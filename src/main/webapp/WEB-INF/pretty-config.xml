@@ -1,0 +1,64 @@
+<pretty-config xmlns="http://ocpsoft.com/prettyfaces/3.3.0" 
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+               xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.4.1
+                                   		http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.4.1.xsd">
+
+   <rewrite match=".*/" trailingSlash="remove"/>
+   
+	<!-- Content Pages -->
+   <url-mapping id="home">
+      <pattern value="/"></pattern>
+      <view-id value="/pages/home.xhtml"></view-id>
+   </url-mapping>
+   
+   <url-mapping id="profile">
+      <pattern value="/profile"></pattern>
+      <view-id value="/pages/profile/profile.xhtml"></view-id>
+      <query-param name="profileId" decode="false">#{profileHome.profileId}</query-param>
+   </url-mapping>
+   
+   <url-mapping id="personal">
+      <pattern value="/personal"></pattern>
+      <view-id value="/pages/profile/data/personal.xhtml"></view-id>
+      <query-param name="profileId" decode="false">#{profileHome.profileId}</query-param>
+   </url-mapping>
+   
+   <url-mapping id="structure">
+      <pattern value="/structure"></pattern>
+      <view-id value="/pages/profile/data/structure.xhtml"></view-id>
+      <query-param name="profileId" decode="false">#{profileHome.profileId}</query-param>
+      <query-param name="property" decode="false">#{profileHome.property}</query-param>
+   </url-mapping>
+   
+   <url-mapping id="group">
+      <pattern value="/group"></pattern>
+      <view-id value="/pages/profile/data/group.xhtml"></view-id>
+      <query-param name="groupId" decode="false">#{groupHome.groupId}</query-param>
+   </url-mapping>
+   
+   <!--
+   <url-mapping id="project-view">
+      <pattern value="/p/#{projects.current.name}"></pattern>
+      <view-id value="/pages/project/view.xhtml"></view-id>
+      <action>#{projects.loadCurrent}</action>
+   </url-mapping>
+   
+   <url-mapping id="project-create">
+      <pattern value="/new-project"></pattern>
+      <view-id value="/pages/project/create.xhtml"></view-id>
+   </url-mapping>
+   -->
+   
+
+	<!-- Begin Exception Mappings -->
+	<url-mapping id="404">
+		<pattern value="/404" />
+		<view-id value="/pages/404.xhtml" />
+	</url-mapping>
+	<url-mapping id="error">
+		<pattern value="/error" />
+		<view-id value="/pages/error.xhtml" />
+	</url-mapping>
+	<!-- End Exception Mappings -->
+
+</pretty-config>

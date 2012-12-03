@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2012 jlgranda.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets" lang="en">
+    <ui:composition>
+
+        <p:commandButton id="buttonEdit#{group.name}" type="button" value="#{messages['common.add']}" onclick="dlg.show()" />  
+
+        <p:dialog header="#{messages['common.add']} #{group.attribute.label}" widgetVar="dlg" resizable="false">  
+            <h:form id="formEdit#{group.name}" transient="true">  
+
+                <h:panelGrid columns="2" style="margin-bottom:10px">  
+                    <h:outputLabel for="name" value="#{messages['common.name']}" />  
+                    <p:inputText id="name" value="#{group.name}" />  
+                </h:panelGrid>  
+
+                <p:commandButton id="submitButton" value="Submit" update=":account:groupDataTable#{group.name}" oncomplete="dlg.hide();"/>  
+
+            </h:form>  
+        </p:dialog>  
+        <p:dataTable var="m" value="#{group.members}" id="groupDataTable#{group.name}" editable="true">  
+
+            <f:facet name="header">  
+                #{group.attribute.label}
+            </f:facet>  
+            <!-- //TODO activar ajax
+            <p:ajax event="rowEdit" listener="#{tableBean.onEdit}" update=":form:messages" />  
+            <p:ajax event="rowEditCancel" listener="#{tableBean.onCancel}" update=":form:messages" />  
+            -->
+            <p:column headerText="#{messages['common.name']}" style="width:125px">  
+                <p:cellEditor>  
+                    <f:facet name="output">  
+                        <h:outputText value="#{m.name}" />  
+                    </f:facet>  
+                    <f:facet name="input">  
+                        <p:inputText value="#{m.name}" style="width:100%"/>  
+                    </f:facet>  
+                </p:cellEditor>  
+            </p:column>  
+            <p:column headerText="#{messages['common.options']}" style="width:50px">  
+                <p:rowEditor />  
+            </p:column>  
+
+        </p:dataTable>  
+    </ui:composition>
+</html>

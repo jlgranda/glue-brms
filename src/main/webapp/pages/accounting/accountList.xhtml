@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/default.xhtml">
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:viewParam name="result" value="#{accountListService.firstResult}" />
+        </f:metadata>
+
+        <h:form id="form">
+
+            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">  
+
+                <h:outputText value="#{messages['Account.schema']}:" />  
+                <p:selectOneMenu value="#{accountListService.selectedAccount}" 
+                                 converter="org.eqaula.glue.accounting.converter.AccountConverter" 
+                                 panelStyle="width:450px"  
+                                 effect="fade" var="p" style="width:460px"  
+                                 filter="true" filterMatchMode="startsWith"
+                                 >  
+                    <f:selectItem itemLabel="#{messages['common.selecta']}" itemValue="" />  
+                    <f:selectItems value="#{accountListService.schemas}" var="account" itemLabel="#{account.name}" itemValue="#{account}"/>  
+
+                    <p:column>  
+                        #{p.name}
+                    </p:column>  
+                    
+                    <p:ajax update="accountTable"/>  
+                </p:selectOneMenu>  
+
+            </h:panelGrid>
+            
+            <p:commandButton value="Submit" update="display" oncomplete="dlg.show()"/>
+
+            <p:dataTable var="account" value="#{accountListService}"
+                         paginator="true" rows="10"
+                         paginatorAlwaysVisible="false"
+                         paginatorPosition="top"
+                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                         rowsPerPageTemplate="5,10,15"
+                         id="accountTable" lazy="true"
+                         selection="#{accountListService.selectedAccounts}"
+                         rendered="#{accountListService.selectedAccount != null}">
+
+                <p:column selectionMode="multiple" style="width:18px" />
+
+                <p:column headerText="#{messages['Account.code']}" sortBy="#{account.code}">
+                    <h:outputText value="#{account.code}" />
+                </p:column>
+
+<!-- p:column headerText="#{messages['Account.type']}" sortBy="#{account.type}"
+        filterBy="#{account.accountType}"
+        filterOptions="#{ui.accountTypesAsSelectItem}"  
+        filterMatchMode="exact">
+        <h:outputText value="#{account.accountType}" />
+</p:column-->
+
+                <p:column headerText="#{messages['Account.type']}" sortBy="#{account.accountType}">
+                    <h:outputText value="#{account.accountType}" />
+                </p:column>
+
+                <p:column headerText="#{messages['Account.name']}" sortBy="#{account.name}">
+                    <h:outputText value="#{account.name}" />
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:commandButton id="multiViewButton" value="#{messages['common.view']}" icon="ui-icon-search"  
+                                     update=":form:displayMulti" oncomplete="multiAccountDialog.show()"/>  
+                </f:facet>
+            </p:dataTable>
+
+            <p:dialog id="multiDialog" header="#{messages['Account.detail']}"
+                      widgetVar="multiAccountDialog" height="300" showEffect="fade"
+                      hideEffect="explode">
+
+                <p:dataList id="displayMulti" value="#{accountListService.selectedAccounts}"
+                            var="selectedAccount">  
+                    Code: #{selectedAccount.code}, Name: #{selectedAccount.name}  
+                </p:dataList>
+
+            </p:dialog>
+            
+            <p:dialog header="Plan de cuentas seleccionado" modal="true" showEffect="fade" hideEffect="fade" widgetVar="dlg">  
+                    <h:panelGrid columns="1" id="display">  
+                                <h:outputText value="#{accountListService.selectedAccount.name}" />  
+    		    </h:panelGrid>  
+             </p:dialog>  
+
+        </h:form>
+
+
+    </ui:define>
+</ui:composition>

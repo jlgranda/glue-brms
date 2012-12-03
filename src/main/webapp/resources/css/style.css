@@ -1,0 +1,976 @@
+body {
+	background-color: #fff;
+	background-image: url(#{request.contextPath}/resources/images/fondo-bg.jpg);
+	background-repeat: repeat;
+	background-attachment: fixed;
+	background-position: top left;
+	margin: 0px;
+	padding: 0px;
+	font: Normal 13px Arial, Helvetica, sans-serif;
+	color: #555;
+}
+
+body {
+	text-align: center;
+}
+
+body * {
+	text-align: left;
+}
+
+#container {
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+}
+
+#header {
+	width: 100%;
+	height: 86px;
+	padding: 0px 0px 0px 0px;
+	background-color: #fff;
+	background-image: url(#{request.contextPath}/resources/images/cabecera.jpg);
+	border-bottom: solid 0px #aaa;
+	color: #768492;
+}
+
+#header-top {
+	width: 100%;
+	height: 36px;
+	padding: 0px 0px 0px 0px;
+	background-color: #666;
+	background-image: url(#{request.contextPath}/resources/images/cabecera.jpg);
+	border-bottom: solid 0px #aaa;
+	color: #768492;
+}
+
+#header-logo {
+	width: 100%;
+	height: 59px;
+	padding: 0px 0px 0px 0px;
+	background-color: #fff;
+	background-image: none;
+	border-bottom: solid 0px #aaa;
+	color: #768492;
+}
+
+#header-control {
+	width: 100%;
+	height: 24px;
+	padding: 0px 0px 0px 0px;
+	background-color: #fff;
+	background-image: none;
+	border-bottom: solid 0px #aaa;
+	color: #768492;
+}
+
+#header #menu {
+	width: 100%;
+	height: 86px;
+	margin-top: 0px;
+	position: relative;
+	bottom: -50px;
+}
+
+#header #menu li {
+	display: inline;
+}
+
+#header #menu li a {
+	width: 114px;
+	height: 80px;
+	display: block;
+	float: left;
+	color: #1e4a73;
+	line-height: 22px;
+	text-align: center;
+	position: relative;
+}
+
+#header #menu li #logo {
+	width: 461px;
+	height: 80px;
+	display: block;
+	background: url(#{request.contextPath}/resources/images/logo.png) top left no-repeat;
+	display: block;
+}
+
+#header #menu li #logo:hover,#header #menu .active#logo {
+	background: url(#{request.contextPath}/resources/images/logo.png) bottom left no-repeat;
+}
+
+#header #menu li a.active,#header #menu li a:hover {
+	width: 114px;
+	height: 80px;
+	color: #5496BF;
+	display: inline;
+	float: left;
+	z-index: 5;
+	font: Regular 12px tahoma;
+}
+
+.logo {
+	width: 366px;
+	height: 80px;
+	background: url(#{request.contextPath}/resources/images/logo.png) center center no-repeat;
+	margin: 10px 0 0 20px;
+	line-height: 30px;
+	display: block;
+}
+
+
+h1 {
+	color: #666;
+	margin: 0px 0px 10px 0px;
+	font-weight: normal;
+	font-size: 24px;
+	letter-spacing: -1px;
+}
+
+h1 a {
+	color: #666;
+	text-decoration: none;
+}
+
+#description {
+	color: #777;
+	font-size: 11px;
+	line-height: 18px;
+	padding-right: 70px;
+	margin-bottom: 30px;
+}
+
+.date {
+	margin: 0px 0px 5px 0px;
+	color: #ccc;
+	font-size: 24px;
+	text-align: right;
+	letter-spacing: -1px;
+	text-transform: uppercase;
+	border-bottom: solid 0px #ccc;
+}
+
+div.post {
+	width: 800px;
+	height: 600px;
+	margin-top: 25px;
+	margin-left: 25px;
+	margin-right: 25px;
+	margin-bottom: 30px;
+	position: relative;
+	float: left;
+}
+
+div.post img.permalink {
+	border-width: 0px;
+	width: 23px;
+	height: 9px;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	display: none;
+}
+
+div.post:hover img.permalink {
+	display: block;
+}
+
+div.post h2 {
+	font-size: 17px;
+	color: #444;
+	margin: 0px 0px 0px 0px;
+}
+
+div.post h2 a {
+	color: #444;
+	text-decoration: none;
+}
+
+a {
+	color: #111;
+}
+
+/* Regular Post */
+div.post div.regular {
+	font: Normal 13px 'Lucida Grande', Verdana, Arial, sans-serif;
+	line-height: 17px;
+}
+
+div.post div.regular blockquote {
+	font-style: italic;
+}
+
+/* Photo Post */
+div.post div.photo img {
+	border-width: 0px;
+}
+
+div.post div.photo div.caption {
+	font-size: 11px;
+	margin-top: 5px;
+	color: #888;
+}
+
+div.post div.photo div.caption a {
+	color: #888;
+}
+
+/* Quote Post */
+div.post div.quote {
+	padding: 0px 30px 0px 30px;
+}
+
+div.post div.quote span.quote {
+	font-size: 24px;
+	color: #444;
+}
+
+div.post div.quote span.quote a {
+	color: #444;
+}
+
+div.post div.quote span.quote big.quote {
+	font: Bold 60px Georgia, serif;
+	line-height: 1px;
+	vertical-align: -23px;
+	opacity: 0.4;
+	-moz-opacity: 0.4;
+	filter: alpha(opacity = 40);
+}
+
+div.post div.quote span.quote big.quote a {
+	text-decoration: none;
+}
+
+div.post div.quote div.source {
+	font-size: 16px;
+	color: #666;
+}
+
+div.post div.quote div.source a {
+	color: #666;
+}
+
+/* Link Post */
+div.post div.link {
+	color: #666;
+	font-size: 24px;
+	letter-spacing: -1px;
+}
+
+div.post div.link a {
+	color: #666;
+	text-decoration: none;
+	border-bottom: dotted 1px #666;
+}
+
+div.post div.link div.description {
+	font-size: 15px;
+	letter-spacing: 0px;
+	line-height: 20px;
+}
+
+/* Conversation Post */
+div.post div.conversation ul {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px 0px 0px 1px;
+	border-left: solid 5px #555;
+}
+
+div.post div.conversation ul li {
+	font-size: 12px;
+	padding: 4px 0px 4px 8px;
+	color: #000;
+	margin-bottom: 1px;
+}
+
+div.post div.conversation ul li span.label {
+	font-weight: bold;
+}
+
+div.post div.conversation ul li.odd {
+	background-color: #f4f4f4;
+}
+
+div.post div.conversation ul li.even {
+	background-color: #e8e8e8;
+}
+
+/* Video Post */
+div.post div.video div.caption {
+	margin-top: 5px;
+	color: #888;
+	font-size: 11px;
+}
+
+div.post div.video div.caption a {
+	color: #888;
+}
+
+#navigation {
+	font-size: 11px;
+	font-weight: bold;
+}
+
+#navigation a {
+	color: #555;
+	text-decoration: none;
+}
+
+#navigation a:hover {
+	text-decoration: underline;
+}
+
+
+
+/* column container */
+.colmask {
+	position: relative; /* This fixes the IE7 overflow hidden bug */
+	clear: both;
+	float: left;
+	width: 100%; /* width of whole page */
+	overflow: hidden; /* This chops off any overhanging divs */
+	color: #82A1B5;
+}
+/* common column settings */
+.colright,.colmid,.colleft {
+	float: left;
+	width: 100%; /* width of page */
+	position: relative;
+}
+
+.col1,.col2,.col3 {
+	float: left;
+	position: relative;
+	padding: 0 0 0 0;
+	/* no left and right padding on columns, we just make them narrower instead 
+					only padding top and bottom is included here, make it whatever value you need */
+	overflow: hidden;
+}
+/* 3 Column settings */
+.threecol {
+	background: #eee; /* right column background colour */
+	background-color: #d9e8eb;
+	height: 66px;
+	width: 100%;
+	background-attachment: fixed;
+	background-position: top left;
+	padding: 0 0 0 0;
+}
+
+.threecol p {
+	text-align: right;
+}
+
+.threecol .colmid {
+	right: 48%; /* width of the right column */
+	background: #fff; /* center column background colour */
+}
+
+.threecol .colleft {
+	right: 37px; /* width of the middle column */
+	background: #f4f4f4; /* left column background colour */
+}
+
+.threecol .col1 {
+	height: 66px;
+	width: 37px;
+	/* width of center column content (column width minus padding on either side) */
+	left: 100%; /* 100% plus left padding of center column */
+	background-color: #d9e8eb;
+	/*background-image: url(#{request.contextPath}/resources/images/pie0.gif);*/
+	background-repeat: repeat;
+	background-attachment: fixed;
+	background-position: top left;
+}
+
+.threecol .col2 {
+	height: 66px;
+	width: 50%;
+	/* Width of left column content (column width minus padding on either side) */
+	left: 48%;
+	/* width of (right column) plus (center column left and right padding) plus (left column left padding) */
+	background-color: #d9e8eb;
+	/*background-image: url(#{request.contextPath}/resources/images/pie-right.gif);*/
+	background-repeat: repeat;
+	background-attachment: fixed;
+	background-position: top left;
+}
+
+.threecol .col3 {
+	height: 66px;
+	width: 47%;
+	/* Width of right column content (column width minus padding on either side) */
+	left: 50%; /* Please make note of the brackets here:
+					(100% - left column width) plus (center column left and right padding) plus (left column left and right padding) plus (right column left padding) */
+	background-color: #d9e8eb;
+	/*background-image: url(#{request.contextPath}/resources/images/pie-left.gif);*/
+	background-repeat: repeat;
+	background-attachment: fixed;
+	background-position: top left;
+	padding: 0 0 0 0;
+}
+
+.threecol .col3 a {
+	color: #A1BFD4;
+}
+
+.threecol .col3 p {
+	text-align: right;
+}
+
+div.pagination {
+	text-align: center;
+	padding: 3px;
+	margin: 3px;
+}
+
+div.pagination a {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #ddd;
+	text-decoration: none;
+	color: #aaa;
+}
+
+div.pagination a:hover,div.pagination a:active {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #a0a0a0;
+}
+
+div.pagination span.current {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #e0e0e0;
+	font-weight: bold;
+	background-color: #f0f0f0;
+	color: #aaa;
+}
+
+div.pagination span.disabled {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #f3f3f3;
+	color: #ccc;
+}
+
+.containerComments {
+	margin: 0px 0px 0px 0px;
+	background-color: #fff;
+	position: relative;
+	float: right;
+	width: 400px;
+}
+
+.containerFormComments {
+	margin: 25px 10px 0px 0px;
+	font-family: Verdana;
+	font-size: 0.75em;
+	background-color: #fff;
+	float: right;
+}
+
+#commentForm {
+	margin: 25px 10px 10px 25px;
+	background-color: #fff;
+	position: relative;
+	float: right;
+	width: 350px;
+}
+
+#commentForm input,#commentForm textarea {
+	font: 0.9em 'Lucida Grande', Verdana, Arial, Sans-Serif;
+}
+
+#commentForm p {
+	font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	margin: 5px 0;
+}
+
+#commentForm input {
+	width: 170px;
+	padding: 2px;
+	margin: 5px 5px 1px 0;
+}
+
+#commentForm textarea {
+	padding: 2px;
+}
+
+#commentForm #btnAdd {
+	margin: 25px 10px 10px 25px;
+	float: left;
+}
+
+#simplerMenuWrapper #more-langs {
+	font-family: "Trebuchet MS";
+	font-size: 12px;
+	line-height: 12px;
+	font-weight: normal;
+	padding-right: 10px;
+	text-decoration: underline;
+}
+
+#simplerMenuWrapper {
+	float: right;
+	margin-right: 20px;
+	margin-top: 0;
+}
+
+#simplerMenuWrapper {
+	float: right;
+	margin-right: 20px;
+}
+
+.invi {
+	overflow: hidden;
+	text-indent: -300em;
+}
+
+.slot-01 {
+	width: 230px;
+	height: 208px;
+	float: left;
+	padding: 0px;
+	text-align: left;
+	background: url(#{request.contextPath}/resources/images/cursos.jpg) bottom left no-repeat;
+	font: Regular 12px myriad, roman;
+	color: #828E99;
+}
+
+.slot-01 span {
+	width: 200px;
+	line-height: 15px;
+	position: relative;
+	bottom: -75px;
+	left: 25px;
+	margin-bottom: 10px;
+	float: left;
+	background-color: #fff;
+}
+
+.slot-01 p {
+	font: normal 1.2em Helvetica, sans-serif;
+	color: #f60;
+	padding-bottom: 10px;
+}
+
+#como-obtener-aula {
+	position: relative;
+	bottom: -72px;
+	padding: 18px;
+	color: #F49016;
+	font: Regular 10px myriad, roman;
+}
+
+.slot-02 {
+	width: 230px;
+	height: 208px;
+	float: left;
+	padding: 0px 0px 0px;
+	text-align: left;
+	background: url(#{request.contextPath}/resources/images/cursos.jpg) bottom left no-repeat;
+	font: Regular 12px myriad, roman;
+	color: #828E99;
+}
+
+.slot-02 span {
+	width: 190px;
+	line-height: 15px;
+	position: relative;
+	bottom: -75px;
+	left: 20px;
+	margin-bottom: 10px;
+	float: left;
+	background-color: #fff;
+}
+
+.slot-02 p {
+	font: normal 1.2em Helvetica, sans-serif;
+	color: #f60;
+	padding-bottom: 10px;
+}
+
+#como-obtener-plataforma {
+	position: relative;
+	bottom: -72px;
+	padding: 18px;
+	color: #87C009;
+	font: Regular 10px myriad, roman;
+}
+
+.slot-03 {
+	width: 230px;
+	height: 208px;
+	float: left;
+	padding: 0px 0px 0px;
+	text-align: left;
+	background: url(#{request.contextPath}/resources/images/aulas.jpg) bottom left no-repeat;
+	font: Regular 12px myriad, roman;
+	color: #828E99;
+}
+
+.slot-03 span {
+	width: 190px;
+	line-height: 15px;
+	position: relative;
+	bottom: -75px;
+	left: 20px;
+	margin-bottom: 10px;
+	float: left;
+	background-color: #fff;
+}
+
+.slot-03 p {
+	font: normal 1.2em Helvetica, sans-serif;
+	color: #f60;
+	padding-bottom: 10px;
+}
+
+#ver-demo {
+	position: relative;
+	bottom: -72px;
+	padding: 18px;
+	color: #1C6CA0;
+	font: Regular 10px myriad, roman;
+}
+
+.slot-04 {
+	width: 230px;
+	height: 208px;
+	float: left;
+	padding: 0px 0px 0px;
+	text-align: left;
+	background: url(#{request.contextPath}/resources/images/redes.jpg) bottom left no-repeat;
+	font: Regular 12px myriad, roman;
+	color: #828E99;
+}
+
+.slot-04 span {
+	width: 190px;
+	line-height: 15px;
+	position: relative;
+	bottom: -75px;
+	left: 20px;
+	margin-bottom: 10px;
+	float: left;
+	background-color: #fff;
+}
+
+.slot-04 p {
+	font: normal 1.2em Helvetica, sans-serif;
+	color: #f60;
+	padding-bottom: 10px;
+}
+
+#como-matricularse {
+	color: #f6d;
+	position: relative;
+	bottom: -72px;
+	padding: 18px;
+	color: #1F5C80;
+	font: Regular 10px myriad, roman;
+}
+
+.eqaulers {
+	width: 531px;
+	height: 208px;
+	float: left;
+	padding: 0px;
+	text-align: left;
+	background-color: #fff;
+	/*background: url(#{request.contextPath}/resources/images/certificacion.jpg) bottom left no-repeat;*/
+	position: relative;
+}
+
+.eqaulers span {
+	width: 200px;
+	line-height: 15px;
+	position: relative;
+	bottom: -75px;
+	left: 25px;
+	margin-bottom: 10px;
+	float: left;
+	background-color: #fff;
+}
+
+.eqaulers p {
+	font: normal 1.2em Helvetica, sans-serif;
+	padding-bottom: 10px;
+}
+
+.certificacion {
+	width: 531px;
+	height: 208px;
+	background: url(#{request.contextPath}/resources/images/certificacion.jpg) center center no-repeat;
+	margin: 10px 0 0 20px;
+	line-height: 30px;
+	display: block;
+}
+
+.login {
+	width: 280px;
+	height: 148px;
+	float: right;
+	padding: 0px 60px 60px 0px;
+	text-align: right;
+	background-color: #fff;
+	position: relative;
+}
+
+.login span {
+	width: 220px;
+	line-height: 0px;
+	position: relative;
+	margin-bottom: 5px;
+	float: right;
+	background-color: #fff;
+}
+
+.login p {
+	color: #00456E;
+	font: Bold 16px myriad;
+	padding-bottom: 10px;
+	text-align: right;
+}
+
+.candidates {
+	width: 961px;
+	float: left;
+	padding: 0px 60px 60px 0px;
+	text-align: left;
+	background-color: #fff;
+	position: relative;
+}
+
+.candidates p {
+	color: #00456E;
+	font: Bold 16px myriad;
+	padding-bottom: 10px;
+	text-align: left;
+}
+
+.candidates1 {
+	width: 381px;
+	float: left;
+	padding: 0px 60px 60px 0px;
+	text-align: left;
+	background-color: #fff;
+	position: relative;
+}
+
+.candidates1 p {
+	color: #00456E;
+	font: Bold 16px myriad;
+	padding-bottom: 10px;
+	text-align: left;
+}
+
+.candidates2 {
+	width: 370px;
+	float: right;
+	padding: 0px 60px 60px 0px;
+	text-align: left;
+	background-color: #fff;
+	position: relative;
+}
+
+.candidates2 p {
+	color: #00456E;
+	font: Bold 16px myriad;
+	padding-bottom: 10px;
+	text-align: left;
+}
+
+.unete {
+	text-align: right;
+}
+
+.eqaula-id {
+	color: #476373;
+	font: Regular 12px tahoma;
+	float: right;
+	padding-bottom: 10px;
+}
+
+.password {
+	color: #476373;
+	font: Regular 12px tahoma;
+	float: right;
+	padding-bottom: 10px;
+}
+
+.submit-button {
+	color: #476373;
+	font: Regular 12px tahoma;
+	float: right;
+	padding-bottom: 10px;
+}
+
+#recordar-contrasenia {
+	color: #f60;
+	position: relative;
+	bottom: -70px;
+}
+
+.clearer {
+	clear: both;
+	margin: 0;
+	padding: 0;
+	height: 0px;
+	border: none;
+	background: transparent;
+	display: block;
+}
+
+div.post-certificacion {
+	width: 600px;
+	height: 100%;
+	margin-top: 25px;
+	margin-left: 25px;
+	margin-right: 25px;
+	margin-bottom: 30px;
+	position: relative;
+	float: left;
+}
+
+div.post-certificacion img.permalink {
+	border-width: 0px;
+	width: 23px;
+	height: 9px;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	display: none;
+}
+
+div.post-certificacion:hover img.permalink {
+	display: block;
+}
+
+div.post-certificacion h2 {
+	font-size: 17px;
+	color: #444;
+	margin: 0px 0px 0px 0px;
+}
+
+div.post-certificacion h2 a {
+	color: #444;
+	text-decoration: none;
+}
+
+a {
+	color: #111;
+}
+
+/* Regular Post */
+div.post-certificacion div.regular {
+	font: Normal 13px 'Lucida Grande', Verdana, Arial, sans-serif;
+	line-height: 17px;
+}
+
+div.post-certificacion div.regular blockquote {
+	font-style: italic;
+}
+
+div.paypal {
+	width: 200px;
+	height: 600px;
+	margin-top: 25px;
+	margin-left: 25px;
+	margin-right: 25px;
+	margin-bottom: 30px;
+	position: relative;
+	float: left;
+}
+
+blockquote {
+	display: block !important;
+	padding: 10px 20px;
+	text-align: justify;
+	font-family: Georgia, Times, "Times New Roman", serif;
+}
+
+blockquote p {
+	font-style: italic;
+	color: #376688;
+	display: inline;
+	font-size: 1.1em;
+}
+
+blockquote p:before,blockquote p:after {
+	color: #8FAAB8;
+	line-height: 0;
+	font-size: 4em;
+}
+
+blockquote p:before {
+	content: open-quote;
+	padding-right: 10px;
+	vertical-align: -27px;
+}
+
+blockquote p:after {
+	content: close-quote;
+	font-size: 4em;
+	line-height: .3;
+	vertical-align: -37px;
+}
+
+blockquote[cite]:after {
+	display: block;
+	text-align: right;
+	content: "\2014\ " attr(cite);
+	font-style: normal;
+	font-size: 0.85em;
+}
+
+#banner {
+	background-color: #666;
+	border-bottom: 1px solid #333;
+}
+
+#banner h1 {
+	margin: 0;
+	padding: .5em;
+}
+
+#nav {
+	float: left;
+	width: 160px;
+	margin-left: 10px;
+	padding-top: 1em;
+}
+
+#nav p {
+	margin-top: 0;
+}
+
+#content {
+	padding-top: 1em;
+	margin: 5px 0 200px 0;
+}
+
+
+/* common column settings */
+#footer {
+	clear: both;
+	float: left;
+	width: 100%; /* width of page */
+	position: relative;
+	background-color: #d9e8eb;
+	height: 66px;
+	background-attachment: fixed;
+	background-position: top left;
+	padding: 0 0 0 0;
+}
+
+#footer p {
+	text-align: right;
+	color: #A1BFD4;
+}

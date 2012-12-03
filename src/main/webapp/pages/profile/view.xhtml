@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:composition template="/WEB-INF/view/templates/profile-active.xhtml">
+
+        <ui:param name="title" value="Profile - #{profile.username}" />
+
+        <ui:define name="header">
+            <ocp:gravatar email="#{profile.email}" size="90" updatable="true" styleClass="fl" />
+            <h:panelGroup rendered="#{profile.username == account.loggedIn.username}">
+                <div style="margin-left: 115px;" >
+
+                    <h2>#{profile.username}
+                        <h:link outcome="/pages/account" styleClass="btn" value="edit">
+                        </h:link>
+                    </h2>
+
+                </div>
+            </h:panelGroup>
+        </ui:define>
+
+        <ui:define name="header-right">
+            #{profile.username}
+        </ui:define>
+
+        <ui:define name="content">
+            <h:form id="account">
+                <h:panelGroup id="snm" layout="block" class="clearfix">
+                    <label for="screnname"><b>#{messages['common.screenName']}</b></label>
+                    <div class="input">
+                        <h:outputText id="screenname" value="#{profile.fullName}"/>
+                    </div>
+                </h:panelGroup>
+                <h:panelGroup id="eml" layout="block" class="clearfix">
+                    <label for="email"><b>#{messages['common.email']}</b></label>
+                    <div class="input">
+                        <h:outputText id="email" value="#{profile.email}" rendered="#{!profile.emailSecret}"/>
+                        <h:outputText value="#{messages['common.emailprivate']}" rendered="#{profile.emailSecret}" />
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup id="bio" layout="block" class="clearfix">
+                    <label for="bio"><b>#{messages['common.bio']}</b></label>
+                    <div class="input">
+                        <h:outputText id="bioIn" value="#{profile.bio}" styleClass="span4" />
+                    </div>
+                </h:panelGroup>
+
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+</html>

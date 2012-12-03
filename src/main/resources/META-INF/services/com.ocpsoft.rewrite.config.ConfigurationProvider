@@ -1,0 +1,5 @@
+org.eqaula.glue.rewrite.AccessRewriteConfiguration
+org.eqaula.glue.rewrite.CatchallRewriteConfiguration
+org.eqaula.glue.rewrite.AccountVerificationInterceptor
+org.eqaula.glue.rewrite.MessageInterceptor
+org.eqaula.glue.rewrite.AuthenticationStatusInterceptor

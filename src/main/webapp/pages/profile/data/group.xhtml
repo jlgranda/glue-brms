@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
+    <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
+        <ui:define name="content">
+            <f:metadata>
+                <f:viewParam name="groupId" value="#{groupHome.groupId}" />
+                <s:viewAction action="#{groupHome.load}" if="#{conversation.transient}"/>
+            </f:metadata>
+            <h:form id="form">
+                <h2>#{messages['common.edit']} #{messages['module.profile.data.education']}: #{groupHome.instance.name}</h2>
+                <br/>
+                <glue:group id="#{groupHome.instance.id}" label="#{groupHome.instance.property.label}" group="#{g}" inlinehelp="#{groupHome.instance.property.helpInline}"
+                            controller="#{groupHome}"
+                            members="findOtherMembers"
+                            addAction="addBussinesEntity"
+                            form="form">
+                </glue:group>
+                <div class="actions">
+                    <h:commandButton id="save" action="#{groupHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary" rendered="false"/>
+                    &nbsp;
+                    <h:commandButton action="/pages/home.xhtml?faces-redirect=true"
+                                     value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

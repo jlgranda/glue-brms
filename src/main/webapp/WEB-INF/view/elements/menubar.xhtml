@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+    <div>
+        <h:form>
+            <p:growl id="messages"/>  
+            <p:menubar>  
+               
+                <p:submenu label="#{messages['app.name']}" icon="ui-icon-lightbulb" >  
+                    <p:menuitem value="#{messages['app.name']}" url="/" icon="ui-icon-lightbulb" />  
+                    <p:submenu label="#{messages['module.profile']}" icon="ui-icon-contact">  
+                        <p:menuitem value="#{messages['module.profile.profiles']}" url="/pages/profile/profileList.jsf"/>  
+                    </p:submenu>  
+                    <p:submenu label="#{messages['module.stocklist']}" icon="ui-icon-cart">  
+                        <p:menuitem value="#{messages['module.stocklist.warehouse']}" url="/pages/stocklist/warehouseList.jsf"/>  
+                        <p:menuitem value="#{messages['module.stocklist.items']}" url="/pages/stocklist/itemList.jsf"/>  
+                    </p:submenu>  
+                    <p:submenu label="#{messages['module.accounting']}" icon="ui-icon-calculator">  
+                        <p:menuitem value="#{messages['module.accounting.accounts']}" url="/pages/accounting/accountList.jsf"/>  
+                    </p:submenu>  
+                    <p:separator />  
+                    <p:menuitem value="#{messages['common.quit']}" url="#" />  
+                </p:submenu>  
+                
+                <p:menuitem value="#{messages['common.refresh']}" update="messages" url="#" icon="ui-icon-refresh"/>
+                <p:menuitem value="#{messages['common.edit']}" update="messages" url="#" icon="ui-icon-pencil" />  
+                <p:menuitem value="#{messages['common.delete']}" update="messages" url="#" icon="ui-icon-trash" />  
+                
+                <p:submenu label="#{messages['common.more']}" rendered="false">  
+                </p:submenu>  
+
+            </p:menubar>  
+        </h:form>
+    </div>
+</ui:composition>

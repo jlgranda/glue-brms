@@ -1,0 +1,56 @@
+<!--
+
+  This file is part of SocialPM: Agile Project Management Tools (SocialPM) 
+ 
+  Copyright (c)2010 Lincoln Baxter, III <lincoln@ocpsoft.com> (OcpSoft)
+  
+  If you are developing and distributing open source applications under 
+  the GPL Licence, then you are free to use SocialPM under the GPL 
+  License:
+ 
+  SocialPM is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  SocialPM is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with SocialPM.  If not, see <http://www.gnu.org/licenses/>.
+   
+  For OEMs, ISVs, and VARs who distribute SocialPM with their products, 
+  or host SocialPM online, OcpSoft provides flexible OEM commercial 
+  Licences:
+  
+  To purchase a License, contact OcpSoft (http://ocpsoft.com)
+
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+
+<composite:interface shortDescription="Renders a gravatar for a given email address">
+	<composite:attribute name="profile" />
+	<composite:attribute name="style" />
+	<composite:attribute name="styleClass" />
+	<composite:attribute name="displayName" type="Boolean" default="true"/>
+	<composite:attribute name="updatable" default="false"/>
+</composite:interface>
+
+<composite:implementation>
+	<h:panelGroup style="#{cc.attrs.style}" styleClass="#{cc.attrs.styleClass}">
+	    <h:link outcome="/pages/profile">
+            <ocp:gravatar email="#{cc.attrs.profile.email}" size="15" /> 
+            <h:outputText value="#{cc.attrs.profile}" style="position: relative; top: -5px;" rendered="#{cc.attrs.displayName}" />
+    		<f:param name="profile" value="#{cc.attrs.profile}" />
+		</h:link>
+	</h:panelGroup>
+</composite:implementation>
+
+</html>

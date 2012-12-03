@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
+    <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
+        <ui:define name="content">
+            <f:metadata>
+                <f:viewParam name="id" value="#{profileHome.profileId}" />
+                <s:viewAction action="#{profileHome.load}" if="#{conversation.transient}"/>
+            </f:metadata>
+            <h2>#{messages['common.edit']}: #{profileHome.instance.fullName}</h2>
+            <br/>
+            <p:tabView id="profile-tabs">
+                <p:tab id="personal" title="#{messages['module.profile.data.personal']}">
+                    <h:form id="profile">
+                        <glue:input id="fstn" name="firstname" type="text" label="#{messages['common.firstname']}" value="#{profileHome.instance.firstname}" required="true" inlinehelp="#{messages['common.firstname.inlinehelp']}" execute="@this save" render="fstn"/>
+                        <glue:input id="srn" name="surname" type="text" label="#{messages['common.surname']}" value="#{profileHome.instance.surname}" required="true" inlinehelp="#{messages['common.surname.inlinehelp']}" execute="@this save"/>
+                        <glue:input id="cod" name="code" type="text" label="#{messages['profile.dni']}" value="#{profileHome.instance.code}" required="false" inlinehelp="#{messages['profile.dni.inlinehelp']}" execute="@this save"/>
+                        <glue:input id="eml" name="text" type="email" label="#{messages['common.email']}" value="#{profileHome.instance.email}" required="true" validator="emailValidator" inlinehelp="#{messages['common.email.inlinehelp']}" execute="@this save"/>
+                        <!-- Attributos personalizados -->
+                        <c:forEach items="#{profileHome.findAttributesFor(profileHome.instance, 'PersonalData')}" var="a" >
+                            <glue:input id="#{a.property.id}" name="#{a.name}" type="#{a.type}" label="#{a.property.label}" value="#{a.value}" required="#{a.property.required}" inlinehelp="#{a.property.helpInline}" execute="@this save" listener="#{account.saveAjax()}" render="#{a.property.id} #{a.property.render != null ? a.property.render : ''}" converter="#{a.property.converter}" values="#{ui.getValuesAsSelectItem(a.property.values)}"/>
+                        </c:forEach>
+                        <div class="actions">
+                            <h:commandButton id="save" action="#{profileHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary"/>
+                            &nbsp;
+                            <h:commandButton action="/pages/home.xhtml?faces-redirect=true"
+                                             value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/>
+                        </div>
+                    </h:form>
+                </p:tab>
+                <p:tab id="dependence" title="#{messages['module.profile.data.dependences']}">
+                    <h:form id="dependence-form">
+                        <!-- Atributos relación -->
+                        <c:forEach items="#{profileHome.instance.findGroupsFor('Spouse,Childrens')}" var="g" >
+                            <glue:group id="#{g.id}" label="#{g.property.label}" group="#{g}" inlinehelp="#{g.property.helpInline}"
+                                        controller="#{profileHome}"
+                                        members="findOtherMembers"
+                                        addAction="addBussinesEntity"
+                                        editListener="rowEditListener"
+                                        editCancelListener="editCancelListener"
+                                        form="profile-tabs:dependence-form">
+                            </glue:group>
+                        </c:forEach>
+                        <div class="actions">
+                            <h:commandButton id="save" action="#{profileHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary" rendered="false"/>
+                            &nbsp;
+                            <h:commandButton action="/pages/home.xhtml?faces-redirect=true"
+                                             value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/>
+                        </div>
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+
+        </ui:define>
+    </ui:composition>
+</html>

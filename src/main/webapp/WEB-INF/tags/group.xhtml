@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2012 jlgranda.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+    xmlns:glue="http://eqaula.org/jsf/facelets"
+    >
+    <c:set var="id" value="#{not empty id ? id : (not empty name ? name : action)}" />
+    <c:set var="required" value="#{not empty required and required}" />
+    <c:set var="group" value="#{not empty group ? group : null}" />
+    <c:set var="members" value="#{not empty members ? members : 'members'}" />
+    <c:set var="form" value="#{not empty form ? form: 'form'}" />
+
+
+    <h:panelGroup id="panel-group-#{id}" layout="block" class="clearfix">
+        <label for="#{name}" class="#{(not empty required and required) ? 'required' : ''}">#{label}#{(not empty required and required) ? '*&#160;' : ''}</label>
+        <div class="input">
+            <p:panel id="panel-#{id}">
+                <p:dataTable var="m" value="#{members == 'members' ? group[members] : group[members](controller.instance)}" 
+                             editable="false" 
+                             emptyMessage="#{messages['common.emptyList']}"
+                             rowKey="#{group.id}"
+                             selection="#{controller.bussinesEntity}" 
+                             selectionMode="single" >  
+
+                    <p:ajax event="rowSelect" update=":#{form}:edit-dialog-#{id}" oncomplete="editDlg.show()" /> 
+                    <p:column headerText="#{messages['common.name']}" style="width:125px">  
+                        <h:outputText value="#{m.name}" />  
+                    </p:column>  
+                </p:dataTable>
+            </p:panel>
+            <p:commandButton value="#{messages['common.add']} #{label}" ajax="true"
+                             action="#{controller[addAction](group)}" process="@this, edit-dialog-#{id}"
+                             icon="ui-icon-plus" update="edit-dialog-#{id}" oncomplete="editDlg.show();"/>  
+            <p:dialog id="edit-dialog-#{id}" header="#{messages['common.edit']} #{controller.bussinesEntity.name}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="450">
+                <!-- Attributos de clase, sino existen extendidos -->
+                <p:panel rendered="#{empty controller.findAttributesFor(controller.bussinesEntity, group.name)}">
+                    <glue:input id="gname_#{id}" name="gname_#{group.id}" type="text" label="#{messages['common.name']}" value="#{controller.bussinesEntity.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}"/>
+                    <glue:input id="gcode_#{id}" name="gcode_#{group.id}" type="text" label="#{messages['common.code']}" value="#{controller.bussinesEntity.code}" required="false" inlinehelp="#{messages['common.code.inlinehelp']}"/>
+                </p:panel>
+                <p:panel rendered="#{not empty controller.findAttributesFor(controller.bussinesEntity, group.name)}">
+                    <!-- Attributos personalizados -->
+                    <c:forEach items="#{controller.findAttributesFor(controller.bussinesEntity, group.name)}" var="a" >
+                        <glue:input id="#{a.property.id}" name="#{a.name}" type="#{a.type}" label="#{a.property.label}" value="#{a.value}" required="#{a.property.required}" inlinehelp="#{a.property.helpInline}" render="#{a.property.id} #{a.property.render != null ? a.property.render : ''}" converter="#{a.property.converter}" values="#{ui.getValuesAsSelectItem(a.property.values)}"/>
+                    </c:forEach>
+                </p:panel>
+                <p:commandButton value="#{messages['common.save']}" 
+                                 actionListener="#{controller.saveBussinesEntity()}" 
+                                 update="panel-#{id}"
+                                 ajax="false" process="@this, edit-dialog-#{id}"
+                                 style="margin-top:10px;" icon="ui-icon-disk"
+                                 oncomplete="edit-dialog-#{id}.hide();">  
+                </p:commandButton>  
+
+                <p:commandButton type="button" value="#{messages['common.delete']}" onclick="deletedDlg.show()" style="margin-top:10px;"/>  
+            </p:dialog>
+            <p:dialog id="cancel-dialog-#{id}" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
+                <h:panelGroup layout="block" style="padding:5px;">  
+                    <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                </h:panelGroup>  
+                <p:commandButton value="#{messages['common.delete']}" oncomplete="deletedDlg.hide();"  
+                                 action="#{controller[deleteAction]}" process="@this"  
+                                 style="margin-top:10px;">  
+                </p:commandButton>  
+                <p:commandButton value="Cancel" type="button" onclick="deletedDlg.hide();"  
+                                 style="margin-top:10px;"/>  
+            </p:dialog>  
+        </div>
+    </h:panelGroup>
+</ui:composition>

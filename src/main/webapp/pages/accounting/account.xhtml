@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+
+		<f:metadata>
+			<f:viewParam name="id" value="#{accountService.id}" />
+		</f:metadata>
+
+		<h:form>
+			<h:link value="&#171; Overview" outcome="index" action="#{accountService.end()}"></h:link>
+		</h:form>
+
+		<div style="padding-bottom: 10px;">
+			<h2>#{accountService.instance.name} - #{accountService.instance.type}</h2>
+
+                        <div class="">
+				#{accountService.instance.author.firstname}, #{accountService.instance.author.surname}
+				-
+				<h:outputText value="#{accountService.instance.created}">
+					<f:convertDateTime pattern="dd-MM-yyyy" />
+				</h:outputText>
+
+				<h:form rendered="#{currentUser.id eq accountService.instance.author.id}">
+					<h:link value="Edit" outcome="edit">
+						<f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+					</h:link>
+					&#160;
+					<h:commandLink value="Delete" action="#{accountService.delete}"/>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>
