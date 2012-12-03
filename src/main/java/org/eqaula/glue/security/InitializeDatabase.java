@@ -248,10 +248,12 @@ public class InitializeDatabase {
         validateStructureForEducation();
         validateStructureForRole();
         validateStructureForTasks();
+        validateStructureForCapacitacion();
+        validateStructureForTrayectoriaLaboral();
     }
 
     private void validateStructureForProfile() {
-        BussinesEntityType bussinesEntityType = null;
+        BussinesEntityType bussinesEntityType = null; 
 
         try {
             TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
@@ -283,6 +285,8 @@ public class InitializeDatabase {
             attributes.add(buildAttribute("Role", Structure.class.getName(), null, true, "Detalle del cargo que desempeña", "Detalle del cargo que desempeña"));
             attributes.add(buildAttribute("Strategic", Structure.class.getName(), null, true, "Educación", "Detalle sus logros académicos"));
             attributes.add(buildAttribute("Tasks", Group.class.getName(), null, true, "Tareas a su cargo", "Detalle las tareas que corresponden a su cargo dentro de la institución"));
+            attributes.add(buildAttribute("Capacitacion", Group.class.getName(), null, true, "Eventos de Capacitacion", "Detalle de capacitaciones con  respaldo fisico notarizado desde el año 2000 en adelante"));
+            attributes.add(buildAttribute("TrayectoriaLaboral", Group.class.getName(), null, true, "Trayectoria Labora", "Detalle de la trayectoria laboral del ultimo año"));
 
 
             //Agregar atributos
@@ -386,7 +390,10 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
 
-            attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), true, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
+            //attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), true, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
+            attributes.add(buildAttribute("tipoRelacion", "java.lang.String[]","Casado,Unión libre", true, "Tipo de Relacion", "Indique que relacion tiene"));             
+            attributes.add(buildAttribute("empresaTrabajo", String.class.getName(), null, false, "Empresa en la que Trabaja", "Indique la empresa que trabaja"));
+            attributes.add(buildAttribute("funcionCargo", String.class.getName(), null ,false, "Actividad / Funcion o Cargo", "Que Cargo o funcion tiene"));
 
             //Agregar atributos
             structure.setProperties(attributes);
@@ -424,8 +431,10 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
 
-            attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), true, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
-
+            //attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), true, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
+            attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), false, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
+            attributes.add(buildAttribute("tipoInstruccion", "java.lang.String[]","Bachillerato,Egresado,Superior,4 Nivel", false, "Tipo de Relacion", "Indique el tipo de instruccion"));
+            
             //Agregar atributos
             structure.setProperties(attributes);
 
@@ -618,6 +627,93 @@ public class InitializeDatabase {
         }
     }
 
+    private void validateStructureForCapacitacion() {
+      BussinesEntityType bussinesEntityType = null;
+        String name = "Capacitacion";
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", name);
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(name);
+
+            //Agrupaciones de propiedades
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = null;
+            structure = new Structure();
+            structure.setName("Data for " + name);
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+
+            //Lista de atributos de entidad de negocios
+            List<Property> attributes = new ArrayList<Property>();
+
+            //attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), true, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
+            attributes.add(buildAttribute("nameEvent", String.class.getName(), null ,true, "Nombre del Evento", "Indique el evento que se realizo"));
+            attributes.add(buildAttribute("typeEvent", "java.lang.String[]","Curso,Seminario,Taller,Conferencia,Diplomado", true, "Tipo de Evento", "Indique que tipo de evento se realizo"));                     
+            attributes.add(buildAttribute("auspiciante", String.class.getName(), null, false, "Auxpiciante", "Indiqueel auxpiciante ya sea Empresa o Institucion"));
+            attributes.add(buildAttribute("duracionHoras", Long.class.getName(), null, true, "Duracion en Horas", "Indique cuantas horas duro el Evento"));
+            attributes.add(buildAttribute("country", String.class.getName(), null, false, "País", "País donde se realizo el evento"));
+            attributes.add(buildAttribute("dateBegin", Date.class.getName(), ago.getTime(), false, "Fecha de Inicio", "Fecha que inicio el evento"));
+            attributes.add(buildAttribute("dateEnd", Date.class.getName(), ago.getTime(), false, "Fecha de Finalizacion", "Fecha de Culminacion"));
+            
+            //Agregar atributos
+            structure.setProperties(attributes);
+
+            bussinesEntityType.addStructure(structure);
+
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+        }
+    }
+    
+    private void validateStructureForTrayectoriaLaboral() {
+      BussinesEntityType bussinesEntityType = null;
+        String name = "TrayectoriaLaboral";
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", name);
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(name);
+
+            //Agrupaciones de propiedades
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = null;
+            structure = new Structure();
+            structure.setName("Data for " + name);
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+
+            //Lista de atributos de entidad de negocios
+            List<Property> attributes = new ArrayList<Property>();
+            attributes.add(buildAttribute("tipoInstitucion", "java.lang.String[]","Publica, Privada, Mixta", true, "Tipo de Institucion", "Indique que tipo de institucion"));                        
+            attributes.add(buildAttribute("nombreInstitucion", String.class.getName(), null ,true, "Nombre de la Institucion", "Indique de la institucion u organizacion"));
+            attributes.add(buildAttribute("unidadAdministrativa", "java.lang.String[]","Departamento,Area,Direccion", true, "Unidad Administrativa", "Indique que tipo de unidad administrativa"));                        
+            attributes.add(buildAttribute("denominacionPuesto", String.class.getName(), null, false, "Denominacion del Puesto", "Indique la denominacion del puesto"));
+            attributes.add(buildAttribute("fechaInicio", Date.class.getName(), ago.getTime(), false, "Fecha de Ingreso", "Fecha de ingreso del trabajar"));
+            attributes.add(buildAttribute("fechaFin", Date.class.getName(), ago.getTime(), false, "Fecha de Salida", "Fecha de salida del trabajo"));            
+            attributes.add(buildAttribute("responsabilidades", String.class.getName(), null, false, "Principales Responsabilidades", "Indique que responsabilidades tenia"));
+            attributes.add(buildAttribute("motivoSalida", String.class.getName(), null, false, "Motivo de Salida", "Por que motivo salio"));
+            
+            //Agregar atributos
+            structure.setProperties(attributes);
+
+            bussinesEntityType.addStructure(structure);
+
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+        }
+    }
+    
     //builder for attributes
     private Property buildAttribute(String name, String type, Serializable value, boolean required, String label, String helpinline) {
         Property attributte = new Property();
