@@ -278,7 +278,7 @@ public class InitializeDatabase {
             List<Property> attributes = new ArrayList<Property>();
 
             
-            attributes.add(buildAttribute("PersonalData", Structure.class.getName(), null, true, "Datos personales", "Información personal relevante"));
+            attributes.add(buildAttribute("PersonalData", Structure.class.getName(), null, true, "Datos personales", "Información personal relevante", null, "/pages/profile/data/personal"));
             attributes.add(buildAttribute("Spouse", Group.class.getName(), null, true, "Esposa/o", "Datos de su conyugue"));
             attributes.add(buildAttribute("Childrens", Group.class.getName(), null, true, "Hijos", "Datos de sus hijos"));
             attributes.add(buildAttribute("Education", Group.class.getName(), null, true, "Educación", "Detalle sus logros académicos"));
