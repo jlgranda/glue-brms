@@ -283,7 +283,7 @@ public class InitializeDatabase {
             attributes.add(buildAttribute("Childrens", Group.class.getName(), null, true, "Hijos", "Datos de sus hijos"));
             attributes.add(buildAttribute("Education", Group.class.getName(), null, true, "Educación", "Detalle sus logros académicos"));
             attributes.add(buildAttribute("Role", Structure.class.getName(), null, true, "Detalle del cargo que desempeña", "Detalle del cargo que desempeña"));
-            attributes.add(buildAttribute("Strategic", Structure.class.getName(), null, true, "Educación", "Detalle sus logros académicos"));
+            attributes.add(buildAttribute("Strategic", Structure.class.getName(), null, true, "Datos estratégicos", "Custionario para recolectar información estratégica"));
             attributes.add(buildAttribute("Tasks", Group.class.getName(), null, true, "Tareas a su cargo", "Detalle las tareas que corresponden a su cargo dentro de la institución"));
             attributes.add(buildAttribute("Capacitacion", Group.class.getName(), null, true, "Eventos de Capacitacion", "Detalle de capacitaciones con  respaldo fisico notarizado desde el año 2000 en adelante"));
             attributes.add(buildAttribute("TrayectoriaLaboral", Group.class.getName(), null, true, "Trayectoria Labora", "Detalle de la trayectoria laboral del ultimo año"));

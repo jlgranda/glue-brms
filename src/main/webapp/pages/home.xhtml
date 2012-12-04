@@ -75,7 +75,7 @@
                                     <c:choose>
                                         <c:when test="#{p.type == 'org.eqaula.glue.model.Structure'}">
                                             <h:link outcome="/pages/profile/data/structure">
-                                                <div class="span4 columns" style="margin-left: 21px;">
+                                                <div class="span4 columns" style="margin-left: 16px;">
                                                     <div class="well" style="height: 175px; margin-bottom: 0px;">
                                                         #{p.label}
                                                     </div></div>
@@ -85,11 +85,12 @@
                                         </c:when>
                                         <c:when test="#{p.type == 'org.eqaula.glue.model.Group'}">
                                             <h:link outcome="/pages/profile/data/group">
-                                                <div class="span4 columns" style="margin-left: 21px;">
+                                                <div class="span4 columns" style="margin-left: 16px;">
                                                     <div class="well" style="height: 175px; margin-bottom: 0px;">
                                                         #{p.label}
                                                     </div></div>
                                                 <f:param name="groupId" value="#{ui.getGroup(userProfile, p).getId()}"/>
+                                                <f:param name="profileId" value="#{userProfile.id}"/>
                                             </h:link>
                                         </c:when>
                                     </c:choose>

@@ -16,24 +16,25 @@
 package org.eqaula.glue.controller.profile;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
+import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityAttribute;
-import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.Group;
-import org.eqaula.glue.model.Property;
-import org.eqaula.glue.model.Structure;
+import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.Dates;
+import org.jboss.seam.transaction.Transactional;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -44,11 +45,12 @@ import org.eqaula.glue.util.Dates;
 public class GroupHome extends BussinesEntityHome<Group> implements Serializable {
 
     private static final long serialVersionUID = 3338389062654114362L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ProfileHome.class);
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(GroupHome.class);
     @Inject
     @Web
     private EntityManager em;
-    
+    @Inject
+    private ProfileHome profileHome;
     private Long profileId;
     private String name;
 
@@ -75,7 +77,6 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
     public void setName(String name) {
         this.name = name;
     }
-    
 
     @Override
     protected Group createInstance() {
@@ -93,9 +94,11 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
 
     @TransactionAttribute
     public void load() {
-        log.info("eqaula --> Loading instance from ProfileHome for " + getId());
+        log.info("eqaula --> Loading instance from GroupHome for " + getGroupId());
+        log.info("eqaula --> Required profile " + getProfileId());
         if (isIdDefined()) {
             wire();
+            loadProfileHome(); //Cargar el objeto ProfileHome relacionado al grupo
         } else {
             //TODO ver forma de cargas con profileId y groupName
             //Group g = bussinesEntityService.findByName(name)
@@ -137,4 +140,77 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
         }
     }
 
+    @Transactional
+    public void addBussinesEntity(Group group) {
+        Date now = Calendar.getInstance().getTime();
+        String name = "Nuevo " + (group.getProperty() != null ? group.getProperty().getLabel() : "elemento") + " " + (group.findOtherMembers(getProfile()).size() + 1);
+        BussinesEntity entity = new BussinesEntity();
+        entity.setName(name);
+        //TODO implementar generador de códigos para entidad de negocio
+        entity.setCode((group.getProperty() != null ? group.getProperty().getLabel() : "elemento") + " " + (group.findOtherMembers(getProfile()).size() + 1));
+        entity.setCreatedOn(now);
+        entity.setLastUpdate(now);
+        entity.setActivationTime(now);
+        entity.setExpirationTime(Dates.addDays(now, 364));
+        entity.setAuthor(null); //Establecer al usuario actual
+        entity.buildAttributes(getInstance().getName(), bussinesEntityService); //Construir atributos de grupos
+        log.info("eqaula --> start attributes for " + group.getName() + " into entity " + entity.getName() + "");
+        //buildAttributesFor(entity, group.getName());
+        //Set default values into dinamycs properties
+        //TODO idear un mecanismo generico de inicialización de variables dinamicas
+        //entity.getBussinessEntityAttribute("title").setValue(name);
+
+        group.add(entity);
+
+        setBussinesEntity(entity); //Establecer para edición
+    }
+
+    @Transactional
+    public void saveBussinesEntity() {
+
+        try {
+            if (getBussinesEntity() == null) {
+                throw new NullPointerException("bussinessEntity is null");
+            }
+
+            if (getBussinesEntity().getName().equalsIgnoreCase("")) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No name", null));
+            } else {
+                boolean validate = true;
+                for (BussinesEntityAttribute a : getBussinesEntity().getAttributes()) {
+                    if (a.getValue() == null && a.getProperty().isRequired()) {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizó con exito " + bussinesEntity.getName(), ""));
+                        validate = false;
+                    } else {
+                        a.setStringValue(a.getValue() == null ? a.getProperty().getName() : a.getValue().toString());
+                    }
+
+                }
+                if (validate) {
+                    save(getBussinesEntity());
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizó con exito " + bussinesEntity.getName(), ""));
+                    RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hay algunos valores requeridos vacios para " + bussinesEntity.getName() + ". Recuerde los campos con (*) son obligatorios", ""));
+                }
+
+            }
+
+        } catch (Exception e) {
+            System.out.println("saveBussinesEntity ERROR = " + e.getMessage());
+            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
+        }
+    }
+
+    private void loadProfileHome() {
+        if (getProfileId() != null) {
+            profileHome.setProfileId(profileId);
+            profileHome.load();
+        }
+    }
+
+    public Profile getProfile() {
+        return profileHome.getInstance();
+    }
 }
