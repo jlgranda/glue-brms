@@ -5,10 +5,10 @@
 
    <rewrite match=".*/" trailingSlash="remove"/>
    
-	<!-- Content Pages -->
+   <!-- Content Pages -->
    <url-mapping id="home">
-      <pattern value="/"></pattern>
-      <view-id value="/pages/home.xhtml"></view-id>
+       <pattern value="/"></pattern>
+       <view-id value="/pages/home.xhtml"></view-id>
    </url-mapping>
    
    <url-mapping id="profile">
@@ -35,6 +35,25 @@
       <view-id value="/pages/profile/data/group.xhtml"></view-id>
       <query-param name="groupId" decode="false">#{groupHome.groupId}</query-param>
       <query-param name="profileId" decode="false">#{groupHome.profileId}</query-param>
+   </url-mapping>
+   
+   <!-- Admin Pages -->
+   <url-mapping id="admin">
+      <pattern value="/admin"></pattern>
+      <view-id value="/pages/admin/home.xhtml"></view-id>
+   </url-mapping>
+   
+   <url-mapping id="bussinesentity">
+      <pattern value="/admin/bussinesentity/bussinesentity"></pattern>
+      <view-id value="/pages/admin/bussinesentity/bussinesentity.xhtml"></view-id>
+   </url-mapping>
+   <url-mapping id="bussinesentitylist">
+      <pattern value="/admin/bussinesentity/list"></pattern>
+      <view-id value="/pages/admin/bussinesentity/list.xhtml"></view-id>
+   </url-mapping>
+   <url-mapping id="bussinesentityview">
+      <pattern value="/admin/bussinesentity/list"></pattern>
+      <view-id value="/pages/admin/bussinesentity/view.xhtml"></view-id>
    </url-mapping>
    
    <!--
