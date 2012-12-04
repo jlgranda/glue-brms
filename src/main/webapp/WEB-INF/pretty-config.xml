@@ -43,17 +43,17 @@
       <view-id value="/pages/admin/home.xhtml"></view-id>
    </url-mapping>
    
-   <url-mapping id="bussinesentity">
-      <pattern value="/admin/bussinesentity/bussinesentity"></pattern>
-      <view-id value="/pages/admin/bussinesentity/bussinesentity.xhtml"></view-id>
+   <url-mapping id="bussinesentitytype">
+      <pattern value="/admin/bussinesentitytype/bussinesentitytype"></pattern>
+      <view-id value="/pages/admin/bussinesentity/bussinesentitytype.xhtml"></view-id>
    </url-mapping>
-   <url-mapping id="bussinesentitylist">
-      <pattern value="/admin/bussinesentity/list"></pattern>
-      <view-id value="/pages/admin/bussinesentity/list.xhtml"></view-id>
+   <url-mapping id="bussinesentitytypelist">
+      <pattern value="/admin/bussinesentitytype/list"></pattern>
+      <view-id value="/pages/admin/bussinesentitytype/list.xhtml"></view-id>
    </url-mapping>
-   <url-mapping id="bussinesentityview">
-      <pattern value="/admin/bussinesentity/view"></pattern>
-      <view-id value="/pages/admin/bussinesentity/view.xhtml"></view-id>
+   <url-mapping id="bussinesentitytypeview">
+      <pattern value="/admin/bussinesentitytype/view"></pattern>
+      <view-id value="/pages/admin/bussinesentitytype/view.xhtml"></view-id>
    </url-mapping>
    
    <!--

@@ -95,7 +95,7 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<BussinesEntity> query = builder.createQuery(BussinesEntity.class);
 
-        Root<Account> from = query.from(Account.class);
+        Root<BussinesEntity> from = query.from(BussinesEntity.class);
         query.select(from).orderBy(builder.desc(from.get(BussinesEntity_.name)));
         return getResultList(query, maxresults, firstresult);
     }
@@ -103,7 +103,7 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
     public Long count() {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Long> query = builder.createQuery(Long.class);
-        Root<Account> from = query.from(Account.class);
+        Root<BussinesEntity> from = query.from(BussinesEntity.class);
 
         query.select(builder.count(from));
 
