@@ -75,7 +75,7 @@
                                     <c:choose>
                                         <c:when test="#{p.type == 'org.eqaula.glue.model.Structure'}">
                                             <!-- TODO cambiar nombre de atributo fragmentXHTML a page -->
-                                            <h:link outcome="#{p.fragmentXHTML != null ? p.fragmentXHTML : '/pages/profile/data/structure'}">
+                                            <h:link outcome="#{p.customForm != null ? p.customForm : '/pages/profile/data/structure'}">
                                                 <div class="span4 columns" style="margin-left: 16px;">
                                                     <div class="well" style="height: 175px; margin-bottom: 0px;">
                                                         #{p.label}

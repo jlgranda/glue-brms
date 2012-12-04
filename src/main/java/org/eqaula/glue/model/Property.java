@@ -57,7 +57,7 @@ public class Property implements Serializable {
     private String helpInline;
     @Basic(fetch = FetchType.LAZY)
     private byte[] valueByteArray;
-    private String fragmentXHTML;
+    private String customForm;
     @Transient
     private Object value;
     @Transient
@@ -141,12 +141,12 @@ public class Property implements Serializable {
         this.type = type;
     }
 
-    public String getFragmentXHTML() {
-        return fragmentXHTML;
+    public String getCustomForm() {
+        return customForm;
     }
 
-    public void setFragmentXHTML(String fragmentXHTML) {
-        this.fragmentXHTML = fragmentXHTML;
+    public void setCustomForm(String customForm) {
+        this.customForm = customForm;
     }
 
     public String getRender() {
