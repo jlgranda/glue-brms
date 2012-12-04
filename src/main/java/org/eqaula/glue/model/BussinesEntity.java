@@ -286,6 +286,26 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
             }
         }
     }
+    
+    public void buildAttributes(String name, BussinesEntityService bes) {
+        log.info("eqaula --> build attributes for " + name);
+        BussinesEntityType _type = bes.findBussinesEntityTypeByName(name);
+        if (_type == null) {
+            return;
+        }
+        for (Structure s : _type.getStructures()) {
+            for (Property a : s.getProperties()) {
+                if (a.getType().equals(Group.class.getName())) {
+                    //TODO support for groups into groups
+                } else if (a.getType().equals(Structure.class.getName())) {
+                    loadStructure(a, bes);
+                } else {
+                    //tmp.add(buildAtribute(a));
+                    this.addBussinesEntityAttribute(buildAtribute(a));
+                }
+            }
+        }
+    }
 
     protected void loadStructure(Property a, BussinesEntityService bes) {
         BussinesEntityType _type = bes.findBussinesEntityTypeByName(a.getName());

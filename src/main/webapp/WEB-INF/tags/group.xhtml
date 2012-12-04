@@ -22,8 +22,7 @@ limitations under the License.
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
     xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
-    xmlns:glue="http://eqaula.org/jsf/facelets"
-    >
+    xmlns:glue="http://eqaula.org/jsf/facelets">
     <c:set var="id" value="#{not empty id ? id : (not empty name ? name : action)}" />
     <c:set var="required" value="#{not empty required and required}" />
     <c:set var="group" value="#{not empty group ? group : null}" />
@@ -53,13 +52,13 @@ limitations under the License.
                              icon="ui-icon-plus" update="edit-dialog-#{id}" oncomplete="editDlg.show();"/>  
             <p:dialog id="edit-dialog-#{id}" header="#{messages['common.edit']} #{controller.bussinesEntity.name}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="450">
                 <!-- Attributos de clase, sino existen extendidos -->
-                <p:panel rendered="#{empty controller.findAttributesFor(controller.bussinesEntity, group.name)}">
+                <p:panel rendered="#{empty controller.bussinesEntity.findBussinesEntityAttribute(group.name)}">
                     <glue:input id="gname_#{id}" name="gname_#{group.id}" type="text" label="#{messages['common.name']}" value="#{controller.bussinesEntity.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}"/>
                     <glue:input id="gcode_#{id}" name="gcode_#{group.id}" type="text" label="#{messages['common.code']}" value="#{controller.bussinesEntity.code}" required="false" inlinehelp="#{messages['common.code.inlinehelp']}"/>
                 </p:panel>
-                <p:panel rendered="#{not empty controller.findAttributesFor(controller.bussinesEntity, group.name)}">
+                <p:panel rendered="#{not empty controller.bussinesEntity.findBussinesEntityAttribute(group.name)}">
                     <!-- Attributos personalizados -->
-                    <c:forEach items="#{controller.findAttributesFor(controller.bussinesEntity, group.name)}" var="a" >
+                    <c:forEach items="#{controller.bussinesEntity.findBussinesEntityAttribute(group.name)}" var="a" >
                         <glue:input id="#{a.property.id}" name="#{a.name}" type="#{a.type}" label="#{a.property.label}" value="#{a.value}" required="#{a.property.required}" inlinehelp="#{a.property.helpInline}" render="#{a.property.id} #{a.property.render != null ? a.property.render : ''}" converter="#{a.property.converter}" values="#{ui.getValuesAsSelectItem(a.property.values)}"/>
                     </c:forEach>
                 </p:panel>

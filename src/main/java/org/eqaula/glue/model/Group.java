@@ -83,8 +83,6 @@ public class Group extends BussinesEntity {
     
     public List<BussinesEntity> findOtherMembers(BussinesEntity me) {
         
-        //System.out.println("findOtherMembers for " + me);
-        
         List<BussinesEntity> _buffer = new ArrayList<BussinesEntity>();
         
         if (me ==  null) {
@@ -92,11 +90,10 @@ public class Group extends BussinesEntity {
         }
         
         for (BussinesEntity e : getMembers()){
-            if (!me.getId().equals(e.getId())){
+            if (me.getId() != null  && !me.getId().equals(e.getId())){
                 _buffer.add(e);
             }
         }
-        //System.out.println("Other members " + _buffer);
         return _buffer;
     }
 
