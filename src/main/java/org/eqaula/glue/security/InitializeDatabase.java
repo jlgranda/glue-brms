@@ -433,7 +433,7 @@ public class InitializeDatabase {
 
             //attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), true, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
             attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), false, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
-            attributes.add(buildAttribute("tipoInstruccion", "java.lang.String[]",",Pre-Basica,Basica,Bachillerato,Egresado,Superior,4 Nivel,Ninguno", false, "Tipo de Instrucción", "Indique el tipo de instrucción"));
+            attributes.add(buildAttribute("tipoInstruccion", "java.lang.String[]","Pre-Basica,Basica,Bachillerato,Egresado,Superior,4 Nivel,Ninguno", false, "Tipo de Instrucción", "Indique el tipo de instrucción"));
             
             //Agregar atributos
             structure.setProperties(attributes);
@@ -750,7 +750,7 @@ public class InitializeDatabase {
         return attributte;
     }
 
-    private Property buildAttribute(String name, String type, Serializable value, boolean required, String label, String helpinline, String render, String fragmentXHTML) {
+    private Property buildAttribute(String name, String type, Serializable value, boolean required, String label, String helpinline, String render, String customForm) {
         Property attributte = new Property();
         attributte.setName(name);
         attributte.setType(type);
@@ -759,7 +759,7 @@ public class InitializeDatabase {
         attributte.setLabel(label);
         attributte.setHelpInline(helpinline);
         attributte.setRender(render);
-        attributte.setFragmentXHTML(fragmentXHTML);
+        attributte.setCustomForm(customForm);
         return attributte;
     }
 }
