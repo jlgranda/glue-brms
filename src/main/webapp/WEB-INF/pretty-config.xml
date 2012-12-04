@@ -52,7 +52,7 @@
       <view-id value="/pages/admin/bussinesentity/list.xhtml"></view-id>
    </url-mapping>
    <url-mapping id="bussinesentityview">
-      <pattern value="/admin/bussinesentity/list"></pattern>
+      <pattern value="/admin/bussinesentity/view"></pattern>
       <view-id value="/pages/admin/bussinesentity/view.xhtml"></view-id>
    </url-mapping>
    
