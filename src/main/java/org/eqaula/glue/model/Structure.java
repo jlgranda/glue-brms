@@ -36,9 +36,6 @@ public class Structure extends DeletableObject<Structure> implements Serializabl
     private BussinesEntityType bussinesEntityType;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy="structure", fetch=FetchType.LAZY)
-    /*@JoinTable(name = "structure_attribute", joinColumns = {
-        @JoinColumn(name = "structure_id")}, inverseJoinColumns = {
-        @JoinColumn(name = "attribute_id")})*/
     private List<Property> properties;
 
     public BussinesEntityType getBussinesEntityType() {
