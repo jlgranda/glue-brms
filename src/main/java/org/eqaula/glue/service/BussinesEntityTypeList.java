@@ -52,6 +52,7 @@ public class BussinesEntityTypeList extends LazyDataModel<BussinesEntityType>{
 
     public BussinesEntityTypeList() {
         setPageSize(MAX_RESULTS);
+        resultList = new ArrayList<BussinesEntityType>();         
     }
 
     public Logger getLog() {
@@ -82,7 +83,7 @@ public class BussinesEntityTypeList extends LazyDataModel<BussinesEntityType>{
         return resultList;
     }
     
-    public String bind() {
+    public String find() {
         resultList = bussinesEntityTypeService.findAll();
         String summary = "Encontrados!";
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null));

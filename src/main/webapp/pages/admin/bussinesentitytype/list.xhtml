@@ -23,43 +23,41 @@ limitations under the License.
                 template="/WEB-INF/view/templates/glue.xhtml">
     <ui:define name="content">
         <f:metadata>
+            <f:event listener="#{bussinesEntityTypeList.find()}" type="preRenderView"/>
             <f:viewParam name="result" value="#{bussinesEntityTypeList.firstResult}" />
         </f:metadata>
          
     <h:form id="form">
-        <p:dataTable var="bussinesEntityType" value="#{bussinesEntityTypeList}"
+        <h1>Lista de BussinesEntityType</h1>
+        
+        <p:dataTable var="bussinesEntityType" value="#{bussinesEntityTypeList.resultList}"
                          paginator="true" rows="10"
                          paginatorAlwaysVisible="false"
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
                          rowsPerPageTemplate="5,10,15"
-                         id="bussinesEntityTypeTable" lazy="true"
+                         id="bussinesEntityTypeTable" lazy="true"                          
                          selection="#{bussinesEntityTypeList.bussinesEntityTypeService}"
-                         rendered="#{not empty bussinesEntityTypeList.resultList}">
+                         rendered="#{not empty bussinesEntityTypeList.resultList}"
+                         var="bussinesEntityType">                
 
-                <p:column selectionMode="multiple" style="width:18px" />
-
-                <p:column headerText="#{messages['BussinesEntity.code']}" sortBy="#{account.code}">
-                    <h:outputText value="#{bussinesEntity.code}" />
-                </p:column>
-
-                <p:column headerText="#{messages['BussinesEntity.name']}" sortBy="#{account.name}">
-                    <h:outputText value="#{bussinesEntity.name}" />
-                </p:column>
+                  <p:column headerText="#{messages['BussinesEntityType.name']}" >
+                      <h:outputText value="#{bussinesEntityType.name}"></h:outputText>
+                 </p:column> 
 
                 <f:facet name="footer">
                     <p:commandButton id="multiViewButton" value="#{messages['common.view']}" icon="ui-icon-search"  
                                      update=":form:displayMulti" oncomplete="multiBussinesEntityDialog.show()"/>  
                 </f:facet>
             </p:dataTable>
-
+            <!--
             <p:dialog id="multiDialog" header="#{messages['Account.detail']}"
                       widgetVar="multiBussinesEntityDialog" height="300" showEffect="fade"
                       hideEffect="explode">
 
                 <p:dataList id="displayMulti" value="#{bussinesEntityTypeList.selectedBussinesEntityType}"
                             var="selectedBussinesEntityType">  
-                    Code: #{selectedBussinesEntityType.code}, Name: #{selectedBussinesEntityType.name}  
+                    
                 </p:dataList>
 
             </p:dialog>
@@ -68,7 +66,7 @@ limitations under the License.
                     <h:panelGrid columns="1" id="display">  
                         <h:outputText value="#{bussinesEntityTypeList.selectedBussinesEntityType.name}" />  
     		    </h:panelGrid>  
-             </p:dialog>  
+             </p:dialog>  -->
 
         </h:form>
     </ui:define>
