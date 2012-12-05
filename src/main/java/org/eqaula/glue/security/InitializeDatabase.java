@@ -392,9 +392,9 @@ public class InitializeDatabase {
 
             //attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), true, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
             attributes.add(buildAttribute("tipoRelacion", "java.lang.String[]","Casado,Unión libre", true, "Tipo de Relacion", "Indique que relacion tiene"));             
-            attributes.add(buildAttribute("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos"));
-            attributes.add(buildAttribute("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre"));
-            attributes.add(buildAttribute("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones"));
+            attributes.add(builtProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos",null,null,true));
+            attributes.add(builtProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre",null,null,true));
+            attributes.add(builtProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones",null,null,true));
             attributes.add(buildAttribute("empresaTrabajo", String.class.getName(), null, false, "Empresa en la que Trabaja", "Indique la empresa que trabaja"));
             attributes.add(buildAttribute("funcionCargo", String.class.getName(), null ,false, "Actividad / Función o Cargo", "Que cargo o funcion tiene"));
 
@@ -435,8 +435,9 @@ public class InitializeDatabase {
             List<Property> attributes = new ArrayList<Property>();
 
             attributes.add(buildAttribute("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos"));
-            attributes.add(buildAttribute("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre"));
-            attributes.add(buildAttribute("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones"));
+            attributes.add(builtProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos",null,null,true));
+            attributes.add(builtProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre",null,null,true));
+            attributes.add(builtProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones",null,null,true));
             attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), false, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));            
             attributes.add(buildAttribute("tipoInstruccion", "java.lang.String[]","Pre-Basica,Basica,Bachillerato,Egresado,Superior,4 Nivel,Ninguno", false, "Tipo de Instrucción", "Indique el tipo de instrucción"));
             
@@ -783,6 +784,17 @@ public class InitializeDatabase {
     }
 
     //metodo buildProterty
+    private Property builtProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, boolean showInColumns){
+        Property property = new Property();
+        property.setName(name);
+        property.setType(type);
+        property.setValue(value);
+        property.setRequired(required);
+        property.setLabel(label);
+        property.setHelpInline(helpinline);         
+        property.setShowInColumns(showInColumns);
+        return property;
+    }
     private Property builtProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, String render, String customForm, boolean showInColumns){
         Property property = new Property();
         property.setName(name);

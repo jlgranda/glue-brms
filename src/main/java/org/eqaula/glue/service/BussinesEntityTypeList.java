@@ -69,7 +69,7 @@ public class BussinesEntityTypeList extends LazyDataModel<BussinesEntityType>{
         log.info("load BussinesEntitys");
         resultList = new ArrayList<BussinesEntityType>();
         if (resultList == null && getSelectedBussinesEntityType() != null) {
-            resultList = bussinesEntityService.find(this.getPageSize(), firstResult, getSelectedBussinesEntityType());
+            //resultList = bussinesEntityService.find(this.getPageSize(), firstResult, getSelectedBussinesEntityType());
         }
         
         return resultList;
