@@ -279,7 +279,7 @@ public class InitializeDatabase {
 
             
             attributes.add(buildAttribute("PersonalData", Structure.class.getName(), null, true, "Datos personales", "Información personal relevante", null, "/pages/profile/data/personal"));
-            attributes.add(buildAttribute("Spouse", Group.class.getName(), null, true, "Esposa/o", "Datos de su conyugue"));
+            attributes.add(buildGroupTypeProperty("Spouse","Esposa/o", false, null, 1L, "Datos de su conyugue"));
             attributes.add(buildAttribute("Childrens", Group.class.getName(), null, true, "Hijos", "Datos de sus hijos"));
             attributes.add(buildAttribute("Education", Group.class.getName(), null, true, "Educación", "Detalle sus logros académicos"));
             attributes.add(buildAttribute("Role", Structure.class.getName(), null, true, "Detalle del cargo que desempeña", "Detalle del cargo que desempeña"));
@@ -722,6 +722,20 @@ public class InitializeDatabase {
         attributte.setLabel(label);
         attributte.setHelpInline(helpinline);
         return attributte;
+    }
+    
+    private Property buildGroupTypeProperty(String name, String label, boolean showDefaultBussinesEntityProperties, String generatorName, Long maximumMembers, String helpinline) {
+        Property property = new Property();
+        property.setName(name);
+        property.setType(Group.class.getName());
+        property.setValue(null);
+        property.setRequired(true);
+        property.setLabel(label);
+        property.setHelpInline(helpinline);
+        property.setShowDefaultBussinesEntityProperties(showDefaultBussinesEntityProperties);
+        property.setGeneratorName(generatorName);
+        property.setMaximumMembers(maximumMembers);
+        return property;
     }
     
     //builder for attributes

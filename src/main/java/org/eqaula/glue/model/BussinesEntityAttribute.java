@@ -130,27 +130,39 @@ public class BussinesEntityAttribute implements Serializable {
     
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+                // if deriving: appendSuper(super.hashCode()).
+                append(getName()).
+                append(getType()).
+                toHashCode();
     }
 
     @Override
-    public boolean equals(Object object) {
-        if (!(object instanceof Property)) {
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        BussinesEntityAttribute other = (BussinesEntityAttribute) object;
-        if ((this.id == null && other.id != null)
-                || (this.id != null && !this.id.equals(other.id))
-                || (this.name != null && !this.name.equals(other.name))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        BussinesEntityAttribute other = (BussinesEntityAttribute) obj;
+        return new EqualsBuilder().
+                // if deriving: appendSuper(super.equals(obj)).
+                append(getName(), other.getName()).
+                append(getType(), other.getType()).
+                isEquals();
     }
+          
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.BussinesEntityAttribute[ id=" + id + " ]";
+        return "org.eqaula.glue.model.BussinesEntityAttribute[ "
+                + "id=" + id + "," 
+                + "name=" + name + ","
+                + "type=" + type + ","
+                + " ]";
     }
 }

@@ -33,6 +33,10 @@
                                          selectionMode="single" >  
 
                                 <p:ajax event="rowSelect" update=":edit-dialog" oncomplete="editDlg.show()" /> 
+                                <p:ajax event="rowSelect" listener="#{groupHome.onRowSelect}"   
+                                        update=":edit-dialog :form-table:messages" oncomplete="editDlg.show()" />  
+                                <p:ajax event="rowUnselect" listener="#{groupHome.onRowUnselect}" update=":form-table:messages"/>  
+
                                 <p:column headerText="#{messages['common.name']}" style="width:125px">  
                                     <h:outputText value="#{m.name}" />  
                                 </p:column>  
@@ -41,12 +45,12 @@
                                 </p:column>
                             </p:dataTable>
                         </p:panel>
-                        <p:commandButton value="#{messages['common.add']} #{groupHome.instance.property.label}" ajax="true"
-                                         action="#{groupHome.addBussinesEntity(groupHome.instance)}" process="@this, :edit-dialog"
-                                         icon="ui-icon-plus" update=":edit-dialog" oncomplete="editDlg.show();"/>  
                     </div>
                 </h:panelGroup>
                 <div class="actions">
+                    <p:commandButton value="#{messages['common.add']} #{groupHome.instance.property.label}" ajax="true"
+                                     action="#{groupHome.addBussinesEntity(groupHome.instance)}" process="@this, :edit-dialog"
+                                     icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"/>  
                     <h:commandButton id="save" action="#{groupHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary" rendered="false"/>
                     &nbsp;
                     <h:commandButton action="/pages/home.xhtml?faces-redirect=true"
@@ -60,7 +64,7 @@
                     <h:form id="form-dialog">
                         <p:messages id="messages-dialog" showDetail="true" autoUpdate="true" closable="true" />  
                         <!-- Attributos de clase, siempre mostrar, almacena nombre y código único -->
-                        <h:panelGroup layout="block" class="clearfix">
+                        <h:panelGroup layout="block" class="clearfix" rendered="#{groupHome.instance.property.showDefaultBussinesEntityProperties}">
                             <h:panelGroup layout="block" class="clearfix">
                                 <label for="name" class="required">#{messages['common.name']}*</label>
                                 <div class="input">
@@ -137,7 +141,8 @@
                                          style="margin-top:10px;" icon="ui-icon-disk">  
                         </p:commandButton>  
 
-                        <p:commandButton type="button" value="#{messages['common.delete']}" onclick="deletedDlg.show()" style="margin-top:10px;"/>  
+                        <p:commandButton type="button" value="#{messages['common.delete']}" style="margin-top:10px;" rendered="#{groupHome.bussinesEntity.persistent}" onclick="editDlg.hide();"/>  
+                        <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" rendered="#{not groupHome.bussinesEntity.persistent}" onclick="editDlg.hide();" action="#{groupHome.deleteBussinessEntity()}"/>  
                     </h:form>
                 </p:dialog>
                 <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
@@ -145,11 +150,13 @@
                         <h:panelGroup layout="block" style="padding:5px;">  
                             <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                         </h:panelGroup>  
-                        <p:commandButton value="#{messages['common.delete']}" oncomplete="deletedDlg.hide();"  
-                                         action="#{groupHome.deleteBussinessEntity()}" process="@this"  
+                        <p:commandButton value="#{messages['common.agree']}" oncomplete="deletedDlg.hide();"  
+                                         action="#{groupHome.deleteBussinessEntity()}" 
+                                         update=":form-table:dataTable :form-dialog:messages-dialog"
+                                         ajax="true" process="@this"  
                                          style="margin-top:10px;">  
                         </p:commandButton>  
-                        <p:commandButton value="Cancel" type="button" onclick="deletedDlg.hide();"  
+                        <p:commandButton value="#{messages['common.noagree']}" type="button" onclick="deletedDlg.hide();"  
                                          style="margin-top:10px;"/>  
                     </h:form>
                 </p:dialog>  

@@ -41,10 +41,10 @@ limitations under the License.
         <div class="input">
             <c:choose>
                 <c:when test="#{type == 'java.lang.String' or type == 'text'}">
-                    <h:inputText value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}">
+                    <p:inputText value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}">
                         <f:validator validatorId="#{validator}"/>
-                        <f:ajax execute="#{execute}" render="#{render}"  />
-                    </h:inputText>
+                        <p:ajax event="change" update="#{render}" partialSubmit="true"/>
+                    </p:inputText>
                 </c:when>
                 <c:when test="#{type == 'java.util.Date' or type == 'calendar'}">
                     <p:calendar value="#{a.value}" id="#{name}" navigator="true" label="#{label}">

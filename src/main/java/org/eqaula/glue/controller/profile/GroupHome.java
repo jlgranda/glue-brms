@@ -35,6 +35,8 @@ import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -142,27 +144,28 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
 
     @Transactional
     public void addBussinesEntity(Group group) {
-        Date now = Calendar.getInstance().getTime();
-        String name = "Nuevo " + (group.getProperty() != null ? group.getProperty().getLabel() : "elemento") + " " + (group.findOtherMembers(getProfile()).size() + 1);
-        BussinesEntity entity = new BussinesEntity();
-        entity.setName(name);
-        //TODO implementar generador de códigos para entidad de negocio
-        entity.setCode((group.getProperty() != null ? group.getProperty().getLabel() : "elemento") + " " + (group.findOtherMembers(getProfile()).size() + 1));
-        entity.setCreatedOn(now);
-        entity.setLastUpdate(now);
-        entity.setActivationTime(now);
-        entity.setExpirationTime(Dates.addDays(now, 364));
-        entity.setAuthor(null); //Establecer al usuario actual
-        entity.buildAttributes(getInstance().getName(), bussinesEntityService); //Construir atributos de grupos
-        log.info("eqaula --> start attributes for " + group.getName() + " into entity " + entity.getName() + "");
-        //buildAttributesFor(entity, group.getName());
-        //Set default values into dinamycs properties
-        //TODO idear un mecanismo generico de inicialización de variables dinamicas
-        //entity.getBussinessEntityAttribute("title").setValue(name);
+        //comparar con maximum + 1, ya que el mismo objeto es parte del grupo
+        if (group.getProperty().getMaximumMembers() == 0L || group.getMembers().size() < group.getProperty().getMaximumMembers() + 1) {
+            Date now = Calendar.getInstance().getTime();
+            //TODO internacionalizar cadenas estáticas
+            String name = "Nuevo " + (group.getProperty() != null ? group.getProperty().getLabel() : "elemento") + " " + (group.findOtherMembers(getProfile()).size() + 1);
+            BussinesEntity entity = new BussinesEntity();
+            entity.setName(name);
+            //TODO implementar generador de códigos para entidad de negocio
+            entity.setCode((group.getProperty() != null ? group.getProperty().getLabel() : "elemento") + " " + (group.findOtherMembers(getProfile()).size() + 1));
+            entity.setCreatedOn(now);
+            entity.setLastUpdate(now);
+            entity.setActivationTime(now);
+            entity.setExpirationTime(Dates.addDays(now, 364));
+            entity.setAuthor(null); //Establecer al usuario actual
+            entity.buildAttributes(getInstance().getName(), bussinesEntityService); //Construir atributos de grupos
+            group.add(entity);
 
-        group.add(entity);
-
-        setBussinesEntity(entity); //Establecer para edición
+            setBussinesEntity(entity); //Establecer para edición
+            RequestContext.getCurrentInstance().execute("editDlg.show()"); //abrir el popup si se añadió correctamente
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No es posible agregar más " + group.getProperty().getLabel() + ". El número máximo es " + group.getProperty().getMaximumMembers(), ""));
+        }
     }
 
     @Transactional
@@ -190,6 +193,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
                     save(getBussinesEntity());
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizó con exito " + bussinesEntity.getName(), ""));
                     RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
+                    setBussinesEntity(null); //liberar de memoria el objeto seleccionado
                 } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hay algunos valores requeridos vacios para " + bussinesEntity.getName() + ". Recuerde los campos con (*) son obligatorios", ""));
                 }
@@ -201,6 +205,44 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
+    }
+
+    @Transactional
+    public void deleteBussinessEntity() {
+        try {
+            if (getBussinesEntity() == null) {
+                throw new NullPointerException("bussinessEntity is null");
+            }
+
+            if (getBussinesEntity().isPersistent()) {
+                delete(getBussinesEntity());
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hemos completado con exito la operación de borrado de " + bussinesEntity.getName(), ""));
+                RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
+                setBussinesEntity(null); //liberar de memoria el objeto seleccionado
+            } else {
+                //remover de la lista, si aún no esta persistido
+                getInstance().getMembers().remove(this.getBussinesEntity());
+                RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
+            }
+
+        } catch (Exception e) {
+            System.out.println("saveBussinesEntity ERROR = " + e.getMessage());
+            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
+        }
+    }
+
+    public void onRowSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage("BussinesEntity Selected ", ((BussinesEntity) event.getObject()).getName());
+
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        FacesMessage msg = new FacesMessage("BussinesEntity Unselected ", ((BussinesEntity) event.getObject()).getName());
+
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        this.setBussinesEntity(null);
     }
 
     private void loadProfileHome() {

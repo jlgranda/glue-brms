@@ -56,7 +56,7 @@ public class SafeTextUTF8Validator implements Validator
       String field = value.toString();
       if (!StringValidations.isPunctuatedTextUTF8(field))
       {
-         FacesMessage msg = new FacesMessage("I don't like that...");
+         FacesMessage msg = new FacesMessage("Este texto no anda bien, evite usar caracteres extraños...");
          throw new ValidatorException(msg);
       }
    }

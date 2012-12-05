@@ -30,6 +30,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
 import org.apache.commons.lang.SerializationUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eqaula.glue.util.Lists;
 
 /**
@@ -64,6 +66,25 @@ public class Property implements Serializable {
     private List<String> values;
     private String render;
     private String converter;
+    /*************************************************************
+     * Attributes for property type org.eqaula.glue.model.Group
+     *************************************************************/ 
+    /**
+     * Show/hide default BussinesEntity attributes into form edition for org.equala.glue.Group type 
+     */
+    private boolean showDefaultBussinesEntityProperties = false;
+    /**
+     * If this property is a group, register a generatorName for code attribute in members. It is apply for other attributes type
+     */
+    private String generatorName;
+    /**
+     * El límite de miembros permitidos para el grupo
+     */
+    private Long maximumMembers = 0L;
+    /**
+     * Show in columns of table for groups.
+     */
+    private boolean showInColumns = false;
     
     @ManyToOne
     @JoinColumn(name = "structure_id")
@@ -172,35 +193,79 @@ public class Property implements Serializable {
     public void setConverter(String converter) {
         this.converter = converter;
     }
-    
-    public List<String> getValues(){
+
+    public List<String> getValues() {
         return Lists.stringToList(getValue().toString());
     }
-    
-    @Override
+
+    public boolean isShowDefaultBussinesEntityProperties() {
+        return showDefaultBussinesEntityProperties;
+    }
+
+    public void setShowDefaultBussinesEntityProperties(boolean showDefaultBussinesEntityProperties) {
+        this.showDefaultBussinesEntityProperties = showDefaultBussinesEntityProperties;
+    }
+
+    public String getGeneratorName() {
+        return generatorName;
+    }
+
+    public void setGeneratorName(String generatorName) {
+        this.generatorName = generatorName;
+    }
+
+    public Long getMaximumMembers() {
+        return maximumMembers;
+    }
+
+    public void setMaximumMembers(Long maximumMembers) {
+        this.maximumMembers = maximumMembers;
+    }
+
+    public boolean isShowInColumns() {
+        return showInColumns;
+    }
+
+    public void setShowInColumns(boolean showInColumns) {
+        this.showInColumns = showInColumns;
+    }
+
+   @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+                // if deriving: appendSuper(super.hashCode()).
+                append(getGroupName()).
+                append(getName()).
+                append(getType()).
+                toHashCode();
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Property)) {
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Property other = (Property) object;
-        if ((this.id == null && other.id != null)
-                || (this.id != null && !this.id.equals(other.id))
-                || (this.name != null && !this.name.equals(other.name))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        Property other = (Property) obj;
+        return new EqualsBuilder().
+                // if deriving: appendSuper(super.equals(obj)).
+                append(getGroupName(), other.getGroupName()).
+                append(getName(), other.getName()).
+                append(getType(), other.getType()).
+                isEquals();
     }
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.StructureAttribute[ id=" + id + " ]";
+        return "org.eqaula.glue.model.Property[ "
+                + "id=" + id + "," 
+                + "name=" + name + ","
+                + "type=" + type + ","
+                + " ]";
     }
 }
