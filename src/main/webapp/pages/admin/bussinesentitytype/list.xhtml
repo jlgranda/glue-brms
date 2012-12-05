@@ -14,12 +14,62 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/view/templates/glue.xhtml">
+    <ui:define name="content">
+        <f:metadata>
+            <f:viewParam name="result" value="BussinesEntityTypeListService" />
+        </f:metadata>
+         
+    <h:form id="form">
+            <p:dataTable var="bussinesEntityType" value="#{BussinesEntityTypeList}"
+                         paginator="true" rows="10"
+                         paginatorAlwaysVisible="false"
+                         paginatorPosition="top"
+                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                         rowsPerPageTemplate="5,10,15"
+                         id="bussinesEntityTable" lazy="true"
+                         selection="#{bussinesEntityListService.selectedBussinesEntities}"
+                         rendered="#{not empty bussinesEntityListService.resultList}">
+
+                <p:column selectionMode="multiple" style="width:18px" />
+
+                <p:column headerText="#{messages['BussinesEntity.code']}" sortBy="#{account.code}">
+                    <h:outputText value="#{bussinesEntity.code}" />
+                </p:column>
+
+                <p:column headerText="#{messages['BussinesEntity.name']}" sortBy="#{account.name}">
+                    <h:outputText value="#{bussinesEntity.name}" />
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:commandButton id="multiViewButton" value="#{messages['common.view']}" icon="ui-icon-search"  
+                                     update=":form:displayMulti" oncomplete="multiBussinesEntityDialog.show()"/>  
+                </f:facet>
+            </p:dataTable>
+
+            <p:dialog id="multiDialog" header="#{messages['Account.detail']}"
+                      widgetVar="multiBussinesEntityDialog" height="300" showEffect="fade"
+                      hideEffect="explode">
+
+                <p:dataList id="displayMulti" value="#{bussinesEntityListService.selectedBussinesEntity}"
+                            var="selectedBussinesEntity">  
+                    Code: #{selectedBussinesEntity.code}, Name: #{selectedBussinesEntity.name}  
+                </p:dataList>
+
+            </p:dialog>
+            
+            <p:dialog header="#{messages['common.selectedBussinesEntity']}" modal="true" showEffect="fade" hideEffect="fade" widgetVar="dlg">  
+                    <h:panelGrid columns="1" id="display">  
+                                <h:outputText value="#{bussinesEntityListService.selectedBussinesEntity.name}" />  
+    		    </h:panelGrid>  
+             </p:dialog>  
+
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -762,4 +762,18 @@ public class InitializeDatabase {
         attributte.setCustomForm(customForm);
         return attributte;
     }
+
+    //metodo buildProterty
+    private Property builtProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, String render, String customForm){
+        Property property = new Property();
+        property.setName(name);
+        property.setType(type);
+        property.setValue(value);
+        property.setRequired(required);
+        property.setLabel(label);
+        property.setHelpInline(helpinline);
+        property.setRender(render);
+        property.setCustomForm(customForm);        
+        return property;
+    }
 }
