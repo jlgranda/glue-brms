@@ -23,52 +23,59 @@ limitations under the License.
                 template="/WEB-INF/view/templates/glue.xhtml">
     <ui:define name="content">
         <f:metadata>
-            <f:viewParam name="result" value="BussinesEntityTypeListService" />
+            <f:event listener="#{bussinesEntityTypeList.find()}" type="preRenderView"/>
+            <f:viewParam name="result" value="#{bussinesEntityTypeListService.firstResult}" />
         </f:metadata>
          
     <h:form id="form">
-            <p:dataTable var="bussinesEntityType" value="#{BussinesEntityTypeList}"
+        <h1>Lista de BussinesEntityType</h1>
+        <h:panelGrid columns="3">
+                <h:outputText value="#{messages['common.find']}: "></h:outputText>
+                <!--<p:inputText id="criterio" value="" size="25">
+                </p:inputText>-->
+                <p:commandButton value="Buscar" action="#{bussinesEntityTypeListService.find()}" ajax="true" 
+                                 icon="ui-icon ui-icon-disk" update="bussinesEntityTypeTable">
+
+                </p:commandButton> 
+        </h:panelGrid>
+        
+        <p:dataTable var="bussinesEntityType" value="#{bussinesEntityTypeListService.resultList}"
                          paginator="true" rows="10"
                          paginatorAlwaysVisible="false"
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
                          rowsPerPageTemplate="5,10,15"
-                         id="bussinesEntityTable" lazy="true"
-                         selection="#{bussinesEntityListService.selectedBussinesEntities}"
-                         rendered="#{not empty bussinesEntityListService.resultList}">
+                         id="bussinesEntityTypeTable" lazy="true"                          
+                         selection="#{bussinesEntityTypeListService.selectedBussinesEntityType}"
+                         rendered="#{not empty bussinesEntityTypeList.resultList}">                
+                         
+                <p:column selectionMode="multiple" style="width:18px" />     
+                <p:column headerText="#{messages['BussinesEntityType.name']}" >
+                          <h:outputText value="#{bussinesEntityType.name}"></h:outputText>
+                     </p:column> 
 
-                <p:column selectionMode="multiple" style="width:18px" />
-
-                <p:column headerText="#{messages['BussinesEntity.code']}" sortBy="#{account.code}">
-                    <h:outputText value="#{bussinesEntity.code}" />
-                </p:column>
-
-                <p:column headerText="#{messages['BussinesEntity.name']}" sortBy="#{account.name}">
-                    <h:outputText value="#{bussinesEntity.name}" />
-                </p:column>
-
-                <f:facet name="footer">
-                    <p:commandButton id="multiViewButton" value="#{messages['common.view']}" icon="ui-icon-search"  
-                                     update=":form:displayMulti" oncomplete="multiBussinesEntityDialog.show()"/>  
-                </f:facet>
+                 <f:facet name="footer">
+                        <p:commandButton id="multiViewButton" value="#{messages['common.view']}" icon="ui-icon-search"  
+                                         update=":form:displayMulti" oncomplete="multiBussinesEntityDialog.show()"/>  
+                 </f:facet>
             </p:dataTable>
-
+            <!--
             <p:dialog id="multiDialog" header="#{messages['Account.detail']}"
                       widgetVar="multiBussinesEntityDialog" height="300" showEffect="fade"
                       hideEffect="explode">
 
-                <p:dataList id="displayMulti" value="#{bussinesEntityListService.selectedBussinesEntity}"
-                            var="selectedBussinesEntity">  
-                    Code: #{selectedBussinesEntity.code}, Name: #{selectedBussinesEntity.name}  
+                <p:dataList id="displayMulti" value="#{bussinesEntityTypeList.selectedBussinesEntityType}"
+                            var="selectedBussinesEntityType">  
+                    
                 </p:dataList>
 
             </p:dialog>
             
             <p:dialog header="#{messages['common.selectedBussinesEntity']}" modal="true" showEffect="fade" hideEffect="fade" widgetVar="dlg">  
                     <h:panelGrid columns="1" id="display">  
-                                <h:outputText value="#{bussinesEntityListService.selectedBussinesEntity.name}" />  
+                        <h:outputText value="#{bussinesEntityTypeList.selectedBussinesEntityType.name}" />  
     		    </h:panelGrid>  
-             </p:dialog>  
+             </p:dialog>  -->
 
         </h:form>
     </ui:define>
