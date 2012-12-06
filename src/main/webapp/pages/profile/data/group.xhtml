@@ -25,24 +25,23 @@
                     <label for="#{groupHome.instance.property.name}" class="#{(not empty groupHome.instance.property.required and groupHome.instance.property.required) ? 'required' : ''}">#{groupHome.instance.property.label}#{(not empty groupHome.instance.property.required and groupHome.instance.property.required) ? '*&#160;' : ''}</label>
                     <div class="input">
                         <p:panel id="dataTable">
-                            <p:dataTable var="m" value="#{groupHome.instance.findOtherMembers(groupHome.profile)}" 
+                            <p:dataTable id="members" var="m" value="#{groupHome.instance.findOtherMembers(groupHome.profile)}" 
                                          editable="false" 
                                          emptyMessage="#{messages['common.emptyList']}"
                                          rowKey="#{groupHome.instance.id}"
                                          selection="#{groupHome.bussinesEntity}" 
                                          selectionMode="single" >  
 
-                                <p:ajax event="rowSelect" update=":edit-dialog" oncomplete="editDlg.show()" /> 
                                 <p:ajax event="rowSelect" listener="#{groupHome.onRowSelect}"   
                                         update=":edit-dialog :form-table:messages" oncomplete="editDlg.show()" />  
                                 <p:ajax event="rowUnselect" listener="#{groupHome.onRowUnselect}" update=":form-table:messages"/>  
-
-                                <p:column headerText="#{messages['common.name']}" style="width:125px">  
-                                    <h:outputText value="#{m.name}" />  
-                                </p:column>  
-                                <p:column headerText="#{messages['common.code']}" style="width:125px">  
-                                    <h:outputText value="#{m.code}" />  
-                                </p:column>
+                                <p:columns value="#{groupHome.columns}" var="column" columnIndexVar="colIndex"   
+                                           sortBy="#{m[column.property]}">  
+                                    <f:facet name="header">  
+                                        #{column.header}  
+                                    </f:facet>  
+                                    #{m.findAttributeValue(column.property)}  
+                                </p:columns> 
                             </p:dataTable>
                         </p:panel>
                     </div>

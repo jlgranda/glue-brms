@@ -189,7 +189,7 @@ public class StringValidations {
     }
 
     public static void main(String args[]) {
-        String text = "José Luis Granda";
+        String text = "JosÃ© Luis";
         if (!StringValidations.isPunctuatedTextUTF8(text)) {
 
             System.out.print("Este texto " + text + " no anda bien, evite usar caracteres extraños...");

@@ -35,7 +35,6 @@ package org.eqaula.glue.web.filter;
 
 import java.io.IOException;
 import java.util.Enumeration;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -48,9 +47,14 @@ public class ResponseHeaderFilter implements Filter
 {
    FilterConfig fc;
 
+    @Override
    public void doFilter(final ServletRequest req, final ServletResponse res, final FilterChain chain) throws IOException, ServletException
    {
       HttpServletResponse response = (HttpServletResponse) res;
+      
+      // Set the characterencoding for the request and response streams.  
+        //req.setCharacterEncoding("UTF-8");  
+        //response.setContentType("text/html; charset=UTF-8"); 
 
       for (Enumeration<?> e = this.fc.getInitParameterNames(); e.hasMoreElements();)
       {
@@ -61,11 +65,13 @@ public class ResponseHeaderFilter implements Filter
       chain.doFilter(req, response);
    }
 
+    @Override
    public void init(final FilterConfig filterConfig)
    {
       this.fc = filterConfig;
    }
 
+    @Override
    public void destroy()
    {
       this.fc = null;

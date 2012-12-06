@@ -16,12 +16,15 @@
 package org.eqaula.glue.controller.profile;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -55,6 +58,8 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
     private ProfileHome profileHome;
     private Long profileId;
     private String name;
+    //UI attributes
+    private List<ColumnModel> columns = new ArrayList<ColumnModel>();
 
     public Long getGroupId() {
         return (Long) getId();
@@ -100,7 +105,8 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
         log.info("eqaula --> Required profile " + getProfileId());
         if (isIdDefined()) {
             wire();
-            loadProfileHome(); //Cargar el objeto ProfileHome relacionado al grupo
+            loadProfileHome(); //Cargar el objeto GroupHome relacionado al grupo
+            makeColumnsTemplate(); //Establecer las columnas a mostrar en la tabla
         } else {
             //TODO ver forma de cargas con profileId y groupName
             //Group g = bussinesEntityService.findByName(name)
@@ -146,26 +152,30 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
     public void addBussinesEntity(Group group) {
         //comparar con maximum + 1, ya que el mismo objeto es parte del grupo
         if (group.getProperty().getMaximumMembers() == 0L || group.getMembers().size() < group.getProperty().getMaximumMembers() + 1) {
-            Date now = Calendar.getInstance().getTime();
-            //TODO internacionalizar cadenas estáticas
-            String name = "Nuevo " + (group.getProperty() != null ? group.getProperty().getLabel() : "elemento") + " " + (group.findOtherMembers(getProfile()).size() + 1);
-            BussinesEntity entity = new BussinesEntity();
-            entity.setName(name);
-            //TODO implementar generador de códigos para entidad de negocio
-            entity.setCode((group.getProperty() != null ? group.getProperty().getLabel() : "elemento") + " " + (group.findOtherMembers(getProfile()).size() + 1));
-            entity.setCreatedOn(now);
-            entity.setLastUpdate(now);
-            entity.setActivationTime(now);
-            entity.setExpirationTime(Dates.addDays(now, 364));
-            entity.setAuthor(null); //Establecer al usuario actual
-            entity.buildAttributes(getInstance().getName(), bussinesEntityService); //Construir atributos de grupos
+            BussinesEntity entity = makeBussinessEntity(group);
             group.add(entity);
-
             setBussinesEntity(entity); //Establecer para edición
             RequestContext.getCurrentInstance().execute("editDlg.show()"); //abrir el popup si se añadió correctamente
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No es posible agregar más " + group.getProperty().getLabel() + ". El número máximo es " + group.getProperty().getMaximumMembers(), ""));
         }
+    }
+    
+    private BussinesEntity makeBussinessEntity(Group g){
+        Date now = Calendar.getInstance().getTime();
+            //TODO internacionalizar cadenas estáticas
+            String name = "Nuevo " + (g.getProperty() != null ? g.getProperty().getLabel() : "elemento") + " " + (g.findOtherMembers(getProfile()).size() + 1);
+            BussinesEntity entity = new BussinesEntity();
+            entity.setName(name);
+            //TODO implementar generador de códigos para entidad de negocio
+            entity.setCode((g.getProperty() != null ? g.getProperty().getLabel() : "elemento") + " " + (g.findOtherMembers(getProfile()).size() + 1));
+            entity.setCreatedOn(now);
+            entity.setLastUpdate(now);
+            entity.setActivationTime(now);
+            entity.setExpirationTime(Dates.addDays(now, 364));
+            entity.setAuthor(null); //Establecer al usuario actual
+            entity.buildAttributes(g.getName(), bussinesEntityService); //Construir atributos de grupos
+            return entity;
     }
 
     @Transactional
@@ -180,6 +190,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No name", null));
             } else {
                 boolean validate = true;
+                //write String values
                 for (BussinesEntityAttribute a : getBussinesEntity().getAttributes()) {
                     if (a.getValue() == null && a.getProperty().isRequired()) {
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizó con exito " + bussinesEntity.getName(), ""));
@@ -187,7 +198,12 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
                     } else {
                         a.setStringValue(a.getValue() == null ? a.getProperty().getName() : a.getValue().toString());
                     }
-
+                }
+                //overwrite defaults attributes
+                if (!getInstance().getProperty().isShowDefaultBussinesEntityProperties()){
+                    //TODO idear mecanismo para que sea configurable
+                    //getInstance().setName(getInstance().getBussinessEntityAttribute("nombres").getValue().toString() + getInstance().getBussinessEntityAttribute("apellidos").getValue().toString());
+                    //getInstance().setCode(getInstance().getBussinessEntityAttribute("cedula").getValue().toString());
                 }
                 if (validate) {
                     save(getBussinesEntity());
@@ -221,7 +237,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
                 setBussinesEntity(null); //liberar de memoria el objeto seleccionado
             } else {
                 //remover de la lista, si aún no esta persistido
-                getInstance().getMembers().remove(this.getBussinesEntity());
+                getInstance().remove(this.getBussinesEntity());
                 RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
             }
 
@@ -255,4 +271,47 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
     public Profile getProfile() {
         return profileHome.getInstance();
     }
+
+    private void makeColumnsTemplate() {
+        BussinesEntity template = makeBussinessEntity(getInstance());
+        //List<ColumnModel> _columns = new ArrayList<ColumnModel>();
+        for (BussinesEntityAttribute a : template.getAttributes()){
+            if (a.getProperty().isShowInColumns()){
+                this.columns.add(new ColumnModel(a.getProperty().getLabel(), a.getProperty().getName()));
+            }
+        }
+        if (this.columns.isEmpty() || getInstance().getProperty().isShowDefaultBussinesEntityProperties()){
+            //TODO aplicar internacionalización
+            this.columns.add(new ColumnModel("name", "name"));
+            this.columns.add(new ColumnModel("code", "code"));
+        }
+        
+        
+    }
+
+    static public class ColumnModel implements Serializable {
+        private static final long serialVersionUID = -2978153523510149782L;
+
+        private String header;
+        private String property;
+
+        public ColumnModel(String header, String property) {
+            this.header = header;
+            this.property = property;
+        }
+
+        public String getHeader() {
+            return header;
+        }
+
+        public String getProperty() {
+            return property;
+        }
+    }
+
+
+    
+    public List<ColumnModel> getColumns() {  
+        return columns;  
+    }  
 }

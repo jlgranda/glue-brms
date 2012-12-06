@@ -201,6 +201,16 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         }
         return null;
     }
+    
+    public String findAttributeValue(String name){
+        if ("code".equalsIgnoreCase(name)){
+            return getCode();
+        } else if ("name".equalsIgnoreCase(name)){
+            return getName();
+        } else {
+            return (getBussinessEntityAttribute(name) != null ? getBussinessEntityAttribute(name).getValue().toString() : "undefined!");
+        }
+    }
 
     /*
      * Retrieve all attributes for strcuture name list

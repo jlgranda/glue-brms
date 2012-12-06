@@ -392,9 +392,9 @@ public class InitializeDatabase {
 
             //attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), true, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
             attributes.add(buildAttribute("tipoRelacion", "java.lang.String[]","Casado,Unión libre", true, "Tipo de Relacion", "Indique que relacion tiene"));             
-            attributes.add(builtProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos",null,null,true));
-            attributes.add(builtProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre",null,null,true));
-            attributes.add(builtProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones",null,null,true));
+            attributes.add(buildProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos",null,null,true));
+            attributes.add(buildProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre",null,null,true));
+            attributes.add(buildProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones",null,null,true));
             attributes.add(buildAttribute("empresaTrabajo", String.class.getName(), null, false, "Empresa en la que Trabaja", "Indique la empresa que trabaja"));
             attributes.add(buildAttribute("funcionCargo", String.class.getName(), null ,false, "Actividad / Función o Cargo", "Que cargo o funcion tiene"));
 
@@ -435,9 +435,9 @@ public class InitializeDatabase {
             List<Property> attributes = new ArrayList<Property>();
 
             attributes.add(buildAttribute("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos"));
-            attributes.add(builtProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos",null,null,true));
-            attributes.add(builtProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre",null,null,true));
-            attributes.add(builtProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones",null,null,true));
+            attributes.add(buildProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos",null,null,true));
+            attributes.add(buildProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre",null,null,true));
+            attributes.add(buildProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones",null,null,true));
             attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), false, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));            
             attributes.add(buildAttribute("tipoInstruccion", "java.lang.String[]","Pre-Basica,Basica,Bachillerato,Egresado,Superior,4 Nivel,Ninguno", false, "Tipo de Instrucción", "Indique el tipo de instrucción"));
             
@@ -477,13 +477,14 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
 
-            attributes.add(buildAttribute("title", String.class.getName(), "", true, "Titulo", "Qué titulación obtuviste?"));
-            attributes.add(buildAttribute("country", String.class.getName(), "", true, "País", ""));
-            attributes.add(buildAttribute("institution", String.class.getName(), "", true, "Institución", "Centro de estudios"));
-            attributes.add(buildAttribute("start", Date.class.getName(), now, true, "Fecha de inicio", "Cuándo inicio?"));
-            attributes.add(buildAttribute("end", Date.class.getName(), now, false, "Fecha de fin", "Cuándo finalizó?"));
-            attributes.add(buildAttribute("atPresent", Boolean.class.getName(), false, true, "Al presente", ""));
-            attributes.add(buildAttribute("level", "java.lang.String[]", "Secundario,Terciario,Universitario,Postgrado,Master,Doctorado,Otro", true, "Nivel de estudio", "Nivel de los estudios cursados"));
+            attributes.add(buildProperty("title", String.class.getName(), "", true, "Titulo", "¿Qué titulación obtuviste?", true));
+            attributes.add(buildProperty("country", String.class.getName(), "", true, "País", "¿En que país obtuvo este título?", true));
+            attributes.add(buildProperty("institution", String.class.getName(), "", true, "Institución", "¿En que centro de estudios?", true));
+            attributes.add(buildAttribute("start", Date.class.getName(), now, true, "Fecha de inicio", "¿Cuándo inicio?"));
+            attributes.add(buildAttribute("end", Date.class.getName(), now, false, "Fecha de fin", "¿Cuándo finalizó?"));
+            //attributes.add(buildAttribute("atPresent", Boolean.class.getName(), false, true, "Al presente", ""));
+            attributes.add(buildProperty("atPresent", "java.lang.String[]", "Sí,No", true, "Al presente", "¿Esta cursando actualmente esta titulación?", false));
+            attributes.add(buildProperty("level", "java.lang.String[]", "Secundario,Terciario,Universitario,Postgrado,Master,Doctorado,Otro", true, "Nivel de estudio", "Nivel de los estudios cursados", true));
 //            attributes.add(buildAttribute("status", "java.lang.String[]", "Graduado,En curso,Abandonado", true, "Nivel de estudio", "Nivel de los estudios cursados"));
 
             //Agregar atributos
@@ -618,8 +619,11 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> properties = new ArrayList<Property>();
 
-            //TODO crear estructura para registro de tareas
-
+            properties.add(buildProperty("taskName", String.class.getName(), null ,true, "Tarea", "Resuma la tarea que realiza, use un verbo de acción. Ej.: Elaborar, Controlar, Notificar, etc", true));
+            properties.add(buildProperty("taskSummary", String.class.getName(), null ,true, "Descripción", "Describa en detalle la tarea que realiza, sea generoso.", true));
+            properties.add(buildProperty("taskTime", Float.class.getName(), null ,true, "Tiempo", "Tiempo promedio que le toma la tarea", true));
+            properties.add(buildProperty("taskReportTo", String.class.getName(), null ,true, "Responsable", "A quién reporta el cumplimiento de la tarea", true));
+            //TODO agregar prpiedades para tareas
 
             //Agregar atributos
             structure.setProperties(properties);
@@ -657,11 +661,11 @@ public class InitializeDatabase {
             List<Property> attributes = new ArrayList<Property>();
 
             //attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), true, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
-            attributes.add(buildAttribute("nameEvent", String.class.getName(), null ,true, "Nombre del Evento", "Indique el evento que se realizo"));
-            attributes.add(buildAttribute("typeEvent", "java.lang.String[]","Curso,Seminario,Taller,Conferencia,Diplomado", true, "Tipo de Evento", "Indique que tipo de evento se realizó"));                     
+            attributes.add(buildProperty("nameEvent", String.class.getName(), null ,true, "Nombre del Evento", "Indique el evento que se realizo", true));
+            attributes.add(buildProperty("typeEvent", "java.lang.String[]","Curso,Seminario,Taller,Conferencia,Diplomado", true, "Tipo de Evento", "Indique que tipo de evento se realizó", true));                     
             attributes.add(buildAttribute("auspiciante", String.class.getName(), null, false, "Auxpiciante", "Indiqueel auxpiciante ya sea Empresa o Institución"));
-            attributes.add(buildAttribute("duracionHoras", Long.class.getName(), null, true, "Duración en Horas", "Indique cuantas horas duro el Evento"));
-            attributes.add(buildAttribute("country", String.class.getName(), null, false, "País", "País donde se realizo el evento"));
+            attributes.add(buildProperty("duracionHoras", Long.class.getName(), null, true, "Duración en Horas", "Indique cuantas horas duro el Evento", true));
+            attributes.add(buildProperty("country", String.class.getName(), null, false, "País", "País donde se realizo el evento", true));
             attributes.add(buildAttribute("dateBegin", Date.class.getName(), ago.getTime(), false, "Fecha de Inicio", "Fecha que inicio el evento"));
             attributes.add(buildAttribute("dateEnd", Date.class.getName(), ago.getTime(), false, "Fecha de Finalización", "Fecha de Culminación"));
             
@@ -699,14 +703,14 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildAttribute("tipoInstitucion", "java.lang.String[]","Publica, Privada, Mixta, Otra", true, "Tipo de Institución", "Indique que tipo de institución"));                        
-            attributes.add(buildAttribute("nombreInstitucion", String.class.getName(), null ,true, "Nombre de la Institucion", "Indique el nombre de la institución u organización"));
+            attributes.add(buildProperty("tipoInstitucion", "java.lang.String[]","Publica, Privada, Mixta, Otra", true, "Tipo de Institución", "Indique que tipo de institución", true));                        
+            attributes.add(buildProperty("nombreInstitucion", String.class.getName(), null ,true, "Nombre de la Institucion", "Indique el nombre de la institución u organización", true));
             attributes.add(buildAttribute("unidadAdministrativa", "java.lang.String[]","Departamento,Area,Direccion", true, "Unidad Administrativa", "Indique que tipo de unidad administrativa"));                        
-            attributes.add(buildAttribute("denominacionPuesto", String.class.getName(), null, false, "Denominacion del Puesto", "Indique la denominación del puesto"));
-            attributes.add(buildAttribute("fechaInicio", Date.class.getName(), ago.getTime(), false, "Fecha de Ingreso", "Fecha de ingreso del trabajar"));
-            attributes.add(buildAttribute("fechaFin", Date.class.getName(), ago.getTime(), false, "Fecha de Salida", "Fecha de salida del trabajo"));            
-            attributes.add(buildAttribute("responsabilidades", String.class.getName(), null, false, "Principales Responsabilidades", "Indique que responsabilidades tenia"));
-            attributes.add(buildAttribute("motivoSalida", String.class.getName(), null, false, "Motivo de Salida", "Por que motivo salio"));
+            attributes.add(buildProperty("denominacionPuesto", String.class.getName(), null, false, "Denominacion del Puesto", "Indique la denominación del puesto", true));
+            attributes.add(buildAttribute("fechaInicio", Date.class.getName(), ago.getTime(), false, "Fecha de Ingreso", "¿Cuándo ingreso?"));
+            attributes.add(buildAttribute("fechaFin", Date.class.getName(), ago.getTime(), false, "Fecha de Salida", "¿Cuándo salió?"));            
+            attributes.add(buildAttribute("responsabilidades", "java.lang.MultiLineString", null, false, "Principales Responsabilidades", "Indique que responsabilidades tenia"));
+            attributes.add(buildAttribute("motivoSalida", "java.lang.MultiLineString", null, false, "Motivo de Salida", "¿Por qué motivo salio?"));
             
             //Agregar atributos
             structure.setProperties(attributes);
@@ -784,7 +788,7 @@ public class InitializeDatabase {
     }
 
     //metodo buildProterty
-    private Property builtProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, boolean showInColumns){
+    private Property buildProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, boolean showInColumns){
         Property property = new Property();
         property.setName(name);
         property.setType(type);
@@ -795,7 +799,7 @@ public class InitializeDatabase {
         property.setShowInColumns(showInColumns);
         return property;
     }
-    private Property builtProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, String render, String customForm, boolean showInColumns){
+    private Property buildProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, String render, String customForm, boolean showInColumns){
         Property property = new Property();
         property.setName(name);
         property.setType(type);
