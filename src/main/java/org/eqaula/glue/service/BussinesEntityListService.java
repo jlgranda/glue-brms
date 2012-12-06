@@ -20,14 +20,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.model.BussinesEntity;
-import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
+import org.jboss.solder.logging.Logger;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -44,8 +46,11 @@ public class BussinesEntityListService extends LazyDataModel<BussinesEntity> {
      */
     private static final long serialVersionUID = 4819808125494695197L;
     private static final int MAX_RESULTS = 5;
+    private static Logger log = Logger.getLogger(BussinesEntityListService.class);
     @Inject
-    private Logger log;
+    @Web
+    private EntityManager entityManager;
+    private String structureName;
     @Inject
     private BussinesEntityService bussinesEntityService;
     private List<BussinesEntity> resultList;
@@ -55,6 +60,11 @@ public class BussinesEntityListService extends LazyDataModel<BussinesEntity> {
 
     public BussinesEntityListService() {
         setPageSize(MAX_RESULTS);
+    }
+
+    @PostConstruct
+    public void init() {
+        bussinesEntityService.setEntityManager(entityManager);
     }
 
     public List<BussinesEntity> getResultList() {
@@ -114,7 +124,7 @@ public class BussinesEntityListService extends LazyDataModel<BussinesEntity> {
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
         /*_filters.put(BussinesEntity_.parent.getName(), getSelectedAccount()); //Filtro por defecto
-        _filters.putAll(filters);*/
+         _filters.putAll(filters);*/
 
         QueryData<BussinesEntity> qData = bussinesEntityService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
@@ -136,5 +146,4 @@ public class BussinesEntityListService extends LazyDataModel<BussinesEntity> {
     public void setSelectedBussinesEntity(BussinesEntity selectedBussinesEntity) {
         this.selectedBussinesEntity = selectedBussinesEntity;
     }
-
 }
