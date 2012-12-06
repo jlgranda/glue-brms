@@ -434,9 +434,9 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
 
-            attributes.add(builtProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos",null,null,true));
-            attributes.add(builtProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre",null,null,true));
-            attributes.add(builtProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones",null,null,true));
+            attributes.add(buildProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos",null,null,true));
+            attributes.add(buildProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre",null,null,true));
+            attributes.add(buildProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones",null,null,true));
             attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), false, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));            
             attributes.add(buildAttribute("tipoInstruccion", "java.lang.String[]","Pre-Basica,Basica,Bachillerato,Egresado,Superior,4 Nivel,Ninguno", false, "Tipo de Instrucción", "Indique el tipo de instrucción"));
             

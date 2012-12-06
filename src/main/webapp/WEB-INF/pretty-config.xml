@@ -50,6 +50,7 @@
    <url-mapping id="bussinesentitytypelist">
       <pattern value="/admin/bussinesentitytype/list"></pattern>
       <view-id value="/pages/admin/bussinesentitytype/list.xhtml"></view-id>
+      <query-param name="result" decode="false">#{bussinesEntityTypeListService.firstResult}</query-param>
    </url-mapping>
    <url-mapping id="bussinesentitytypeview">
       <pattern value="/admin/bussinesentitytype/view"></pattern>

@@ -16,16 +16,13 @@
 package org.eqaula.glue.service;
 
 import java.util.List;
-import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.BussinesEntity;
-import org.eqaula.glue.model.BussinesEntityAttribute;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.BussinesEntityType_; 
 import org.eqaula.glue.util.PersistenceUtil; 
@@ -34,14 +31,14 @@ import org.eqaula.glue.util.PersistenceUtil;
  *
  * @author cesar
  */
-public class BussinesEntityTypeService extends PersistenceUtil<BussinesEntity> {
+public class BussinesEntityTypeService extends PersistenceUtil<BussinesEntityType> {
 
     private static final long serialVersionUID = 6569835981443699931L;
-    @Inject
-    private Logger log;
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityTypeService.class);
+    
 
     public BussinesEntityTypeService() {
-        super(BussinesEntity.class);
+        super(BussinesEntityType.class);
     }
     
     @Override
@@ -85,21 +82,6 @@ public class BussinesEntityTypeService extends PersistenceUtil<BussinesEntity> {
         query.select(builder.count(from)); 
         return this.<Long>getTypedSingleResult(query); 
     }
-    
-    //metodo saveAtributes 
- /*   public void saveAttributes(BussinesEntity bussinesEntity, Map<Property, Object> attributes) {
-        BussinesEntityAttribute attribute = null;
-        for (Map.Entry<Property, Object> e : attributes.entrySet()) {
-            attribute = new BussinesEntityAttribute();
-            attribute.setName(e.getKey().getName());
-            attribute.setValue((Serializable) e.getValue());
-            attribute.setType(e.getKey().getType());
-            bussinesEntity.addBussinesEntityAttribute(attribute);
-        }
-
-        super.save(bussinesEntity);
-        em.flush();
-    }*/
     
     public List<BussinesEntityType> findAll() {        
         Query query = em.createNamedQuery("BussinesEntityType.findAllBussinesEntityTypes");         

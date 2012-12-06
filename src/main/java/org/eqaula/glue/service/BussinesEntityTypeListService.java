@@ -22,15 +22,11 @@ import java.util.Map;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
-import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.BussinesEntityType_;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.primefaces.model.LazyDataModel;
@@ -42,14 +38,14 @@ import org.primefaces.model.SortOrder;
  */
 @RequestScoped
 @Named
-public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityType>{
+public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityType> {
+
     private static final long serialVersionUID = 4819808125494695200L;
     private static final int MAX_RESULTS = 5;
-    @Inject
-    private Logger log;
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityTypeListService.class);
     @Inject
     @Web
-    private EntityManager entitytyManager;
+    private EntityManager entityManager;
     @Inject
     private BussinesEntityTypeService bussinesEntityTypeService;
     private List<BussinesEntityType> resultList;
@@ -59,56 +55,41 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
 
     public BussinesEntityTypeListService() {
         setPageSize(MAX_RESULTS);
-        resultList = new ArrayList<BussinesEntityType>();         
+        resultList = new ArrayList<BussinesEntityType>();
+        log.info("Service initialized!");
     }
 
-    public Logger getLog() {
-        return log;
-    }
-
-    public void setLog(Logger log) {
-        this.log = log;
-    }
-
-    public BussinesEntityTypeService getBussinesEntityTypeService() {
-        return bussinesEntityTypeService;
-    }
-
-    public void setBussinesEntityTypeService(BussinesEntityTypeService bussinesEntityTypeService) {
-        this.bussinesEntityTypeService = bussinesEntityTypeService;
-    }
-
-    
     public List<BussinesEntityType> getResultList() {
-        log.info("load BussinesEntityType");         
+        log.info("load BussinesEntityType");
         if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
             //resultList = bussinesEntityService.find(this.getPageSize(), firstResult, getSelectedBussinesEntityType());
-            resultList = bussinesEntityTypeService.find(this.getPageSize(), firstResult);            
+            resultList = bussinesEntityTypeService.find(this.getPageSize(), firstResult);
+            log.info("eqaula --> resultlist " + resultList);
         }
-        
+
         return resultList;
     }
-   
+
     public void setResultList(List<BussinesEntityType> resultList) {
         this.resultList = resultList;
     }
-    
+
     public String find() {
         /*
-        try {
-            init();
-            resultList = bussinesEntityTypeService.findAll();
-            String summary = "Encontrados! ";             
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null));
-            System.out.println("lista "+resultList.get(0));
-        } catch (Exception e) {
+         try {
+         init();
+         resultList = bussinesEntityTypeService.findAll();
+         String summary = "Encontrados! ";             
+         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null));
+         System.out.println("lista "+resultList.get(0));
+         } catch (Exception e) {
             
-        }
-        */
+         }
+         */
         this.getResultList();
         return "/pages/admin/bussinesentitytype/list";
     }
-    
+
     public int getNextFirstResult() {
         return firstResult + this.getPageSize();
     }
@@ -116,7 +97,7 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
     public int getPreviousFirstResult() {
         return this.getPageSize() >= firstResult ? 0 : firstResult - this.getPageSize();
     }
-           
+
     public int getFirstResult() {
         return firstResult;
     }
@@ -126,16 +107,17 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
         this.firstResult = firstResult;
         this.resultList = null;
     }
-    
+
     public boolean isPreviousExists() {
         return firstResult > 0;
     }
-    
+
     @PostConstruct
-    public void init() {         
-        bussinesEntityTypeService.setEntityManager(entitytyManager);        
+    public void init() {
+        log.info("Setup entityManager into bussinesEntityTypeService...");
+        bussinesEntityTypeService.setEntityManager(entityManager);
     }
-    
+
     @Override
     public BussinesEntityType getRowData(String rowKey) {
 
@@ -147,9 +129,34 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
         return entity.getName();
     }
 
+    
+
+    public BussinesEntityType[] getSelectedBussinesEntitiesType() {
+        return selectedBussinesEntitiesType;
+    }
+
+    public void setSelectedBussinesEntitiesType(BussinesEntityType[] selectedBussinesEntitiesType) {
+        this.selectedBussinesEntitiesType = selectedBussinesEntitiesType;
+    }
+
+    public BussinesEntityType getSelectedBussinesEntityType() {
+        return selectedBussinesEntityType;
+    }
+
+    public void setSelectedBussinesEntityType(BussinesEntityType selectedBussinesEntityType) {
+        this.selectedBussinesEntityType = selectedBussinesEntityType;
+    }
+//    @Override
+//    public List<BussinesEntityType> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+//        throw new UnsupportedOperationException("Not supported yet.");
+//    }
+    
     @Override
     public List<BussinesEntityType> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
 
+        log.info("load results for ..." + first + ", " + pageSize);
+        
+        
         int end = first + pageSize;
 
         QuerySortOrder order = QuerySortOrder.ASC;
@@ -158,34 +165,10 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
         /*_filters.put(BussinesEntityType_.name, getSelectedBussinesEntityType()); //Filtro por defecto
-        _filters.putAll(filters);*/
+         _filters.putAll(filters);*/
 
-        QueryData<BussinesEntityType> qData = (QueryData<BussinesEntityType>) bussinesEntityTypeService.find(first, end);
+        QueryData<BussinesEntityType> qData = bussinesEntityTypeService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();
     }
-       
-    
-    public BussinesEntityType[] getSelectedBussinesEntitiesType() {
-        return selectedBussinesEntitiesType;
-    }
-
-    public void setSelectedBussinesEntitiesType(BussinesEntityType[] selectedBussinesEntitiesType) {
-        this.selectedBussinesEntitiesType = selectedBussinesEntitiesType;
-    }
-        
-    public BussinesEntityType getSelectedBussinesEntityType() {
-        return selectedBussinesEntityType;
-    }
-
-    public void setSelectedBussinesEntityType(BussinesEntityType selectedBussinesEntityType) {
-        this.selectedBussinesEntityType = selectedBussinesEntityType;
-    }
-
-    
-//    @Override
-//    public List<BussinesEntityType> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-
 }

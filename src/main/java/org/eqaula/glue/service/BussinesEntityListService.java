@@ -60,6 +60,7 @@ public class BussinesEntityListService extends LazyDataModel<BussinesEntity> {
 
     public BussinesEntityListService() {
         setPageSize(MAX_RESULTS);
+        resultList = new ArrayList<BussinesEntity>();
     }
 
     @PostConstruct
@@ -69,9 +70,9 @@ public class BussinesEntityListService extends LazyDataModel<BussinesEntity> {
 
     public List<BussinesEntity> getResultList() {
         log.info("load BussinesEntitys");
-        resultList = new ArrayList<BussinesEntity>();
-        if (resultList == null && getSelectedBussinesEntity() != null) {
-            resultList = bussinesEntityService.find(this.getPageSize(), firstResult, getSelectedBussinesEntity());
+        
+        if (resultList.isEmpty()/* && getSelectedBussinesEntity() != null*/) {
+            resultList = bussinesEntityService.find(this.getPageSize(), firstResult/*, getSelectedBussinesEntity()*/);
         }
         return resultList;
     }

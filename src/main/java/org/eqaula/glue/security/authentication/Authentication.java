@@ -168,7 +168,7 @@ public class Authentication
       identity.setAuthenticatorClass(IdmAuthenticator.class);
       identity.logout();
 
-      session.invalidate();
+      //session.invalidate();
 
       return "/pages/home?faces-redirect=true";
       //return true;
