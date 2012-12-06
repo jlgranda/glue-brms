@@ -23,14 +23,14 @@ limitations under the License.
                 template="/WEB-INF/view/templates/glue.xhtml">
     <ui:define name="content">
         <f:metadata>
-            <f:event listener="#{bussinesEntityTypeList.find()}" type="preRenderView"/>
+            <!--<f:event listener="#{bussinesEntityTypeListService.find()}" type="preRenderView"/>-->
             <f:viewParam name="result" value="#{bussinesEntityTypeListService.firstResult}" />
         </f:metadata>
          
     <h:form id="form">
         <h1>Lista de BussinesEntityType</h1>
         <h:panelGrid columns="3">
-                <h:outputText value="#{messages['common.find']}: "></h:outputText>
+                <h:outputText value="#{messages['common.find.title']}: "></h:outputText>
                 <!--<p:inputText id="criterio" value="" size="25">
                 </p:inputText>-->
                 <p:commandButton value="Buscar" action="#{bussinesEntityTypeListService.find()}" ajax="true" 
@@ -49,7 +49,8 @@ limitations under the License.
                          selection="#{bussinesEntityTypeListService.selectedBussinesEntityType}"
                          rendered="#{not empty bussinesEntityTypeList.resultList}">                
                          
-                <p:column selectionMode="multiple" style="width:18px" />     
+                <p:column selectionMode="multiple" style="width:18px" /> 
+                
                 <p:column headerText="#{messages['BussinesEntityType.name']}" >
                           <h:outputText value="#{bussinesEntityType.name}"></h:outputText>
                      </p:column> 

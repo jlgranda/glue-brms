@@ -38,7 +38,9 @@ import org.hibernate.annotations.Fetch;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "BussinesEntityType.findAllBussinesEntityTypes",
-    query = "select t FROM BussinesEntityType t")
+    query = "select t FROM BussinesEntityType t"),
+    @NamedQuery(name = "BussinesEntityType.findForName",
+    query = "select t FROM BussinesEntityType t where t.name = :name")    
 })
 public class BussinesEntityType implements Serializable {
 

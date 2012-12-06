@@ -26,8 +26,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
+import org.eqaula.glue.model.BussinesEntityType_;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.primefaces.model.LazyDataModel;
@@ -44,6 +47,9 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
     private static final int MAX_RESULTS = 5;
     @Inject
     private Logger log;
+    @Inject
+    @Web
+    private EntityManager entitytyManager;
     @Inject
     private BussinesEntityTypeService bussinesEntityTypeService;
     private List<BussinesEntityType> resultList;
@@ -74,26 +80,32 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
 
     
     public List<BussinesEntityType> getResultList() {
-        log.info("load BussinesEntitys");
-        resultList = new ArrayList<BussinesEntityType>();
-        if (resultList == null && getSelectedBussinesEntityType() != null) {
+        log.info("load BussinesEntityType");         
+        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
             //resultList = bussinesEntityService.find(this.getPageSize(), firstResult, getSelectedBussinesEntityType());
             resultList = bussinesEntityTypeService.find(this.getPageSize(), firstResult);            
         }
         
         return resultList;
     }
+   
+    public void setResultList(List<BussinesEntityType> resultList) {
+        this.resultList = resultList;
+    }
     
     public String find() {
+        /*
         try {
-            bussinesEntityTypeService.init();
+            init();
             resultList = bussinesEntityTypeService.findAll();
-            String summary = "Encontrados!";
+            String summary = "Encontrados! ";             
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null));
+            System.out.println("lista "+resultList.get(0));
         } catch (Exception e) {
-            System.out.print("Error al iniciar los datos");
+            
         }
-        
+        */
+        this.getResultList();
         return "/pages/admin/bussinesentitytype/list";
     }
     
@@ -103,10 +115,6 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
 
     public int getPreviousFirstResult() {
         return this.getPageSize() >= firstResult ? 0 : firstResult - this.getPageSize();
-    }
-    
-    public void setResultList(List<BussinesEntityType> resultList) {
-        this.resultList = resultList;
     }
            
     public int getFirstResult() {
@@ -122,7 +130,12 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
     public boolean isPreviousExists() {
         return firstResult > 0;
     }
-
+    
+    @PostConstruct
+    public void init() {         
+        bussinesEntityTypeService.setEntityManager(entitytyManager);        
+    }
+    
     @Override
     public BussinesEntityType getRowData(String rowKey) {
 
@@ -144,7 +157,7 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
             order = QuerySortOrder.DESC;
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
-        /*_filters.put(BussinesEntity_.parent.getName(), getSelectedAccount()); //Filtro por defecto
+        /*_filters.put(BussinesEntityType_.name, getSelectedBussinesEntityType()); //Filtro por defecto
         _filters.putAll(filters);*/
 
         QueryData<BussinesEntityType> qData = (QueryData<BussinesEntityType>) bussinesEntityTypeService.find(first, end);

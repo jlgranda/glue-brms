@@ -15,11 +15,9 @@
  */
 package org.eqaula.glue.service;
 
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -29,13 +27,8 @@ import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityAttribute;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.BussinesEntityType_;
-import org.eqaula.glue.model.BussinesEntity_;
-import org.eqaula.glue.model.GroupType;
-import org.eqaula.glue.model.Property;
-import org.eqaula.glue.util.PersistenceUtil;
-import org.eqaula.glue.util.QueryData;
-import org.eqaula.glue.util.QuerySortOrder;
+import org.eqaula.glue.model.BussinesEntityType_; 
+import org.eqaula.glue.util.PersistenceUtil; 
 
 /**
  *
@@ -91,8 +84,8 @@ public class BussinesEntityTypeService extends PersistenceUtil<BussinesEntity> {
 
         query.select(builder.count(from)); 
         return this.<Long>getTypedSingleResult(query); 
-    } 
-     
+    }
+    
     //metodo saveAtributes 
  /*   public void saveAttributes(BussinesEntity bussinesEntity, Map<Property, Object> attributes) {
         BussinesEntityAttribute attribute = null;
@@ -108,11 +101,8 @@ public class BussinesEntityTypeService extends PersistenceUtil<BussinesEntity> {
         em.flush();
     }*/
     
-    public List<BussinesEntityType> findAll() {
+    public List<BussinesEntityType> findAll() {        
         Query query = em.createNamedQuery("BussinesEntityType.findAllBussinesEntityTypes");         
         return query.getResultList();
-    }
-    
-    //metodo para buscar por estructura
-    
+    }        
 }
