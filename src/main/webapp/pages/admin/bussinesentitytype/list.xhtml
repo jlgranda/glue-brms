@@ -24,31 +24,40 @@ limitations under the License.
     <ui:define name="content">
         <f:metadata>
             <f:event listener="#{bussinesEntityTypeList.find()}" type="preRenderView"/>
-            <f:viewParam name="result" value="#{bussinesEntityTypeList.firstResult}" />
+            <f:viewParam name="result" value="#{bussinesEntityTypeListService.firstResult}" />
         </f:metadata>
          
     <h:form id="form">
         <h1>Lista de BussinesEntityType</h1>
+        <h:panelGrid columns="3">
+                <h:outputText value="#{messages['common.find']}: "></h:outputText>
+                <!--<p:inputText id="criterio" value="" size="25">
+                </p:inputText>-->
+                <p:commandButton value="Buscar" action="#{bussinesEntityTypeListService.find()}" ajax="true" 
+                                 icon="ui-icon ui-icon-disk" update="bussinesEntityTypeTable">
+
+                </p:commandButton> 
+        </h:panelGrid>
         
-        <p:dataTable var="bussinesEntityType" value="#{bussinesEntityTypeList.resultList}"
+        <p:dataTable var="bussinesEntityType" value="#{bussinesEntityTypeListService.resultList}"
                          paginator="true" rows="10"
                          paginatorAlwaysVisible="false"
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
                          rowsPerPageTemplate="5,10,15"
                          id="bussinesEntityTypeTable" lazy="true"                          
-                         selection="#{bussinesEntityTypeList.bussinesEntityTypeService}"
-                         rendered="#{not empty bussinesEntityTypeList.resultList}"
-                         var="bussinesEntityType">                
+                         selection="#{bussinesEntityTypeListService.selectedBussinesEntityType}"
+                         rendered="#{not empty bussinesEntityTypeList.resultList}">                
+                         
+                <p:column selectionMode="multiple" style="width:18px" />     
+                <p:column headerText="#{messages['BussinesEntityType.name']}" >
+                          <h:outputText value="#{bussinesEntityType.name}"></h:outputText>
+                     </p:column> 
 
-                  <p:column headerText="#{messages['BussinesEntityType.name']}" >
-                      <h:outputText value="#{bussinesEntityType.name}"></h:outputText>
-                 </p:column> 
-
-                <f:facet name="footer">
-                    <p:commandButton id="multiViewButton" value="#{messages['common.view']}" icon="ui-icon-search"  
-                                     update=":form:displayMulti" oncomplete="multiBussinesEntityDialog.show()"/>  
-                </f:facet>
+                 <f:facet name="footer">
+                        <p:commandButton id="multiViewButton" value="#{messages['common.view']}" icon="ui-icon-search"  
+                                         update=":form:displayMulti" oncomplete="multiBussinesEntityDialog.show()"/>  
+                 </f:facet>
             </p:dataTable>
             <!--
             <p:dialog id="multiDialog" header="#{messages['Account.detail']}"

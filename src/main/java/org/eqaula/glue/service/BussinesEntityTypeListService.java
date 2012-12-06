@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -38,7 +39,7 @@ import org.primefaces.model.SortOrder;
  */
 @RequestScoped
 @Named
-public class BussinesEntityTypeList extends LazyDataModel<BussinesEntityType>{
+public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityType>{
     private static final long serialVersionUID = 4819808125494695200L;
     private static final int MAX_RESULTS = 5;
     @Inject
@@ -47,10 +48,10 @@ public class BussinesEntityTypeList extends LazyDataModel<BussinesEntityType>{
     private BussinesEntityTypeService bussinesEntityTypeService;
     private List<BussinesEntityType> resultList;
     private int firstResult = 0;
-    private BussinesEntityType[] selectedBussinesEntities;
+    private BussinesEntityType[] selectedBussinesEntitiesType;
     private BussinesEntityType selectedBussinesEntityType; //Filtro de cuenta schema
 
-    public BussinesEntityTypeList() {
+    public BussinesEntityTypeListService() {
         setPageSize(MAX_RESULTS);
         resultList = new ArrayList<BussinesEntityType>();         
     }
@@ -84,9 +85,15 @@ public class BussinesEntityTypeList extends LazyDataModel<BussinesEntityType>{
     }
     
     public String find() {
-        resultList = bussinesEntityTypeService.findAll();
-        String summary = "Encontrados!";
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null));
+        try {
+            bussinesEntityTypeService.init();
+            resultList = bussinesEntityTypeService.findAll();
+            String summary = "Encontrados!";
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null));
+        } catch (Exception e) {
+            System.out.print("Error al iniciar los datos");
+        }
+        
         return "/pages/admin/bussinesentitytype/list";
     }
     
@@ -144,15 +151,16 @@ public class BussinesEntityTypeList extends LazyDataModel<BussinesEntityType>{
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();
     }
+       
     
-    public BussinesEntityType[] getSelectedBussinesEntities() {
-        return selectedBussinesEntities;
+    public BussinesEntityType[] getSelectedBussinesEntitiesType() {
+        return selectedBussinesEntitiesType;
     }
 
-    public void setSelectedBussinesEntities(BussinesEntityType[] selectedBussinesEntities) {
-        this.selectedBussinesEntities = selectedBussinesEntities;
+    public void setSelectedBussinesEntitiesType(BussinesEntityType[] selectedBussinesEntitiesType) {
+        this.selectedBussinesEntitiesType = selectedBussinesEntitiesType;
     }
-
+        
     public BussinesEntityType getSelectedBussinesEntityType() {
         return selectedBussinesEntityType;
     }
