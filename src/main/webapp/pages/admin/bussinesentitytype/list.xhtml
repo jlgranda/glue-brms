@@ -25,11 +25,16 @@ limitations under the License.
         <f:metadata>
             <f:viewParam name="result" value="#{bussinesEntityTypeListService.firstResult}" />
         </f:metadata>
-         
-    <h:form id="form">
-        <h1>#{messages['BussinesEntityTypes']}</h1>
-        
-        <p:dataTable var="bussinesEntityType" value="#{bussinesEntityTypeListService}"
+
+        <h:form id="form">
+            <h1>#{messages['BussinesEntityTypes']}</h1>
+            <div class="actions">
+                <p:commandButton value="#{messages['common.new']}" ajax="true"
+                                 action="#{groupHome.addBussinesEntity(groupHome.instance)}" process="@this, :edit-dialog"
+                                 icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"/>  
+                <h:commandButton id="save" action="#{groupHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary" rendered="false"/>                         
+            </div>  
+            <p:dataTable var="bussinesEntityType" value="#{bussinesEntityTypeListService}"
                          paginator="true" rows="10"
                          paginatorAlwaysVisible="false"
                          paginatorPosition="top"
@@ -38,25 +43,25 @@ limitations under the License.
                          id="bussinesEntityTypeTable" lazy="true"                          
                          selection="#{bussinesEntityTypeListService.selectedBussinesEntityType}"
                          rendered="#{true}">                
-                         
+
                 <p:column selectionMode="multiple" style="width:18px" /> 
-                
+
                 <p:column headerText="#{messages['BussinesEntityType.name']}" sortBy="#{bussinesEntityType.name}">
                     <h:outputText value="#{bussinesEntityType.name}"></h:outputText>
                 </p:column> 
-                
+
                 <p:column headerText="#{messages['BussinesEntityType.structureAccount']}" sortBy="#{bussinesEntityType.name}">
                     <h:outputText value="#{bussinesEntityType.structures.size()}"></h:outputText>
                 </p:column> 
-                
+
                 <p:column headerText="#{messages['BussinesEntityType.attributeAccount']}" sortBy="#{bussinesEntityType.name}">
                     <h:outputText value="#{bussinesEntityType.structures[0].properties.size()}"></h:outputText>
                 </p:column> 
 
-                 <f:facet name="footer">
-                       <!-- <p:commandButton id="multiViewButton" value="#{messages['common.view']}" icon="ui-icon-search"  
-                                         update=":form:displayMulti" oncomplete="multiBussinesEntityDialog.show()"/>  -->
-                 </f:facet>
+                <f:facet name="footer">
+                      <!-- <p:commandButton id="multiViewButton" value="#{messages['common.view']}" icon="ui-icon-search"  
+                                        update=":form:displayMulti" oncomplete="multiBussinesEntityDialog.show()"/>  -->
+                </f:facet>
             </p:dataTable>
             <!--
             <p:dialog id="multiDialog" header="#{messages['Account.detail']}"
@@ -73,7 +78,7 @@ limitations under the License.
             <p:dialog header="#{messages['common.selectedBussinesEntity']}" modal="true" showEffect="fade" hideEffect="fade" widgetVar="dlg">  
                     <h:panelGrid columns="1" id="display">  
                         <h:outputText value="#{bussinesEntityTypeList.selectedBussinesEntityType.name}" />  
-    		    </h:panelGrid>  
+                    </h:panelGrid>  
              </p:dialog>  -->
 
         </h:form>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 jlgranda.
+ * Copyright 2012 cesar.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,41 +21,38 @@ import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
-import org.eqaula.glue.model.BussinesEntity;
-import org.eqaula.glue.model.BussinesEntityAttribute;
-import org.eqaula.glue.model.Group;
-import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.util.Dates;
+import org.eqaula.glue.model.BussinesEntityType;
+import org.eqaula.glue.service.BussinesEntityTypeListService;
 import org.jboss.seam.transaction.Transactional;
 
 /**
  *
- * @author jlgranda
+ * @author cesar
  */
-@Named
-@ViewScoped
-public class ProfileHome extends BussinesEntityHome<Profile> implements Serializable {
+public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityType> implements Serializable {
 
     private static final long serialVersionUID = 7632987414391869389L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ProfileHome.class);
+    
     @Inject
     @Web
     private EntityManager em;
+    @Inject
+    private BussinesEntityTypeListService bussinesEntityTypeListService;
+            
     private String structureName;
 
-    public Long getProfileId() {
+    public long getBussinesEntityTypeId() {
         return (Long) getId();
     }
 
-    public void setProfileId(Long profileId) {
-        setId(profileId);
+    public void setBussinesEntityTypeId(long bussinesEntityTypeId) {
+        setId(bussinesEntityTypeId);
     }
 
     public String getStructureName() {
@@ -67,110 +64,96 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     }
 
     @Override
-    protected Profile createInstance() {
-
-        Date now = Calendar.getInstance().getTime();
-        Profile profile = new Profile();
-        profile.setCreatedOn(now);
-        profile.setLastUpdate(now);
-        profile.setActivationTime(now);
-        profile.setExpirationTime(Dates.addDays(now, 364));
-        profile.setAuthor(null); //Establecer al usuario actual
-        profile.buildAttributes(bussinesEntityService);
-        return profile;
+    protected BussinesEntityType createInstance() {
+        BussinesEntityType bussinesEntityType = new BussinesEntityType();         
+        
+        bussinesEntityType.setName(structureName);
+        bussinesEntityType.setStructures(bussinesEntityTypeListService.getSelectedBussinesEntityType().getStructures());
+        
+        return bussinesEntityType;        
     }
-
-    @TransactionAttribute
-    public void load() {
-        log.info("eqaula --> Loading instance from ProfileHome for " + getId());
-        if (isIdDefined()) {
-            wire();
-        }
-        log.info("eqaula --> Loaded instance" + getInstance());
-    }
-
+    
     @TransactionAttribute
     public void wire() {
         getInstance();
     }
-
+    
     public boolean isWired() {
         return true;
     }
 
-    public Profile getDefinedInstance() {
+    public BussinesEntityType getDefinedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
-
-    @PostConstruct
+     @PostConstruct
     public void init() {
         setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
 
     @Override
-    public Class<Profile> getEntityClass() {
-        return Profile.class;
+    public Class<BussinesEntityType> getEntityClass() {
+        return BussinesEntityType.class;
     }
 
     @TransactionAttribute
     public String saveAjax() {
         Date now = Calendar.getInstance().getTime();
         log.info("eqaula --> saving " + getInstance().getName());
-        getInstance().setLastUpdate(now);
-        for(BussinesEntityAttribute a : getInstance().getAttributes()){
-            if (a.getProperty().getType().equals("java.lang.String") && a.getValue() == null){
-                a.setValue(a.getName());
-                a.setStringValue(a.getName());
-            }
-        }
+        getInstance().setName(structureName);
+//        for(BussinesEntityAttribute a : getInstance().){
+//            if (a.getProperty().getType().equals("java.lang.String") && a.getValue() == null){
+//                a.setValue(a.getName());
+//                a.setStringValue(a.getName());
+//            }
+//        }
         save(getInstance());
         return "/pages/home?faces-redirect=true";
     }
 
     @TransactionAttribute
     public void displayBootcampAjax() {
-        getInstance().setShowBootcamp(true);
+//        getInstance().setShowBootcamp(true);
         update();
     }
 
     @TransactionAttribute
     public void dismissBootcampAjax() {
-        getInstance().setShowBootcamp(false);
+//        getInstance().setShowBootcamp(false);
         update();
     }
-
+/*
     @Transactional
-    public void addBussinesEntity(Group group) {
+    public void addBussinesEntityType(Structure structure) {
         Date now = Calendar.getInstance().getTime();
-        String name = "Nuevo " + (group.getProperty() != null ? group.getProperty().getLabel() : "elemento") + " " + (group.findOtherMembers(this.getInstance()).size() + 1);
+        String name = "Nuevo " + (structure.getProperty() != null ? structure.getProperty().getLabel() : "elemento") + " " + (structure.findOtherMembers(this.getInstance()).size() + 1);
         BussinesEntity entity = new BussinesEntity();
         entity.setName(name);
         //TODO implementar generador de códigos para entidad de negocio
-        entity.setCode((group.getProperty() != null ? group.getProperty().getLabel() : "elemento") + " " + (group.findOtherMembers(this.getInstance()).size() + 1));
+        entity.setCode((structure.getProperty() != null ? structure.getProperty().getLabel() : "elemento") + " " + (structure.findOtherMembers(this.getInstance()).size() + 1));
         entity.setCreatedOn(now);
         entity.setLastUpdate(now);
         entity.setActivationTime(now);
         entity.setExpirationTime(Dates.addDays(now, 364));
         entity.setAuthor(null); //Establecer al usuario actual
         entity.buildAttributes(bussinesEntityService);
-        log.info("eqaula --> start attributes for " + group.getName() + " into entity " + entity.getName() + "");
+        log.info("eqaula --> start attributes for " + structure.getName() + " into entity " + entity.getName() + "");
         //buildAttributesFor(entity, group.getName());
         //Set default values into dinamycs properties
         //TODO idear un mecanismo generico de inicialización de variables dinamicas
         //entity.getBussinessEntityAttribute("title").setValue(name);
 
-        group.add(entity);
+        structure.add(entity);
 
         setBussinesEntity(entity); //Establecer para edición
     }
-
+*/
     @Transactional
-    public void saveBussinesEntity() {
+    public void saveBussinesEntityType() {
 
         try {
             if (getBussinesEntity() == null) {
-                throw new NullPointerException("bussinessEntity is null");
+                throw new NullPointerException("bussinessEntityType is null");
             }
 
             if (getBussinesEntity().getName().equalsIgnoreCase("")) {
@@ -186,4 +169,4 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
     }
-}
+  }
