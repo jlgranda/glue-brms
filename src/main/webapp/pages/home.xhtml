@@ -77,7 +77,7 @@
                                             <!-- TODO cambiar nombre de atributo fragmentXHTML a page -->
                                             <h:link outcome="#{p.customForm != null ? p.customForm : '/pages/profile/data/structure'}">
                                                 <div class="span4 columns" style="margin-left: 16px;">
-                                                    <div class="well" style="height: 175px; margin-bottom: 0px;">
+                                                    <div class="well" style="height: 86px; margin-bottom: 0px;">
                                                         #{p.label}
                                                     </div></div>
                                                 <f:param name="profileId" value="#{userProfile.id}"/>
@@ -87,7 +87,7 @@
                                         <c:when test="#{p.type == 'org.eqaula.glue.model.Group'}">
                                             <h:link outcome="/pages/profile/data/group">
                                                 <div class="span4 columns" style="margin-left: 16px;">
-                                                    <div class="well" style="height: 175px; margin-bottom: 0px;">
+                                                    <div class="well" style="height: 86px; margin-bottom: 0px;">
                                                         #{p.label}
                                                     </div></div>
                                                 <f:param name="groupId" value="#{ui.getGroup(userProfile, p).getId()}"/>
@@ -96,32 +96,6 @@
                                         </c:when>
                                     </c:choose>
                                 </c:forEach>
-                                <!--
-                                <h:link outcome="/pages/profile/data/education">
-                                    <div class="span4 columns" style="margin-left: 12px;"><div class="well" style="height: 175px; margin-bottom: 0px;">
-                                #{messages['module.profile.data.education']}
-                            </div></div>
-                        <f:param name="profileId" value="#{userProfile.id}"/>
-                    </h:link>
-                    <h:link outcome="/pages/profile/data/role">
-                        <div class="span4 columns" style="margin-left: 12px;"><div class="well" style="height: 175px; margin-bottom: 0px;">
-                                #{messages['module.profile.data.role']}
-                            </div></div>
-                        <f:param name="profileId" value="#{userProfile.id}"/>
-                    </h:link>
-                    <h:link outcome="/pages/profile/data/strategic">
-                        <div class="span4 columns" style="margin-left: 12px;"><div class="well" style="height: 175px; margin-bottom: 0px;">
-                                #{messages['module.profile.data.strategic']}
-                            </div></div>
-                        <f:param name="profileId" value="#{userProfile.id}"/>
-                    </h:link>
-                    <h:link outcome="/pages/profile/data/tasks">
-                        <div class="span4 columns" style="margin-left: 12px;"><div class="well" style="height: 175px; margin-bottom: 0px;">
-                                #{messages['module.profile.data.tasks']}
-                            </div></div>
-                        <f:param name="profileId" value="#{userProfile.id}"/>
-                    </h:link>
-                                -->
                             </div>
                         </div>
                     </div>
@@ -130,64 +104,66 @@
         </ui:define>
 
         <ui:define name="content">
-
-            <div class="row">
-                <div class="span8 columns">
-                    <div class="hanger">
-                        <b>#{messages['common.welcome']}</b> (#{true ? '' : messages['common.justnow']})
-                        <p><h:link outcome="/pages/profile/view" value="#{messages['common.profile']}" rendered="#{identity.loggedIn}"/><br/>
-                            <a href="http://twitter.com/eqaula">#{messages['common.follow']}</a></p>
+            <p:panel rendered="false">
+                <div class="row">
+                    <div class="span8 columns">
+                        <div class="hanger">
+                            <b>#{messages['common.welcome']}</b> (#{true ? '' : messages['common.justnow']})
+                            <p><h:link outcome="/pages/profile/view" value="#{messages['common.profile']}" rendered="#{identity.loggedIn}">
+                                    <f:param name="profileId" value="#{userProfile.id}"/>
+                                </h:link><br/>
+                            </p>
+                        </div>
                     </div>
-                </div>
-                <div class="span8 columns">
-                    <div class="well" style="padding-top: 7px; padding-bottom: 10px;">
-                        <h:button value="#{messages['common.createnewprofile']}" outcome="/pages/project/create" class="btn fr"/>
-                        <h3>#{messages['module.profile.profiles']} (${profiles.count})</h3>
+                    <div class="span8 columns">
+                        <div class="well" style="padding-top: 7px; padding-bottom: 10px;">
+                            <h:button value="#{messages['common.createnewprofile']}" outcome="/pages/project/create" class="btn fr" rendered="false"/>
+                            <h3>#{messages['module.profile.profiles']} (${profiles.count})</h3>
 
-                        <ul class="plain clear">
-                            <ui:repeat var="p" value="#{projects.all}" varStatus="i">
-                                <li>
-                                    <div class="box" style="margin-bottom: 8px;">
+                            <ul class="plain clear">
+                                <ui:repeat var="p" value="#{projects.all}" varStatus="i">
+                                    <li>
+                                        <div class="box" style="margin-bottom: 8px;">
 
-                                        <div class="row">
-                                            <div class="span6 columns">
-                                                <h:button value="${p.owner.username}" outcome="/pages/account" /> 
-                                                <span style="font-size: 16px;">
-                                                    / <h:link outcome="/pages/project/view"
-                                                              value="#{p.name}">
+                                            <div class="row">
+                                                <div class="span6 columns">
+                                                    <h:button value="${p.owner.username}" outcome="/pages/account" /> 
+                                                    <span style="font-size: 16px;">
+                                                        / <h:link outcome="/pages/project/view"
+                                                                  value="#{p.name}">
+                                                            <f:param name="profile" value="#{p.owner.username}" />
+                                                            <f:param name="project" value="#{p.slug}" />
+                                                        </h:link>
+                                                    </span>
+                                                </div>
+                                                <div class="span1 columns">
+                                                </div>
+                                            </div>
+
+                                            <p>Your assignments: <ocp:tooltip placement="right" title="over #{projects.getAssignedStoryCount(userProfile, p)} stories" trigger="hover">
+                                                    <h:link id="assignments" value="#{projects.getAssignedTaskCount(userProfile, p)} tasks" 
+                                                            outcome="/pages/project/view">
                                                         <f:param name="profile" value="#{p.owner.username}" />
                                                         <f:param name="project" value="#{p.slug}" />
                                                     </h:link>
-                                                </span>
-                                            </div>
-                                            <div class="span1 columns">
-                                            </div>
+                                                </ocp:tooltip></p>
+
                                         </div>
+                                    </li>
+                                </ui:repeat>
 
-                                        <p>Your assignments: <ocp:tooltip placement="right" title="over #{projects.getAssignedStoryCount(userProfile, p)} stories" trigger="hover">
-                                                <h:link id="assignments" value="#{projects.getAssignedTaskCount(userProfile, p)} tasks" 
-                                                        outcome="/pages/project/view">
-                                                    <f:param name="profile" value="#{p.owner.username}" />
-                                                    <f:param name="project" value="#{p.slug}" />
-                                                </h:link>
-                                            </ocp:tooltip></p>
-
-                                    </div>
-                                </li>
-                            </ui:repeat>
-
-                            <h:panelGroup layout="block" rendered="${projects.count == 0}" styleClass="box">
-                                Looks like you aren't working on anything right now. You can <h:link outcome="/pages/project/create" value="start a new project" /> to get going.
-                            </h:panelGroup>
-                        </ul>
+                                <h:panelGroup layout="block" rendered="${projects.count == 0}" styleClass="box">
+                                    Looks like you aren't working on anything right now. You can <h:link outcome="/pages/project/create" value="start a new project" /> to get going.
+                                </h:panelGroup>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-
+            </p:panel>
         </ui:define>
 
-        <ui:define name="side-items">
+        <ui:define name="sidebar">
+            
         </ui:define>
 
     </ui:composition>

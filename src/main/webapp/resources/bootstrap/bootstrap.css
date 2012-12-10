@@ -2372,3 +2372,20 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
     text-align: left;
 }
 
+.mini-icon-logout:before {
+    content: "";
+}
+.mini-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+}
+.mini-icon, .mega-icon {
+    display: inline-block;
+    font-family: 'Octicons Regular';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    text-decoration: none;
+}
+

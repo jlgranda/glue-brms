@@ -37,9 +37,13 @@ import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import org.eqaula.glue.cdi.LoggedIn;
 import org.eqaula.glue.model.profile.Profile;
+import org.jboss.seam.security.Identity;
+import org.ocpsoft.rewrite.config.Condition;
 import org.ocpsoft.rewrite.config.Configuration;
 import org.ocpsoft.rewrite.config.ConfigurationBuilder;
 import org.ocpsoft.rewrite.config.Direction;
+import org.ocpsoft.rewrite.context.EvaluationContext;
+import org.ocpsoft.rewrite.event.Rewrite;
 import org.ocpsoft.rewrite.servlet.config.HttpConfigurationProvider;
 import org.ocpsoft.rewrite.servlet.config.Path;
 import org.ocpsoft.rewrite.servlet.config.Redirect;
@@ -53,27 +57,33 @@ import org.ocpsoft.rewrite.servlet.config.rule.Join;
 public class AuthenticationStatusInterceptor extends HttpConfigurationProvider
 {
    @Inject
-   @LoggedIn
-   private Profile profile;
+   private Identity identity;
 
    @Override
    public Configuration getConfiguration(final ServletContext context)
    {
-      ConfigurationBuilder config = ConfigurationBuilder.begin();
-//      if (!profile.isPersistent())
-//      {
-//         /*
-//          * If the user is not logged in, show them the guest home page instead of the dashboard.
-//          */
-//         return config.addRule(Join.path("/").to("/pages/loggedOffHome.xhtml"));
-//      }
-//      else
-//      {
-         config.defineRule()
-         .when(Direction.isInbound().and(Path.matches("/(signup|login)")))
-         .perform(Redirect.temporary(context.getContextPath() + "/"));
-//      }
-      return config;
+       Condition loggedIn = new Condition() {
+                 @Override
+                 public boolean evaluate(Rewrite event, EvaluationContext context) {
+                    return identity.isLoggedIn();
+                 }
+
+              };
+
+         /*
+          * If the user is not logged in, show them the guest home page instead of the dashboard.
+          */
+         return ConfigurationBuilder.begin()
+              .addRule(Join.path("/")
+                           .to("/pages/loggedOffHome.xhtml")
+                           .when(Direction.isInbound().andNot(loggedIn)))
+
+              .defineRule()
+              .when(Direction.isInbound()
+                      .and(Path.matches("/(signup|login)")
+                      .andNot(loggedIn)))
+              .perform(Redirect.temporary(context.getContextPath() + "/"));
+
    }
 
    @Override

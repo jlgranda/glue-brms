@@ -56,8 +56,10 @@ public class PasswordValidator implements Validator
       if (value instanceof String && ((String) value).length() > 0 && !StringValidations.isPassword(field))
       {
          FacesMessage msg = new FacesMessage(
-                  "Too short (minimum is 8 characters) - most special characters are allowed.");
+                  "Contraseña muy corta  (ingrese mínimo 8 caracteres) - se permiten letras, numeros y otros caracteres especiales.");
          throw new ValidatorException(msg);
       }
+      
+      System.out.println("eqaula --> passwordValidator " + field);
    }
 }

@@ -75,7 +75,7 @@ public class PasswordConfirmValidator implements Validator
 
       if (!ignore && !passwordValue.equals(passwordConfirmValue))
       {
-         throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Passwords do not match.",
+         throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Las contraseñas no coinciden.",
                   null));
       }
    }

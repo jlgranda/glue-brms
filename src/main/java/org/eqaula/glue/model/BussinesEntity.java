@@ -279,7 +279,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     // Attributes management and build
     //-------------------------------------------------------------------------
     public void buildAttributes(BussinesEntityService bes) {
-        log.info("eqaula --> build attributes for " + this.getName());
+        log.info("eqaula --> build attributes for type " + this.getType());
         if (getType() == null){
             return;
         }

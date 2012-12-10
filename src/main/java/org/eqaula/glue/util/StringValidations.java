@@ -158,6 +158,7 @@ public class StringValidations {
 
     public static boolean isPassword(final String password) {
         if (password != null) {
+            System.out.println("eqaula --> isPassword " + password);
             return password.matches("^[a-zA-Z0-9!@#$%^&*\\s\\(\\)_\\+=-]{8,}$");
         }
 

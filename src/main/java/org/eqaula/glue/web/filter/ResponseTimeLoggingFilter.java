@@ -65,8 +65,9 @@ public class ResponseTimeLoggingFilter implements Filter
          System.out.println("Request completed in [" + (time / 1000.0) + "] seconds: ["
                   + ((HttpServletRequest) request).getRequestURI() + "]");
       }
-      else
-         chain.doFilter(request, response);
+      else {
+           chain.doFilter(request, response);
+       }
    }
 
    @Override

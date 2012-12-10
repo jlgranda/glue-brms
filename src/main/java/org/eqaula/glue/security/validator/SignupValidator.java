@@ -61,8 +61,8 @@ public class SignupValidator implements Validator
                && !(password.getValue() == null || !"".equals(password.getValue())))
       {
          passwordConfirm.getComponent().setValid(false);
-         passwordConfirm.getComponent().setValidatorMessage("Confirm your password");
-         throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please confirm your password.",
+         passwordConfirm.getComponent().setValidatorMessage("Confirme la contraseña");
+         throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Por favor confirme su contraseña.",
                   null));
       }
    }

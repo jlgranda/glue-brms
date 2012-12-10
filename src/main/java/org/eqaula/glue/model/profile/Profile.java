@@ -35,22 +35,11 @@ package org.eqaula.glue.model.profile;
 
 import com.google.common.base.Strings;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import javax.ejb.TransactionAttribute;
 import javax.persistence.*;
 import org.eqaula.glue.model.BussinesEntity;
-import org.eqaula.glue.model.BussinesEntityAttribute;
-import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.PersistentObject;
 import org.eqaula.glue.model.Group;
-import org.eqaula.glue.model.Property;
-import org.eqaula.glue.model.Structure;
-import org.eqaula.glue.util.Dates;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasypt.util.password.BasicPasswordEncryptor;
@@ -58,7 +47,6 @@ import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.hibernate.validator.constraints.Email;
 
 import org.hibernate.annotations.Index;
-import org.jboss.seam.transaction.Transactional;
 
 @Entity
 @Table(name = "Profile")
@@ -79,11 +67,9 @@ public class Profile extends BussinesEntity implements Serializable {
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(Profile.class);
     private static final long serialVersionUID = 274770881776410973L;
     
-    @NotEmpty
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String firstname;
-    @NotEmpty
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String surname;
     @NotEmpty
     @Column(nullable = false, unique = true)
@@ -285,7 +271,9 @@ public class Profile extends BussinesEntity implements Serializable {
     
     @Transient
     public String getFullName(){
-        return Strings.nullToEmpty(this.getFirstname() + " " + this.getSurname());
+        String fullName = Strings.nullToEmpty(this.getFirstname() + " " + this.getSurname());
+        boolean flag = Strings.isNullOrEmpty(this.getFirstname()) && Strings.isNullOrEmpty(this.getSurname());
+        return flag ? getUsername() : fullName;
     }
     
 }

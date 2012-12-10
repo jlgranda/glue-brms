@@ -20,19 +20,23 @@
             <h:form id="profile">
 
                 <!-- Attributos para usuario -->
-
+                <glue:input id="fstn" name="firstname" type="text" label="#{messages['common.firstname']}" value="#{profileHome.instance.firstname}" required="true" inlinehelp="#{messages['common.firstname.inlinehelp']}" execute="@this save" render="fstn"/>
+                <glue:input id="srn" name="surname" type="text" label="#{messages['common.surname']}" value="#{profileHome.instance.surname}" required="true" inlinehelp="#{messages['common.surname.inlinehelp']}" execute="@this save"/>
+                <glue:input id="cod" name="code" type="text" label="#{messages['profile.dni']}" value="#{profileHome.instance.code}" required="false" inlinehelp="#{messages['profile.dni.inlinehelp']}" execute="@this save"/>
+                <!--
                 <glue:input id="scrn" name="screename" type="text" label="#{messages['common.screenname']}" value="#{profileHome.instance.screenName}" required="false" inlinehelp="#{messages['common.screenname.inlinehelp']}" execute="@this save"/>
+                -->
 
+                <glue:input id="bio" name="bio" type="textarea" label="#{messages['common.bio']}" value="#{profileHome.instance.bio}" required="false" inlinehelp="#{messages['common.bio.inlinehelp']}" execute="@this save"/>
+                
                 <glue:input id="eml" name="text" type="email" label="#{messages['common.email']}" value="#{profileHome.instance.email}" required="true" validator="emailValidator" inlinehelp="#{messages['common.email.inlinehelp']}" execute="@this save"/>
 
                 <glue:input id="emlSecret" name="emailSecret" type="checkbox" value="#{profileHome.instance.emailSecret}" required="true" inlinehelp="#{messages['common.keepemailsecret']}" execute="@this save"/>
 
-                <glue:input id="bio" name="bio" type="textarea" label="#{messages['common.bio']}" value="#{profileHome.instance.bio}" required="false" inlinehelp="#{messages['common.bio.inlinehelp']}" execute="@this save"/>
-
                 <glue:input id="showBootcamp" name="showBootcamp" type="checkbox" value="#{profileHome.instance.showBootcamp}" required="true" inlinehelp="#{messages['common.bootcamp.inlinehelp']}" execute="@this save"/>
 
                 <div class="actions">
-                    <h:commandButton id="save" action="#{profileHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary"/>
+                    <h:commandButton id="save" action="#{profileHome.saveProfile()}" value="#{messages['common.save']}" styleClass="btn primary"/>
                     &nbsp;
                     <h:commandButton action="/pages/home.xhtml?faces-redirect=true"
                                      value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/>

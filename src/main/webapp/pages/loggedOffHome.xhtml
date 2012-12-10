@@ -11,17 +11,18 @@
 	<ui:define name="header-replace">
 		<div class="alert-message info" style="margin: auto; margin-top: 15px; width: 900px;">
 			<center>
-			<h1>${statistics.userCount} people managing over ${statistics.projectCount} projects</h1>
+			<h1>#{messages['module.profile.profiles']} en Glue (${profiles.count})</h1>
 			<div class="alert-message block-message warning">
 				<span style="font-size: 16px;">
-				<a href="/p/rewrite">rewrite</a>, 
+				<!--<a href="/p/rewrite">rewrite</a>, 
 				<a href="/p/rewrite">prettyfaces</a>, 
 				<a href="/p/rewrite">forge</a>, 
 				<a href="/p/rewrite">seam</a>, 
 				<a href="/p/rewrite">richfaces</a>, 
 				 and many more.
+    -->
 				</span>
-				<input type="text" style="margin-left: 15px;" placeholder="Find a project..." />
+				<input type="text" style="margin-left: 15px;" placeholder="Find a profile..." />
 			</div>
 			</center>
 		</div>

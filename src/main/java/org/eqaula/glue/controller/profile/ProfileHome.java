@@ -36,8 +36,21 @@ import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.Property;
 import org.eqaula.glue.model.profile.Profile;
+import org.eqaula.glue.profile.ProfileService;
 import org.eqaula.glue.util.Dates;
+import org.jboss.seam.international.status.Messages;
+import org.jboss.seam.security.Authenticator;
+import org.jboss.seam.security.Credentials;
+import org.jboss.seam.security.Identity;
+import org.jboss.seam.security.external.openid.OpenIdAuthenticator;
+import org.jboss.seam.security.management.IdmAuthenticator;
 import org.jboss.seam.transaction.Transactional;
+import org.picketlink.idm.api.AttributesManager;
+import org.picketlink.idm.api.IdentitySession;
+import org.picketlink.idm.api.PersistenceManager;
+import org.picketlink.idm.api.User;
+import org.picketlink.idm.common.exception.IdentityException;
+import org.picketlink.idm.impl.api.PasswordCredential;
 
 /**
  *
@@ -52,6 +65,21 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     @Inject
     @Web
     private EntityManager em;
+    private Messages msg;
+    @Inject
+    private Identity identity;
+    @Inject
+    private Credentials credentials;
+    @Inject
+    private IdentitySession security;
+    @Inject
+    private OpenIdAuthenticator oidAuth;
+    @Inject
+    private IdmAuthenticator idmAuth;
+    //private String username;
+    private String password;
+    private String passwordConfirm;
+    //private String email;
     private String structureName;
 
     public Long getProfileId() {
@@ -70,9 +98,26 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         this.structureName = structureName;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
+    
     @Override
     protected Profile createInstance() {
 
+        
         Date now = Calendar.getInstance().getTime();
         Profile profile = new Profile();
         profile.setCreatedOn(now);
@@ -80,7 +125,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         profile.setActivationTime(now);
         profile.setExpirationTime(Dates.addDays(now, 364));
         profile.setAuthor(null); //Establecer al usuario actual
-        profile.buildAttributes(bussinesEntityService);
+        //profile.buildAttributes(bussinesEntityService);
         return profile;
     }
 
@@ -118,17 +163,76 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     }
 
     @TransactionAttribute
+    public String register() throws IdentityException {
+        createUser();
+
+        credentials.setUsername(getInstance().getUsername());
+        credentials.setCredential(new PasswordCredential(getPassword()));
+
+        oidAuth.setStatus(Authenticator.AuthenticationStatus.FAILURE);
+        identity.setAuthenticatorClass(IdmAuthenticator.class);
+
+        /*
+         * Try twice to work around some state bug in Seam Security
+         * TODO file issue in seam security
+         */
+        String result = identity.login();
+        if (Identity.RESPONSE_LOGIN_EXCEPTION.equals(result)) {
+            result = identity.login();
+        }
+
+        return result;
+    }
+
+    @TransactionAttribute
+    private void createUser() throws IdentityException {
+        // TODO validate username, email address, and user existence
+        PersistenceManager identityManager = security.getPersistenceManager();
+        User user = identityManager.createUser(getInstance().getUsername());
+
+        AttributesManager attributesManager = security.getAttributesManager();
+        attributesManager.updatePassword(user, getPassword());
+        attributesManager.addAttribute(user, "email", getInstance().getEmail());
+
+        em.flush();
+
+        // TODO figure out a good pattern for this...
+        //setInstance(createInstance());
+        //getInstance().setEmail(email);
+        getInstance().setPassword(getPassword());
+        getInstance().getIdentityKeys().add(user.getKey());
+        getInstance().setUsernameConfirmed(true);
+        getInstance().setShowBootcamp(true);
+        create(getInstance()); //
+        setProfileId(getInstance().getId());
+        wire();
+        getInstance().setType(bussinesEntityService.findBussinesEntityTypeByName(Profile.class.getName()));
+        getInstance().buildAttributes(bussinesEntityService);
+        save(getInstance()); //Actualizar estructura de datos
+        
+    }
+
+    @TransactionAttribute
     public String saveAjax() {
         Date now = Calendar.getInstance().getTime();
         log.info("eqaula --> saving " + getInstance().getName());
         getInstance().setLastUpdate(now);
-        for(BussinesEntityAttribute a : getInstance().getAttributes()){
-            if (a.getProperty().getType().equals("java.lang.String") && a.getValue() == null){
+        for (BussinesEntityAttribute a : getInstance().getAttributes()) {
+            if (a.getProperty().getType().equals("java.lang.String") && a.getValue() == null) {
                 a.setValue(a.getName());
                 a.setStringValue(a.getName());
             }
         }
         save(getInstance());
+        return "/pages/home?faces-redirect=true";
+    }
+    
+    @TransactionAttribute
+    public String saveProfile() {
+        Date now = Calendar.getInstance().getTime();
+        getInstance().setLastUpdate(now);
+        save(getInstance());
+        //return "/pages/profile/view?faces-redirect=true";
         return "/pages/home?faces-redirect=true";
     }
 
