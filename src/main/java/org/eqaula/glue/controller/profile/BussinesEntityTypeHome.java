@@ -21,8 +21,10 @@ import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
@@ -34,6 +36,8 @@ import org.jboss.seam.transaction.Transactional;
  *
  * @author cesar
  */
+@Named
+@ViewScoped
 public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityType> implements Serializable {
 
     private static final long serialVersionUID = 7632987414391869389L;
@@ -108,7 +112,7 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
 //            }
 //        }
         save(getInstance());
-        return "/pages/home?faces-redirect=true";
+        return "/pages/admin/bussinesentitytype/list?faces-redirect=true";
     }
 
     @TransactionAttribute
@@ -150,7 +154,7 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
 */
     @Transactional
     public void saveBussinesEntityType() {
-
+        /*
         try {
             if (getBussinesEntity() == null) {
                 throw new NullPointerException("bussinessEntityType is null");
@@ -167,6 +171,6 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
             System.out.println("saveBussinesEntity ERROR = " + e.getMessage());
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
-        }
+        }*/
     }
   }
