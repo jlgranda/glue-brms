@@ -17,6 +17,12 @@
       <query-param name="profileId" decode="false">#{profileHome.profileId}</query-param>
    </url-mapping>
    
+   <url-mapping id="profile-view">
+      <pattern value="/view"></pattern>
+      <view-id value="/pages/profile/view.xhtml"></view-id>
+      <query-param name="profileId" decode="false">#{profileHome.profileId}</query-param>
+   </url-mapping>
+   
    <url-mapping id="personal">
       <pattern value="/personal"></pattern>
       <view-id value="/pages/profile/data/personal.xhtml"></view-id>
