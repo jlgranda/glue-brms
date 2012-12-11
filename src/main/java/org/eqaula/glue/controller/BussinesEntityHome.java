@@ -46,6 +46,8 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
     protected BussinesEntityService bussinesEntityService;
     protected BussinesEntity bussinesEntity;
     private Property property;
+    
+    private String backView;
 
     public Property getProperty() {
         return property;
@@ -53,6 +55,14 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
 
     public void setProperty(Property property) {
         this.property = property;
+    }
+
+    public String getBackView() {
+        return backView;
+    }
+
+    public void setBackView(String backView) {
+        this.backView = backView;
     }
     
     @Override

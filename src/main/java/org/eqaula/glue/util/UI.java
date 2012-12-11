@@ -32,9 +32,12 @@
 package org.eqaula.glue.util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import javax.annotation.PostConstruct;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -44,12 +47,14 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.eqaula.glue.cdi.Web;
+import org.eqaula.glue.controller.profile.GroupHome;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityAttribute;
 import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.Property;
 
 import org.eqaula.glue.model.accounting.Account;
+import org.eqaula.glue.service.BussinesEntityService;
 
 @Named("ui")
 @RequestScoped
@@ -58,6 +63,14 @@ public class UI {
     @Inject
     @Web
     private EntityManager em;
+    
+    @Inject
+    protected BussinesEntityService bussinesEntityService;
+    
+    @PostConstruct
+    public void init() {
+        bussinesEntityService.setEntityManager(em);
+    }
 
     public List<Property> getProperties(BussinesEntity entity) {
         if (entity == null) {
@@ -82,7 +95,42 @@ public class UI {
         return q.getResultList();
 
     }
+    
+    public List<GroupHome.ColumnModel> findColumnsTemplate(Group g) {
+        List<GroupHome.ColumnModel> columns = new ArrayList<GroupHome.ColumnModel>();
+        BussinesEntity template = makeBussinessEntity(g);
+        //List<ColumnModel> _columns = new ArrayList<ColumnModel>();
+        for (BussinesEntityAttribute a : template.getAttributes()){
+            if (a.getProperty().isShowInColumns()){
+                columns.add(new GroupHome.ColumnModel(a.getProperty().getLabel(), a.getProperty().getName()));
+            }
+        }
+        if (columns.isEmpty() || g.getProperty().isShowDefaultBussinesEntityProperties()){
+            //TODO aplicar internacionalización
+            columns.add(new GroupHome.ColumnModel("name", "name"));
+            columns.add(new GroupHome.ColumnModel("code", "code"));
+        }
+        
+        return columns;
+    }
 
+    public BussinesEntity makeBussinessEntity(Group g){
+        Date now = Calendar.getInstance().getTime();
+            //TODO internacionalizar cadenas estáticas
+            String name = "New instance";
+            BussinesEntity entity = new BussinesEntity();
+            entity.setName(name);
+            //TODO implementar generador de códigos para entidad de negocio
+            entity.setCode("NewCode");
+            entity.setCreatedOn(now);
+            entity.setLastUpdate(now);
+            entity.setActivationTime(now);
+            entity.setExpirationTime(Dates.addDays(now, 364));
+            entity.setAuthor(null); //Establecer al usuario actual
+            entity.buildAttributes(g.getName(), bussinesEntityService); //Construir atributos de grupos
+            return entity;
+    }
+    
     public Group getGroup(BussinesEntity entity, Property p) {
         Query q = em.createNamedQuery("Group.findByBussinesEntityIdAndPropertyId");
         q.setParameter("bussinesEntityId", entity.getId());
