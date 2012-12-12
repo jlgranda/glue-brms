@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -32,6 +34,8 @@ import org.eqaula.glue.model.BussinesEntity_;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.jboss.solder.logging.Logger;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -168,5 +172,18 @@ public class BussinesEntityListService extends LazyDataModel<BussinesEntity> {
 
     public void setSelectedBussinesEntity(BussinesEntity selectedBussinesEntity) {
         this.selectedBussinesEntity = selectedBussinesEntity;
+    }
+    
+    public void onRowSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage("BussinesEntity Selected ", ((BussinesEntity) event.getObject()).getName());
+
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        FacesMessage msg = new FacesMessage("BussinesEntity Unselected ", ((BussinesEntity) event.getObject()).getName());
+
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        this.setSelectedBussinesEntity(null);
     }
 }

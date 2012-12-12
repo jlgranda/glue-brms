@@ -31,9 +31,9 @@
                         <div class="span7 columns">
                             <h2>${profileHome.instance.fullName}</h2>
                             <p><span style="">#{profileHome.instance.code}</span>
-                               <span><h:outputText id="email" value="#{profileHome.instance.email}" rendered="#{!profileHome.instance.emailSecret}"/></span>
-                               <br/>
-                               #{empty profileHome.instance.bio ? messages['common.wathgoingtoaccomplishtoday'] : profileHome.instance.bio}
+                                <span><h:outputText id="email" value="#{profileHome.instance.email}" rendered="#{!profileHome.instance.emailSecret}"/></span>
+                                <br/>
+                                #{empty profileHome.instance.bio ? messages['common.wathgoingtoaccomplishtoday'] : profileHome.instance.bio}
                             </p>
                         </div>
                         <div class="span1 columns offset4">
@@ -48,7 +48,6 @@
         <ui:define name="content">
             <h:form id="account">
 
-                <h3>#{messages['module.profile.data.personal']}</h3>
                 <h:panelGroup  layout="block" class="clearfix" rendered="false">
                     <label for="fullname"><b>#{messages['common.fullName']}</b></label>
                     <div class="output">
@@ -74,39 +73,25 @@
                         <h:outputText id="bioIn" value="#{profileHome.instance.bio}" styleClass="span4" />
                     </div>
                 </h:panelGroup>
-                <p:scrollPanel style="width:100%;height:200px">
-                    <!-- Mostrar los datos de estructure-->
-                    <h:panelGroup id="attributes" layout="block" class="clearfix">
-                        <ui:repeat value="#{profileHome.instance.findBussinesEntityAttribute(profileHome.structureName)}" var="a" varStatus="status">
-                            <!--<h:panelGroup  layout="block" class="clearfix" rendered="true">
-                                <label for="firstdate"><b>#{messages['common.firstDate']}</b></label>
-                                <div class="input">
-                                    <h:outputText id="firstdateIn" value="#{a.value}" styleClass="span4" rendered="#{a.property.type eq 'java.lang.String'}" />
-                                </div>
-                            </h:panelGroup>-->
-                            <h:panelGroup layout="block" class="clearfix" >
-                                <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
-                                <div class="input">                                     
-                                    <!--<h:outputText id="xvalue" value="#{a.value}" styleClass="span4" rendered="#{a.property.type eq 'java.lang.String'}" />-->
-                                    <h:outputText id="valuedate" value="#{a.value}" styleClass="span4" />
-                                                                        
-                                    <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
-                                                     rendered="#{a.property.type eq 'java.lang.String[]'}" disabled="true">  
-                                        <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
-                                        <p:ajax event="change" update="@parent" partialSubmit="true"/>
-                                    </p:selectOneMenu>                                    
-                                </div>
-                            </h:panelGroup>  
-                        </ui:repeat>
-                    </h:panelGroup>
-                </p:scrollPanel>
                 <c:forEach items="#{ui.getProperties(profileHome.instance)}" var="p" >
+                    <h3>#{p.label}</h3>
                     <c:choose>                        
                         <c:when test="#{p.type == 'org.eqaula.glue.model.Structure'}">
-                             
+                            <p:scrollPanel style="width:100%;height:200px">
+                                <!-- Mostrar los datos de estructure-->
+                                <h:panelGroup id="attributes" layout="block" class="clearfix">
+                                    <ui:repeat value="#{profileHome.instance.findBussinesEntityAttribute(p.name)}" var="a" varStatus="status">
+                                        <h:panelGroup layout="block" class="clearfix" >
+                                            <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
+                                            <div class="input">                                     
+                                                <h:outputText id="value" value="#{a.value}" styleClass="span4" />
+                                            </div>
+                                        </h:panelGroup>  
+                                    </ui:repeat>
+                                </h:panelGroup>
+                            </p:scrollPanel>
                         </c:when>
                         <c:when test="#{p.type == 'org.eqaula.glue.model.Group'}">
-                            <h2>#{p.label}</h2>
                             <p:dataTable id="groups" var="m" value="#{ui.getGroup(profileHome.instance, p).findOtherMembers(profileHome.instance)}" 
                                          editable="false" 
                                          emptyMessage="#{messages['common.emptyList']}">  

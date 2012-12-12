@@ -923,6 +923,27 @@ textarea[readonly] {
 .actions .secondary-action a:hover {
     text-decoration: underline;
 }
+
+.admin-actions {
+    background: #f5f5f5;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 17px 20px 18px 20px;
+    border-top: 1px solid #ddd;
+    -webkit-border-radius: 0 0 3px 3px;
+    -moz-border-radius: 0 0 3px 3px;
+    border-radius: 0 0 3px 3px;
+}
+.admin-actions .secondary-action {
+    float: right;
+}
+.admin-actions .secondary-action a {
+    line-height: 30px;
+}
+.admin-actions .secondary-action a:hover {
+    text-decoration: underline;
+}
+
 .help-inline, .help-block {
     font-size: 11px;
     line-height: 18px;
