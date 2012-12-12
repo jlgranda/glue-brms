@@ -44,7 +44,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
     + "AND p.type IN (:types) "
     + "ORDER BY p.id")
 })
-public class BussinesEntityAttribute implements Serializable {
+public class BussinesEntityAttribute implements Serializable, Comparable<BussinesEntityAttribute> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -164,5 +164,10 @@ public class BussinesEntityAttribute implements Serializable {
                 + "name=" + name + ","
                 + "type=" + type + ","
                 + " ]";
+    }
+
+    @Override
+    public int compareTo(BussinesEntityAttribute o) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

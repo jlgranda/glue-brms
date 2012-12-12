@@ -18,6 +18,8 @@ package org.eqaula.glue.controller.profile;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
@@ -101,7 +103,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
     public String getPasswordConfirm() {
         return passwordConfirm;
     }
@@ -109,11 +111,11 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     public void setPasswordConfirm(String passwordConfirm) {
         this.passwordConfirm = passwordConfirm;
     }
-    
+
     @Override
     protected Profile createInstance() {
 
-        
+
         Date now = Calendar.getInstance().getTime();
         Profile profile = new Profile();
         profile.setCreatedOn(now);
@@ -202,10 +204,11 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         create(getInstance()); //
         setProfileId(getInstance().getId());
         wire();
+        getInstance().setName(getInstance().getUsername()); //Para referencia
         getInstance().setType(bussinesEntityService.findBussinesEntityTypeByName(Profile.class.getName()));
         getInstance().buildAttributes(bussinesEntityService);
         save(getInstance()); //Actualizar estructura de datos
-        
+
     }
 
     @TransactionAttribute
@@ -222,14 +225,25 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         save(getInstance());
         return "/pages/home?faces-redirect=true";
     }
-    
+
     @TransactionAttribute
     public String saveProfile() {
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
-        save(getInstance());
-        //return "/pages/profile/view?faces-redirect=true";
-        return "/pages/home?faces-redirect=true";
+        if (getInstance().isPersistent()){
+            save(getInstance());
+        } else {
+            try {
+                register();
+            } catch (IdentityException ex) {
+                Logger.getLogger(ProfileHome.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if ("list".equalsIgnoreCase(getBackView())) {
+            return "/pages/profile/list?typeName=org.eqaula.glue.model.Profile";
+        } else {
+            return "/pages/profile/view?faces-redirect=true&profileId=" + getProfileId();
+        }
     }
 
     @TransactionAttribute

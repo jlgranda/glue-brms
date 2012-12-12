@@ -14,6 +14,7 @@
         <ui:define name="content">
             <f:metadata>
                 <f:viewParam name="id" value="#{profileHome.profileId}" />
+                <f:viewParam name="backView" value="#{profileHome.backView}" />
                 <s:viewAction action="#{profileHome.load}" if="#{conversation.transient}"/>
             </f:metadata>
             <h2>#{messages['common.edit']} #{messages['Profile']}: #{profileHome.instance.fullName}</h2>
@@ -28,12 +29,76 @@
                 -->
 
                 <glue:input id="bio" name="bio" type="textarea" label="#{messages['common.bio']}" value="#{profileHome.instance.bio}" required="false" inlinehelp="#{messages['common.bio.inlinehelp']}" execute="@this save"/>
-                
-                <glue:input id="eml" name="text" type="email" label="#{messages['common.email']}" value="#{profileHome.instance.email}" required="true" validator="emailValidator" inlinehelp="#{messages['common.email.inlinehelp']}" execute="@this save"/>
 
-                <glue:input id="emlSecret" name="emailSecret" type="checkbox" value="#{profileHome.instance.emailSecret}" required="true" inlinehelp="#{messages['common.keepemailsecret']}" execute="@this save"/>
+                <glue:input id="eml" name="text" type="email" label="#{messages['common.email']}" value="#{profileHome.instance.email}" required="true" validator="emailValidator" inlinehelp="#{messages['common.email.inlinehelp']}" execute="@this save" rendered="#{profileHome.instance.persistent}"/>
+
+                <h:panelGroup id="eml" layout="block" class="clearfix" rendered="#{not profileHome.instance.persistent}">
+                    <label for="email">#{messages['common.email']}</label>
+                    <div class="input">
+                        <h:inputText id="email" value="#{profileHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
+                            <f:validator validatorId="emailValidator" />
+                            <f:validator validatorId="signupEmailAvailabilityValidator" />
+                            <f:ajax execute="@this" render="eml"  />
+                        </h:inputText>
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.email != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-inline"><br/>Prometemos <b>nunca</b> compartir su dirección de correo. <ocp:message forId="email" /></span>
+                    </div>
+                </h:panelGroup>
 
                 <glue:input id="showBootcamp" name="showBootcamp" type="checkbox" value="#{profileHome.instance.showBootcamp}" required="true" inlinehelp="#{messages['common.bootcamp.inlinehelp']}" execute="@this save"/>
+
+                <p:panel rendered="#{not profileHome.instance.persistent}" transient="true">
+                    <h:panelGroup id="unm" layout="block" class="clearfix">
+                        <label for="username">#{messages['common.username']}</label>
+                        <div class="input">
+                            <h:inputText id="username" value="#{profileHome.instance.username}" styleClass="xLarge" required="true" label="#{messages['common.username']}">
+                                <f:ajax execute="@this" render="unm" />
+                                <f:validator validatorId="usernameValidator" />
+                                <f:validator validatorId="signupUsernameAvailabilityValidator" />
+                            </h:inputText>
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.username != null}"
+                                            styleClass="validation-status" />
+                            <span class="help-inline"><br/>Su nombre de usuario. Ej.:<b>jlgranda, juan, carlos21</b>. (Lo necesitará más adelante.) <ocp:message forId="username" /></span>
+                        </div>
+                    </h:panelGroup>
+
+                    <div class="clearfix">
+                        <label for="password">#{messages['common.password']}</label>
+                        <div class="input">
+                            <h:inputSecret id="password" value="#{profileHome.password}" redisplay="true" 
+                                           styleClass="xLarge" style="text-transform: uppercase;" required="true" requiredMessage="Required" label="#{messages['common.password']}">
+                                <f:ajax execute="password passwordConfirm passwordValidator" render="password passwordConfirm pwg pwcg :messages:messages"/>
+                                <f:validator validatorId="passwordValidator" />
+                            </h:inputSecret>
+                            <h:panelGroup id="pwg">
+                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.password != null}"
+                                                styleClass="validation-status"/>
+                                <span class="help-inline"><ocp:message id="pm"  forId="password" /></span>
+                            </h:panelGroup>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="passwordConfirm">#{messages['common.confirmPassword']}</label>
+                        <div class="input">
+                            <h:inputSecret id="passwordConfirm" value="#{profileHome.passwordConfirm}"
+                                           redisplay="true" styleClass="xLarge" style="text-transform: uppercase;" label="#{messages['common.confirmPassword']}">
+                                <f:ajax execute="password passwordConfirm passwordValidator signupValidator" render="password passwordConfirm pwg pwcg :messages:messages"/>
+                                <f:validator validatorId="passwordValidator" />
+                            </h:inputSecret>
+                            <h:panelGroup id="pwcg">
+                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.passwordConfirm != null}"
+                                                styleClass="validation-status"/>
+                                <span class="help-inline"><ocp:message forId="passwordConfirm" /></span>
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                </p:panel>
+
+                <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
+                <s:validateForm id="signupValidator" validatorId="signupValidator" />
+
 
                 <div class="actions">
                     <h:commandButton id="save" action="#{profileHome.saveProfile()}" value="#{messages['common.save']}" styleClass="btn primary"/>

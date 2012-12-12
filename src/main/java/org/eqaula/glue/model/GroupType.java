@@ -39,9 +39,9 @@ package org.eqaula.glue.model;
  */
 
 public enum GroupType{
+        COMPANY,
 	DEPARTMENT,
 	ROLE,
-	COMPANY,
 	USER,
         EMPLOYEE,
 	GROUP,

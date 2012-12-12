@@ -37,17 +37,8 @@ import javax.servlet.ServletContext;
 import org.ocpsoft.common.services.NonEnriching;
 import org.ocpsoft.rewrite.config.Configuration;
 import org.ocpsoft.rewrite.config.ConfigurationBuilder;
-import org.ocpsoft.rewrite.config.Direction;
-import org.ocpsoft.rewrite.config.Not;
-import org.ocpsoft.rewrite.config.Operation;
-import org.ocpsoft.rewrite.context.EvaluationContext;
-import org.ocpsoft.rewrite.el.El;
-import org.ocpsoft.rewrite.event.Rewrite;
-import org.ocpsoft.rewrite.faces.config.PhaseAction;
 import org.ocpsoft.rewrite.servlet.config.HttpConfigurationProvider;
-import org.ocpsoft.rewrite.servlet.config.Path;
-import org.ocpsoft.rewrite.servlet.config.Redirect;
-import org.ocpsoft.rewrite.servlet.config.rule.Join;
+
 
 
 /**

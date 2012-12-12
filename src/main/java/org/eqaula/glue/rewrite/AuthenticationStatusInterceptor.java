@@ -35,8 +35,6 @@ package org.eqaula.glue.rewrite;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
-import org.eqaula.glue.cdi.LoggedIn;
-import org.eqaula.glue.model.profile.Profile;
 import org.jboss.seam.security.Identity;
 import org.ocpsoft.rewrite.config.Condition;
 import org.ocpsoft.rewrite.config.Configuration;
@@ -48,6 +46,7 @@ import org.ocpsoft.rewrite.servlet.config.HttpConfigurationProvider;
 import org.ocpsoft.rewrite.servlet.config.Path;
 import org.ocpsoft.rewrite.servlet.config.Redirect;
 import org.ocpsoft.rewrite.servlet.config.rule.Join;
+
 
 
 

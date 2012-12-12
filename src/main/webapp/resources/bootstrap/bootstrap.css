@@ -624,6 +624,7 @@ label {
 form .input {
     margin-left: 150px;
 }
+
 input[type=checkbox], input[type=radio] {
     cursor: pointer;
 }
@@ -719,6 +720,11 @@ input[type=file]:focus, input[type=checkbox]:focus, select:focus {
     -moz-box-shadow: none;
     box-shadow: none;
     outline: 1px dotted #666;
+}
+
+form .output {
+    margin-left: 150px;
+    vertical-align: center;
 }
 form div.clearfix.error {
     background: #fae5e3;

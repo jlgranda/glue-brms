@@ -22,6 +22,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 /**
  *
@@ -36,6 +37,7 @@ public class Structure extends DeletableObject<Structure> implements Serializabl
     private BussinesEntityType bussinesEntityType;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy="structure", fetch=FetchType.LAZY)
+    @OrderBy(value="sequence")
     private List<Property> properties;
 
     public BussinesEntityType getBussinesEntityType() {

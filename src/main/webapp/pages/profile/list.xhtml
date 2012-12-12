@@ -27,6 +27,10 @@ limitations under the License.
             <f:viewParam name="result" value="#{bussinesEntityListService.firstResult}" />
         </f:metadata>
 
+        <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="profile">
+            <f:param name="profileId"></f:param>
+            <f:param name="backView" value="list"></f:param>
+        </h:link>
         <h:form id="form">
             <p:dataTable var="bussinesEntity" value="#{bussinesEntityListService}"
                          paginator="true" rows="10"
@@ -36,7 +40,7 @@ limitations under the License.
                          rowsPerPageTemplate="5,10,15"
                          id="bussinesEntityTable" lazy="true"
                          selection="#{bussinesEntityListService.selectedBussinesEntities}"
-                         rendered="#{not empty bussinesEntityListService.resultList}">
+                         rendered="true">
 
                 <p:column selectionMode="multiple" style="width:18px" />
 
@@ -64,21 +68,14 @@ limitations under the License.
                 </p:dataList>
 
             </p:dialog>
-            
+
             <p:dialog header="#{messages['common.selectedBussinesEntity']}" modal="true" showEffect="fade" hideEffect="fade" widgetVar="dlg">  
-                    <h:panelGrid columns="1" id="display">  
-                                <h:outputText value="#{bussinesEntityListService.selectedBussinesEntity.name}" />  
-    		    </h:panelGrid>  
-             </p:dialog>  
+                <h:panelGrid columns="1" id="display">  
+                    <h:outputText value="#{bussinesEntityListService.selectedBussinesEntity.name}" />  
+                </h:panelGrid>  
+            </p:dialog>  
 
         </h:form>
-        <h:link></h:link>
-        <h:link value="#{messages['common.emptyBussinesEntityList']}" rendered="#{empty bussinesEntityListService.resultList}" outcome="profile">
-            <f:param name="profileId"></f:param>
-        </h:link>
-        <h:link value="#{messages.common.add}" rendered="#{not empty bussinesEntityListService.resultList}" outcome="profile">
-            <f:param name="profileId"></f:param>
-        </h:link>
 
     </ui:define>
 </ui:composition>

@@ -150,16 +150,14 @@ public class Authentication
       }
    }
 
-   public boolean login() throws InterruptedException
+   public void login() throws InterruptedException
    {
       identity.setAuthenticatorClass(IdmAuthenticator.class);
       try {
          identity.login();
-         return true;
       }
       catch (Exception e) {
          identity.login();
-         return false;
       }
    }
 
@@ -171,6 +169,5 @@ public class Authentication
       //session.invalidate();
 
       return "/pages/home?faces-redirect=true";
-      //return true;
    }
 }

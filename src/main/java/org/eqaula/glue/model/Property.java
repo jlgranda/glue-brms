@@ -54,6 +54,7 @@ public class Property implements Serializable {
     private String groupName; //nombre de grupo
     private String name;
     private String label;
+    private Long sequence;
     private String type;
     private boolean required;
     private String helpInline;
@@ -120,6 +121,14 @@ public class Property implements Serializable {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public Long getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(Long sequence) {
+        this.sequence = sequence;
     }
 
     public boolean isRequired() {

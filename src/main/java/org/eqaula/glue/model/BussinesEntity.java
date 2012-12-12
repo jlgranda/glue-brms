@@ -81,6 +81,9 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     @ManyToOne(optional = true)
     @JoinColumn(name = "author", nullable = true)
     private Profile author;
+    @ManyToOne
+    @JoinColumn(name = "parent")
+    public BussinesEntity parent;
     @ManyToMany(targetEntity = Group.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "entity_group", joinColumns =
     @JoinColumn(name = "bussinesEntityId", referencedColumnName = "id"),
@@ -94,6 +97,14 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     @ManyToOne
     @JoinColumn(name = "property_id")
     private Property property;
+
+    public BussinesEntity getParent() {
+        return parent;
+    }
+
+    public void setParent(BussinesEntity parent) {
+        this.parent = parent;
+    }
 
     public void setGroups(List<Group> groups) {
         this.groups = groups;
@@ -201,11 +212,11 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         }
         return null;
     }
-    
-    public String findAttributeValue(String name){
-        if ("code".equalsIgnoreCase(name)){
+
+    public String findAttributeValue(String name) {
+        if ("code".equalsIgnoreCase(name)) {
             return getCode();
-        } else if ("name".equalsIgnoreCase(name)){
+        } else if ("name".equalsIgnoreCase(name)) {
             return getName();
         } else {
             return (getBussinessEntityAttribute(name) != null ? getBussinessEntityAttribute(name).getValue().toString() : "undefined!");
@@ -280,7 +291,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     //-------------------------------------------------------------------------
     public void buildAttributes(BussinesEntityService bes) {
         log.info("eqaula --> build attributes for type " + this.getType());
-        if (getType() == null){
+        if (getType() == null) {
             return;
         }
         for (Structure s : getType().getStructures()) {
@@ -290,13 +301,12 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
                 } else if (a.getType().equals(Structure.class.getName())) {
                     loadStructure(a, bes);
                 } else {
-                    //tmp.add(buildAtribute(a));
                     this.addBussinesEntityAttribute(buildAtribute(a));
                 }
             }
         }
     }
-    
+
     public void buildAttributes(String name, BussinesEntityService bes) {
         log.info("eqaula --> build attributes for " + name);
         BussinesEntityType _type = bes.findBussinesEntityTypeByName(name);
@@ -310,7 +320,6 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
                 } else if (a.getType().equals(Structure.class.getName())) {
                     loadStructure(a, bes);
                 } else {
-                    //tmp.add(buildAtribute(a));
                     this.addBussinesEntityAttribute(buildAtribute(a));
                 }
             }
@@ -344,7 +353,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
             g.setProperty(attr); //almacenar en memoria para dibujar GUI
             g.buildAttributes(bes);
             this.add(g);
-        } 
+        }
         return g;
     }
 

@@ -30,7 +30,7 @@ limitations under the License.
     <c:set var="form" value="#{not empty form ? form: 'form'}" />
 
 
-    <h:panelGroup id="panel-group-#{id}" layout="block" class="clearfix">
+    <h:panelGroup id="panel-group-#{id}" layout="block" class="clearfix" rendered="#{rendered}">
         <label for="#{name}" class="#{(not empty required and required) ? 'required' : ''}">#{label}#{(not empty required and required) ? '*&#160;' : ''}</label>
         <div class="input">
             <p:panel id="panel-#{id}">
