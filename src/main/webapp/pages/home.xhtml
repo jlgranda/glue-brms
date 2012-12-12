@@ -37,7 +37,7 @@
                         <div class="row fl" style="margin-top: 5px;">
                             <div class="span2 columns">
                                 <h:link outcome="/pages/profile/view" title="${userProfile.fullName}">
-                                    <ocp:gravatar email="${userProfile.email}" size="90" updatable="false" />
+                                    <ocp:gravatar email="${userProfile.email}" size="90" updatable="true" />
                                     <f:param name="profileId" value="#{userProfile.id}"/>
                                 </h:link>
 

@@ -48,7 +48,12 @@
       <pattern value="/admin"></pattern>
       <view-id value="/pages/admin/home.xhtml"></view-id>
    </url-mapping>
-   
+   <url-mapping id="profilelist">
+      <pattern value="/admin/profile/list"></pattern>
+      <view-id value="/pages/profile/list.xhtml"></view-id>
+      <query-param name="result" decode="false">#{bussinesEntityListService.firstResult}</query-param>
+      <query-param name="typeName" decode="false">#{bussinesEntityListService.typeName}</query-param>
+   </url-mapping>
    <url-mapping id="bussinesentitytype">
       <pattern value="/admin/bussinesentitytype/bussinesentitytype"></pattern>
       <view-id value="/pages/admin/bussinesentity/bussinesentitytype.xhtml"></view-id>

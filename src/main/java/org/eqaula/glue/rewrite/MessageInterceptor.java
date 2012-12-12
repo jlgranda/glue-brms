@@ -34,10 +34,8 @@
 package org.eqaula.glue.rewrite;
 
 import java.util.Arrays;
-
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
-
 import org.jboss.seam.international.status.Messages;
 import org.ocpsoft.rewrite.config.Configuration;
 import org.ocpsoft.rewrite.config.ConfigurationBuilder;
@@ -45,10 +43,11 @@ import org.ocpsoft.rewrite.context.EvaluationContext;
 import org.ocpsoft.rewrite.servlet.config.Forward;
 import org.ocpsoft.rewrite.servlet.config.HttpConfigurationProvider;
 import org.ocpsoft.rewrite.servlet.config.HttpOperation;
-import org.ocpsoft.rewrite.servlet.config.QueryString;
 import org.ocpsoft.rewrite.servlet.http.event.HttpServletRewrite;
-import org.ocpsoft.rewrite.servlet.util.QueryStringBuilder;
 import org.ocpsoft.rewrite.servlet.util.URLBuilder;
+import org.ocpsoft.rewrite.servlet.config.QueryString;
+import org.ocpsoft.rewrite.servlet.util.QueryStringBuilder;
+
 
 
 
