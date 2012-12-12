@@ -28,11 +28,14 @@ limitations under the License.
 
         <h:form id="form">
             <h1>#{messages['BussinesEntityTypes']}</h1>
-            <div class="span1 columns offset4">
-                            <h:link outcome="/pages/admin/bussinesentitytype/bussinesentitytype" styleClass="btn" value="#{messages['common.new']}">
-                                <f:param name="profileId" value="#{profileHome.instance.id}"/>
-                            </h:link>
-                        </div>
+            <h:panelGroup>
+                <div class="span1 columns offset4">
+                    <h:link outcome="/pages/admin/bussinesentitytype/bussinesentitytype" styleClass="btn" value="#{messages['common.new']}">
+                        <f:param name="profileId" value="#{profileHome.instance.id}"/>
+                    </h:link>
+                </div>
+            </h:panelGroup>             
+
             <p:dataTable var="bussinesEntityType" value="#{bussinesEntityTypeListService}"
                          paginator="true" rows="10"
                          paginatorAlwaysVisible="false"

@@ -71,11 +71,11 @@
    <!-- Administracion contabilidad -->
    <url-mapping id="accountingList">
       <pattern value="/accounting/accountingList"></pattern>
-      <view-id value="/pages/accounting/accountingList.xhtml"></view-id> 
+      <view-id value="/pages/accounting/accountList.xhtml"></view-id> 
    </url-mapping>   
    <url-mapping id="accountingEdit">
       <pattern value="/accounting/accountingEdit"></pattern>
-      <view-id value="/pages/accounting/accountingEdit.xhtml"></view-id>       
+      <view-id value="/pages/accounting/accountEdit.xhtml"></view-id>       
    </url-mapping>
    <url-mapping id="account">
       <pattern value="/accounting/account"></pattern>
