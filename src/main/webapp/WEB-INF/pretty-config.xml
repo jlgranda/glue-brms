@@ -50,7 +50,7 @@
    </url-mapping>
    <url-mapping id="profilelist">
       <pattern value="/admin/profile/list"></pattern>
-      <view-id value="/pages/profile/list.xhtml"></view-id>
+      <view-id value="/pages/admin/list.xhtml"></view-id>
       <query-param name="result" decode="false">#{bussinesEntityListService.firstResult}</query-param>
       <query-param name="typeName" decode="false">#{bussinesEntityListService.typeName}</query-param>
    </url-mapping>
@@ -70,8 +70,10 @@
    
    <!-- Administracion contabilidad -->
    <url-mapping id="accountingList">
-      <pattern value="/accounting/accountList"></pattern>
-      <view-id value="/pages/accounting/accountList.xhtml"></view-id> 
+      <pattern value="/admin/accounting/list"></pattern>
+      <view-id value="/pages/admin/list.xhtml"></view-id> 
+      <query-param name="result" decode="false">#{bussinesEntityListService.firstResult}</query-param>
+      <query-param name="typeName" decode="false">#{bussinesEntityListService.typeName}</query-param>
    </url-mapping>   
    <url-mapping id="accountingEdit">
       <pattern value="/accounting/accountEdit"></pattern>
@@ -89,22 +91,22 @@
       <action>#{projects.loadCurrent}</action>
    </url-mapping>
    
-   <url-mapping id="project-create">
-      <pattern value="/new-project"></pattern>
-      <view-id value="/pages/project/create.xhtml"></view-id>
-   </url-mapping>
-   -->
+    <url-mapping id="project-create">
+       <pattern value="/new-project"></pattern>
+       <view-id value="/pages/project/create.xhtml"></view-id>
+    </url-mapping>
+    -->
    
 
-	<!-- Begin Exception Mappings -->
-	<url-mapping id="404">
-		<pattern value="/404" />
-		<view-id value="/pages/404.xhtml" />
-	</url-mapping>
-	<url-mapping id="error">
-		<pattern value="/error" />
-		<view-id value="/pages/error.xhtml" />
-	</url-mapping>
-	<!-- End Exception Mappings -->
+    <!-- Begin Exception Mappings -->
+    <url-mapping id="404">
+        <pattern value="/404" />
+        <view-id value="/pages/404.xhtml" />
+    </url-mapping>
+    <url-mapping id="error">
+        <pattern value="/error" />
+        <view-id value="/pages/error.xhtml" />
+    </url-mapping>
+    <!-- End Exception Mappings -->
 
 </pretty-config>
