@@ -28,19 +28,17 @@ limitations under the License.
 
         <h:form id="form">
             <h1>#{messages['BussinesEntityTypes']}</h1>
-            <!--
-            <div class="actions">
-                
-                <p:button value="#{messages['common.new']}" outcome="/pages/admin/bussinesentitytype/bussinesentitytype" 
-                          icon="ui-icon ui-icon-circle-plus">
-                    <f:param name="bussinesEntityTypeId" value=""/>
-                </p:button>
-                
-                <p:button value="#{messages['common.edit']}" outcome="/pages/admin/bussinesentitytype/bussinesentitytype" 
-                          icon="ui-icon ui-icon-circle-plus">
-                    <f:param name="bussinesEntityTypeId" value="#{bussinesEntityTypeListService.selectedBussinesEntityType.id}"/>
-                </p:button>
-            </div>   -->
+            <h:panelGroup>
+                <div class="span1 columns offset4">
+                    <h:link outcome="/pages/admin/bussinesentitytype/bussinesentitytype" styleClass="btn" value="#{messages['common.new']}">
+                        <f:param name="bussinesEntityTypeId" value=""/>
+                    </h:link>
+                    <h:link outcome="/pages/admin/bussinesentitytype/bussinesentitytype" styleClass="btn" value="#{messages['common.new']}">
+                        <f:param name="bussinesEntityTypeId" value=""/>
+                    </h:link>
+                </div>
+            </h:panelGroup>             
+
             <p:dataTable var="bussinesEntityType" value="#{bussinesEntityTypeListService}"
                          paginator="true" rows="10"
                          paginatorAlwaysVisible="false"
