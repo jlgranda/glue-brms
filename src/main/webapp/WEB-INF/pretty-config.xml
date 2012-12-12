@@ -68,6 +68,20 @@
       <view-id value="/pages/admin/bussinesentitytype/view.xhtml"></view-id>
    </url-mapping>
    
+   <!-- Administracion contabilidad -->
+   <url-mapping id="accountingList">
+      <pattern value="/accounting/accountingList"></pattern>
+      <view-id value="/pages/accounting/accountingList.xhtml"></view-id> 
+   </url-mapping>   
+   <url-mapping id="accountingEdit">
+      <pattern value="/accounting/accountingEdit"></pattern>
+      <view-id value="/pages/accounting/accountingEdit.xhtml"></view-id>       
+   </url-mapping>
+   <url-mapping id="account">
+      <pattern value="/accounting/account"></pattern>
+      <view-id value="/pages/accounting/account.xhtml"></view-id>       
+   </url-mapping>
+   
    <!--
    <url-mapping id="project-view">
       <pattern value="/p/#{projects.current.name}"></pattern>
