@@ -31,7 +31,10 @@ limitations under the License.
             <h:panelGroup>
                 <div class="span1 columns offset4">
                     <h:link outcome="/pages/admin/bussinesentitytype/bussinesentitytype" styleClass="btn" value="#{messages['common.new']}">
-                        <f:param name="profileId" value="#{profileHome.instance.id}"/>
+                        <f:param name="bussinesEntityTypeId" value=""/>
+                    </h:link>
+                    <h:link outcome="/pages/admin/bussinesentitytype/bussinesentitytype" styleClass="btn" value="#{messages['common.new']}">
+                        <f:param name="bussinesEntityTypeId" value=""/>
                     </h:link>
                 </div>
             </h:panelGroup>             

@@ -25,7 +25,7 @@ limitations under the License.
                 template="/WEB-INF/view/templates/glue.xhtml">
     <ui:define name="content">
         <f:metadata>
-            <f:viewParam name="bussinesEntityTypeId" value="#{bussinesEntityTypeHome.bussinesEntityTypeId}" />
+            <f:viewParam name="bussinesEntityTypeId" value="#{bussinesEntityTypeListService.selectedBussinesEntityType.id}" />
         </f:metadata>
 
         <h:form id="form">
