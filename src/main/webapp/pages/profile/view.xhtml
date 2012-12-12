@@ -7,11 +7,13 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:s="http://jboss.org/seam/faces"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
 
     <ui:composition template="/WEB-INF/view/templates/profile-active.xhtml">
         <f:metadata>
             <f:viewParam name="id" value="#{profileHome.profileId}" />                
+            <f:viewParam name="structureName" value="#{profileHome.structureName}" />
             <s:viewAction action="#{profileHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
 
@@ -73,7 +75,41 @@
                         <h:outputText id="bioIn" value="#{profileHome.instance.bio}" styleClass="span4" />
                     </div>
                 </h:panelGroup>
-
+                <p:scrollPanel style="width:100%;height:200px">
+                    <!-- Mostrar los datos de estructure-->
+                    <h:panelGroup id="attributes" layout="block" class="clearfix">
+                        <ui:repeat value="#{profileHome.instance.findBussinesEntityAttribute(profileHome.structureName)}" var="a" varStatus="status">
+                            <!--<h:panelGroup  layout="block" class="clearfix" rendered="true">
+                                <label for="firstdate"><b>#{messages['common.firstDate']}</b></label>
+                                <div class="input">
+                                    <h:outputText id="firstdateIn" value="#{a.value}" styleClass="span4" rendered="#{a.property.type eq 'java.lang.String'}" />
+                                </div>
+                            </h:panelGroup>-->
+                            <h:panelGroup layout="block" class="clearfix" >
+                                <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
+                                <div class="input">                                     
+                                    <h:outputText id="xvalue" value="#{a.value}" styleClass="span4" rendered="#{a.property.type eq 'java.lang.String'}" />
+                                    <h:outputText id="valuemenu" value="#{a.value}" styleClass="span4" rendered="#{a.property.type eq 'java.lang.Date'}" />
+                                    
+                                    <!--<p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
+                                                rendered="#{a.property.type eq 'java.util.Date'}" disabled="true">
+                                        <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
+                                    </p:calendar>-->
+                                    
+                                    <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
+                                                     rendered="#{a.property.type eq 'java.lang.String[]'}" disabled="true">  
+                                        <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
+                                        <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                    </p:selectOneMenu> 
+                                    <p:inputTextarea value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
+                                                     rendered="#{a.property.type eq 'java.lang.MultiLineString'}" disabled="true">
+                                        <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                    </p:inputTextarea>
+                                </div>
+                            </h:panelGroup>  
+                        </ui:repeat>
+                    </h:panelGroup>
+                </p:scrollPanel>
                 <c:forEach items="#{ui.getProperties(profileHome.instance)}" var="p" >
                     <c:choose>
                         <c:when test="#{p.type == 'org.eqaula.glue.model.Structure'}">
