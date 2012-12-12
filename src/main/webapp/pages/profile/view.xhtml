@@ -87,37 +87,27 @@
                             <h:panelGroup layout="block" class="clearfix" >
                                 <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
                                 <div class="input">                                     
-                                    <h:outputText id="xvalue" value="#{a.value}" styleClass="span4" rendered="#{a.property.type eq 'java.lang.String'}" />
-                                    <h:outputText id="valuemenu" value="#{a.value}" styleClass="span4" rendered="#{a.property.type eq 'java.lang.Date'}" />
-                                    
-                                    <!--<p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
-                                                rendered="#{a.property.type eq 'java.util.Date'}" disabled="true">
-                                        <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
-                                    </p:calendar>-->
-                                    
+                                    <!--<h:outputText id="xvalue" value="#{a.value}" styleClass="span4" rendered="#{a.property.type eq 'java.lang.String'}" />-->
+                                    <h:outputText id="valuedate" value="#{a.value}" styleClass="span4" />
+                                                                        
                                     <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
                                                      rendered="#{a.property.type eq 'java.lang.String[]'}" disabled="true">  
                                         <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
                                         <p:ajax event="change" update="@parent" partialSubmit="true"/>
-                                    </p:selectOneMenu> 
-                                    <p:inputTextarea value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
-                                                     rendered="#{a.property.type eq 'java.lang.MultiLineString'}" disabled="true">
-                                        <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                    </p:inputTextarea>
+                                    </p:selectOneMenu>                                    
                                 </div>
                             </h:panelGroup>  
                         </ui:repeat>
                     </h:panelGroup>
                 </p:scrollPanel>
                 <c:forEach items="#{ui.getProperties(profileHome.instance)}" var="p" >
-                    <c:choose>
+                    <c:choose>                        
                         <c:when test="#{p.type == 'org.eqaula.glue.model.Structure'}">
-                            <!--TODO agregar pars Structure -->
-
+                             
                         </c:when>
                         <c:when test="#{p.type == 'org.eqaula.glue.model.Group'}">
-                            <h3>#{p.label}</h3>
-                            <p:dataTable id="espouces" var="m" value="#{ui.getGroup(profileHome.instance, p).findOtherMembers(profileHome.instance)}" 
+                            <h2>#{p.label}</h2>
+                            <p:dataTable id="groups" var="m" value="#{ui.getGroup(profileHome.instance, p).findOtherMembers(profileHome.instance)}" 
                                          editable="false" 
                                          emptyMessage="#{messages['common.emptyList']}">  
 
