@@ -47,8 +47,6 @@ import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.eqaula.glue.model.BussinesEntity;
-import org.eqaula.glue.model.accounting.Account;
 
 @TransactionAttribute
 public abstract class PersistenceUtil<T> implements Serializable {
@@ -68,6 +66,7 @@ public abstract class PersistenceUtil<T> implements Serializable {
     public abstract void setEntityManager(EntityManager em);
 
     protected <T> long count(final Class<T> type) {
+        System.out.println("eqaula --> PersistentUtil em "  + getEntityManager());
         CriteriaBuilder qb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Long> cq = qb.createQuery(Long.class);
         cq.select(qb.count(cq.from(type)));

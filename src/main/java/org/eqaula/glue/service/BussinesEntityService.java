@@ -3,6 +3,7 @@ package org.eqaula.glue.service;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -12,8 +13,11 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityAttribute;
@@ -49,8 +53,7 @@ import org.eqaula.glue.util.QuerySortOrder;
 public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
 
     private static final long serialVersionUID = 6569835981443699931L;
-    @Inject
-    private Logger log;
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityService.class);
 
     public BussinesEntityService() {
         super(BussinesEntity.class);
@@ -74,7 +77,7 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
 
         return getSingleResult(query);
     }
-    
+
     public BussinesEntity findByNameAndProfile(final String name, final Long profile) {
 
         log.info("find BussinesEntity with name " + name + " and profile " + profile);
@@ -111,6 +114,10 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
 
     }
 
+    public Long countBussinesEntity(Class entityClass) {
+        return this.count(entityClass);
+    }
+
     public List<BussinesEntity> find(int maxresults, int firstresult, GroupType type) {
         Map<String, Object> filters = new HashMap<String, Object>();
         filters.put(BussinesEntity_.type.getName(), type);
@@ -141,11 +148,10 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
         super.save(bussinesEntity);
         em.flush();
     }
-    
-        
-    public BussinesEntityType findBussinesEntityTypeByName(String name){
-        
-        
+
+    public BussinesEntityType findBussinesEntityTypeByName(String name) {
+
+
         log.info("find BussinesEntityType with name " + name);
 
         CriteriaBuilder builder = getCriteriaBuilder();
@@ -156,5 +162,30 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
         query.where(builder.equal(bussinesEntity.get(BussinesEntityType_.name), name));
 
         return getSingleResult(query);
+    }
+
+    public Long getCountRequiredProperties(Long bussinesEntityId, String bussinesEntityTypeName) {
+        Query q = em.createNamedQuery("BussinesEntityAttribute.countRequiredProperties", Long.class);
+        q.setParameter("bussinesEntityId", bussinesEntityId);
+        q.setParameter("bussinesEntityTypeName", bussinesEntityTypeName);
+        Long value = 0L;
+        System.out.println("BussinesEntityAttribute.countRequiredProperties [bussinesEntityId, bussinesEntityTypeName] ---> [" + bussinesEntityId + ", " + bussinesEntityTypeName + "] " + q.getResultList());
+        List<Long> result = q.getResultList();
+        for (Long r : result) {
+            value = r;
+        }
+        return value;
+    }
+
+    public Long getCountCompletedRequiredProperties(Long bussinesEntityId, String bussinesEntityTypeName) {
+        Query q = em.createNamedQuery("BussinesEntityAttribute.countCompletedRequiredProperties", Long.class);
+        q.setParameter("bussinesEntityId", bussinesEntityId);
+        q.setParameter("bussinesEntityTypeName", bussinesEntityTypeName);
+        Long value = 0L;
+        List<Long> result = q.getResultList();
+        for (Long r : result) {
+            value = r;
+        }
+        return value;
     }
 }
