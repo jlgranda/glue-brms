@@ -48,6 +48,8 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
     private Property property;
     
     private String backView;
+    
+    private boolean editionEnabled = true;
 
     public Property getProperty() {
         return property;
@@ -63,6 +65,14 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
 
     public void setBackView(String backView) {
         this.backView = backView;
+    }
+
+    public boolean isEditionEnabled() {
+        return editionEnabled;
+    }
+
+    public void setEditionEnabled(boolean editionEnabled) {
+        this.editionEnabled = editionEnabled;
     }
     
     @Override

@@ -45,8 +45,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
     + "ORDER BY p.id")
 })
 public class BussinesEntityAttribute implements Serializable, Comparable<BussinesEntityAttribute> {
+    private static final long serialVersionUID = 7807041724651919898L;
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -134,6 +134,7 @@ public class BussinesEntityAttribute implements Serializable, Comparable<Bussine
                 // if deriving: appendSuper(super.hashCode()).
                 append(getName()).
                 append(getType()).
+                append(getProperty()).
                 toHashCode();
     }
 
@@ -153,6 +154,7 @@ public class BussinesEntityAttribute implements Serializable, Comparable<Bussine
                 // if deriving: appendSuper(super.equals(obj)).
                 append(getName(), other.getName()).
                 append(getType(), other.getType()).
+                append(getProperty(), other.getProperty()).
                 isEquals();
     }
           

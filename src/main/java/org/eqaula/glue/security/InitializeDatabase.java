@@ -471,14 +471,14 @@ public class InitializeDatabase {
             List<Property> attributes = new ArrayList<Property>();
 
             attributes.add(buildProperty("role", String.class.getName(), "", true, "Cargo actual", "El cargo actual que desempeña", 1L));
-            attributes.add(buildProperty("remuneracion", Double.class.getName(), "", true, "Remuneración unificada", "Monto de remuneración unificada del cargo", 2L));
+            attributes.add(buildProperty("remuneracion", Double.class.getName(), 0.0, true, "Remuneración unificada", "Monto de remuneración unificada del cargo", 2L));
             attributes.add(buildProperty("jefe", String.class.getName(), "", true, "Jefe inmediato", "El nombre de su jefe inmediato", 3L));
             attributes.add(buildProperty("tipoContratacion", String.class.getName(), "", true, "Tipo de contrato", "La modalidad de contratación", 4L));
             attributes.add(buildProperty("tituloProfesional1", String.class.getName(), "", true, "Título profesional", "Indique el título profesional que posee", 5L));
             attributes.add(buildProperty("tituloProfesional2", String.class.getName(), "", false, "Otro título profesional", "Indique el título profesional que posee", 6L));
             attributes.add(buildProperty("tituloCuartoNivel1", String.class.getName(), "", false, "Título de cuarto nivel", "Indique el título de cuarto nivel que posee", 7L));
             attributes.add(buildProperty("tituloCuartoNivel2", String.class.getName(), "", false, "Otro título de cuarto nivel", "Indique el título de cuarto nivel que posee", 8L));
-            attributes.add(buildProperty("aniosServicio", Long.class.getName(), "", true, "Años de servicio", "Indique el tiempo en años que va laborando", 9L));
+            attributes.add(buildProperty("aniosServicio", Long.class.getName(), 0, true, "Años de servicio", "Indique el tiempo en años que va laborando", 9L));
             attributes.add(buildProperty("historiaLaboral", String.class.getName(), "", true, "Historia laboral", "Indique el código de historia laboral", 10L));
             attributes.add(buildProperty("logrosPersonales", String.class.getName(), "", false, "Logros personales relevantes", "Indique los logros personales relavantes en relación a la institución", 11L));
             attributes.add(buildProperty("comentario", "java.lang.MultiLineString", "", false, "Comentario", "Haganos conocer sus ideas y/o comentarios acerca de este proceso", 12L));
@@ -518,20 +518,20 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
 
-            attributes.add(buildProperty("mision", "java.lang.MultiLineString", "", true, "Cuál cree usted que debería ser la misión de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 1L));
-            attributes.add(buildProperty("vision", "java.lang.MultiLineString", "", true, "Cuál cree usted que debería ser la visión de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 2L));
-            attributes.add(buildProperty("objetivos", "java.lang.MultiLineString", "", true, "Cuál cree usted que debería ser los objetivos estratégicos de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 3L));
-            attributes.add(buildProperty("fortalezas", "java.lang.MultiLineString", "", true, "Identifique fortalezas para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 4L));
-            attributes.add(buildProperty("oportunidades", "java.lang.MultiLineString", "", true, "Identifique oportunidades para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 5L));
-            attributes.add(buildProperty("debilidades", "java.lang.MultiLineString", "", true, "Identifique debilidades para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 6L));
-            attributes.add(buildProperty("amenazas", "java.lang.MultiLineString", "", true, "Identifique amanezas para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 7L));
-            attributes.add(buildProperty("empresavsunidad", "java.lang.MultiLineString", "", true, "Identifique oportunidades para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 8L));
-            attributes.add(buildProperty("ventajas", "java.lang.MultiLineString", "", true, "Menciones ventajas de la empresa en relación a una unidad?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 9L));
-            attributes.add(buildProperty("desventajas", "java.lang.MultiLineString", "", true, "Menciones desventajas de la empresa en relación a una unidad?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 10L));
-            attributes.add(buildProperty("calidad", "java.lang.MultiLineString", "", true, "Ha evidenciado control de calidad en el ejercicio de su gestión?", "Analise la pregunta y conteste en el espacio correspondiente", 12L));
-            attributes.add(buildProperty("aporte", "java.lang.MultiLineString", "", true, "Cómo aportaría ud para la construcción de la nueva empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 13L));
-            attributes.add(buildProperty("compromiso", "java.lang.MultiLineString", "", true, "Cuál sería su comprimiso personal para con la nueva empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 14L));
-            attributes.add(buildProperty("valoracionservicio", "java.lang.MultiLineString", "", true, "Cómo cree ud que los usuarios valoran el servicio de la UMAPAL?", "Analise la pregunta y conteste en el espacio correspondiente", 15L));
+            attributes.add(buildPropertyAsSurvey("mision", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser la misión de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 1L));
+            attributes.add(buildPropertyAsSurvey("vision", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser la visión de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 2L));
+            attributes.add(buildPropertyAsSurvey("objetivos", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser los objetivos estratégicos de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 3L));
+            attributes.add(buildPropertyAsSurvey("fortalezas", "java.lang.MultiLineString", null, true, "Identifique fortalezas para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 4L));
+            attributes.add(buildPropertyAsSurvey("oportunidades", "java.lang.MultiLineString", null, true, "Identifique oportunidades para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 5L));
+            attributes.add(buildPropertyAsSurvey("debilidades", "java.lang.MultiLineString", null, true, "Identifique debilidades para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 6L));
+            attributes.add(buildPropertyAsSurvey("amenazas", "java.lang.MultiLineString", null, true, "Identifique amanezas para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 7L));
+            attributes.add(buildPropertyAsSurvey("empresavsunidad", "java.lang.MultiLineString", null, true, "Identifique oportunidades para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 8L));
+            attributes.add(buildPropertyAsSurvey("ventajas", "java.lang.MultiLineString", null, true, "Menciones ventajas de la empresa en relación a una unidad?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 9L));
+            attributes.add(buildPropertyAsSurvey("desventajas", "java.lang.MultiLineString", null, true, "Menciones desventajas de la empresa en relación a una unidad?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 10L));
+            attributes.add(buildPropertyAsSurvey("calidad", "java.lang.MultiLineString", null, true, "Ha evidenciado control de calidad en el ejercicio de su gestión?", "Analise la pregunta y conteste en el espacio correspondiente", 11L));
+            attributes.add(buildPropertyAsSurvey("aporte", "java.lang.MultiLineString", null, true, "Cómo aportaría ud para la construcción de la nueva empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 12L));
+            attributes.add(buildPropertyAsSurvey("compromiso", "java.lang.MultiLineString", null, true, "Cuál sería su comprimiso personal para con la nueva empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 13L));
+            attributes.add(buildPropertyAsSurvey("valoracionservicio", "java.lang.MultiLineString", null, true, "Cómo cree ud que los usuarios valoran el servicio de la UMAPAL?", "Analise la pregunta y conteste en el espacio correspondiente", 14L));
 
             structure.setProperties(attributes);
 
@@ -611,7 +611,7 @@ public class InitializeDatabase {
             //attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), true, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
             attributes.add(buildProperty("nameEvent", String.class.getName(), null, true, "Nombre del Evento", "Indique el evento que se realizo", true, 1L));
             attributes.add(buildProperty("typeEvent", "java.lang.String[]", "Curso,Seminario,Taller,Conferencia,Diplomado", true, "Tipo de Evento", "Indique que tipo de evento se realizó", true, 2L));
-            attributes.add(buildProperty("auspiciante", String.class.getName(), null, false, "Auxpiciante", "Indiqueel auxpiciante ya sea Empresa o Institución", 3L));
+            attributes.add(buildProperty("auspiciante", String.class.getName(), null, false, "Auspiciante", "Indique el Auspiciante ya sea Empresa o Institución", 3L));
             attributes.add(buildProperty("duracionHoras", Long.class.getName(), null, true, "Duración en Horas", "Indique cuantas horas duro el Evento", true, 4L));
             attributes.add(buildProperty("country", String.class.getName(), null, false, "País", "País donde se realizo el evento", true, 5L));
             attributes.add(buildProperty("dateBegin", Date.class.getName(), ago.getTime(), false, "Fecha de Inicio", "Fecha que inicio el evento", 6L));
@@ -651,10 +651,10 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildProperty("tipoInstitucion", "java.lang.String[]", "Publica, Privada, Mixta, Otra", true, "Tipo de Institución", "Indique que tipo de institución", true, 1L));
-            attributes.add(buildProperty("nombreInstitucion", String.class.getName(), null, true, "Nombre de la Institucion", "Indique el nombre de la institución u organización", true, 2L));
-            attributes.add(buildProperty("unidadAdministrativa", "java.lang.String[]", "Departamento,Area,Direccion", true, "Unidad Administrativa", "Indique que tipo de unidad administrativa", 3L));
-            attributes.add(buildProperty("denominacionPuesto", String.class.getName(), null, false, "Denominacion del Puesto", "Indique la denominación del puesto", true, 4L));
+            attributes.add(buildProperty("tipoInstitucion", "java.lang.String[]", "Pública, Privada, Mixta, Otra", true, "Tipo de Institución", "Indique que tipo de institución", true, 1L));
+            attributes.add(buildProperty("nombreInstitucion", String.class.getName(), null, true, "Nombre de la Institución", "Indique el nombre de la institución u organización", true, 2L));
+            attributes.add(buildProperty("unidadAdministrativa", "java.lang.String[]", "Departamento,Área,Dirección", true, "Unidad Administrativa", "Indique que tipo de unidad administrativa", 3L));
+            attributes.add(buildProperty("denominacionPuesto", String.class.getName(), null, false, "Denominación del Puesto", "Indique la denominación del puesto", true, 4L));
             attributes.add(buildProperty("fechaInicio", Date.class.getName(), ago.getTime(), false, "Fecha de Ingreso", "¿Cuándo ingreso?", 5L));
             attributes.add(buildProperty("fechaFin", Date.class.getName(), ago.getTime(), false, "Fecha de Salida", "¿Cuándo salió?", 6L));
             attributes.add(buildProperty("responsabilidades", "java.lang.MultiLineString", null, false, "Principales Responsabilidades", "Indique que responsabilidades tenia", 7L));
@@ -757,6 +757,22 @@ public class InitializeDatabase {
         property.setCustomForm(null);
         property.setShowInColumns(showInColumns);
         property.setSequence(sequence);
+        return property;
+    }
+    
+    private Property buildPropertyAsSurvey(String name, String type, Serializable value, boolean required, String label, String helpinline, Long sequence) {
+        Property property = new Property();
+        property.setName(name);
+        property.setType(type);
+        property.setValue(value);
+        property.setRequired(required);
+        property.setLabel(label);
+        property.setHelpInline(helpinline);
+        property.setRender(null);
+        property.setCustomForm(null);
+        property.setShowInColumns(false);
+        property.setSequence(sequence);
+        property.setSurvey(true);
         return property;
     }
 }

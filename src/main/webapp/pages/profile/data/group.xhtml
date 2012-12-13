@@ -52,8 +52,10 @@
                                      icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"/>  
                     <h:commandButton id="save" action="#{groupHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary" rendered="false"/>
                     &nbsp;
-                    <h:commandButton action="/pages/home.xhtml?faces-redirect=true"
-                                     value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/>
+                    <h:link outcome="/pages/profile/view.xhtml?faces-redirect=true"
+                                     value="#{messages['common.cancel']}" styleClass="btn" immediate="true">
+                        <f:param name="profileId" value="#{groupHome.profile.id}"></f:param>
+                    </h:link>
                 </div>
             </h:form>
 
@@ -106,7 +108,7 @@
                                             <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
                                         </p:calendar>  
                                         <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}"
-                                                        rendered="#{a.property.type eq 'java.lang.Long' or type eq 'java.lang.Double' or type eq 'java.lang.Float'}">  
+                                                        rendered="#{a.property.type eq 'java.lang.Long' or a.property.type eq 'java.lang.Double' or a.property.type eq 'java.lang.Float'}">  
                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                         </pe:inputNumber>  
                                         <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
