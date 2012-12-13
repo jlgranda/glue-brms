@@ -45,8 +45,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import org.eqaula.glue.util.PersistenceUtil;
 import org.eqaula.glue.model.profile.Profile;
+import org.eqaula.glue.model.profile.Profile_;
 
 import org.eqaula.glue.util.Strings;
 
@@ -59,7 +63,7 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
 {
    
     private static final long serialVersionUID = -4022772083704382039L;
-
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(Profile.class);
     public ProfileService() {
         super(Profile.class);
     }
