@@ -216,14 +216,15 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         Date now = Calendar.getInstance().getTime();
         log.info("eqaula --> saving " + getInstance().getName());
         getInstance().setLastUpdate(now);
-        for (BussinesEntityAttribute a : getInstance().getAttributes()) {
+        /*for (BussinesEntityAttribute a : getInstance().getAttributes()) {
             if (a.getProperty().getType().equals("java.lang.String") && a.getValue() == null) {
                 a.setValue(a.getName());
                 a.setStringValue(a.getName());
             }
-        }
+        }*/
         save(getInstance());
-        return "/pages/home?faces-redirect=true";
+        //return "/pages/home?faces-redirect=true";
+        return "/pages/profile/view?faces-redirect=true&profileId=" + getProfileId();
     }
 
     @TransactionAttribute
@@ -256,6 +257,12 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     public void dismissBootcampAjax() {
         getInstance().setShowBootcamp(false);
         update();
+    }
+    
+    public void commuteEdition(){
+        setEditionEnabled(! isEditionEnabled());
+         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Edición activa " + isEditionEnabled(), null));
+        
     }
 
     @Transactional

@@ -87,6 +87,11 @@ public class Property implements Serializable {
      */
     private boolean showInColumns = false;
     
+    /*************************************************************
+     * Attributes for pools
+     *************************************************************/ 
+    private boolean survey;
+    
     @ManyToOne
     @JoinColumn(name = "structure_id")
     private Structure structure;
@@ -237,6 +242,14 @@ public class Property implements Serializable {
 
     public void setShowInColumns(boolean showInColumns) {
         this.showInColumns = showInColumns;
+    }
+
+    public boolean isSurvey() {
+        return survey;
+    }
+
+    public void setSurvey(boolean survey) {
+        this.survey = survey;
     }
 
    @Override

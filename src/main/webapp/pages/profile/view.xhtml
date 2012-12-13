@@ -36,17 +36,29 @@
                                 #{empty profileHome.instance.bio ? messages['common.wathgoingtoaccomplishtoday'] : profileHome.instance.bio}
                             </p>
                         </div>
-                        <div class="span1 columns offset4">
-                            <h:link outcome="/pages/profile/profile" styleClass="btn" value="#{messages['common.edit']}">
-                                <f:param name="profileId" value="#{profileHome.instance.id}"/>
-                            </h:link>
+
+                        <div class="span4 columns offset3">
+                            <h:form id="control">
+                                <p:commandButton value="#{messages['common.editionEnabled']}"  actionListener="#{profileHome.commuteEdition()}" 
+                                                 rendered="#{not profileHome.editionEnabled}" styleClass="btn primary"
+                                                 update=":control :summary">
+                                </p:commandButton>
+                                <br/>
+                                <h:link outcome="/pages/profile/profile" styleClass="btn" value="#{messages['common.edit']} #{messages['profile']}" rendered="#{profileHome.editionEnabled}">
+                                    <f:param name="profileId" value="#{profileHome.instance.id}"/>
+                                </h:link>
+                                <br/>
+                                <h:link outcome="/pages/home" styleClass="btn secondary" value="#{messages['common.dashboard']}">
+                                </h:link>
+                            </h:form>
                         </div>
+
                     </div>
                 </div></div>             
         </ui:define>
 
         <ui:define name="content">
-            <h:form id="account">
+            <h:form id="summary">
 
                 <h:panelGroup  layout="block" class="clearfix" rendered="false">
                     <label for="fullname"><b>#{messages['common.fullName']}</b></label>
@@ -73,42 +85,59 @@
                         <h:outputText id="bioIn" value="#{profileHome.instance.bio}" styleClass="span4" />
                     </div>
                 </h:panelGroup>
-                <p:accordionPanel multiple="true">  
-                    <c:forEach items="#{ui.getProperties(profileHome.instance)}" var="p" >
+                <c:forEach items="#{ui.getProperties(profileHome.instance)}" var="p" >
+                    <p:panel header="#{p.label}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{p.name}">
+                        <f:facet name="header">
+                            <strong>#{p.label}</strong>#{' '}
+                            <h:link outcome="#{p.customForm != null ? p.customForm : '/pages/profile/data/structure'}" styleClass="btn" value="#{messages['common.edit']}" 
+                                    rendered="#{profileHome.editionEnabled and p.type == 'org.eqaula.glue.model.Structure'}"
+                                    icon="ui-icon-disk">
+                                <f:param name="profileId" value="#{profileHome.instance.id}"/>
+                                <f:param name="structureName" value="#{p.name}"/>
+                            </h:link>
+                            <h:link outcome="/pages/profile/data/group" styleClass="btn" value="#{messages['common.edit']}" 
+                                    rendered="#{profileHome.editionEnabled and p.type == 'org.eqaula.glue.model.Group'}">
+                                <f:param name="profileId" value="#{profileHome.instance.id}"/>
+                                <f:param name="groupId" value="#{ui.getGroup(profileHome.instance, p).getId()}"/>
+                            </h:link>
+                        </f:facet>
+                        <c:choose>                        
+                            <c:when test="#{p.type == 'org.eqaula.glue.model.Structure'}">
+                                <!-- Mostrar los datos de estructure-->
+                                <h:panelGroup id="attributes" layout="block" class="clearfix">
+                                    <ui:repeat value="#{profileHome.instance.findBussinesEntityAttribute(p.name)}" var="a" varStatus="status">
+                                        <h:panelGroup layout="block" class="clearfix" rendered="#{a.property.survey}">
+                                            <span class="#{(not empty a.property.required and a.property.required) ? 'survey-label required' : 'survey-label'}">#{a.property.label}</span>
+                                            <div class="survey-output">
+                                                <h:outputText value="#{a.value}"/>
+                                            </div>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" class="clearfix" rendered="#{not a.property.survey}">
+                                            <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</strong></label>
+                                            <div class="output">                                     
+                                                <h:outputText value="#{a.value}"/>
+                                            </div>
+                                        </h:panelGroup>  
+                                    </ui:repeat>
+                                </h:panelGroup>
+                            </c:when>
+                            <c:when test="#{p.type == 'org.eqaula.glue.model.Group'}">
+                                <p:dataTable id="groups" var="m" value="#{ui.getGroup(profileHome.instance, p).findOtherMembers(profileHome.instance)}" 
+                                             editable="false" 
+                                             emptyMessage="#{messages['common.emptyList']}">  
 
-                        <p:tab title="#{p.label}">  
-                            <c:choose>                        
-                                <c:when test="#{p.type == 'org.eqaula.glue.model.Structure'}">
-                                    <!-- Mostrar los datos de estructure-->
-                                    <h:panelGroup id="attributes" layout="block" class="clearfix">
-                                        <ui:repeat value="#{profileHome.instance.findBussinesEntityAttribute(p.name)}" var="a" varStatus="status">
-                                            <h:panelGroup layout="block" class="clearfix" >
-                                                <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</strong></label>
-                                                <div class="output">                                     
-                                                    <h:outputText id="value" value="#{a.value}"/>
-                                                </div>
-                                            </h:panelGroup>  
-                                        </ui:repeat>
-                                    </h:panelGroup>
-                                </c:when>
-                                <c:when test="#{p.type == 'org.eqaula.glue.model.Group'}">
-                                    <p:dataTable id="groups" var="m" value="#{ui.getGroup(profileHome.instance, p).findOtherMembers(profileHome.instance)}" 
-                                                 editable="false" 
-                                                 emptyMessage="#{messages['common.emptyList']}">  
-
-                                        <p:columns value="#{ui.findColumnsTemplate(ui.getGroup(profileHome.instance, p))}" var="column" columnIndexVar="colIndex"   
-                                                   sortBy="#{m[column.property]}">  
-                                            <f:facet name="header">  
-                                                #{column.header}  
-                                            </f:facet>  
-                                            #{m.findAttributeValue(column.property)}  
-                                        </p:columns>
-                                    </p:dataTable>
-                                </c:when>
-                            </c:choose>
-                        </p:tab>  
-                    </c:forEach>
-                </p:accordionPanel> 
+                                    <p:columns value="#{ui.findColumnsTemplate(ui.getGroup(profileHome.instance, p))}" var="column" columnIndexVar="colIndex"   
+                                               sortBy="#{m[column.property]}">  
+                                        <f:facet name="header">  
+                                            #{column.header}  
+                                        </f:facet>  
+                                        #{m.findAttributeValue(column.property)}  
+                                    </p:columns>
+                                </p:dataTable>
+                            </c:when>
+                        </c:choose>
+                    </p:panel>
+                </c:forEach>
             </h:form>
         </ui:define>
 

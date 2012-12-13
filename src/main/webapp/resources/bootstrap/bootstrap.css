@@ -53,6 +53,7 @@ ul,
 fieldset,
 form,
 label,
+survey-label,
 legend,
 button,
 table,
@@ -604,7 +605,9 @@ form .clearfix:after {
     clear: both;
 }
 label,
+survey-label,
 input,
+survey-input,
 select,
 textarea {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -621,8 +624,27 @@ label {
     text-align: right;
     color: #404040;
 }
+
+label .required { font-weight: bold; }
+
+
+survey-label {
+    padding-top: 6px;
+    font-size: 13px;
+    line-height: 18px;
+    width: 130px;
+    text-align: right;
+    color: #404040;
+}
+
+survey-label .required { font-weight: bold; }
+
 form .input {
     margin-left: 150px;
+}
+
+form .survey-input{
+    margin-left: 0px;
 }
 
 input[type=checkbox], input[type=radio] {
@@ -724,8 +746,15 @@ input[type=file]:focus, input[type=checkbox]:focus, select:focus {
 
 form .output {
     margin-left: 150px;
-    vertical-align: center;
+    vertical-align: middle;
 }
+
+form .survey-output{
+    margin-left: 3px;
+    vertical-align: middle;
+    padding: 10px 20px 20px 10px;
+}
+
 form div.clearfix.error {
     background: #fae5e3;
     padding: 10px 0;
@@ -793,8 +822,6 @@ select.xxlarge {
 textarea.xxlarge {
     overflow-y: auto;
 }
-
-.required label { font-weight: bold; }
 
 .required > input { background-color: whiteSmoke; }
 
@@ -1873,6 +1900,22 @@ footer {
     border-color: #0064cd #0064cd #003f81;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
+.btn.secondary {
+    color: #ffffff;
+    background-color: #7dcd00;
+    background-repeat: repeat-x;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#7dcd00), to(#7dcd00));
+    background-image: -moz-linear-gradient(top, #7dcd00, #7dcd00);
+    background-image: -ms-linear-gradient(top, #7dcd00, #7dcd00);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #7dcd00), color-stop(100%, #7dcd00));
+    background-image: -webkit-linear-gradient(top, #7dcd00, #7dcd00);
+    background-image: -o-linear-gradient(top, #7dcd00, #7dcd00);
+    background-image: linear-gradient(top, #7dcd00, #7dcd00);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#7dcd00', endColorstr='#7dcd00', GradientType=0);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    border-color: #7dcd00 #07dcd00 #7dcd00;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
 .btn:active {
     -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
     -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -2354,6 +2397,31 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 }
 .label.notice {
     background-color: #62cffc;
+}
+
+.survey-label {
+    /*padding: 1px 3px 2px;*/
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 18px;
+}
+.survey-label.important {
+    background-color: #c43c35;
+}
+.survey-label.warning {
+    background-color: #f89406;
+}
+.survey-label.success {
+    background-color: #46a546;
+}
+.survey-label.notice {
+    background-color: #62cffc;
+}
+.survey-label.required {
+    font-weight: bold;
 }
 .media-grid {
     margin-left: -20px;
