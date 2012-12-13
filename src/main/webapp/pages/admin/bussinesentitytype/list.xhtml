@@ -21,24 +21,35 @@ limitations under the License.
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/view/templates/glue.xhtml">
+    <ui:param name="title" value="#{messages['BussinesEntityTypes']} - #{bussinesEntityTypeListService}" />
+    <ui:define name="header-replace">
+        <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
+            <div class="container">
+                <div class="row fl" style="margin-top: 5px;">
+                    <h1>#{messages['module.BussinesEntityType']}</h1>   
+                </div>
+            </div>
+        </div>             
+    </ui:define>
     <ui:define name="content">
         <f:metadata>
             <f:viewParam name="result" value="#{bussinesEntityTypeListService.firstResult}" />
         </f:metadata>
 
         <h:form id="form">
-            <h1>#{messages['BussinesEntityTypes']}</h1>
-            <h:panelGroup>
-                <div class="span1 columns offset4">
-                    <h:link outcome="/pages/admin/bussinesentitytype/bussinesentitytype" styleClass="btn" value="#{messages['common.new']}">
-                        <f:param name="bussinesEntityTypeId" value=""/>
-                    </h:link>
-                    <h:link outcome="/pages/admin/bussinesentitytype/bussinesentitytype" styleClass="btn" value="#{messages['common.new']}">
-                        <f:param name="bussinesEntityTypeId" value=""/>
-                    </h:link>
-                </div>
-            </h:panelGroup>             
-
+            <!--<h1>#{messages['BussinesEntityTypes']}</h1>-->
+            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+            <div class="admin-actions">
+                <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="bussinesentitytype" styleClass="btn primary">
+                    <f:param name="bussinesEntityTypeId"></f:param>
+                    <f:param name="backView" value="list"></f:param>
+                </h:link>
+                #{' '}
+                <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="bussinesentitytype" styleClass="btn">
+                    <f:param name="bussinesEntityTypeId" value="#{bussinesEntityTypeListService.selectedBussinesEntityType.id}"></f:param>
+                    <f:param name="backView" value="list"></f:param>
+                </h:link>
+            </div>           
             <p:dataTable var="bussinesEntityType" value="#{bussinesEntityTypeListService}"
                          paginator="true" rows="10"
                          paginatorAlwaysVisible="false"
@@ -47,9 +58,12 @@ limitations under the License.
                          rowsPerPageTemplate="5,10,15"
                          id="bussinesEntityTypeTable" lazy="true"                          
                          selection="#{bussinesEntityTypeListService.selectedBussinesEntityType}"
-                         rendered="#{true}">                
-
-                <p:column selectionMode="single" style="width:18px" /> 
+                         rendered="true"
+                         selectionMode="single">
+                
+                <p:ajax event="rowSelect" listener="#{bussinesEntityTypeListService.onRowSelect}"   
+                        update=":form:button-edit :form:messages"/>  
+                <p:ajax event="rowUnselect" listener="#{bussinesEntityTypeListService.onRowUnselect}" update=":form:button-edit :form:messages"/>
 
                 <p:column headerText="#{messages['BussinesEntityType.name']}" sortBy="#{bussinesEntityType.name}">
                     <h:outputText value="#{bussinesEntityType.name}"></h:outputText>
@@ -67,24 +81,7 @@ limitations under the License.
                       <!-- <p:commandButton id="multiViewButton" value="#{messages['common.view']}" icon="ui-icon-search"  
                                         update=":form:displayMulti" oncomplete="multiBussinesEntityDialog.show()"/>  -->
                 </f:facet>
-            </p:dataTable>
-            <!--
-            <p:dialog id="multiDialog" header="#{messages['Account.detail']}"
-                      widgetVar="multiBussinesEntityDialog" height="300" showEffect="fade"
-                      hideEffect="explode">
-
-                <p:dataList id="displayMulti" value="#{bussinesEntityTypeList.selectedBussinesEntityType}"
-                            var="selectedBussinesEntityType">  
-                    
-                </p:dataList>
-
-            </p:dialog>
-            
-            <p:dialog header="#{messages['common.selectedBussinesEntity']}" modal="true" showEffect="fade" hideEffect="fade" widgetVar="dlg">  
-                    <h:panelGrid columns="1" id="display">  
-                        <h:outputText value="#{bussinesEntityTypeList.selectedBussinesEntityType.name}" />  
-                    </h:panelGrid>  
-             </p:dialog>  -->
+            </p:dataTable>            
 
         </h:form>
     </ui:define>
