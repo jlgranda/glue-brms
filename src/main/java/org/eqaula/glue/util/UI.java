@@ -33,6 +33,7 @@ package org.eqaula.glue.util;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -83,6 +84,7 @@ public class UI {
         
         Query q = em.createNamedQuery("Property.findByBussinesEntityTypeName");
         q.setParameter("bussinesEntityTypeName", entity.getType().getName());
+        Collections.sort(q.getResultList());
         return q.getResultList();
 
     }
@@ -92,6 +94,7 @@ public class UI {
         Query q = em.createNamedQuery("BussinesEntityAttribute.findByBussinesEntityIdAndTypes");
         q.setParameter("bussinesEntityName", entity.getType().getName());
         q.setParameter("types", types);
+        Collections.sort(q.getResultList());
         return q.getResultList();
 
     }

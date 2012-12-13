@@ -202,5 +202,17 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
         return value;
     }
     
+    public Profile findByName(final String name) {
 
+        log.info("find Profile with name " + name);
+
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Profile> query = builder.createQuery(Profile.class);
+
+        Root<Profile> bussinesEntityType = query.from(Profile.class);
+
+        query.where(builder.equal(bussinesEntityType.get(Profile_.name), name));
+
+        return getSingleResult(query);
+    }
 }

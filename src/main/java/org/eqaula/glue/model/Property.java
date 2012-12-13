@@ -44,7 +44,7 @@ import org.eqaula.glue.util.Lists;
     query = "select p FROM Property p "
     + "WHERE p.structure.bussinesEntityType.name = :bussinesEntityTypeName ORDER BY p.id")
 })
-public class Property implements Serializable {
+public class Property implements Comparable<Property>, Serializable {
 
     private static final long serialVersionUID = 1020047606754217515L;
     @Id
@@ -67,15 +67,19 @@ public class Property implements Serializable {
     private List<String> values;
     private String render;
     private String converter;
-    /*************************************************************
-     * Attributes for property type org.eqaula.glue.model.Group
-     *************************************************************/ 
     /**
-     * Show/hide default BussinesEntity attributes into form edition for org.equala.glue.Group type 
+     * ***********************************************************
+     * Attributes for property type org.eqaula.glue.model.Group
+     ************************************************************
+     */
+    /**
+     * Show/hide default BussinesEntity attributes into form edition for
+     * org.equala.glue.Group type
      */
     private boolean showDefaultBussinesEntityProperties = false;
     /**
-     * If this property is a group, register a generatorName for code attribute in members. It is apply for other attributes type
+     * If this property is a group, register a generatorName for code attribute
+     * in members. It is apply for other attributes type
      */
     private String generatorName;
     /**
@@ -90,12 +94,12 @@ public class Property implements Serializable {
      * Show in columns of table for groups.
      */
     private boolean showInColumns = false;
-    
-    /*************************************************************
+    /**
+     * ***********************************************************
      * Attributes for pools
-     *************************************************************/ 
+     ************************************************************
+     */
     private boolean survey;
-    
     @ManyToOne
     @JoinColumn(name = "structure_id")
     private Structure structure;
@@ -264,7 +268,7 @@ public class Property implements Serializable {
         this.survey = survey;
     }
 
-   @Override
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
                 // if deriving: appendSuper(super.hashCode()).
@@ -297,9 +301,14 @@ public class Property implements Serializable {
     @Override
     public String toString() {
         return "org.eqaula.glue.model.Property[ "
-                + "id=" + id + "," 
+                + "id=" + id + ","
                 + "name=" + name + ","
                 + "type=" + type + ","
                 + " ]";
+    }
+
+    @Override
+    public int compareTo(Property o) {
+        return (int)(this.getSequence() - o.getSequence());
     }
 }

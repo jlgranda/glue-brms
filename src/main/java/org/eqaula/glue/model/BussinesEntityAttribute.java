@@ -172,6 +172,6 @@ public class BussinesEntityAttribute implements Serializable, Comparable<Bussine
 
     @Override
     public int compareTo(BussinesEntityAttribute o) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return (int)(this.getProperty().getSequence() - o.getProperty().getSequence());
     }
 }
