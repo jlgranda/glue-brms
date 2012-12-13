@@ -34,7 +34,7 @@ limitations under the License.
     <ui:define name="content">
 
         <f:metadata>
-            <f:viewParam name="result" value="#{bussinesEntityListService.firstResult}" />
+            <f:viewParam name="result" value="#{profileListService.firstResult}" />
         </f:metadata>
 
         <h:form id="form">
@@ -46,32 +46,44 @@ limitations under the License.
                 </h:link>
                 #{' '}
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="profile" styleClass="btn">
-                    <f:param name="profileId" value="#{bussinesEntityListService.selectedBussinesEntity.id}"></f:param>
+                    <f:param name="profileId" value="#{profileListService.selectedProfile.id}"></f:param>
+                    <f:param name="backView" value="list"></f:param>
+                </h:link>
+                #{' '}
+                <h:link id="button-view" value="#{messages['common.view']}" rendered="#{true}" outcome="view" styleClass="btn">
+                    <f:param name="profileId" value="#{profileListService.selectedProfile.id}"></f:param>
                     <f:param name="backView" value="list"></f:param>
                 </h:link>
             </div>
-            <p:dataTable var="bussinesEntity" value="#{bussinesEntityListService}"
+            <p:dataTable var="profile_" value="#{profileListService}"
                          paginator="true" rows="10"
                          paginatorAlwaysVisible="false"
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
                          rowsPerPageTemplate="5,10,15"
                          id="bussinesEntityTable" lazy="true"
-                         selection="#{bussinesEntityListService.selectedBussinesEntity}"
+                         selection="#{profileListService.selectedProfile}"
                          rendered="true"
                          selectionMode="single">
-
-                <p:ajax event="rowSelect" listener="#{bussinesEntityListService.onRowSelect}"   
-                        update=":form:button-edit :form:messages"/>  
-                <p:ajax event="rowUnselect" listener="#{bussinesEntityListService.onRowUnselect}" update=":form:button-edit :form:messages"/>
-
-
-                <p:column headerText="#{messages['BussinesEntity.code']}" sortBy="#{account.code}">
-                    <h:outputText value="#{bussinesEntity.code}" />
+           
+                <p:ajax event="rowSelect" listener="#{profileListService.onRowSelect}"   
+                        update=":form:button-edit :form:messages :form:button-view"/>                 
+                <p:ajax event="rowUnselect" listener="#{profileListService.onRowUnselect}" update=":form:button-edit :form:messages :form:button-view"/>
+               
+                <p:column headerText="#{messages['common.username']}" sortBy="#{profile_.username}">
+                    <h:outputText value="#{profile_.username}" />
                 </p:column>
-
-                <p:column headerText="#{messages['BussinesEntity.name']}" sortBy="#{account.name}">
-                    <h:outputText value="#{bussinesEntity.name}" />
+                <p:column headerText="#{messages['common.firstname']}" sortBy="#{profile_.firstname}">
+                    <h:outputText value="#{profile_.firstname}" />
+                </p:column>
+                <p:column headerText="#{messages['profile.surname']}" sortBy="#{profile_.surname}">
+                    <h:outputText value="#{profile_.surname}" />
+                </p:column>
+                <p:column headerText="#{messages['profile.dni']}" sortBy="#{profile_.code}">
+                    <h:outputText value="#{profile_.code}" />
+                </p:column>
+                <p:column headerText="#{messages['common.email']}" sortBy="#{profile_.email}">
+                    <h:outputText value="#{profile_.email}" />
                 </p:column>
             </p:dataTable>
         </h:form>
