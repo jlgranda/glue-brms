@@ -48,6 +48,10 @@
       <pattern value="/admin"></pattern>
       <view-id value="/pages/admin/home.xhtml"></view-id>
    </url-mapping>
+   <url-mapping id="admin">
+      <pattern value="/admin/querytool"></pattern>
+      <view-id value="/pages/admin/query.xhtml"></view-id>
+   </url-mapping>
    <url-mapping id="profilelist">
       <pattern value="/admin/profile/list"></pattern>
       <view-id value="/pages/admin/list.xhtml"></view-id>

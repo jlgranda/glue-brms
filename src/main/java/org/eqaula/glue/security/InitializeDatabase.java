@@ -229,14 +229,14 @@ public class InitializeDatabase {
 
 
             attributes.add(buildStructureTypeProperty("PersonalData", "Datos personales", "Información personal relevante", "/pages/profile/data/personal", 1L));
-            attributes.add(buildGroupTypeProperty("Spouse", "Esposa/o", false, null, 1L, "Datos de su conyugue", 2L));
-            attributes.add(buildGroupTypeProperty("Childrens", "Hijos", false, null, 0L, "Datos de sus hijos", 3L));
-            attributes.add(buildGroupTypeProperty("Education", "Educación", false, null, 0L, "Detalle sus logros académicos", 4L));
+            attributes.add(buildGroupTypeProperty("Spouse", "Esposa/o", false, null, 1L, 1L, "Datos de su conyugue", 2L));
+            attributes.add(buildGroupTypeProperty("Childrens", "Hijos", false, null, 1L, 0L, "Datos de sus hijos", 3L));
+            attributes.add(buildGroupTypeProperty("Education", "Educación", false, null, 1L, 0L, "Detalle sus logros académicos", 4L));
             attributes.add(buildStructureTypeProperty("Role", "Detalle del cargo que desempeña", "Detalle del cargo que desempeña", null, 5L));
             attributes.add(buildStructureTypeProperty("Strategic", "Datos estratégicos", "Custionario para recolectar información estratégica", null, 6L));
-            attributes.add(buildGroupTypeProperty("Tasks", "Tareas a su cargo", false, null, 0L, "Detalle las tareas que corresponden a su cargo dentro de la institución", 7L));
-            attributes.add(buildGroupTypeProperty("Capacitacion", "Eventos de Capacitación", false, null, 0L, "Detalle de capacitaciones con  respaldo fisico notarizado desde el año 2000 en adelante", 8L));
-            attributes.add(buildGroupTypeProperty("TrayectoriaLaboral", "Trayectoria Laboral", false, null, 0L, "Detalle de la trayectoria laboral desde el año 2000 en adelante", 9L));
+            attributes.add(buildGroupTypeProperty("Tasks", "Tareas a su cargo", false, null, 1L, 0L, "Detalle las tareas que corresponden a su cargo dentro de la institución", 7L));
+            attributes.add(buildGroupTypeProperty("Capacitacion", "Eventos de Capacitación", false, null, 0L, 0L, "Detalle de capacitaciones con  respaldo fisico notarizado desde el año 2000 en adelante", 8L));
+            attributes.add(buildGroupTypeProperty("TrayectoriaLaboral", "Trayectoria Laboral", false, null, 1L, 0L, "Detalle de la trayectoria laboral desde el año 2000 en adelante", 9L));
 
 
             //Agregar atributos
@@ -670,7 +670,7 @@ public class InitializeDatabase {
         }
     }
 
-    private Property buildGroupTypeProperty(String name, String label, boolean showDefaultBussinesEntityProperties, String generatorName, Long maximumMembers, String helpinline, Long sequence) {
+    private Property buildGroupTypeProperty(String name, String label, boolean showDefaultBussinesEntityProperties, String generatorName, Long minimumMembers, Long maximumMembers, String helpinline, Long sequence) {
         Property property = new Property();
         property.setName(name);
         property.setType(Group.class.getName());
@@ -680,6 +680,7 @@ public class InitializeDatabase {
         property.setHelpInline(helpinline);
         property.setShowDefaultBussinesEntityProperties(showDefaultBussinesEntityProperties);
         property.setGeneratorName(generatorName);
+        property.setMinimumMembers(minimumMembers);
         property.setMaximumMembers(maximumMembers);
         property.setSequence(sequence);
         return property;
@@ -746,7 +747,8 @@ public class InitializeDatabase {
     
     private Property buildProperty(String groupName, String name, String type, Serializable value, boolean required, String label, String helpinline, boolean showInColumns, Long sequence) {
         Property property = new Property();
-        property.setGeneratorName(groupName);
+        property.setGeneratorName(null);
+        property.setGroupName(groupName);
         property.setName(name);
         property.setType(type);
         property.setValue(value);

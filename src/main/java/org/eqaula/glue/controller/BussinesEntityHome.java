@@ -46,9 +46,7 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
     protected BussinesEntityService bussinesEntityService;
     protected BussinesEntity bussinesEntity;
     private Property property;
-    
     private String backView;
-    
     private boolean editionEnabled = true;
 
     public Property getProperty() {
@@ -74,7 +72,7 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
     public void setEditionEnabled(boolean editionEnabled) {
         this.editionEnabled = editionEnabled;
     }
-    
+
     @Override
     public void create() {
         super.create();
@@ -151,7 +149,6 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
     }
 
     //protected abstract void buildAttributes(E entity);
-
     @Deprecated
     protected BussinesEntityAttribute buildAtribute(Property p) {
         BussinesEntityAttribute attribute = new BussinesEntityAttribute();
@@ -196,7 +193,7 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
      * @return list of BussinesEntityAttribute for BussinesEntityType names
      * lists
      */
-    public List<BussinesEntityAttribute> findBussinesEntityAttribute(final String names){
+    public List<BussinesEntityAttribute> findBussinesEntityAttribute(final String names) {
         log.info("eqaula --> findBussinesEntityAttribute  " + names + " into " + getInstance());
         if (getInstance() == null) {
             return new ArrayList<BussinesEntityAttribute>();
@@ -207,5 +204,5 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
         log.info("eqaula --> attributes (" + temp.size() + ")");
         return temp;
     }
-
+    
 }

@@ -79,6 +79,10 @@ public class Property implements Serializable {
      */
     private String generatorName;
     /**
+     * El mínimo de miembros requeridos para el grupo
+     */
+    private Long minimumMembers = 0L;
+    /**
      * El límite de miembros permitidos para el grupo
      */
     private Long maximumMembers = 0L;
@@ -226,6 +230,14 @@ public class Property implements Serializable {
 
     public void setGeneratorName(String generatorName) {
         this.generatorName = generatorName;
+    }
+
+    public Long getMinimumMembers() {
+        return minimumMembers;
+    }
+
+    public void setMinimumMembers(Long minimumMembers) {
+        this.minimumMembers = minimumMembers;
     }
 
     public Long getMaximumMembers() {

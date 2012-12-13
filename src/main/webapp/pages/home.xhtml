@@ -70,26 +70,34 @@
                         <ocp:tooltip forId="bootcamp:close" title="#{messages['']}" placement="left" trigger="hover" />
                         <div class="body">
                             <div class="row">
-
                                 <c:forEach items="#{ui.getProperties(userProfile)}" var="p" >
                                     <c:choose>
                                         <c:when test="#{p.type == 'org.eqaula.glue.model.Structure'}">
-                                            <!-- TODO cambiar nombre de atributo fragmentXHTML a page -->
                                             <h:link outcome="#{p.customForm != null ? p.customForm : '/pages/profile/data/structure'}">
-                                                <div class="span4 columns" style="margin-left: 16px;">
-                                                    <div class="well" style="height: 86px; margin-bottom: 0px;">
-                                                        #{p.label}
-                                                    </div></div>
+                                                <div class="span7 columns" style="margin-left: 48px;">
+                                                    <div class="well" style="height: 225px; width:370px; margin-bottom: 0px;">
+                                                        <p:meterGaugeChart value="#{statistics.buildMeterGaugeModel(statistics.calculeAttributesCompletedPercent(userProfile.id, p.name) * 100)}" 
+                                                                           style="width:370px;height:225px" title="#{p.label}"
+                                                                           seriesColors="d48891,d48891,e4af83,e4af83,82bc82"
+                                                                           showTickLabels="true" labelHeightAdjust="25" intervalOuterRadius="80"
+                                                                           />  
+                                                    </div>
+                                                </div>
                                                 <f:param name="profileId" value="#{userProfile.id}"/>
                                                 <f:param name="structureName" value="#{p.name}"/>
                                             </h:link>
                                         </c:when>
                                         <c:when test="#{p.type == 'org.eqaula.glue.model.Group'}">
                                             <h:link outcome="/pages/profile/data/group">
-                                                <div class="span4 columns" style="margin-left: 16px;">
-                                                    <div class="well" style="height: 86px; margin-bottom: 0px;">
-                                                        #{p.label}
-                                                    </div></div>
+                                                <div class="span7 columns" style="margin-left: 48px;">
+                                                    <div class="well" style="height: 225px; width:370px; margin-bottom: 0px;">
+                                                        <p:meterGaugeChart value="#{statistics.buildMeterGaugeModel(statistics.calculeMembersCompletedPercent(p.minimumMembers, ui.getGroup(userProfile, p).findOtherMembers(userProfile).size()) * 100)}" 
+                                                                           style="width:370px;height:225px" title="#{p.label}"
+                                                                           seriesColors="d48891,d48891,e4af83,e4af83,82bc82"
+                                                                           showTickLabels="true" labelHeightAdjust="25" intervalOuterRadius="80"
+                                                                           />  
+                                                    </div>
+                                                </div>
                                                 <f:param name="groupId" value="#{ui.getGroup(userProfile, p).getId()}"/>
                                                 <f:param name="profileId" value="#{userProfile.id}"/>
                                             </h:link>
@@ -163,7 +171,7 @@
         </ui:define>
 
         <ui:define name="sidebar">
-            
+
         </ui:define>
 
     </ui:composition>

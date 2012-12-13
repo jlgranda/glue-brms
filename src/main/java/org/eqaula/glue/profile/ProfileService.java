@@ -43,6 +43,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import org.eqaula.glue.util.PersistenceUtil;
 import org.eqaula.glue.model.profile.Profile;
@@ -171,6 +172,31 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
          return true;
       }
    }
+
+    public Long getCountRequiredProperties(Long bussinesEntityId, String bussinesEntityTypeName) {
+        Query q = em.createNamedQuery("BussinesEntityAttribute.countRequiredProperties", Long.class);
+        q.setParameter("bussinesEntityId", bussinesEntityId);
+        q.setParameter("bussinesEntityTypeName", bussinesEntityTypeName);
+        Long value = 0L;
+        System.out.println("BussinesEntityAttribute.countRequiredProperties [bussinesEntityId, bussinesEntityTypeName] ---> [" + bussinesEntityId + ", " + bussinesEntityTypeName + "] " + q.getResultList());
+        List<Long> result = q.getResultList();
+        for (Long r : result){
+            value = r;
+        }
+        return value;
+    }
+
+    public Long getCountCompletedRequiredProperties(Long bussinesEntityId, String bussinesEntityTypeName) {
+        Query q = em.createNamedQuery("BussinesEntityAttribute.countCompletedRequiredProperties", Long.class);
+        q.setParameter("bussinesEntityId", bussinesEntityId);
+        q.setParameter("bussinesEntityTypeName", bussinesEntityTypeName);
+        Long value = 0L;
+        List<Long> result = q.getResultList();
+        for (Long r : result){
+            value = r;
+        }
+        return value;
+    }
     
 
 }

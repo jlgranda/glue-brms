@@ -42,15 +42,19 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
     query = "select a FROM BussinesEntityAttribute a JOIN a.property p "
     + "WHERE p.structure.bussinesEntityType.name = :bussinesEntitytypeName "
     + "AND p.type IN (:types) "
-    + "ORDER BY p.id")
+    + "ORDER BY p.id"),
+    @NamedQuery(name = "BussinesEntityAttribute.countRequiredProperties",
+    query = "select count(a)  FROM org.eqaula.glue.model.BussinesEntityAttribute a WHERE a.bussinesEntity.id = :bussinesEntityId AND a.property.structure.bussinesEntityType.name = :bussinesEntityTypeName AND a.property.required = true GROUP BY a.property.structure"),
+    @NamedQuery(name = "BussinesEntityAttribute.countCompletedRequiredProperties",
+    query = "select count(a)  FROM org.eqaula.glue.model.BussinesEntityAttribute a WHERE a.bussinesEntity.id = :bussinesEntityId AND a.property.structure.bussinesEntityType.name = :bussinesEntityTypeName AND a.property.required = true AND a.valueByteArray != a.property.valueByteArray GROUP BY a.property.structure")
 })
 public class BussinesEntityAttribute implements Serializable, Comparable<BussinesEntityAttribute> {
-    private static final long serialVersionUID = 7807041724651919898L;
 
+    private static final long serialVersionUID = 7807041724651919898L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne(cascade= CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private BussinesEntity bussinesEntity;
     private String name;
     @Transient
@@ -127,7 +131,6 @@ public class BussinesEntityAttribute implements Serializable, Comparable<Bussine
         this.stringValue = stringValue;
     }
 
-    
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -157,12 +160,11 @@ public class BussinesEntityAttribute implements Serializable, Comparable<Bussine
                 append(getProperty(), other.getProperty()).
                 isEquals();
     }
-          
 
     @Override
     public String toString() {
         return "org.eqaula.glue.model.BussinesEntityAttribute[ "
-                + "id=" + id + "," 
+                + "id=" + id + ","
                 + "name=" + name + ","
                 + "type=" + type + ","
                 + " ]";
