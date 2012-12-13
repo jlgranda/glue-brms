@@ -44,8 +44,12 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import org.eqaula.glue.util.PersistenceUtil;
 import org.eqaula.glue.model.profile.Profile;
+import org.eqaula.glue.model.profile.Profile_;
 
 import org.eqaula.glue.util.Strings;
 
@@ -58,7 +62,7 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
 {
    
     private static final long serialVersionUID = -4022772083704382039L;
-
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(Profile.class);
     public ProfileService() {
         super(Profile.class);
     }
@@ -171,6 +175,19 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
          return true;
       }
    }
-    
+   
+   public Profile findByName(final String name) {
+
+        log.info("find Profile with name " + name);
+
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Profile> query = builder.createQuery(Profile.class);
+
+        Root<Profile> bussinesEntityType = query.from(Profile.class);
+
+        query.where(builder.equal(bussinesEntityType.get(Profile_.name), name));
+
+        return getSingleResult(query);
+    }
 
 }
