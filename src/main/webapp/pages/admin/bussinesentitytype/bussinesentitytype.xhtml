@@ -20,56 +20,31 @@ limitations under the License.
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:s="http://jboss.org/seam/faces"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:glue="http://eqaula.org/jsf/facelets"
                 template="/WEB-INF/view/templates/glue.xhtml">
     <ui:define name="content">
         <f:metadata>
-            <f:viewParam name="bussinesEntityTypeId" value="#{bussinesEntityTypeListService.selectedBussinesEntityType.id}" />
+            <f:viewParam name="bussinesEntityTypeId" value="#{bussinesEntityTypeHome.bussinesEntityTypeId}" />
+            <s:viewAction action="#{bussinesEntityTypeHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
 
         <h:form id="form">
-            <h1>#{messages['common.new']} #{messages['BussinesEntityType']}</h1>            
-            <glue:input id="namebeth" name="name" type="text" label="#{messages['common.nameBussinesEntityType']}" value="#{bussinesEntityTypeListService.selectedBussinesEntityType.name}" required="true" inlinehelp="#{messages['common.nameBussinesEntityType.inlinehelp']}" execute="@this save" render="namebeth"/>
+            <h2>#{messages['module.BussinesEntityType']}</h2>            
+            <glue:input id="namebeth" name="name" type="text" label="#{messages['module.BussinesEntityType.typeName']}" value="#{bussinesEntityTypeHome.instance.name}" required="true" inlinehelp="#{messages['common.nameBussinesEntityType.inlinehelp']}" execute="@this save" render="namebeth"/>
             
-            <h3 >#{messages['common.add']} #{messages['Propertys']}</h3>
-            
-            <!--<p:dataTable var="bussinesEntityType" value="#{bussinesEntityTypeListService}"
-                         paginator="true" rows="10"
-                         paginatorAlwaysVisible="false"
-                         paginatorPosition="top"
-                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
-                         rowsPerPageTemplate="5,10,15"
-                         id="bussinesEntityTypeTable" lazy="true"                          
-                         selection="#{bussinesEntityTypeListService.selectedBussinesEntityType}"
-                         rendered="#{true}">                
+            <br />
+            <h3 >#{messages['common.add']} #{messages['common.properties']}</h3>
 
-                <p:column selectionMode="multiple" style="width:18px" /> 
 
-                <p:column headerText="#{messages['BussinesEntityType.name']}" sortBy="#{bussinesEntityType.name}">
-                    <h:outputText value="#{bussinesEntityType.name}"></h:outputText>
-                </p:column> 
-
-                <p:column headerText="#{messages['BussinesEntityType.structureAccount']}" sortBy="#{bussinesEntityType.name}">
-                    <h:outputText value="#{bussinesEntityType.structures.size()}"></h:outputText>
-                </p:column> 
-
-                <p:column headerText="#{messages['BussinesEntityType.attributeAccount']}" sortBy="#{bussinesEntityType.name}">
-                    <h:outputText value="#{bussinesEntityType.structures[0].properties.size()}"></h:outputText>
-                </p:column> 
-
-                <f:facet name="footer">
-                      <!-- <p:commandButton id="multiViewButton" value="#{messages['common.view']}" icon="ui-icon-search"  
-                                        update=":form:displayMulti" oncomplete="multiBussinesEntityDialog.show()"/>  
-                </f:facet>
-            </p:dataTable>-->
-            
             <div class="actions">
-                <!--<p:commandButton value="#{messages['common.new']}" ajax="true"
-                                 action="#{groupHome.addBussinesEntity(groupHome.instance)}" process="@this, :edit-dialog"
-                                 icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"/>  -->
-                <h:commandButton id="save" action="#{bussinesEntityTypeHome.save}" value="#{messages['common.save']}" styleClass="btn primary" rendered="false"/>                         
-            </div>            
+                <h:commandButton id="save" action="#{bussinesEntityTypeHome.saveBussinesEntityType()}" value="#{messages['common.save']}" styleClass="btn primary"/>
+                #{' '};
+                <h:commandButton action="/pages/home.xhtml?faces-redirect=true"
+                                 value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/>
+            </div>
+
 
         </h:form>
     </ui:define>

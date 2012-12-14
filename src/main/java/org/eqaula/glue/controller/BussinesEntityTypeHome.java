@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eqaula.glue.controller.profile;
+package org.eqaula.glue.controller;
 
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
@@ -28,9 +30,15 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
+import org.eqaula.glue.controller.profile.ProfileHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.service.BussinesEntityTypeListService;
+import org.eqaula.glue.service.BussinesEntityTypeService;
+import org.jboss.seam.security.Credentials;
+import org.jboss.seam.security.Identity;
+import org.jboss.seam.security.management.IdmAuthenticator;
 import org.jboss.seam.transaction.Transactional;
+import org.picketlink.idm.common.exception.IdentityException;
 
 /**
  *
@@ -42,46 +50,60 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
 
     private static final long serialVersionUID = 7632987414391869389L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ProfileHome.class);
-    
     @Inject
     @Web
     private EntityManager em;
     @Inject
     private BussinesEntityTypeListService bussinesEntityTypeListService;
-            
-    private String structureName;
+    @Inject
+    private BussinesEntityTypeService bussinesEntityTypeService;
+    private String name;
 
-    public long getBussinesEntityTypeId() {
+    public BussinesEntityTypeHome() {
+        log.info("eqaula --> Inicializo BussinesEntityTypeHome");
+    }
+
+    public Long getBussinesEntityTypeId() {
         return (Long) getId();
     }
 
-    public void setBussinesEntityTypeId(long bussinesEntityTypeId) {
+    public void setBussinesEntityTypeId(Long bussinesEntityTypeId) {
         setId(bussinesEntityTypeId);
     }
 
-    public String getStructureName() {
-        return structureName;
+    public String getName() {
+        return name;
     }
 
-    public void setStructureName(String structureName) {
-        this.structureName = structureName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     protected BussinesEntityType createInstance() {
-        BussinesEntityType bussinesEntityType = new BussinesEntityType();         
-        
-        bussinesEntityType.setName(structureName);
-        bussinesEntityType.setStructures(bussinesEntityTypeListService.getSelectedBussinesEntityType().getStructures());
-        
-        return bussinesEntityType;        
+        BussinesEntityType bussinesEntityType = new BussinesEntityType();
+
+        //bussinesEntityType.setName(name);
+        //bussinesEntityType.setStructures(bussinesEntityTypeListService.getSelectedBussinesEntityType().getStructures());
+        bussinesEntityType.setStructures(null);
+
+        return bussinesEntityType;
     }
-    
+
+    @TransactionAttribute
+    public void load() {
+        log.info("eqaula --> Loading instance from BussinesEntityType for " + getId());
+        if (isIdDefined()) {
+            wire();
+        }
+        log.info("eqaula --> Loaded instance" + getInstance());
+    }
+
     @TransactionAttribute
     public void wire() {
         getInstance();
     }
-    
+
     public boolean isWired() {
         return true;
     }
@@ -89,10 +111,11 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     public BussinesEntityType getDefinedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
-     @PostConstruct
+
+    @PostConstruct
     public void init() {
         setEntityManager(em);
-        bussinesEntityService.setEntityManager(em);
+        bussinesEntityTypeService.setEntityManager(em);
     }
 
     @Override
@@ -101,60 +124,30 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     }
 
     @TransactionAttribute
-    public String saveAjax() {
-        Date now = Calendar.getInstance().getTime();
+    public String saveBussinesEntityType() {
         log.info("eqaula --> saving " + getInstance().getName());
-        getInstance().setName(structureName);
-//        for(BussinesEntityAttribute a : getInstance().){
-//            if (a.getProperty().getType().equals("java.lang.String") && a.getValue() == null){
-//                a.setValue(a.getName());
-//                a.setStringValue(a.getName());
-//            }
-//        }
-        save(getInstance());
-        return "/pages/admin/bussinesentitytype/list?faces-redirect=true";
-    }
-
-    @TransactionAttribute
-    public void displayBootcampAjax() {
-//        getInstance().setShowBootcamp(true);
-        update();
-    }
-
-    @TransactionAttribute
-    public void dismissBootcampAjax() {
-//        getInstance().setShowBootcamp(false);
-        update();
-    }
-/*
-    @Transactional
-    public void addBussinesEntityType(Structure structure) {
         Date now = Calendar.getInstance().getTime();
-        String name = "Nuevo " + (structure.getProperty() != null ? structure.getProperty().getLabel() : "elemento") + " " + (structure.findOtherMembers(this.getInstance()).size() + 1);
-        BussinesEntity entity = new BussinesEntity();
-        entity.setName(name);
-        //TODO implementar generador de códigos para entidad de negocio
-        entity.setCode((structure.getProperty() != null ? structure.getProperty().getLabel() : "elemento") + " " + (structure.findOtherMembers(this.getInstance()).size() + 1));
-        entity.setCreatedOn(now);
-        entity.setLastUpdate(now);
-        entity.setActivationTime(now);
-        entity.setExpirationTime(Dates.addDays(now, 364));
-        entity.setAuthor(null); //Establecer al usuario actual
-        entity.buildAttributes(bussinesEntityService);
-        log.info("eqaula --> start attributes for " + structure.getName() + " into entity " + entity.getName() + "");
-        //buildAttributesFor(entity, group.getName());
-        //Set default values into dinamycs properties
-        //TODO idear un mecanismo generico de inicialización de variables dinamicas
-        //entity.getBussinessEntityAttribute("title").setValue(name);
 
-        structure.add(entity);
+        if (getInstance().getId() != null) {
+            save(getInstance());
+        } else {
+            try {
+                log.info("eqaula --> saving new" + getInstance().getName());
+                createInstance();
+                save(getInstance());
+            } catch (Exception ex) {
+                log.info("eqaula --> error saving new" + getInstance().getName());
+            }          
+        }
 
-        setBussinesEntity(entity); //Establecer para edición
+        return "/pages/admin/bussinesentitytype/list";
+
+        //return "/pages/admin/bussinesentitytype/view?faces-redirect=true&profileId=" + getBussinesEntityTypeId();
+
     }
-*/
+
     @Transactional
-    public void saveBussinesEntityType() {
-        /*
+    public void saveBussinesEntity() {
         try {
             if (getBussinesEntity() == null) {
                 throw new NullPointerException("bussinessEntityType is null");
@@ -171,6 +164,18 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
             System.out.println("saveBussinesEntity ERROR = " + e.getMessage());
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
-        }*/
+        }
     }
-  }
+
+    @TransactionAttribute
+    public void displayBootcampAjax() {
+//        getInstance().setShowBootcamp(true);
+        update();
+    }
+
+    @TransactionAttribute
+    public void dismissBootcampAjax() {
+//        getInstance().setShowBootcamp(false);
+        update();
+    }
+}

@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -29,6 +31,8 @@ import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -170,5 +174,17 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
         QueryData<BussinesEntityType> qData = bussinesEntityTypeService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();
+    }
+    public void onRowSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage("Profile Selected ", ((BussinesEntityType) event.getObject()).getName());
+
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        FacesMessage msg = new FacesMessage("BussinesEntity Unselected ", ((BussinesEntityType) event.getObject()).getName());
+
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        this.setSelectedBussinesEntityType(null);
     }
 }

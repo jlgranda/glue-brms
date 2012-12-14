@@ -61,6 +61,7 @@
    <url-mapping id="bussinesentitytype">
       <pattern value="/admin/bussinesentitytype/bussinesentitytype"></pattern>
       <view-id value="/pages/admin/bussinesentity/bussinesentitytype.xhtml"></view-id>
+      <query-param name="bussinesEntityTypeId" decode="false">#{bussinesEntityTypeHome.bussinesEntityTypeId}</query-param>
    </url-mapping>
    <url-mapping id="bussinesentitytypelist">
       <pattern value="/admin/bussinesentitytype/list"></pattern>
