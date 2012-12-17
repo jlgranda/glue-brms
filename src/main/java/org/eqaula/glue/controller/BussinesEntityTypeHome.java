@@ -16,10 +16,10 @@
 package org.eqaula.glue.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
@@ -28,17 +28,19 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.controller.profile.ProfileHome;
 import org.eqaula.glue.model.BussinesEntityType;
+import org.eqaula.glue.model.Property;
+import org.eqaula.glue.model.Structure;
+import org.eqaula.glue.model.profile.Profile;
+import org.eqaula.glue.security.InitializeDatabase;
 import org.eqaula.glue.service.BussinesEntityTypeListService;
 import org.eqaula.glue.service.BussinesEntityTypeService;
-import org.jboss.seam.security.Credentials;
-import org.jboss.seam.security.Identity;
-import org.jboss.seam.security.management.IdmAuthenticator;
 import org.jboss.seam.transaction.Transactional;
-import org.picketlink.idm.common.exception.IdentityException;
 
 /**
  *
@@ -75,17 +77,26 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String name) {        
+            this.name = name;    
     }
 
     @Override
     protected BussinesEntityType createInstance() {
         BussinesEntityType bussinesEntityType = new BussinesEntityType();
-
-        //bussinesEntityType.setName(name);
-        //bussinesEntityType.setStructures(bussinesEntityTypeListService.getSelectedBussinesEntityType().getStructures());
-        bussinesEntityType.setStructures(null);
+        Date now = Calendar.getInstance().getTime();
+        Calendar ago = Calendar.getInstance();
+        ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+        Structure structure = new Structure();
+        
+        structure.setCreatedOn(now);
+        structure.setLastUpdate(now);
+        /*
+         List<Property> attributes = new ArrayList<Property>();
+         attributes.add(buildStructureTypeProperty("PersonalData", "Datos Personales", "Información personal relevante", "/pages/profile/data/personal", 1L));
+        
+         structure.setProperties(attributes); */
+        bussinesEntityType.addStructure(structure);
 
         return bussinesEntityType;
     }
@@ -126,18 +137,18 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     @TransactionAttribute
     public String saveBussinesEntityType() {
         log.info("eqaula --> saving " + getInstance().getName());
-        Date now = Calendar.getInstance().getTime();
 
-        if (getInstance().getId() != null) {
+        if (getInstance().getId() != null) {             
             save(getInstance());
         } else {
             try {
-                log.info("eqaula --> saving new" + getInstance().getName());
-                createInstance();
+                log.info("eqaula --> saving new" + getInstance().getName()); 
+                getInstance().getStructures().get(0).setName("Data for " + getInstance().getName());
                 save(getInstance());
+                
             } catch (Exception ex) {
                 log.info("eqaula --> error saving new" + getInstance().getName());
-            }          
+            }
         }
 
         return "/pages/admin/bussinesentitytype/list";
@@ -177,5 +188,21 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     public void dismissBootcampAjax() {
 //        getInstance().setShowBootcamp(false);
         update();
+    }
+
+    private Property buildStructureTypeProperty(String name, String label, String helpinline, String customForm, Long sequence) {
+        Property property = new Property();
+        property.setName(name);
+        property.setType(Structure.class.getName());
+        property.setValue(null);
+        property.setRequired(true);
+        property.setLabel(label);
+        property.setHelpInline(helpinline);
+        property.setCustomForm(customForm);
+        property.setShowDefaultBussinesEntityProperties(false);
+        property.setGeneratorName(null);
+        property.setMaximumMembers(null);
+        property.setSequence(sequence);
+        return property;
     }
 }
