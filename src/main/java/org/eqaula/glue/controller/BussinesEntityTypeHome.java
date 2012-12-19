@@ -83,6 +83,7 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
 
     @Override
     protected BussinesEntityType createInstance() {
+        log.info("eqaula --> Creando instance ");
         BussinesEntityType bussinesEntityType = new BussinesEntityType();
         Date now = Calendar.getInstance().getTime();
         Calendar ago = Calendar.getInstance();
@@ -188,21 +189,5 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     public void dismissBootcampAjax() {
 //        getInstance().setShowBootcamp(false);
         update();
-    }
-
-    private Property buildStructureTypeProperty(String name, String label, String helpinline, String customForm, Long sequence) {
-        Property property = new Property();
-        property.setName(name);
-        property.setType(Structure.class.getName());
-        property.setValue(null);
-        property.setRequired(true);
-        property.setLabel(label);
-        property.setHelpInline(helpinline);
-        property.setCustomForm(customForm);
-        property.setShowDefaultBussinesEntityProperties(false);
-        property.setGeneratorName(null);
-        property.setMaximumMembers(null);
-        property.setSequence(sequence);
-        return property;
     }
 }

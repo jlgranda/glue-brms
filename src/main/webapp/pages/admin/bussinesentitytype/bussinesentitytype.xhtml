@@ -36,8 +36,8 @@ limitations under the License.
     </ui:define>
     <ui:define name="content">
         <f:metadata>
-            <f:viewParam name="bussinesEntityTypeId" value="#{bussinesEntityTypeHome.bussinesEntityTypeId}" />
-            <s:viewAction action="#{bussinesEntityTypeHome.load}" if="#{conversation.transient}"/>
+            <f:viewParam name="bussinesEntityTypeId" value="#{bussinesEntityTypeHome.bussinesEntityTypeId}" />             
+            <s:viewAction action="#{bussinesEntityTypeHome.load}" if="#{conversation.transient}"/>                          
         </f:metadata>
 
         <h:form id="form">
@@ -45,16 +45,35 @@ limitations under the License.
                         value="#{bussinesEntityTypeHome.instance.name}" required="true" inlinehelp="#{messages['common.nameBussinesEntityType.inlinehelp']}" execute="@this save" render="namebeth"/>
 
             <br />
-            <c:forEach items="#{bussinesEntityTypeHome.instance.structures}" var="e" >
-                <p:panel header="#{messages['common.properties:']} #{instance.name}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{e.name}">
+            <c:forEach items="#{bussinesEntityTypeHome.instance.structures}" var="e" id="forEach">
+                <p:panel id="panel" header="#{messages['common.properties:']} #{instance.name}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{e.name}">
                     <f:facet name="header">
                         <strong>#{e.name}</strong>#{' '}                            
                     </f:facet>
-
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+                    <div class="admin-actions">
+                        <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="property" styleClass="btn primary">
+                            <f:param name="propertyId"></f:param>
+                            <f:param name="estructureName" value ="#{e.id}"></f:param>
+                            <f:param name="backView" value="bussinesentitytype"></f:param>
+                        </h:link>
+                        #{' '}
+                        <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="property" styleClass="btn">
+                            <f:param name="propertyId" value="#{propertyHome.instance.id}"></f:param>
+                            <f:param name="bussinesEntityTypeId" value ="#{bussinesEntityTypeHome.instance.id}"></f:param>
+                            <f:param name="estructureId" value ="#{e.id}"></f:param>                             
+                            <f:param name="backView" value="bussinesentitytype"></f:param>
+                        </h:link>
+                    </div>                     
                     <p:dataTable var="property" value="#{e.properties}"
                                  editable="false" 
                                  id="properties"
-                                 emptyMessage="#{messages['common.emptyList']}">                            
+                                 rowKey="#{property.id}"
+                                 selection="#{propertyHome.instance}" 
+                                 selectionMode="single" > 
+                        <p:ajax event="rowSelect" listener="#{propertyHome.onRowSelect}"   
+                                update=":form:button-edit :form:messages"/>  
+                        <p:ajax event="rowUnselect" listener="#{propertyHome.onRowUnselect}" update=":form:button-edit :form:messages"/>
 
                         <p:column headerText="#{messages['BussinesEntity.name']}" sortBy="#{property.name}">
                             <h:outputText value="#{property.name}" />
@@ -82,9 +101,9 @@ limitations under the License.
                 #{' '}                                                                                                                       
                 <h:commandButton action="/pages/admin/bussinesentitytype/list.xhtml?faces-redirect=true"                                                                                                                                                        
                                  value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/>
-                </div>
+            </div>
 
 
-            </h:form>
-        </ui:define>
-    </ui:composition>
+        </h:form>
+    </ui:define>
+</ui:composition>
