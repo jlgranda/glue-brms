@@ -32,6 +32,7 @@ import org.apache.commons.lang.SerializationUtils;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.profile.ProfileHome;
 import org.eqaula.glue.model.Property;
+import org.eqaula.glue.model.Structure;
 import org.eqaula.glue.service.BussinesEntityTypeService;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -54,6 +55,7 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
     @Inject
     private BussinesEntityTypeService bussinesEntityTypeService;
     private Long structureId;
+    private Long bussinesEntityTypeId;
     private String propertyStringValue;
 
     public PropertyHome() {
@@ -76,10 +78,36 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
         this.structureId = structureId;
     }
 
-    public String getPropertyStringValue() {
+    public Long getBussinesEntityTypeId() {
+        return bussinesEntityTypeId;
+    }
 
-        if (this.propertyStringValue != null) {
-            setPropertyStringValue((String) getInstance().getValue());
+    public void setBussinesEntityTypeId(Long bussinesEntityTypeId) {
+        this.bussinesEntityTypeId = bussinesEntityTypeId;
+    }
+
+    public String getPropertyStringValue() {
+        if (this.propertyStringValue == null) {
+
+            if (getInstance() != null) {
+                if (getInstance().getValue() != null) {
+                    if ("java.util.Date".equals(getInstance().getType())) {
+                        Date date = (Date) getInstance().getValue();
+                        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+                        String fecha = sdf.format(date);
+                        setPropertyStringValue(fecha);
+                    } else {
+                        log.info("eqaula --> Instance from Property Value not Date for " + propertyStringValue);
+                        setPropertyStringValue((String) getInstance().getValue());
+                    }
+                } else {
+                    log.info("eqaula --> Instance from Property Value not Date for " + propertyStringValue);
+                    this.propertyStringValue = "";
+                }
+            } else {
+                log.info("eqaula --> Instance from Property for " + propertyStringValue);
+                this.propertyStringValue = "";
+            }
         }
         return propertyStringValue;
     }
@@ -132,7 +160,7 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
     public String saveProperty() {
         log.info("eqaula --> saving " + getInstance().getName());
 
-        if (getInstance().getId() != null) {
+        if (getInstance().isPersistent()) {
             this.getInstance().setValue(converterToType(propertyStringValue));
             save(getInstance());
         } else {
@@ -140,15 +168,17 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
                 log.info("eqaula --> saving new" + getInstance().getName());
                 log.info("eqaula --> id for " + getStructureId());
                 //bussinesEntityTypeHome.getInstance().getStructures().get(0).getProperties().add(this.getInstance());
-                this.getInstance().setStructure(bussinesEntityTypeHome.getInstance().getStructures().get(0));
-                save(getInstance());
+                Structure s =  bussinesEntityTypeService.getStructure(getStructureId()); //TODO 
+                s.addProperty(this.getInstance());
+                //this.getInstance().setStructure();
+                save(s);
 
             } catch (Exception ex) {
                 log.info("eqaula --> error saving new" + getInstance().getName());
             }
         }
-
-        return "/pages/admin/bussinesentitytype/bussinesentitytype";
+        log.info("eqaula --> id for " + getBussinesEntityTypeId());
+        return "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();
     }
 
     public void onRowSelect(SelectEvent event) {

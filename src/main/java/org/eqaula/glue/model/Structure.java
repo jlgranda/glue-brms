@@ -21,6 +21,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
@@ -29,6 +32,9 @@ import javax.persistence.OrderBy;
  * @author jlgranda
  */
 @Entity
+@NamedQueries(value={
+    @NamedQuery(name="Structure.findForId",query="Select s From Structure s WHERE s.id= :id")
+})
 public class Structure extends DeletableObject<Structure> implements Serializable {
 
     private static final long serialVersionUID = -1939876087269734534L;
@@ -52,7 +58,7 @@ public class Structure extends DeletableObject<Structure> implements Serializabl
         return properties;
     }
 
-    public boolean addProperties(Property property){
+    public boolean addProperty(Property property){
         property.setStructure(this);
         return this.properties.add(property);
     }

@@ -24,8 +24,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.BussinesEntityType_; 
-import org.eqaula.glue.util.PersistenceUtil; 
+import org.eqaula.glue.model.BussinesEntityType_;
+import org.eqaula.glue.model.Structure;
+import org.eqaula.glue.util.PersistenceUtil;
 
 /**
  *
@@ -35,17 +36,16 @@ public class BussinesEntityTypeService extends PersistenceUtil<BussinesEntityTyp
 
     private static final long serialVersionUID = 6569835981443699931L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityTypeService.class);
-    
 
     public BussinesEntityTypeService() {
         super(BussinesEntityType.class);
     }
-    
+
     @Override
     public void setEntityManager(EntityManager em) {
         this.em = em;
     }
-    
+
     //metodo buscar por nombre
     public BussinesEntityType findByName(final String name) {
 
@@ -60,9 +60,9 @@ public class BussinesEntityTypeService extends PersistenceUtil<BussinesEntityTyp
 
         return getSingleResult(query);
     }
-    
+
     //metodo buscar  lista de BussinesEntityType
-     public List<BussinesEntityType> find(int maxresults, int firstresult) {
+    public List<BussinesEntityType> find(int maxresults, int firstresult) {
         log.info("find BussinesEntityType, max results " + maxresults + " next result " + firstresult);
 
         CriteriaBuilder builder = getCriteriaBuilder();
@@ -72,19 +72,27 @@ public class BussinesEntityTypeService extends PersistenceUtil<BussinesEntityTyp
         query.select(from).orderBy(builder.desc(from.get(BussinesEntityType_.name)));
         return getResultList(query, maxresults, firstresult);
     }
-    
+
     //metodo count
     public Long count() {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Long> query = builder.createQuery(Long.class);
         Root<BussinesEntityType> from = query.from(BussinesEntityType.class);
-
-        query.select(builder.count(from)); 
-        return this.<Long>getTypedSingleResult(query); 
+        query.select(builder.count(from));
+        return this.<Long>getTypedSingleResult(query);
     }
-    
-    public List<BussinesEntityType> findAll() {        
-        Query query = em.createNamedQuery("BussinesEntityType.findAllBussinesEntityTypes");         
+
+    public List<BussinesEntityType> findAll() {
+        Query query = em.createNamedQuery("BussinesEntityType.findAllBussinesEntityTypes");
         return query.getResultList();
-    }        
+    }
+
+    public Structure getStructure(Long id) {
+        log.info("find BussinesEntityType with name " + id);
+        Query c = em.createNamedQuery("Structure.findForId");
+        Structure e = null;
+        c.setParameter("id", id);
+        e = (Structure) c.getSingleResult();
+        return e;
+    }
 }

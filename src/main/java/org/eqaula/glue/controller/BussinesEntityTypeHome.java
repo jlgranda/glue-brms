@@ -77,8 +77,8 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
         return name;
     }
 
-    public void setName(String name) {        
-            this.name = name;    
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -89,7 +89,7 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
         Calendar ago = Calendar.getInstance();
         ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
         Structure structure = new Structure();
-        
+
         structure.setCreatedOn(now);
         structure.setLastUpdate(now);
         /*
@@ -138,24 +138,37 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     @TransactionAttribute
     public String saveBussinesEntityType() {
         log.info("eqaula --> saving " + getInstance().getName());
-
-        if (getInstance().getId() != null) {             
+        if (getInstance().getId() != null) {
             save(getInstance());
         } else {
             try {
-                log.info("eqaula --> saving new" + getInstance().getName()); 
+                log.info("eqaula --> saving new" + getInstance().getName());
                 getInstance().getStructures().get(0).setName("Data for " + getInstance().getName());
                 save(getInstance());
-                
+
             } catch (Exception ex) {
                 log.info("eqaula --> error saving new" + getInstance().getName());
             }
         }
-
         return "/pages/admin/bussinesentitytype/list";
+    }
 
-        //return "/pages/admin/bussinesentitytype/view?faces-redirect=true&profileId=" + getBussinesEntityTypeId();
+    @TransactionAttribute
+    public String saveNewBussinesEntityType() {
+        log.info("eqaula --> saving " + getInstance().getName());
+        try {
+            log.info("eqaula --> saving new" + getInstance().getName());
+            create(getInstance());
+            setBussinesEntityTypeId(getInstance().getId());
+            wire();
+            getInstance().getStructures().get(0).setName("Data for " + getInstance().getName());
+            save(getInstance());
 
+        } catch (Exception ex) {
+            log.info("eqaula --> error saving new" + getInstance().getName());
+        }
+
+        return "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();
     }
 
     @Transactional

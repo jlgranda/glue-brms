@@ -70,7 +70,7 @@ public class Property implements Comparable<Property>, Serializable {
     /**
      * ***********************************************************
      * Attributes for property type org.eqaula.glue.model.Group
-     ************************************************************
+     * ***********************************************************
      */
     /**
      * Show/hide default BussinesEntity attributes into form edition for
@@ -97,7 +97,7 @@ public class Property implements Comparable<Property>, Serializable {
     /**
      * ***********************************************************
      * Attributes for pools
-     ************************************************************
+     * ***********************************************************
      */
     private boolean survey;
     @ManyToOne
@@ -169,7 +169,11 @@ public class Property implements Comparable<Property>, Serializable {
     }
 
     public Object getValue() {
-        return SerializationUtils.deserialize(getValueByteArray());
+        if (getValueByteArray() == null) {
+            return null;
+        } else {
+            return SerializationUtils.deserialize(getValueByteArray());
+        }
     }
 
     public void setValue(Serializable value) {
@@ -268,6 +272,10 @@ public class Property implements Comparable<Property>, Serializable {
         this.survey = survey;
     }
 
+    public boolean isPersistent() {
+        return getId() != null;
+    }
+
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -309,6 +317,6 @@ public class Property implements Comparable<Property>, Serializable {
 
     @Override
     public int compareTo(Property o) {
-        return (int)(this.getSequence() - o.getSequence());
+        return (int) (this.getSequence() - o.getSequence());
     }
 }

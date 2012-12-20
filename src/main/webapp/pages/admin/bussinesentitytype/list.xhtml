@@ -45,7 +45,8 @@ limitations under the License.
                     <f:param name="backView" value="list"></f:param>
                 </h:link>
                 #{' '}
-                <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="bussinesentitytype" styleClass="btn">
+                <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="bussinesentitytype" styleClass="btn"
+                        disabled="#{bussinesEntityTypeListService.selectedBussinesEntityType.id!=null? 'false' : 'true'}" >
                     <f:param name="bussinesEntityTypeId" value="#{bussinesEntityTypeListService.selectedBussinesEntityType.id}"></f:param>
                     <f:param name="backView" value="list"></f:param>
                 </h:link>
