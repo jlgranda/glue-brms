@@ -88,7 +88,6 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
 
     public String getPropertyStringValue() {
         if (this.propertyStringValue == null) {
-
             if (getInstance() != null) {
                 if (getInstance().getValue() != null) {
                     if ("java.util.Date".equals(getInstance().getType())) {
@@ -119,7 +118,6 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
     @Override
     protected Property createInstance() {
         Property property = new Property();
-
         return property;
     }
 
@@ -165,19 +163,19 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             save(getInstance());
         } else {
             try {
-                log.info("eqaula --> saving new" + getInstance().getName());
+                log.info("eqaula --> saving new:" + getInstance().getName());
                 log.info("eqaula --> id for " + getStructureId());
-                //bussinesEntityTypeHome.getInstance().getStructures().get(0).getProperties().add(this.getInstance());
-                Structure s =  bussinesEntityTypeService.getStructure(getStructureId()); //TODO 
+                Structure s = bussinesEntityTypeService.getStructure(getStructureId()); //TODO 
                 s.addProperty(this.getInstance());
-                //this.getInstance().setStructure();
-                save(s);
+                save(s);                 
+                log.info("eqaula --> Estructure name" + s.getName());
+//                getInstance().setStructure(s);                
+//                save(getInstance());
 
             } catch (Exception ex) {
                 log.info("eqaula --> error saving new" + getInstance().getName());
             }
         }
-        log.info("eqaula --> id for " + getBussinesEntityTypeId());
         return "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();
     }
 
