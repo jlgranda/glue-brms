@@ -71,8 +71,10 @@
                     <h:commandButton id="save" action="#{propertyHome.saveProperty()}" 
                                      value="#{messages['common.save']}" styleClass="btn primary"/>
                     #{' '}
-                    <h:link id="button-edit" value="#{messages['common.cancel']}" rendered="true" outcome="/pages/admin/bussinesentitytype/bussinesentitytype.xhtml?faces-redirect=true" styleClass="btn" 
-                            disabled="#{propertyHome.instance.id==null}" >                        
+                    <h:commandButton id="delete" action="#{propertyHome.deleteProperty()}" rendered="#{propertyHome.instance.id!=null}" 
+                                     value="#{messages['common.delete']}" styleClass="btn"/>
+                    #{' '}
+                    <h:link id="cancel" value="#{messages['common.cancel']}" rendered="true" outcome="/pages/admin/bussinesentitytype/bussinesentitytype.xhtml?faces-redirect=true" styleClass="btn"  >                        
                         <f:param name="bussinesEntityTypeId" value ="#{propertyHome.bussinesEntityTypeId}"></f:param>                        
                     </h:link>
                 </div>

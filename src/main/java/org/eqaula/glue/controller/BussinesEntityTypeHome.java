@@ -33,11 +33,13 @@ import javax.persistence.TypedQuery;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.controller.profile.ProfileHome;
+import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.Property;
 import org.eqaula.glue.model.Structure;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.security.InitializeDatabase;
+import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.BussinesEntityTypeListService;
 import org.eqaula.glue.service.BussinesEntityTypeService;
 import org.jboss.seam.transaction.Transactional;
@@ -59,6 +61,8 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     private BussinesEntityTypeListService bussinesEntityTypeListService;
     @Inject
     private BussinesEntityTypeService bussinesEntityTypeService;
+    @Inject
+    private BussinesEntityService bussinesEntityService;
     private String name;
 
     public BussinesEntityTypeHome() {
@@ -143,7 +147,7 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
         } else {
             try {
                 log.info("eqaula --> saving new" + getInstance().getName());
-                getInstance().getStructures().get(0).setName("Data for " + getInstance().getName());
+                getInstance().getStructures().get(0).setName("Propiedades para el tipo " + getInstance().getName());
                 save(getInstance());
 
             } catch (Exception ex) {
@@ -202,5 +206,25 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     public void dismissBootcampAjax() {
 //        getInstance().setShowBootcamp(false);
         update();
+    }
+
+    public boolean isAsocitedBussinesEntity() {
+        boolean a = false;
+        try {            
+            List<BussinesEntity> bussinesEntityList = bussinesEntityService.findBussinesEntityForType(getInstance());
+            if (!bussinesEntityList.isEmpty()) {
+                log.info("eqaula --> buscar bussinesEntity:" + bussinesEntityList.toString());
+                a = true;
+//                for (BussinesEntity b : bussinesEntityList) {
+////                    if(b.getType().getId()==getInstance().getId()){
+////                        a = true;
+////                    }                    
+//                    a = false;
+//                }            
+            }
+        } catch (Exception pe) {
+            log.info("eqaula --> error buscar bussinesEntity:" + pe.getMessage());
+        }
+        return a;
     }
 }

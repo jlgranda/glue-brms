@@ -34,6 +34,8 @@ import org.eqaula.glue.controller.profile.ProfileHome;
 import org.eqaula.glue.model.Property;
 import org.eqaula.glue.model.Structure;
 import org.eqaula.glue.service.BussinesEntityTypeService;
+import org.jboss.seam.transaction.Transactional;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
@@ -167,7 +169,7 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
                 log.info("eqaula --> id for " + getStructureId());
                 Structure s = bussinesEntityTypeService.getStructure(getStructureId()); //TODO 
                 s.addProperty(this.getInstance());
-                save(s);                 
+                save(s);
                 log.info("eqaula --> Estructure name" + s.getName());
 //                getInstance().setStructure(s);                
 //                save(getInstance());
@@ -175,6 +177,34 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             } catch (Exception ex) {
                 log.info("eqaula --> error saving new" + getInstance().getName());
             }
+        }
+        return "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();
+    }
+
+    @Transactional
+    public String deleteProperty() {
+        try {
+            if (getInstance() == null) {
+                throw new NullPointerException("property is null");
+            }
+
+            if (getInstance().isPersistent()) {
+                log.info("eqaula --> ingreso a eliminar" + getInstance().getName());
+                //Remover de la lista de miembros en memoria
+                delete(this.getInstance());
+                //save(getInstance());
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
+                //RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
+                
+            } else {
+                //remover de la lista, si aún no esta persistido
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Debe agregar una propiedad para ser borrada", ""));
+            }
+
+        } catch (Exception e) {
+            //System.out.println("deleteBussinessEntity ERROR = " + e.getMessage());
+            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
         return "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();
     }
@@ -205,13 +235,13 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             } else if ("java.util.Date".equals(getInstance().getType())) {
                 SimpleDateFormat sdf;
                 sdf = new SimpleDateFormat("dd/MM/yyyy");
-                Date fec = null;
+                Date fecha = null;
                 try {
-                    fec = sdf.parse(value);
-                } catch (ParseException exFecha) {
-                    log.info("eqaula --> error converter date");
+                    fecha = sdf.parse(value);
+                } catch (ParseException pe) {
+                    log.info("eqaula --> error converter date:"+pe.getMessage());
                 }
-                o = sdf;
+                o = fecha;
             } else if ("java.lang.Double".equals(getInstance().getType())) {
                 o = Double.valueOf(value);
             } else {
