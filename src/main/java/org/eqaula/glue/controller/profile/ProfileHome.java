@@ -280,7 +280,6 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         entity.setAuthor(null); //Establecer al usuario actual
         entity.buildAttributes(bussinesEntityService);
         log.info("eqaula --> start attributes for " + group.getName() + " into entity " + entity.getName() + "");
-        //buildAttributesFor(entity, group.getName());
         //Set default values into dinamycs properties
         //TODO idear un mecanismo generico de inicialización de variables dinamicas
         //entity.getBussinessEntityAttribute("title").setValue(name);

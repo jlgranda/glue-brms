@@ -36,9 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -54,13 +52,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
-import org.eqaula.glue.util.Lists;
 
 /**
  *
@@ -71,9 +67,9 @@ import org.eqaula.glue.util.Lists;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "ENTITY_TYPE", discriminatorType = DiscriminatorType.STRING, length = 2)
 @NamedQueries({
-    @NamedQuery(name = "BussinesEntity.findBussinesEntityByParentIdAndType",
+    /*@NamedQuery(name = "BussinesEntity.findBussinesEntityByParentIdAndType",
     query = "select m FROM Group "
-    + "g JOIN g.members m WHERE g.id=:id and m.type=:type ORDER BY g.name")
+    + "g JOIN g.members m WHERE g.id=:id and m.type=:type ORDER BY g.name")*/
 })
 public class BussinesEntity extends DeletableObject<BussinesEntity> {
 
@@ -85,13 +81,17 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     @ManyToOne
     @JoinColumn(name = "parent")
     public BussinesEntity parent;
-    @ManyToMany(targetEntity = Group.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "entity_group", joinColumns =
-    @JoinColumn(name = "bussinesEntityId", referencedColumnName = "id"),
-    inverseJoinColumns =
-    @JoinColumn(name = "groupId", referencedColumnName = "groupId"))
-    private List<Group> groups = new ArrayList<Group>();
-    @ManyToOne(cascade = CascadeType.ALL)
+    /*@OneToMany(targetEntity = Group.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+     @JoinTable(name = "bussinesentity_group", joinColumns =
+     @JoinColumn(name = "bussinesEntityId", referencedColumnName = "id"),
+     inverseJoinColumns =
+     @JoinColumn(name = "groupId", referencedColumnName = "id"))
+     private List<Group> groups = new ArrayList<Group>();
+     @ManyToOne(cascade = CascadeType.ALL)*/
+    //Best practice http://java.dzone.com/articles/deterring-%E2%80%9Ctomany%E2%80%9D?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3a+javalobby/frontpage+%28Javalobby+/+Java+Zone%29
+    //Replace ManyToMany fro OneToMany and link entity
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Membership> memberships =  new ArrayList<Membership>();
     private BussinesEntityType type;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bussinesEntity", fetch = FetchType.LAZY)
     private List<BussinesEntityAttribute> attributes = new ArrayList<BussinesEntityAttribute>();
@@ -107,11 +107,24 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         this.parent = parent;
     }
 
+    public List<Membership> getMemberships() {
+        return memberships;
+    }
+
+    public void setMemberships(List<Membership> memberships) {
+        this.memberships = memberships;
+    }
+
     public void setGroups(List<Group> groups) {
-        this.groups = groups;
+        //TODO this.groups = groups;
     }
 
     public List<Group> getGroups() {
+        List<Group> groups = new ArrayList<Group>();
+        for (Membership m : getMemberships()) {
+            groups.add(m.getGroup());
+        }
+
         return groups;
     }
 
@@ -142,17 +155,24 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     }
 
     public void add(Group g) {
-        if (!groups.contains(g)) {
-            this.getGroups().add(g);
-
+        Date now = Calendar.getInstance().getTime();
+        Membership membershipt  = new Membership();
+        membershipt.setGroup(g);
+        membershipt.setBussinesEntity(this);
+        membershipt.setCreatedOn(now);
+        membershipt.setLastUpdate(now);
+        membershipt.setActivationTime(now);
+        membershipt.setExpirationTime(Dates.addDays(now, 364));
+        if (!getMemberships().contains(membershipt)) {
+            getMemberships().add(membershipt);
         }
     }
 
     public void remove(Group g) {
-        if (groups.contains(g)) {
-            this.getGroups().remove(g);
-        }
-
+        /*if (groups.contains(g)) {
+         this.getGroups().remove(g);
+         }
+         */
     }
 
     public boolean containsGroup(String name) {
@@ -221,7 +241,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         } else if ("name".equalsIgnoreCase(name)) {
             return getName();
         } else {
-            return (getBussinessEntityAttribute(name) != null ? getBussinessEntityAttribute(name).getValue().toString() : "undefined!");
+            return (getBussinessEntityAttribute(name) != null && getBussinessEntityAttribute(name).getValue() != null ? getBussinessEntityAttribute(name).getValue().toString() : "undefined!");
         }
     }
 

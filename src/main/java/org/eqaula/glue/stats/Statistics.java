@@ -90,6 +90,9 @@ public class Statistics {
         if (required == 0L) {
             return 1;
         }
+        if (completed > required) {
+            return 1;
+        }
         return (float) (completed / required);
     }
     private MeterGaugeChartModel meterGaugeModel;

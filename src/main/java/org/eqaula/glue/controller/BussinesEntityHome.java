@@ -81,7 +81,6 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
         }
     }
 
-    @Transactional
     public boolean isManaged() {
         return getInstance() != null
                 && getEntityManager().contains(getInstance());

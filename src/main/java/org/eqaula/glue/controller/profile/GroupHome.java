@@ -140,20 +140,20 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
     }
 
     @TransactionAttribute
-    public void saveAjax() {
-        if (isManaged()) {
+    public String saveAjax() {
+        if (getInstance().isPersistent()) {
             update();
         } else {
             persist();
         }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizó con exito " + getInstance().getName(), ""));
+        return "/pages/profile/view?faces-redirect=true&profileId=" + getProfileId();
     }
 
     @Transactional
     public void addBussinesEntity(Group group) {
-        //comparar con maximum + 1, ya que el mismo objeto es parte del grupo
-        if (group.getProperty().getMaximumMembers() == 0L || group.getMembers().size() < group.getProperty().getMaximumMembers() + 1) {
+        if (group.getProperty().getMaximumMembers() == 0L || group.getMembers().size() < group.getProperty().getMaximumMembers()) {
             BussinesEntity entity = makeBussinessEntity(group);
-            group.add(entity);
             setBussinesEntity(entity); //Establecer para edición
             RequestContext.getCurrentInstance().execute("editDlg.show()"); //abrir el popup si se añadió correctamente
         } else {
@@ -193,21 +193,22 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
                 //write String values
                 for (BussinesEntityAttribute a : getBussinesEntity().getAttributes()) {
                     if (a.getValue() == null && a.getProperty().isRequired()) {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizó con exito " + bussinesEntity.getName(), ""));
                         validate = false;
                     } else {
                         a.setStringValue(a.getValue() == null ? a.getProperty().getName() : a.getValue().toString());
                     }
                 }
                 //overwrite defaults attributes
-                if (!getInstance().getProperty().isShowDefaultBussinesEntityProperties()){
+                //if (!getInstance().getProperty().isShowDefaultBussinesEntityProperties()){
                     //TODO idear mecanismo para que sea configurable
                     //getInstance().setName(getInstance().getBussinessEntityAttribute("nombres").getValue().toString() + getInstance().getBussinessEntityAttribute("apellidos").getValue().toString());
                     //getInstance().setCode(getInstance().getBussinessEntityAttribute("cedula").getValue().toString());
-                }
+                //}
                 if (validate) {
-                    save(getBussinesEntity());
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizó con exito " + bussinesEntity.getName(), ""));
+                    //save(getBussinesEntity());
+                    this.getInstance().add(getBussinesEntity());
+                    //save(this.getInstance()); //Guardar cambios en relaciones
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se agregó con exito " + getInstance().getProperty().getLabel() + ": " + getBussinesEntity().getName(), ". No olvide guardar al final!"));
                     RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
                     setBussinesEntity(null); //liberar de memoria el objeto seleccionado
                 } else {
@@ -217,7 +218,6 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
             }
 
         } catch (Exception e) {
-            System.out.println("saveBussinesEntity ERROR = " + e.getMessage());
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
@@ -231,8 +231,10 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
             }
 
             if (getBussinesEntity().isPersistent()) {
-                delete(getBussinesEntity());
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hemos completado con exito la operación de borrado de " + bussinesEntity.getName(), ""));
+                //Remover de la lista de miembros en memoria
+                getInstance().remove(this.getBussinesEntity());
+                //save(getInstance());
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + bussinesEntity.getName(), ". No olvide guardar al final!"));
                 RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
                 setBussinesEntity(null); //liberar de memoria el objeto seleccionado
             } else {
@@ -242,7 +244,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
             }
 
         } catch (Exception e) {
-            System.out.println("saveBussinesEntity ERROR = " + e.getMessage());
+            System.out.println("deleteBussinessEntity ERROR = " + e.getMessage());
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
