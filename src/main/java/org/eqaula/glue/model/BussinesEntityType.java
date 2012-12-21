@@ -100,7 +100,7 @@ public class BussinesEntityType implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        BussinesEntity other = (BussinesEntity) obj;
+        BussinesEntityType other = (BussinesEntityType) obj;
         return new EqualsBuilder().
                 // if deriving: appendSuper(super.equals(obj)).
                 append(getName(), other.getName()).

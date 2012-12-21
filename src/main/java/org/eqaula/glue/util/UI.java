@@ -138,7 +138,7 @@ public class UI {
         Query q = em.createNamedQuery("Group.findByBussinesEntityIdAndPropertyId");
         q.setParameter("bussinesEntityId", entity.getId());
         q.setParameter("propertyId", p.getId());
-        return (Group) q.getResultList().get(0);
+        return q.getResultList().isEmpty() ? new Group() : (Group) q.getResultList().get(0);
 
     }
 
