@@ -118,8 +118,9 @@
                                 <label for="code" class="required">#{messages['common.code']}*</label>
                                 <div class="input">
                                     <p:inputText  name="code" value="#{groupHome.bussinesEntity.code}" styleClass="xLarge span4" required="false" label="#{messages['common.name']}" 
-                                                  rendered="true">
-                                        <f:validator validatorId="safeTextUTF8Validator"/>
+                                                  rendered="true" validator="ciValidator" >
+                                        <f:validator validatorId="safeTextUTF8Validator"/>                                         
+                                        <f:validator validatorId="ciValidator"/>  
                                         <p:ajax event="change" update="@parent" partialSubmit="true"/>
                                     </p:inputText>
                                     <h:graphicImage value="#{resource['success.gif']}" rendered="#{groupHome.bussinesEntity.code != null}"
