@@ -28,12 +28,15 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import org.apache.commons.lang.SerializationUtils;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.profile.ProfileHome;
 import org.eqaula.glue.model.Property;
 import org.eqaula.glue.model.Structure;
 import org.eqaula.glue.service.BussinesEntityTypeService;
+import org.jboss.seam.transaction.Transactional;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
@@ -46,7 +49,7 @@ import org.primefaces.event.UnselectEvent;
 public class PropertyHome extends BussinesEntityHome<Property> implements Serializable {
 
     private static final long serialVersionUID = 7632987414391869389L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ProfileHome.class);
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(PropertyHome.class);
     @Inject
     @Web
     private EntityManager em;
@@ -165,9 +168,9 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             try {
                 log.info("eqaula --> saving new:" + getInstance().getName());
                 log.info("eqaula --> id for " + getStructureId());
-                Structure s = bussinesEntityTypeService.getStructure(getStructureId()); //TODO 
+                Structure s = bussinesEntityTypeService.getStructure(getStructureId()); //Retornar la estrucura.
                 s.addProperty(this.getInstance());
-                save(s);                 
+                //save(s);
                 log.info("eqaula --> Estructure name" + s.getName());
 //                getInstance().setStructure(s);                
 //                save(getInstance());
@@ -175,6 +178,43 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             } catch (Exception ex) {
                 log.info("eqaula --> error saving new" + getInstance().getName());
             }
+        }
+        return "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();
+    }
+
+    @Transactional
+    public String deleteProperty() {
+        try {
+            if (getInstance() == null) {
+                throw new NullPointerException("property is null");
+            }
+
+            if (getInstance().isPersistent()) {
+                log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());
+                //Remover de la lista de miembros en memoria
+                Structure s = bussinesEntityTypeService.getStructure(getStructureId());
+                log.info("eqaula--> Resultado consulta: " + s.getProperties().size());
+                boolean mensaje = s.removeProperty(getInstance());
+                //this.getInstance().setStructure(null);                 
+                log.info("eqaula--> Se elimino la propiedad :"+ mensaje);
+                log.info("eqaula--> Resultado consulta: " + s.getProperties().size());
+                delete(getInstance());
+                //s.setProperties(s.getProperties());                 
+                save(s);                
+                
+                //save(getInstance());
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
+                //RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
+                
+            } else {
+                //remover de la lista, si aún no esta persistido
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Debe agregar una propiedad para ser borrada", ""));
+            }
+
+        } catch (Exception e) {
+            //System.out.println("deleteBussinessEntity ERROR = " + e.getMessage());
+            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
         return "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();
     }
@@ -205,13 +245,13 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             } else if ("java.util.Date".equals(getInstance().getType())) {
                 SimpleDateFormat sdf;
                 sdf = new SimpleDateFormat("dd/MM/yyyy");
-                Date fec = null;
+                Date fecha = null;
                 try {
-                    fec = sdf.parse(value);
-                } catch (ParseException exFecha) {
-                    log.info("eqaula --> error converter date");
+                    fecha = sdf.parse(value);
+                } catch (ParseException pe) {
+                    log.info("eqaula --> error converter date:"+pe.getMessage());
                 }
-                o = sdf;
+                o = fecha;
             } else if ("java.lang.Double".equals(getInstance().getType())) {
                 o = Double.valueOf(value);
             } else {
@@ -221,6 +261,5 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             log.info("eqaula --> error converter: " + value);
         }
         return (Serializable) o;
-
-    }
+    }      
 }

@@ -32,18 +32,16 @@ import javax.persistence.OrderBy;
  * @author jlgranda
  */
 @Entity
-@NamedQueries(value={
-    @NamedQuery(name="Structure.findForId",query="Select s From Structure s WHERE s.id= :id")
+@NamedQueries(value = {
+    @NamedQuery(name = "Structure.findForId", query = "SELECT s FROM Structure s WHERE s.id = :id")
 })
 public class Structure extends DeletableObject<Structure> implements Serializable {
 
     private static final long serialVersionUID = -1939876087269734534L;
-    
     @ManyToOne
     private BussinesEntityType bussinesEntityType;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="structure", fetch=FetchType.LAZY)
-    @OrderBy(value="sequence")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "structure", fetch = FetchType.LAZY)
+    @OrderBy(value = "sequence")
     private List<Property> properties;
 
     public BussinesEntityType getBussinesEntityType() {
@@ -58,16 +56,21 @@ public class Structure extends DeletableObject<Structure> implements Serializabl
         return properties;
     }
 
-    public boolean addProperty(Property property){
+    public boolean addProperty(Property property) {
         property.setStructure(this);
         return this.properties.add(property);
     }
-    
+
     public void setProperties(List<Property> properties) {
-        for (Property p : properties){
+        for (Property p : properties) {
             p.setStructure(this);
         }
         this.properties = properties;
+    }
+
+    public boolean removeProperty(Property property) {       
+        
+        return this.properties.remove(property);
     }
 
     @Override

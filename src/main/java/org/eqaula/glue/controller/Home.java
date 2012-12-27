@@ -240,7 +240,6 @@ public abstract class Home<T, E> extends MutableController<T> implements Seriali
         if (getEntityManager() == null) {
             throw new IllegalStateException("Must initialize EntityManager before using Services!");
         }
-
         getEntityManager().merge(entity);
     }
 
@@ -249,7 +248,7 @@ public abstract class Home<T, E> extends MutableController<T> implements Seriali
     }
 
     protected <E> void delete(final E entity) throws NoResultException {
-        getEntityManager().remove(entity);
+        getEntityManager().remove(getEntityManager().merge(entity));
     }
 
     protected <E> E deleteById(final Class<E> type, final Long id) throws NoResultException {

@@ -34,14 +34,15 @@ limitations under the License.
     <c:set var="required" value="#{not empty required and required}" />
     <c:set var="render" value="#{not empty render ? 'panel-group-'.concat(render) : (not empty id ? 'panel-group-'.concat(id) : 'panel-group-'.concat(mame))}" />
     <c:set var="validator" value="#{not empty validator ? validator : 'safeTextUTF8Validator'}" />
-    <c:set var="converter" value="#{not empty converter ? converter : omnifaces.SelectItemsConverter}" />
+    <c:set var="converter" value="#{not empty converter ? converter : omnifaces.SelectItemsConverter}" />    
+    <c:set var="disabled" value="#{not empty disabled ? disabled : 'false'}" />    
     <!-- TODO habilitar o deshabilitar ajax validation -->
     <h:panelGroup id="panel-group-#{id}" layout="block" class="clearfix">
         <label for="#{name}" class="#{(not empty required and required) ? 'required' : ''}">#{label}#{(not empty required and required) ? '*&#160;' : ''}</label>
         <div class="input">
             <c:choose>
                 <c:when test="#{type == 'java.lang.String' or type == 'text'}">
-                    <p:inputText value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}">
+                    <p:inputText value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}" disabled="#{disabled}">
                         <f:validator validatorId="#{validator}"/>
                         <p:ajax event="change" update="#{render}" partialSubmit="true"/>
                     </p:inputText>

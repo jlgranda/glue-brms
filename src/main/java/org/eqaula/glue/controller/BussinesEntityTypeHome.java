@@ -33,11 +33,13 @@ import javax.persistence.TypedQuery;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.controller.profile.ProfileHome;
+import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.Property;
 import org.eqaula.glue.model.Structure;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.security.InitializeDatabase;
+import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.BussinesEntityTypeListService;
 import org.eqaula.glue.service.BussinesEntityTypeService;
 import org.jboss.seam.transaction.Transactional;
@@ -51,7 +53,7 @@ import org.jboss.seam.transaction.Transactional;
 public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityType> implements Serializable {
 
     private static final long serialVersionUID = 7632987414391869389L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ProfileHome.class);
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityHome.class);
     @Inject
     @Web
     private EntityManager em;
@@ -59,6 +61,8 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     private BussinesEntityTypeListService bussinesEntityTypeListService;
     @Inject
     private BussinesEntityTypeService bussinesEntityTypeService;
+    @Inject
+    private BussinesEntityService bussinesEntityService;
     private String name;
 
     public BussinesEntityTypeHome() {
@@ -143,7 +147,7 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
         } else {
             try {
                 log.info("eqaula --> saving new" + getInstance().getName());
-                getInstance().getStructures().get(0).setName("Data for " + getInstance().getName());
+                getInstance().getStructures().get(0).setName("Propiedades para el tipo " + getInstance().getName());
                 save(getInstance());
 
             } catch (Exception ex) {
@@ -202,5 +206,27 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     public void dismissBootcampAjax() {
 //        getInstance().setShowBootcamp(false);
         update();
+    }
+
+    public boolean isAssociatedToBussinesEntity() {
+        boolean a = false;
+                    
+            log.info("eqaula --> Ingreso a buscar bussinesEntity: "+getInstance());
+            List<BussinesEntity> bussinesEntityList = bussinesEntityService.findBussinesEntityForType(getInstance());            
+            log.info("eqaula --> Lista de bussinesEntity: " + bussinesEntityList.get(0).toString());
+            if (!bussinesEntityList.isEmpty()) {                
+                return (a = true);
+//                for (BussinesEntity b : bussinesEntityList) {
+////                    if(b.getType().getId()==getInstance().getId()){
+////                        a = true;
+////                    }                    
+//                    a = false;
+//                }            
+            }else{
+                return (a = false);                 
+            }
+//        } catch (Exception pe) {
+//            log.info("eqaula --> error buscar bussinesEntity: " + pe.getMessage());
+//        }        
     }
 }

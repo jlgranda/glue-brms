@@ -88,11 +88,11 @@ public class BussinesEntityTypeService extends PersistenceUtil<BussinesEntityTyp
     }
 
     public Structure getStructure(Long id) {
-        log.info("find BussinesEntityType with name " + id);
+        log.info("eqaula--> find Strucure with name " + id);
         Query c = em.createNamedQuery("Structure.findForId");
         Structure e = new Structure();
         c.setParameter("id", id);
-        e = (Structure) c.getSingleResult();
+        e = (Structure) c.getSingleResult();        
         return e;
     }
 }
