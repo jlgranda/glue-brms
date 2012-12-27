@@ -25,7 +25,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -44,20 +43,34 @@ import org.eqaula.glue.model.profile.Profile;
 public class Organization extends BussinesEntity implements Serializable {
     private static final long serialVersionUID = 3095488521256724258L;
     
-    
-    @ManyToMany(targetEntity = Group.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "organization_profile", joinColumns =
-    @JoinColumn(name = "organizationid", referencedColumnName = "id"),
-    inverseJoinColumns =
-    @JoinColumn(name = "profileid", referencedColumnName = "id"))
-    private List<Profile> owners = new ArrayList<Profile>();
+    @OneToMany(mappedBy = "organization")
+    private List<Owner> owners = new ArrayList<Owner>();
 
-    public List<Profile> getOwners() {
+    public List<Owner> getOwners() {
         return owners;
     }
 
-    public void setOwners(List<Profile> owners) {
+    public void setOwners(List<Owner> owners) {
         this.owners = owners;
+    }
+    
+    public boolean addOwner(Owner owner){
+        owner.setOrganization(this);
+        return getOwners().add(owner);
+    }
+    
+    public boolean removeOwner(Owner owner){
+        owner.setOrganization(null);
+        return getOwners().remove(owner);
+    }
+    
+    @Override
+    public String toString() {
+        return "org.eqaula.glue.model.management.Organization[ "
+                + "id=" + getId() + ","
+                + "name=" + getName() + ","
+                + "type=" + getType() + ","
+                + " ]";
     }
     
 }
