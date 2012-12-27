@@ -45,7 +45,7 @@ limitations under the License.
                 <h:outputLabel value="#{messages['module.BussinesEntityType.typeName']}" />
                 <div class="input">
                     <p:inputText  value="#{bussinesEntityTypeHome.instance.name}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.typeName']}" 
-                                  rendered="true" disabled="#{bussinesEntityTypeHome.asocitedBussinesEntity}">
+                                  rendered="true" disabled="#{bussinesEntityTypeHome.associatedToBussinesEntity}">
                         <!--<f:validator validatorId="#{not empty bussinesEntityTypeHome.instance.name ?  bussinesEntityTypeHome.instance.name : 'safeTextUTF8Validator'}"/>-->
                         <p:ajax event="keyup" rendered="save" update="save" />  
                     </p:inputText>
@@ -56,11 +56,8 @@ limitations under the License.
                                  value="#{messages['common.save']}" styleClass="btn primary" rendered="#{bussinesEntityTypeHome.instance.id == null}"/>
                 #{' '}   
                 <h:commandButton id="save" action="#{bussinesEntityTypeHome.saveBussinesEntityType()}" 
-                                 value="#{messages['common.save']}" styleClass="btn primary" rendered="#{bussinesEntityTypeHome.instance.id != null and bussinesEntityTypeHome.asocitedBussinesEntity}" 
+                                 value="#{messages['common.save']}" styleClass="btn primary" rendered="#{bussinesEntityTypeHome.instance.id != null and !bussinesEntityTypeHome.associatedToBussinesEntity}" 
                                  disabled="false"/>
-                #{' '}                                                                                                                       
-                <h:commandButton action="/pages/admin/bussinesentitytype/list.xhtml?faces-redirect=true"                                                                                                                                                        
-                                 value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/>
             </div>
             <c:forEach items="#{bussinesEntityTypeHome.instance.structures}" var="e" id="forEach">
                 <p:panel id="panel" header="#{messages['common.properties:']} #{instance.name}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{e.name}" rendered="#{bussinesEntityTypeHome.instance.id != null}">
@@ -99,10 +96,7 @@ limitations under the License.
 
                         <p:column headerText="#{messages['common.property.label']}" sortBy="#{property.label}">
                             <h:outputText value="#{property.label}" />
-                        </p:column>
-                        <p:column headerText="#{messages['common.property.helpinline']}" sortBy="#{property.helpInline}">
-                            <h:outputText value="#{property.helpInline}" />
-                        </p:column>
+                        </p:column>                        
                         <p:column headerText="#{messages['common.property.type']}" sortBy="#{property.type}">
                             <h:outputText value="#{property.type}" />
                         </p:column>                                 
@@ -118,6 +112,10 @@ limitations under the License.
                         </p:column>     
                     </p:dataTable>
                 </p:panel>
+                <div class="actions">                                                                                                                                          
+                    <h:commandButton action="/pages/admin/bussinesentitytype/list.xhtml?faces-redirect=true"                                                                                                                                                        
+                                     value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/>
+                </div>
             </c:forEach>
         </h:form>
     </ui:define>

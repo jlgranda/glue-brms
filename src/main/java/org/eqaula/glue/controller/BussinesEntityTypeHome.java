@@ -53,7 +53,7 @@ import org.jboss.seam.transaction.Transactional;
 public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityType> implements Serializable {
 
     private static final long serialVersionUID = 7632987414391869389L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ProfileHome.class);
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityHome.class);
     @Inject
     @Web
     private EntityManager em;
@@ -208,23 +208,25 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
         update();
     }
 
-    public boolean isAsocitedBussinesEntity() {
+    public boolean isAssociatedToBussinesEntity() {
         boolean a = false;
-        try {            
-            List<BussinesEntity> bussinesEntityList = bussinesEntityService.findBussinesEntityForType(getInstance());
-            if (!bussinesEntityList.isEmpty()) {
-                log.info("eqaula --> buscar bussinesEntity:" + bussinesEntityList.toString());
-                a = true;
+                    
+            log.info("eqaula --> Ingreso a buscar bussinesEntity: "+getInstance());
+            List<BussinesEntity> bussinesEntityList = bussinesEntityService.findBussinesEntityForType(getInstance());            
+            log.info("eqaula --> Lista de bussinesEntity: " + bussinesEntityList.get(0).toString());
+            if (!bussinesEntityList.isEmpty()) {                
+                return (a = true);
 //                for (BussinesEntity b : bussinesEntityList) {
 ////                    if(b.getType().getId()==getInstance().getId()){
 ////                        a = true;
 ////                    }                    
 //                    a = false;
 //                }            
+            }else{
+                return (a = false);                 
             }
-        } catch (Exception pe) {
-            log.info("eqaula --> error buscar bussinesEntity:" + pe.getMessage());
-        }
-        return a;
+//        } catch (Exception pe) {
+//            log.info("eqaula --> error buscar bussinesEntity: " + pe.getMessage());
+//        }        
     }
 }

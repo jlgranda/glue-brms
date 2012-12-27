@@ -28,6 +28,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import org.apache.commons.lang.SerializationUtils;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.profile.ProfileHome;
@@ -48,7 +49,7 @@ import org.primefaces.event.UnselectEvent;
 public class PropertyHome extends BussinesEntityHome<Property> implements Serializable {
 
     private static final long serialVersionUID = 7632987414391869389L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ProfileHome.class);
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(PropertyHome.class);
     @Inject
     @Web
     private EntityManager em;
@@ -167,9 +168,9 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             try {
                 log.info("eqaula --> saving new:" + getInstance().getName());
                 log.info("eqaula --> id for " + getStructureId());
-                Structure s = bussinesEntityTypeService.getStructure(getStructureId()); //TODO 
+                Structure s = bussinesEntityTypeService.getStructure(getStructureId()); //Retornar la estrucura.
                 s.addProperty(this.getInstance());
-                save(s);
+                //save(s);
                 log.info("eqaula --> Estructure name" + s.getName());
 //                getInstance().setStructure(s);                
 //                save(getInstance());
@@ -189,9 +190,18 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             }
 
             if (getInstance().isPersistent()) {
-                log.info("eqaula --> ingreso a eliminar" + getInstance().getName());
+                log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());
                 //Remover de la lista de miembros en memoria
-                delete(this.getInstance());
+                Structure s = bussinesEntityTypeService.getStructure(getStructureId());
+                log.info("eqaula--> Resultado consulta: " + s.getProperties().size());
+                boolean mensaje = s.removeProperty(getInstance());
+                //this.getInstance().setStructure(null);                 
+                log.info("eqaula--> Se elimino la propiedad :"+ mensaje);
+                log.info("eqaula--> Resultado consulta: " + s.getProperties().size());
+                delete(getInstance());
+                //s.setProperties(s.getProperties());                 
+                save(s);                
+                
                 //save(getInstance());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
                 //RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
@@ -251,6 +261,5 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             log.info("eqaula --> error converter: " + value);
         }
         return (Serializable) o;
-
-    }
+    }      
 }
