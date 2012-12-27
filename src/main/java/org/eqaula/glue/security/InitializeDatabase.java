@@ -31,6 +31,7 @@
  */
 package org.eqaula.glue.security;
 
+import com.google.gson.internal.StringMap;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,6 +51,8 @@ import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.Property;
 import org.eqaula.glue.model.Structure;
 import org.eqaula.glue.model.config.Setting;
+import org.eqaula.glue.model.management.Organization;
+import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.model.security.IdentityObjectCredentialType;
 import org.eqaula.glue.model.security.IdentityObjectType;
@@ -200,6 +203,8 @@ public class InitializeDatabase {
         validateStructureForTasks();
         validateStructureForCapacitacion();
         validateStructureForTrayectoriaLaboral();
+        validateStructureForOrganization();
+        validateStructureForOwner();
     }
 
     private void validateStructureForProfile() {
@@ -225,8 +230,7 @@ public class InitializeDatabase {
             structure.setLastUpdate(now);
 
             //Lista de atributos de entidad de negocios
-            List<Property> attributes = new ArrayList<Property>();
-
+            List<Property> attributes = new ArrayList<Property>(); 
 
             attributes.add(buildStructureTypeProperty("PersonalData", "Datos personales", "Información personal relevante", "/pages/profile/data/personal", 1L));
             attributes.add(buildGroupTypeProperty("Spouse", "Esposa/o", false, null, 1L, 1L, "Datos de su conyugue", 2L));
@@ -251,6 +255,74 @@ public class InitializeDatabase {
         System.out.println("Structure for Profile [" + bussinesEntityType + "]");
     }
 
+    private void validateStructureForOrganization() {
+        BussinesEntityType bussinesEntityType = null;
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", Organization.class.getName());
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(Organization.class.getName());
+
+            //Agrupaciones de propiedades
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = null;
+            structure = new Structure();
+            structure.setName("Data for " + Organization.class.getName());
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+            
+            //Lista de atributos de Perfiles
+            List<Property> attributes = new ArrayList<Property>();
+            attributes.add(buildProperty("mision", "java.lang.MultiLineString", null, true, "Misión", "Ingrese la misión de la Organización", true, 1L));
+            attributes.add(buildProperty("vision", "java.lang.MultiLineString", null, true, "Misión", "Ingrese la vision de la Organización", true, 1L));
+            
+            structure.setProperties(attributes);
+            bussinesEntityType.addStructure(structure);
+            
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+        }
+    }
+    
+    private void validateStructureForOwner() {
+        BussinesEntityType bussinesEntityType = null;
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", Owner.class.getName());
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(Owner.class.getName());
+
+            //Agrupaciones de propiedades
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = null;
+            structure = new Structure();
+            structure.setName("Data for " + Owner.class.getName());
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+            
+            //Lista de atributos de Perfiles
+            List<Property> attributes = new ArrayList<Property>();
+             attributes.add(buildProperty("address", String.class.getName(), null, false, "Dirección", "Calles y número de casa", true, 1L));
+            attributes.add(buildProperty("phone", String.class.getName(), null, false, "Teléfono", "Telefóno de contacto", true, 2L));
+            
+            structure.setProperties(attributes);
+            bussinesEntityType.addStructure(structure);
+            
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+        }
+    }
+    
     private void validateStructureForPersonalData() {
         BussinesEntityType bussinesEntityType = null;
         String name = "PersonalData";
@@ -685,7 +757,7 @@ public class InitializeDatabase {
         property.setSequence(sequence);
         return property;
     }
-    
+
     private Property buildStructureTypeProperty(String name, String label, String helpinline, String customForm, Long sequence) {
         Property property = new Property();
         property.setName(name);
@@ -701,7 +773,7 @@ public class InitializeDatabase {
         property.setSequence(sequence);
         return property;
     }
-    
+
     private Property buildProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, Long sequence) {
         Property property = new Property();
         property.setName(name);
@@ -714,7 +786,7 @@ public class InitializeDatabase {
         property.setSequence(sequence);
         return property;
     }
- 
+
     private Property buildProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, String render, String customForm, boolean showInColumns, Long sequence) {
         Property property = new Property();
         property.setName(name);
@@ -729,7 +801,7 @@ public class InitializeDatabase {
         property.setSequence(sequence);
         return property;
     }
-    
+
     private Property buildProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, boolean showInColumns, Long sequence) {
         Property property = new Property();
         property.setName(name);
@@ -744,7 +816,7 @@ public class InitializeDatabase {
         property.setSequence(sequence);
         return property;
     }
-    
+
     private Property buildProperty(String groupName, String name, String type, Serializable value, boolean required, String label, String helpinline, boolean showInColumns, Long sequence) {
         Property property = new Property();
         property.setGeneratorName(null);
@@ -761,7 +833,7 @@ public class InitializeDatabase {
         property.setSequence(sequence);
         return property;
     }
-    
+
     private Property buildPropertyAsSurvey(String name, String type, Serializable value, boolean required, String label, String helpinline, Long sequence) {
         Property property = new Property();
         property.setName(name);
