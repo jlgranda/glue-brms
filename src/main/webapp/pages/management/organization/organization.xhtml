@@ -78,7 +78,7 @@
                 <div class="actions">
                     <p:commandButton id="save" action="#{organizationHome.saveOrganization()}" value="#{messages['common.save']}" styleClass="btn primary"/>
                     &nbsp;
-                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" 
+                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
                                      update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{organizationHome.organizationId != null}"/>
                     &nbsp;
                     <h:link outcome="/pages/management/organization/list.xhtml?faces-redirect=true" onclick="editDlg.hide();"
@@ -91,7 +91,7 @@
                             <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                         </h:panelGroup>  
                         <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
-                                         action="#{organizationHome.deleteOrganization()}"                                          
+                                         action="#{organizationHome.deleteOrganization()}"                                         
                                          ajax="true" process="@this"  
                                          style="margin-top:10px;">  
                         </p:commandButton>  
