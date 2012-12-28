@@ -104,9 +104,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             log.info("eqaula --> OrganizationHome save instance: "+getInstance().getId());            
             getInstance().setLastUpdate(now);             
             save(getInstance());
-        } else {            
-            getInstance().setType(bussinesEntityService.findBussinesEntityTypeByName(Organization.class.getName()));
-            getInstance().buildAttributes(bussinesEntityService);
+        } else {                        
             save(getInstance());
         }
         return "/pages/management/organization/list";

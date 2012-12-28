@@ -278,8 +278,8 @@ public class InitializeDatabase {
             
             //Lista de atributos de Perfiles
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildProperty("mision", "java.lang.MultiLineString", null, true, "Misión", "Ingrese la misión de la Organización", true, 0L));
-            attributes.add(buildProperty("vision", "java.lang.MultiLineString", null, true, "Visión", "Ingrese la vision de la Organización", true, 1L));
+            attributes.add(buildProperty("mision", "java.lang.MultiLineString", null, false, "Misión", "Ingrese la misión de la Organización", true, 0L));
+            attributes.add(buildProperty("vision", "java.lang.MultiLineString", null, false, "Visión", "Ingrese la vision de la Organización", true, 1L));
             
             structure.setProperties(attributes);
             bussinesEntityType.addStructure(structure);
@@ -588,7 +588,7 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
 
-            attributes.add(buildPropertyAsSurvey("mision", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser la misión de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 1L));
+            attributes.add(buildPropertyAsSurvey("mision", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser la misión de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente",1L));
             attributes.add(buildPropertyAsSurvey("vision", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser la visión de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 2L));
             attributes.add(buildPropertyAsSurvey("objetivos", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser los objetivos estratégicos de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 3L));
             attributes.add(buildPropertyAsSurvey("fortalezas", "java.lang.MultiLineString", null, true, "Identifique fortalezas para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 4L));
@@ -844,7 +844,7 @@ public class InitializeDatabase {
         property.setCustomForm(null);
         property.setShowInColumns(false);
         property.setSequence(sequence);
-        property.setSurvey(true);
+        property.setSurvey(true);         
         return property;
     }
 }
