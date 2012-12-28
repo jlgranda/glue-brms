@@ -416,7 +416,7 @@ public class InitializeDatabase {
             attributes.add(buildProperty("tipoRelacion", "java.lang.String[]", "Casado,Unión libre", true, "Tipo de Relacion", "Indique que relacion tiene", false, 1L));
             attributes.add(buildProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos", true, 2L));
             attributes.add(buildProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre", true, 3L));
-            attributes.add(buildProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones", true, 4L));
+            attributes.add(buildProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Digite su número de cédula o pasaporte sin guiones", true, 4L));
             attributes.add(buildProperty("empresaTrabajo", String.class.getName(), null, false, "Empresa en la que Trabaja", "Indique la empresa que trabaja", false, 5L));
             attributes.add(buildProperty("funcionCargo", String.class.getName(), null, false, "Actividad / Función o Cargo", "Que cargo o funcion tiene", false, 6L));
 
@@ -502,7 +502,7 @@ public class InitializeDatabase {
             attributes.add(buildProperty("country", String.class.getName(), "", true, "País", "¿En que país obtuvo este título?", true, 2L));
             attributes.add(buildProperty("institution", String.class.getName(), "", true, "Institución", "¿En que centro de estudios?", true, 3L));
             attributes.add(buildProperty("graduationDate", Date.class.getName(), now, false, "Fecha de Graduación", "¿Cuándo finalizó sus estudios?", 4L));
-            attributes.add(buildProperty("atPresent", "java.lang.String[]", "Sí,No", true, "Al presente", "¿Esta cursando actualmente esta titulación?", 5L));
+            attributes.add(buildProperty("atPresent", "java.lang.String[]", "Sí,No*", true, "Al presente", "¿Esta cursando actualmente esta titulación?", 5L));
             attributes.add(buildProperty("level", "java.lang.String[]", "Secundario,Terciario,Universitario,Postgrado,Master,Doctorado,Otro", true, "Nivel de estudio", "Nivel de los estudios cursados", true, 6L));
 
             //Agregar atributos

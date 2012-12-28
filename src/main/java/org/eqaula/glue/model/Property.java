@@ -67,11 +67,13 @@ public class Property implements Comparable<Property>, Serializable {
     private List<String> values;
     private String render;
     private String converter;
+    private String validator;
     /**
      * ***********************************************************
      * Attributes for property type org.eqaula.glue.model.Group
      * ***********************************************************
      */
+    private String overwrite;
     /**
      * Show/hide default BussinesEntity attributes into form edition for
      * org.equala.glue.Group type
@@ -218,6 +220,22 @@ public class Property implements Comparable<Property>, Serializable {
 
     public void setConverter(String converter) {
         this.converter = converter;
+    }
+
+    public String getValidator() {
+        return validator;
+    }
+
+    public void setValidator(String validator) {
+        this.validator = validator;
+    }
+
+    public String getOverwrite() {
+        return overwrite;
+    }
+
+    public void setOverwrite(String overwrite) {
+        this.overwrite = overwrite;
     }
 
     public List<String> getValues() {

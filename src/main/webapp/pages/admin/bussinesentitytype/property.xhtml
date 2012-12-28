@@ -45,9 +45,14 @@
                                 value="#{propertyHome.instance.required}" required="false" inlinehelp="#{messages['common.property.required.help']}" execute="@this save" />                                         
                     <glue:input id="secuencia" name="sequence" type="java.lang.Long" label="#{messages['common.property.sequence']}" 
                                 value="#{propertyHome.instance.sequence}" required="false" inlinehelp="#{messages['common.property.sequence.help']}" execute="@this save" />
-
+                    <glue:input id="validator" name="validator" type="text" label="#{messages['common.property.validator']}" 
+                                value="#{propertyHome.instance.validator}" required="false" inlinehelp="#{messages['common.property.validator.help']}" execute="@this save" />
+                    <glue:input id="converter" name="converter" type="text" label="#{messages['common.property.converter']}" 
+                                value="#{propertyHome.instance.converter}" required="false" inlinehelp="#{messages['common.property.converter.help']}" execute="@this save" />
                 </p:panel>
                 <p:panel header="#{messages['common.properties']} para #{messages['panel.Group']}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" >                     
+                    <glue:input id="overwrite" name="overwrite" type="text" label="#{messages['common.property.overwrite']}" 
+                                value="#{propertyHome.instance.overwrite}" required="false" inlinehelp="#{messages['common.property.overwrite.help']}" execute="@this save" />
                     <glue:input id="shwclms" name="showInColumns" type="checkbox" label="#{messages['common.property.showInColumns']}" 
                                 value="#{propertyHome.instance.showInColumns}" required="false" inlinehelp="#{messages['common.property.showInColumns.help']}" execute="@this save" /> 
                     <glue:input id="sdbep" name="showDefaultBEP" type="checkbox" label="#{messages['common.property.showDefaultBussinesEntityProperties']}" 

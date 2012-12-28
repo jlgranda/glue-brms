@@ -25,6 +25,7 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import org.eqaula.glue.util.Interpolator;
+import org.eqaula.glue.util.UI;
 
 /**
  *
@@ -33,6 +34,7 @@ import org.eqaula.glue.util.Interpolator;
 @RequestScoped
 @FacesValidator("ciValidator")
 public class CIValidator implements Validator, Serializable {
+    private static final long serialVersionUID = -7916937959083531222L;
 
     private String message;
 
@@ -48,7 +50,7 @@ public class CIValidator implements Validator, Serializable {
             }
         } else {
             message = Interpolator.interpolate(
-                    "#{messages['common.requiredIdentificationNumber']}",
+                    UI.getMessages("common.requiredIdentificationNumber"),
                     new Object[0]);
             throw new ValidatorException(new FacesMessage(message));
         }
@@ -85,7 +87,7 @@ public class CIValidator implements Validator, Serializable {
 
         if (digit != Double.parseDouble(verif)) {
             message = Interpolator.interpolate(
-                    "#{messages['common.invalidIdentificationNumber']}",
+                    UI.getMessages("common.invalidIdentificationNumber"),
                     new Object[0]);
             throw new ValidatorException(new FacesMessage(message));
         }
@@ -93,7 +95,7 @@ public class CIValidator implements Validator, Serializable {
 
     private void validateNationalIdentityDocument(String nid) {
         message = Interpolator.interpolate(
-                "#{messages['common.lengthIdentificationNumber']}",
+                UI.getMessages("common.lengthIdentificationNumber"),
                 new Object[0]);
         if (nid.length() < 10) {
             throw new ValidatorException(new FacesMessage(message));
@@ -101,7 +103,7 @@ public class CIValidator implements Validator, Serializable {
         String spatron = "[0-9]{10}";// \\d{10}
         if (!Pattern.matches(spatron, nid)) {
             message = Interpolator.interpolate(
-                    "#{messages['common.wrongIdentificationNumber']}",
+                    UI.getMessages("common.wrongIdentificationNumber"),
                     new Object[0]);
             throw new ValidatorException(new FacesMessage(message));
         }
