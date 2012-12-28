@@ -371,6 +371,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         BussinesEntityAttribute attribute = new BussinesEntityAttribute();
         attribute.setName(p.getName());
         attribute.setType(p.getType());
+        //TODO para propiedades de tipo String[], obtener la opcion marcada con * y asignar
         attribute.setValue((Serializable) p.getValue());
         attribute.setProperty(p); //Relaciona los objetos de forma directa
         return attribute;
