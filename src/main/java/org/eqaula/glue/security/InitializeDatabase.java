@@ -278,8 +278,8 @@ public class InitializeDatabase {
             
             //Lista de atributos de Perfiles
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildProperty("mision", "java.lang.MultiLineString", null, true, "Misión", "Ingrese la misión de la Organización", true, 1L));
-            attributes.add(buildProperty("vision", "java.lang.MultiLineString", null, true, "Misión", "Ingrese la vision de la Organización", true, 1L));
+            attributes.add(buildProperty("mision", "java.lang.MultiLineString", null, true, "Misión", "Ingrese la misión de la Organización", true, 0L));
+            attributes.add(buildProperty("vision", "java.lang.MultiLineString", null, true, "Visión", "Ingrese la vision de la Organización", true, 1L));
             
             structure.setProperties(attributes);
             bussinesEntityType.addStructure(structure);

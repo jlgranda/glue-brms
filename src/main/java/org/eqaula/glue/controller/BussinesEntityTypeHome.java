@@ -132,6 +132,7 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     public void init() {
         setEntityManager(em);
         bussinesEntityTypeService.setEntityManager(em);
+        bussinesEntityService.setEntityManager(em);
     }
 
     @Override
@@ -209,24 +210,10 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     }
 
     public boolean isAssociatedToBussinesEntity() {
-        boolean a = false;
-                    
-            log.info("eqaula --> Ingreso a buscar bussinesEntity: "+getInstance());
-            List<BussinesEntity> bussinesEntityList = bussinesEntityService.findBussinesEntityForType(getInstance());            
-            log.info("eqaula --> Lista de bussinesEntity: " + bussinesEntityList.get(0).toString());
-            if (!bussinesEntityList.isEmpty()) {                
-                return (a = true);
-//                for (BussinesEntity b : bussinesEntityList) {
-////                    if(b.getType().getId()==getInstance().getId()){
-////                        a = true;
-////                    }                    
-//                    a = false;
-//                }            
-            }else{
-                return (a = false);                 
-            }
-//        } catch (Exception pe) {
-//            log.info("eqaula --> error buscar bussinesEntity: " + pe.getMessage());
-//        }        
+        log.info("eqaula --> Ingreso a buscar bussinesEntity: " + getInstance());
+        List<BussinesEntity> bussinesEntityList = bussinesEntityService.findBussinesEntityForType(getInstance());
+        log.info("eqaula --> lista de entidades de negocio: " + bussinesEntityList.size());
+        log.info("eqaula --> valor : " + bussinesEntityList.isEmpty());
+        return bussinesEntityList.isEmpty();
     }
 }

@@ -45,8 +45,7 @@ limitations under the License.
                 <h:outputLabel value="#{messages['module.BussinesEntityType.typeName']}" />
                 <div class="input">
                     <p:inputText  value="#{bussinesEntityTypeHome.instance.name}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.typeName']}" 
-                                  rendered="true" disabled="#{bussinesEntityTypeHome.associatedToBussinesEntity}">
-                        <!--<f:validator validatorId="#{not empty bussinesEntityTypeHome.instance.name ?  bussinesEntityTypeHome.instance.name : 'safeTextUTF8Validator'}"/>-->
+                                  rendered="true" disabled="#{!bussinesEntityTypeHome.associatedToBussinesEntity}">
                         <p:ajax event="keyup" rendered="save" update="save" />  
                     </p:inputText>
                 </div>
@@ -56,7 +55,7 @@ limitations under the License.
                                  value="#{messages['common.save']}" styleClass="btn primary" rendered="#{bussinesEntityTypeHome.instance.id == null}"/>
                 #{' '}   
                 <h:commandButton id="save" action="#{bussinesEntityTypeHome.saveBussinesEntityType()}" 
-                                 value="#{messages['common.save']}" styleClass="btn primary" rendered="#{bussinesEntityTypeHome.instance.id != null and !bussinesEntityTypeHome.associatedToBussinesEntity}" 
+                                 value="#{messages['common.save']}" styleClass="btn primary" rendered="#{bussinesEntityTypeHome.instance.id != null and bussinesEntityTypeHome.associatedToBussinesEntity}" 
                                  disabled="false"/>
             </div>
             <c:forEach items="#{bussinesEntityTypeHome.instance.structures}" var="e" id="forEach">

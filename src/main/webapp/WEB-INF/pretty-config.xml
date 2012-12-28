@@ -76,6 +76,15 @@
       <pattern value="/admin/bussinesentitytype/property"></pattern>
       <view-id value="/pages/admin/bussinesentitytype/property.xhtml"></view-id>       
    </url-mapping>
+   <!-- Administracion Management -->
+   <url-mapping id="organization">
+      <pattern value="/admin/management/organization"></pattern>
+      <view-id value="/pages/management/organization/organization.xhtml"></view-id>       
+   </url-mapping>
+   <url-mapping id="organizationList">
+      <pattern value="/admin/management/list"></pattern>
+      <view-id value="/pages/management/organization/list.xhtml"></view-id>       
+   </url-mapping>
    
    <!-- Administracion contabilidad -->
    <url-mapping id="accountingList">
