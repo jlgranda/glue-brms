@@ -20,16 +20,21 @@ import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
+import org.eqaula.glue.model.Structure;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
+import org.jboss.seam.transaction.Transactional;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -123,6 +128,29 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         return Organization.class;
     }
     
-    //crear un metodo para agregar u obtener la estructura de una organiztion
+     @Transactional
+    public String deleteOrganization() {
+        try {
+            if (getInstance() == null) {
+                throw new NullPointerException("Organization is null");
+            } 
+            if (getInstance().isPersistent()) {
+                log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());                
+                delete(getInstance());
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
+                RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
+                
+            } else {
+                //remover de la lista, si aún no esta persistido
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una organización para ser borrada!", ""));
+            }
+
+        } catch (Exception e) {
+            //System.out.println("deleteBussinessEntity ERROR = " + e.getMessage());
+            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
+        }
+        return "/pages/management/organization/list.xhtml?faces-redirect=true";
+    }
         
 }
