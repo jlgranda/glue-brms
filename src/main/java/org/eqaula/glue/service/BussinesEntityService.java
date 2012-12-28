@@ -1,30 +1,21 @@
 package org.eqaula.glue.service;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityAttribute;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.BussinesEntityType_;
 import org.eqaula.glue.model.BussinesEntity_;
-import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.model.GroupType;
 import org.eqaula.glue.model.Property;
 import org.eqaula.glue.util.PersistenceUtil;
@@ -195,7 +186,7 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
         CriteriaQuery<BussinesEntity> query = builder.createQuery(BussinesEntity.class);
         Root<BussinesEntity> bussinesEntity = query.from(BussinesEntity.class);
         query.where(builder.equal(bussinesEntity.get(BussinesEntity_.type), type));
-        log.info("find BussinesEntityType with name " + getResultList(query).toString());
+        log.info("find BussinesEntityType with type " + getResultList(query).toString());
         return getResultList(query);
         
     }
