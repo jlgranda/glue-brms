@@ -165,7 +165,7 @@ public class ProfileListService extends LazyDataModel<Profile> {
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage("BussinesEntity Unselected ", ((Profile) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage("Profile Unselected ", ((Profile) event.getObject()).getName());
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setSelectedProfile(null);
