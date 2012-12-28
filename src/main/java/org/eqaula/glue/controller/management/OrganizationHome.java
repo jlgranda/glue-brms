@@ -26,6 +26,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
+import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
@@ -47,7 +48,6 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     private BussinesEntityService bussinesEntityService;
 
     public OrganizationHome() {
-        log.info("eqaula --> Inicializo OrganizationHome");
     }
 
     public Long getOrganizationId() {
@@ -84,12 +84,15 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     @Override
     protected Organization createInstance() {
         log.info("eqaula --> OrganizationHome create instance");
+        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Organization.class.getName());
         Date now = Calendar.getInstance().getTime();
         Organization organization = new Organization();        
         organization.setCreatedOn(now);
         organization.setLastUpdate(now);
         organization.setActivationTime(now);
-        organization.setExpirationTime(Dates.addDays(now, 364));                 
+        organization.setExpirationTime(Dates.addDays(now, 364)); 
+        organization.setType(_type);
+        organization.buildAttributes(bussinesEntityService);
         return organization;
     }
 

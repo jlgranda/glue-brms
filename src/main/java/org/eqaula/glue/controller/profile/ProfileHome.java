@@ -31,10 +31,8 @@ import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntity;
-import org.eqaula.glue.model.BussinesEntityAttribute;
 import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.profile.ProfileService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.international.status.Messages;
 import org.jboss.seam.security.Authenticator;
@@ -74,10 +72,8 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     private OpenIdAuthenticator oidAuth;
     @Inject
     private IdmAuthenticator idmAuth;
-    //private String username;
     private String password;
     private String passwordConfirm;
-    //private String email;
     private String structureName;
 
     public Long getProfileId() {
@@ -114,8 +110,6 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
 
     @Override
     protected Profile createInstance() {
-
-
         Date now = Calendar.getInstance().getTime();
         Profile profile = new Profile();
         profile.setCreatedOn(now);
