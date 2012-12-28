@@ -604,6 +604,7 @@ form .clearfix:before, form .clearfix:after {
 form .clearfix:after {
     clear: both;
 }
+
 label,
 survey-label,
 input,
@@ -635,6 +636,7 @@ survey-label {
     width: 130px;
     text-align: right;
     color: #404040;
+    float: left;
 }
 
 survey-label .required { font-weight: bold; }
@@ -645,6 +647,18 @@ form .input {
 
 form .survey-input{
     margin-left: 0px;
+}
+
+form .survey-content {
+    padding-top: 6px;
+    float:left;
+    width: 48%;
+}
+
+form .survey-help{
+    padding-top: 6px;
+    float:left;
+    width: 48%;
 }
 
 input[type=checkbox], input[type=radio] {
@@ -2407,6 +2421,28 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
     font-family: inherit;
     font-size: 13px;
     line-height: 18px;
+}
+
+.survey-label-help {
+    /*padding: 1px 3px 2px;*/
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 11px;
+    line-height: 18px;
+    color: #bfbfbf;
+    font-weight: bold;
+}
+
+.survey-help-text{
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+     border-radius: 3px;
+    font-family: inherit;
+    font-size: 11px;
+    line-height: 18px;
+    color: #bfbfbf;
 }
 .survey-label.important {
     background-color: #c43c35;
