@@ -501,9 +501,7 @@ public class InitializeDatabase {
             attributes.add(buildProperty("title", String.class.getName(), "", true, "Titulo", "¿Qué titulación obtuviste?", true, 1L));
             attributes.add(buildProperty("country", String.class.getName(), "", true, "País", "¿En que país obtuvo este título?", true, 2L));
             attributes.add(buildProperty("institution", String.class.getName(), "", true, "Institución", "¿En que centro de estudios?", true, 3L));
-            attributes.add(buildProperty("start", Date.class.getName(), now, true, "Fecha de inicio", "¿Cuándo inicio?", 3L));
-            attributes.add(buildProperty("end", Date.class.getName(), now, false, "Fecha de fin", "¿Cuándo finalizó?", 4L));
-            //attributes.add(buildAttribute("atPresent", Boolean.class.getName(), false, true, "Al presente", ""));
+            attributes.add(buildProperty("graduationDate", Date.class.getName(), now, false, "Fecha de Graduación", "¿Cuándo finalizó sus estudios?", 4L));
             attributes.add(buildProperty("atPresent", "java.lang.String[]", "Sí,No", true, "Al presente", "¿Esta cursando actualmente esta titulación?", 5L));
             attributes.add(buildProperty("level", "java.lang.String[]", "Secundario,Terciario,Universitario,Postgrado,Master,Doctorado,Otro", true, "Nivel de estudio", "Nivel de los estudios cursados", true, 6L));
 
