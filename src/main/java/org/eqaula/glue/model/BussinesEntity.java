@@ -66,11 +66,9 @@ import org.eqaula.glue.util.Dates;
 @Table(name = "BussinesEntity")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "ENTITY_TYPE", discriminatorType = DiscriminatorType.STRING, length = 2)
-@NamedQueries({
-    /*@NamedQuery(name = "BussinesEntity.findBussinesEntityByParentIdAndType",
-    query = "select m FROM Group "
-    + "g JOIN g.members m WHERE g.id=:id and m.type=:type ORDER BY g.name")*/
-})
+@NamedQueries({ /*@NamedQuery(name = "BussinesEntity.findBussinesEntityByParentIdAndType",
+ query = "select m FROM Group "
+ + "g JOIN g.members m WHERE g.id=:id and m.type=:type ORDER BY g.name")*/})
 public class BussinesEntity extends DeletableObject<BussinesEntity> {
 
     private static final long serialVersionUID = -3282665873474370357L;
@@ -91,7 +89,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     //Best practice http://java.dzone.com/articles/deterring-%E2%80%9Ctomany%E2%80%9D?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3a+javalobby/frontpage+%28Javalobby+/+Java+Zone%29
     //Replace ManyToMany fro OneToMany and link entity
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Membership> memberships =  new ArrayList<Membership>();
+    private List<Membership> memberships = new ArrayList<Membership>();
     private BussinesEntityType type;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bussinesEntity", fetch = FetchType.LAZY)
     private List<BussinesEntityAttribute> attributes = new ArrayList<BussinesEntityAttribute>();
@@ -156,7 +154,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
 
     public void add(Group g) {
         Date now = Calendar.getInstance().getTime();
-        Membership membershipt  = new Membership();
+        Membership membershipt = new Membership();
         membershipt.setGroup(g);
         membershipt.setBussinesEntity(this);
         membershipt.setCreatedOn(now);
@@ -371,7 +369,11 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         BussinesEntityAttribute attribute = new BussinesEntityAttribute();
         attribute.setName(p.getName());
         attribute.setType(p.getType());
-        attribute.setValue((Serializable) p.getValue());
+        if ("java.lang.String[]".equals(p.getType())) {
+            attribute.setValue((Serializable) this.valuesSelectItems(String.valueOf(p.getValue())));
+        }else{
+            attribute.setValue((Serializable) p.getValue());
+        }        
         attribute.setProperty(p); //Relaciona los objetos de forma directa
         return attribute;
     }
@@ -394,5 +396,28 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
 
         log.info("eqaula --> attributes (" + temp.size() + ")");
         return temp;
+    }
+
+    public Object valuesSelectItems(String values) {
+        Object obj = null;
+        if (values != null) {
+            List<String> lista = new ArrayList<String>();
+            String r = "";
+            for (int i = 0; i < values.length(); i++) {
+                if (values.charAt(i) == ',') {
+                    lista.add(r);
+                    r = "";
+                } else {
+                    r += values.charAt(i);
+                }
+            }
+            lista.add(r);             
+            for (String s : lista) {
+                if (s.charAt(s.length() - 1) == '*') {
+                    obj = s.substring(0, s.length() - 1);
+                }
+            }               
+        }
+        return obj;
     }
 }
