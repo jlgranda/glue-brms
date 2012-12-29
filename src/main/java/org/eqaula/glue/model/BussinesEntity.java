@@ -51,6 +51,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -91,6 +92,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     //Replace ManyToMany fro OneToMany and link entity
     @OneToMany(cascade = CascadeType.ALL)
     private List<Membership> memberships = new ArrayList<Membership>();
+    @ManyToOne
     private BussinesEntityType type;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bussinesEntity", fetch = FetchType.LAZY)
     private List<BussinesEntityAttribute> attributes = new ArrayList<BussinesEntityAttribute>();
