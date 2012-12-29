@@ -64,10 +64,9 @@ public class UI {
     @Inject
     @Web
     private EntityManager em;
-    
     @Inject
     protected BussinesEntityService bussinesEntityService;
-    
+
     @PostConstruct
     public void init() {
         bussinesEntityService.setEntityManager(em);
@@ -77,11 +76,11 @@ public class UI {
         if (entity == null) {
             return new ArrayList<Property>();
         }
-        
-         if (entity.getType() == null) {
+
+        if (entity.getType() == null) {
             return new ArrayList<Property>();
         }
-        
+
         Query q = em.createNamedQuery("Property.findByBussinesEntityTypeName");
         q.setParameter("bussinesEntityTypeName", entity.getType().getName());
         Collections.sort(q.getResultList());
@@ -98,42 +97,42 @@ public class UI {
         return q.getResultList();
 
     }
-    
+
     public List<GroupHome.ColumnModel> findColumnsTemplate(Group g) {
         List<GroupHome.ColumnModel> columns = new ArrayList<GroupHome.ColumnModel>();
         BussinesEntity template = makeBussinessEntity(g);
         //List<ColumnModel> _columns = new ArrayList<ColumnModel>();
-        for (BussinesEntityAttribute a : template.getAttributes()){
-            if (a.getProperty().isShowInColumns()){
+        for (BussinesEntityAttribute a : template.getAttributes()) {
+            if (a.getProperty().isShowInColumns()) {
                 columns.add(new GroupHome.ColumnModel(a.getProperty().getLabel(), a.getProperty().getName()));
             }
         }
-        if (columns.isEmpty() || g.getProperty().isShowDefaultBussinesEntityProperties()){
+        if (columns.isEmpty() || g.getProperty().isShowDefaultBussinesEntityProperties()) {
             //TODO aplicar internacionalización
             columns.add(new GroupHome.ColumnModel("name", "name"));
             columns.add(new GroupHome.ColumnModel("code", "code"));
         }
-        
+
         return columns;
     }
 
-    public BussinesEntity makeBussinessEntity(Group g){
+    public BussinesEntity makeBussinessEntity(Group g) {
         Date now = Calendar.getInstance().getTime();
-            //TODO internacionalizar cadenas estáticas
-            String name = "New instance";
-            BussinesEntity entity = new BussinesEntity();
-            entity.setName(name);
-            //TODO implementar generador de códigos para entidad de negocio
-            entity.setCode("NewCode");
-            entity.setCreatedOn(now);
-            entity.setLastUpdate(now);
-            entity.setActivationTime(now);
-            entity.setExpirationTime(Dates.addDays(now, 364));
-            entity.setAuthor(null); //Establecer al usuario actual
-            entity.buildAttributes(g.getName(), bussinesEntityService); //Construir atributos de grupos
-            return entity;
+        //TODO internacionalizar cadenas estáticas
+        String name = "New instance";
+        BussinesEntity entity = new BussinesEntity();
+        entity.setName(name);
+        //TODO implementar generador de códigos para entidad de negocio
+        entity.setCode("NewCode");
+        entity.setCreatedOn(now);
+        entity.setLastUpdate(now);
+        entity.setActivationTime(now);
+        entity.setExpirationTime(Dates.addDays(now, 364));
+        entity.setAuthor(null); //Establecer al usuario actual
+        entity.buildAttributes(g.getName(), bussinesEntityService); //Construir atributos de grupos
+        return entity;
     }
-    
+
     public Group getGroup(BussinesEntity entity, Property p) {
         Query q = em.createNamedQuery("Group.findByBussinesEntityIdAndPropertyId");
         q.setParameter("bussinesEntityId", entity.getId());
@@ -165,7 +164,7 @@ public class UI {
         item = new SelectItem(null, getMessages("common.choice"));
         items.add(item);
         for (Object o : values) {
-            item = new SelectItem(o, o.toString());
+            item = new SelectItem(cleanValue(o), cleanValue(o).toString());
             items.add(item);
         }
 
@@ -178,5 +177,23 @@ public class UI {
         ResourceBundle myResources = ResourceBundle.getBundle("org.eqaula.messages", myLocale);
 
         return myResources.containsKey(key) ? myResources.getString(key) : key;
+    }
+
+    private Object cleanValue(Object value) {
+        
+        if (value == null) {
+            return null;
+        }
+        if (!(value instanceof String)){
+            return value;
+        }
+        
+        String cleaned = value.toString();
+
+        if (cleaned.contains("*")) {
+            cleaned = cleaned.substring(0, cleaned.length() - 1);
+        }
+
+        return cleaned;
     }
 }

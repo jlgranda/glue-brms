@@ -208,6 +208,22 @@ public class Lists {
         }
         return Arrays.asList(s.split(","));
     }
+    
+    public static String findDefaultValue(String values) {
+        return findDefaultValue(values, "*");
+    }
+    
+    public static String findDefaultValue(String values, String mnemotecnico) {
+        List<String> options = Lists.stringToList(values);
+        String defaultValue = null;
+        for (String s : options) {
+            if (s.contains(mnemotecnico)) {
+                defaultValue = s.substring(0, s.length() - 1);
+            }
+        }
+        return defaultValue;
+    }
+    
     final static String FILE_NAME = "C:\\Temp\\input.txt";
     final static String OUTPUT_FILE_NAME = "C:\\Temp\\output.txt";
     final static Charset ENCODING = StandardCharsets.UTF_8;

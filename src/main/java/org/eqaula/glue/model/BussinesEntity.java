@@ -57,6 +57,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
+import org.eqaula.glue.util.Lists;
 
 /**
  *
@@ -250,7 +251,6 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         List<BussinesEntityAttribute> _buffer = new ArrayList<BussinesEntityAttribute>();
         for (BussinesEntityAttribute a : getAttributes()) {
             for (String sn : structureNames) {
-                log.info("eqaula --> looking for " + sn + " = " + a.getProperty().getStructure().getBussinesEntityType().getName());
                 if (sn.equalsIgnoreCase(a.getProperty().getStructure().getBussinesEntityType().getName())) {
                     _buffer.add(a);
                 }
@@ -298,7 +298,6 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     // Attributes management and build
     //-------------------------------------------------------------------------
     public void buildAttributes(BussinesEntityService bes) {
-        log.info("eqaula --> build attributes for type " + this.getType());
         if (getType() == null) {
             return;
         }
@@ -316,7 +315,6 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     }
 
     public void buildAttributes(String name, BussinesEntityService bes) {
-        log.info("eqaula --> build attributes for " + name);
         BussinesEntityType _type = bes.findBussinesEntityTypeByName(name);
         if (_type == null) {
             return;
@@ -342,7 +340,6 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         for (Structure s : _type.getStructures()) {
             for (Property attr : s.getProperties()) {
                 this.addBussinesEntityAttribute(buildAtribute(attr));
-                log.info("eqaula --> add attribute " + attr.getName() + " for " + a.getName());
             }
         }
     }
@@ -370,10 +367,10 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         attribute.setName(p.getName());
         attribute.setType(p.getType());
         if ("java.lang.String[]".equals(p.getType())) {
-            attribute.setValue((Serializable) this.valuesSelectItems(String.valueOf(p.getValue())));
-        }else{
+            attribute.setValue((Serializable) Lists.findDefaultValue(p.getValue().toString()));
+        } else {
             attribute.setValue((Serializable) p.getValue());
-        }        
+        }
         attribute.setProperty(p); //Relaciona los objetos de forma directa
         return attribute;
     }
@@ -386,38 +383,10 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
      * lists
      */
     public List<BussinesEntityAttribute> findBussinesEntityAttribute(final String names) {
-
-        log.info("eqaula --> findBussinesEntityAttribute  " + names + " into " + this);
         if (names == null) {
             return new ArrayList<BussinesEntityAttribute>();
         }
-
         List<BussinesEntityAttribute> temp = getBussinessEntityAttributes(names.split(","));
-
-        log.info("eqaula --> attributes (" + temp.size() + ")");
         return temp;
-    }
-
-    public Object valuesSelectItems(String values) {
-        Object obj = null;
-        if (values != null) {
-            List<String> lista = new ArrayList<String>();
-            String r = "";
-            for (int i = 0; i < values.length(); i++) {
-                if (values.charAt(i) == ',') {
-                    lista.add(r);
-                    r = "";
-                } else {
-                    r += values.charAt(i);
-                }
-            }
-            lista.add(r);             
-            for (String s : lista) {
-                if (s.charAt(s.length() - 1) == '*') {
-                    obj = s.substring(0, s.length() - 1);
-                }
-            }               
-        }
-        return obj;
     }
 }
