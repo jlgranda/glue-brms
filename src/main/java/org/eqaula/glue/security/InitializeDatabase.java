@@ -363,7 +363,7 @@ public class InitializeDatabase {
              * AFROECUATORIANO/AFRODESCENDIENTE - BLANCO - INDIGENA - MESTIZO - MONTUBIO - MULATO - NEGRO - OTRA	
              * EN CASO DE SELECCIONAR INDIGENA:   ACHUAR - ANDOA - AWA - CHACHI - COFAN - EPERA - KICHWA - SECOYA - SHIWIAR - SHUAR - SIONA - TSACHILA - WAORANI - ZAPARA
              */
-            attributes.add(buildProperty("Personal", "maritalstatus", "java.lang.String[]", "Casado,Soltero,Divorciado,Unión libre", false, "Estado civil", "Indique su estado civil", false, 1L));
+            attributes.add(buildProperty("Personal", "maritalstatus", "java.lang.String[]", "Casado,Soltero*,Divorciado,Unión libre", false, "Estado civil", "Indique su estado civil", false, 1L));
             attributes.add(buildProperty("Personal", "birthday", Date.class.getName(), ago.getTime(), false, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños", false, 2L));
             attributes.add(buildProperty("Personal", "gender", "java.lang.String[]", "Másculino,Femenino", false, "Género", "", false, 3L));
             attributes.add(buildProperty("Personal", "birthplace", String.class.getName(), "Loja", false, "Lugar de nacimiento", "Dónde nacio?", false, 4L));
@@ -413,7 +413,7 @@ public class InitializeDatabase {
             List<Property> attributes = new ArrayList<Property>();
 
             //attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), true, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
-            attributes.add(buildProperty("tipoRelacion", "java.lang.String[]", "Casado,Unión libre", true, "Tipo de Relacion", "Indique que relacion tiene", false, 1L));
+            attributes.add(buildProperty("tipoRelacion", "java.lang.String[]", "Casado*,Unión libre", true, "Tipo de Relacion", "Indique que relacion tiene", false, 1L));
             attributes.add(buildProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos", true, 2L));
             attributes.add(buildProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre", true, 3L));
             attributes.add(buildProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Digite su número de cédula o pasaporte sin guiones", true, 4L));
