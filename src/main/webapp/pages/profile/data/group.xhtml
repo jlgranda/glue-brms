@@ -10,7 +10,8 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:glue="http://eqaula.org/jsf/facelets"
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
-      xmlns:pe="http://primefaces.org/ui/extensions">
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:o="http://omnifaces.org/ui">
     <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
             <f:viewParam name="id" value="#{profileHome.profileId}" />
@@ -59,30 +60,30 @@
             <h:form id="form-table">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <h:panelGroup layout="block" class="clearfix">
-                        <p:commandButton value="#{messages['common.add']} #{groupHome.instance.property.label}" ajax="true"
+                    <p:commandButton value="#{messages['common.add']} #{groupHome.instance.property.label}" ajax="true"
                                      action="#{groupHome.addBussinesEntity(groupHome.instance)}" process="@this, :edit-dialog"
                                      icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"/>  
-                    
-                        <p:panel id="dataTable">
-                            <p:dataTable id="members" var="m" value="#{groupHome.instance.findOtherMembers(groupHome.profile)}" 
-                                         editable="false" 
-                                         emptyMessage="#{messages['common.emptyList']}"
-                                         rowKey="#{groupHome.instance.id}"
-                                         selection="#{groupHome.bussinesEntity}" 
-                                         selectionMode="single" >  
 
-                                <p:ajax event="rowSelect" listener="#{groupHome.onRowSelect}"   
-                                        update=":edit-dialog :form-table:messages" oncomplete="editDlg.show()" />  
-                                <p:ajax event="rowUnselect" listener="#{groupHome.onRowUnselect}" update=":form-table:messages"/>  
-                                <p:columns value="#{groupHome.columns}" var="column" columnIndexVar="colIndex"   
-                                           sortBy="#{m[column.property]}">  
-                                    <f:facet name="header">  
-                                        #{column.header}  
-                                    </f:facet>  
-                                    #{m.findAttributeValue(column.property)}  
-                                </p:columns> 
-                            </p:dataTable>
-                        </p:panel>
+                    <p:panel id="dataTable">
+                        <p:dataTable id="members" var="m" value="#{groupHome.instance.findOtherMembers(groupHome.profile)}" 
+                                     editable="false" 
+                                     emptyMessage="#{messages['common.emptyList']}"
+                                     rowKey="#{groupHome.instance.id}"
+                                     selection="#{groupHome.bussinesEntity}" 
+                                     selectionMode="single" >  
+
+                            <p:ajax event="rowSelect" listener="#{groupHome.onRowSelect}"   
+                                    update=":edit-dialog :form-table:messages" oncomplete="editDlg.show()" />  
+                            <p:ajax event="rowUnselect" listener="#{groupHome.onRowUnselect}" update=":form-table:messages"/>  
+                            <p:columns value="#{groupHome.columns}" var="column" columnIndexVar="colIndex"   
+                                       sortBy="#{m[column.property]}">  
+                                <f:facet name="header">  
+                                    #{column.header}  
+                                </f:facet>  
+                                #{m.findAttributeValue(column.property)}  
+                            </p:columns> 
+                        </p:dataTable>
+                    </p:panel>
                 </h:panelGroup>
                 <div class="actions">
                     <p:commandButton id="save" action="#{groupHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary" rendered="true"/>
@@ -107,7 +108,7 @@
                                     <p:inputText name="name" value="#{groupHome.bussinesEntity.name}" styleClass="xLarge span4" required="true" label="#{messages['common.name']}" 
                                                  rendered="true">
                                         <f:validator validatorId="safeTextUTF8Validator"/>
-                                        <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                        <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                     </p:inputText>
                                     <h:graphicImage value="#{resource['success.gif']}" rendered="#{groupHome.bussinesEntity.name != null}"
                                                     styleClass="validation-status" />
@@ -120,8 +121,8 @@
                                     <p:inputText  name="code" value="#{groupHome.bussinesEntity.code}" styleClass="xLarge span4" required="false" label="#{messages['common.name']}" 
                                                   rendered="true">
                                         <f:validator validatorId="safeTextUTF8Validator"/>                                        
-                                        
-                                        <p:ajax event="change" update="@parent" partialSubmit="true"/>
+
+                                        <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                     </p:inputText>
                                     <h:graphicImage value="#{resource['success.gif']}" rendered="#{groupHome.bussinesEntity.code != null}"
                                                     styleClass="validation-status" />
@@ -132,12 +133,13 @@
                         <h:panelGroup layout="block" class="clearfix">
                             <ui:repeat value="#{groupHome.bussinesEntity.findBussinesEntityAttribute(groupHome.instance.name)}" var="a" varStatus="status">
                                 <h:panelGroup layout="block" class="clearfix">
-                                    <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
+                                    <label class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
                                     <div class="input">
                                         <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" 
                                                       rendered="#{a.property.type eq 'java.lang.String'}">
-                                            <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
-                                            <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                            <o:validator validatorId="#{a.property.validator}" disabled="#{empty a.property.validator}"/>
+                                            <o:validator validatorId="safeTextUTF8Validator" disabled="#{not empty a.property.validator}"/>
+                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                         </p:inputText>
                                         <p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
                                                     rendered="#{a.property.type eq 'java.util.Date'}">
@@ -166,20 +168,20 @@
                                         -->
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{a.value != null}"
                                                         styleClass="validation-status" />
-                                        <span class="help-inline"><br/>#{a.property.helpInline} <ocp:message forId="#{a.name}" /></span>
+                                        <span class="help-inline"><br/>#{a.property.helpInline}</span>
                                     </div>
                                 </h:panelGroup>  
                             </ui:repeat>
                         </h:panelGroup>
                         <p:commandButton value="#{messages['common.save']}" 
-                                         action="#{groupHome.saveBussinesEntity()}" 
+                                         actionListener="#{groupHome.saveBussinesEntity()}" 
                                          update=":form-table:dataTable messages-dialog :edit-dialog"
                                          ajax="true" process="@this"
                                          style="margin-top:10px;" icon="ui-icon-disk">  
                         </p:commandButton>  
 
                         <p:commandButton type="button" value="#{messages['common.delete']}" style="margin-top:10px;" rendered="#{groupHome.bussinesEntity.persistent}" onclick="deletedDlg.show();"/>  
-                        <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" rendered="#{not groupHome.bussinesEntity.persistent}" onclick="editDlg.hide();" action="#{groupHome.deleteBussinessEntity()}"/>  
+                        <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" rendered="#{not groupHome.bussinesEntity.persistent}" onclick="editDlg.hide();" actionListener="#{groupHome.deleteBussinessEntity()}"/>  
                     </h:form>
                 </p:dialog>
                 <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
@@ -200,5 +202,15 @@
             </h:panelGroup>
 
         </ui:define>
+        <script type="text/javascript">  
+            function handleSaveRequest(xhr, status, args) {  
+                if(args.validationFailed || !args.loggedIn) {  
+                    jQuery('#edit-dialog').effect("shake", { times:3 }, 100);  
+                } else {  
+                    editDlg.hide();  
+                    //jQuery('#loginLink').fadeOut();  
+                }  
+            }  
+        </script> 
     </ui:composition>
 </html>

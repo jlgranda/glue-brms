@@ -415,7 +415,7 @@ public class InitializeDatabase {
             attributes.add(buildProperty("tipoRelacion", "java.lang.String[]", "Casado,Unión libre", true, "Tipo de Relacion", "Indique que relacion tiene", false, 1L));
             attributes.add(buildProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos", true, 2L));
             attributes.add(buildProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre", true, 3L));
-            attributes.add(buildProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Digite su número de cédula o pasaporte sin guiones", true, 4L));
+            attributes.add(buildProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Digite su número de cédula o pasaporte sin guiones", true, "ciValidator", 4L));
             attributes.add(buildProperty("empresaTrabajo", String.class.getName(), null, false, "Empresa en la que Trabaja", "Indique la empresa que trabaja", false, 5L));
             attributes.add(buildProperty("funcionCargo", String.class.getName(), null, false, "Actividad / Función o Cargo", "Que cargo o funcion tiene", false, 6L));
 
@@ -457,7 +457,7 @@ public class InitializeDatabase {
 
             attributes.add(buildProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos", true, 1L));
             attributes.add(buildProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre", true, 2L));
-            attributes.add(buildProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones", true, 3L));
+            attributes.add(buildProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones", true, "ciValidator", 3L));
             attributes.add(buildProperty("birthday", Date.class.getName(), ago.getTime(), false, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños", 4L));
             attributes.add(buildProperty("tipoInstruccion", "java.lang.String[]", "Pre-Basica,Basica,Bachillerato,Egresado,Superior,4 Nivel,Ninguno", false, "Tipo de Instrucción", "Indique el tipo de instrucción", 5L));
 
@@ -784,21 +784,6 @@ public class InitializeDatabase {
         return property;
     }
 
-    private Property buildProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, String render, String customForm, boolean showInColumns, Long sequence) {
-        Property property = new Property();
-        property.setName(name);
-        property.setType(type);
-        property.setValue(value);
-        property.setRequired(required);
-        property.setLabel(label);
-        property.setHelpInline(helpinline);
-        property.setRender(render);
-        property.setCustomForm(customForm);
-        property.setShowInColumns(showInColumns);
-        property.setSequence(sequence);
-        return property;
-    }
-
     private Property buildProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, boolean showInColumns, Long sequence) {
         Property property = new Property();
         property.setName(name);
@@ -810,6 +795,22 @@ public class InitializeDatabase {
         property.setRender(null);
         property.setCustomForm(null);
         property.setShowInColumns(showInColumns);
+        property.setSequence(sequence);
+        return property;
+    }
+    
+    private Property buildProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, boolean showInColumns, String validator, Long sequence) {
+        Property property = new Property();
+        property.setName(name);
+        property.setType(type);
+        property.setValue(value);
+        property.setRequired(required);
+        property.setLabel(label);
+        property.setHelpInline(helpinline);
+        property.setRender(null);
+        property.setCustomForm(null);
+        property.setShowInColumns(showInColumns);
+        property.setValidator(validator);
         property.setSequence(sequence);
         return property;
     }

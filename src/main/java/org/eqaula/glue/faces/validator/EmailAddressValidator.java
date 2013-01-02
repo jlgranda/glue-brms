@@ -41,7 +41,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-
 import org.eqaula.glue.util.StringValidations;
 
 @RequestScoped

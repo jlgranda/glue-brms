@@ -161,7 +161,7 @@ public class UI {
     public List<SelectItem> getValuesAsSelectItem(List<Object> values) {
         List<SelectItem> items = new ArrayList<SelectItem>();
         SelectItem item = null;
-        item = new SelectItem(null, getMessages("common.choice"));
+        item = new SelectItem(null, UI.getMessages("common.choice"));
         items.add(item);
         for (Object o : values) {
             item = new SelectItem(cleanValue(o), cleanValue(o).toString());

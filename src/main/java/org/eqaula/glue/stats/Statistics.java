@@ -147,9 +147,9 @@ public class Statistics {
         entities.setLabel("Entidades");
         entities.set("Perfiles", bes.countBussinesEntity(Profile.class));
         entities.set("Organizaciones", bes.countBussinesEntity(Organization.class));
-        entities.set("Tipos de entidades de negocio", bes.countBussinesEntity(BussinesEntityType.class));
-        entities.set("Estructuras de datos", bes.countBussinesEntity(Structure.class));
-        entities.set("Propiedades", bes.countBussinesEntity(Property.class));
+        //entities.set("Tipos de entidades de negocio", bes.countBussinesEntity(BussinesEntityType.class));
+        //entities.set("Estructuras de datos", bes.countBussinesEntity(Structure.class));
+        //entities.set("Propiedades", bes.countBussinesEntity(Property.class));
         /*entities.set("2006", 44);
         entities.set("2007", 150);
         entities.set("2008", 25);*/

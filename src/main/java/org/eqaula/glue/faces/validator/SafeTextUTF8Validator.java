@@ -42,6 +42,7 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import org.eqaula.glue.util.StringValidations;
+import org.eqaula.glue.util.UI;
 
 
 
@@ -56,7 +57,7 @@ public class SafeTextUTF8Validator implements Validator
       String field = value.toString();
       if (!StringValidations.isPunctuatedTextUTF8(field))
       {
-         FacesMessage msg = new FacesMessage("Este texto no anda bien, evite usar caracteres extraños...");
+         FacesMessage msg = new FacesMessage(UI.getMessages("validation.badUTF8Input"), UI.getMessages("validation.badUTF8Input.detail"));
          throw new ValidatorException(msg);
       }
    }

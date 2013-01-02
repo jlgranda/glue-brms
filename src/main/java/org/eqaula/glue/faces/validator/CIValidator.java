@@ -15,7 +15,6 @@
  */
 package org.eqaula.glue.faces.validator;
 
-import java.io.Serializable;
 import java.util.regex.Pattern;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -31,16 +30,14 @@ import org.eqaula.glue.util.UI;
  *
  * @author cesar
  */
-@RequestScoped
 @FacesValidator("ciValidator")
-public class CIValidator implements Validator, Serializable {
-    private static final long serialVersionUID = -7916937959083531222L;
+@RequestScoped
+public class CIValidator implements Validator {
 
     private String message;
 
     @Override
-    public void validate(FacesContext context, UIComponent component,
-            Object value) throws ValidatorException {
+    public void validate(final FacesContext context, final UIComponent component, final Object value) throws ValidatorException {
         if (value != null) {
             String nid = value.toString().trim();
             if (nid.length() <= 10) {
@@ -50,7 +47,7 @@ public class CIValidator implements Validator, Serializable {
             }
         } else {
             message = Interpolator.interpolate(
-                    UI.getMessages("common.requiredIdentificationNumber"),
+                    UI.getMessages("validation.requiredIdentificationNumber"),
                     new Object[0]);
             throw new ValidatorException(new FacesMessage(message));
         }
@@ -87,15 +84,16 @@ public class CIValidator implements Validator, Serializable {
 
         if (digit != Double.parseDouble(verif)) {
             message = Interpolator.interpolate(
-                    UI.getMessages("common.invalidIdentificationNumber"),
+                    UI.getMessages("validation.invalidIdentificationNumber"),
                     new Object[0]);
             throw new ValidatorException(new FacesMessage(message));
         }
     }
 
     private void validateNationalIdentityDocument(String nid) {
+        System.out.println("eqaula --> validateNationalIdentityDocument" + nid);
         message = Interpolator.interpolate(
-                UI.getMessages("common.lengthIdentificationNumber"),
+                UI.getMessages("validation.lengthIdentificationNumber"),
                 new Object[0]);
         if (nid.length() < 10) {
             throw new ValidatorException(new FacesMessage(message));
@@ -103,7 +101,7 @@ public class CIValidator implements Validator, Serializable {
         String spatron = "[0-9]{10}";// \\d{10}
         if (!Pattern.matches(spatron, nid)) {
             message = Interpolator.interpolate(
-                    UI.getMessages("common.wrongIdentificationNumber"),
+                    UI.getMessages("validation.wrongIdentificationNumber"),
                     new Object[0]);
             throw new ValidatorException(new FacesMessage(message));
         }
@@ -125,14 +123,14 @@ public class CIValidator implements Validator, Serializable {
         int digit_verify = residue == 0 ? residue : module - residue;
         if (digit_verify != Integer.parseInt(verif)) {
             message = Interpolator.interpolate(
-                    "#{messages['common.invalidIdentificationNumber']}",
+                     UI.getMessages("validation.invalidIdentificationNumber"),
                     new Object[0]);
             throw new ValidatorException(new FacesMessage(message));
         }
         String _main = nid.substring(10, nid.length());
         if (!_main.matches("[0-9]{2}[0-9&&[^0]]")) {
             message = Interpolator.interpolate(
-                    "#{messages['common.invalidIdentificationNumberFinished']}",
+                    UI.getMessages("validation.invalidIdentificationNumberFinished"),
                     new Object[0]);
             throw new ValidatorException(new FacesMessage(message));
         }
@@ -154,14 +152,14 @@ public class CIValidator implements Validator, Serializable {
         int digit_verify = residue == 0 ? residue : module - residue;
         if (digit_verify != Integer.parseInt(verif)) {
             message = Interpolator.interpolate(
-                    "#{messages['common.invalidIdentificationNumber']}",
+                    UI.getMessages("validation.invalidIdentificationNumber"),
                     new Object[0]);
             throw new ValidatorException(new FacesMessage(message));
         }
         String _main = nid.substring(9, nid.length());
         if (!_main.matches("[0-9]{3}[0-9&&[^0]]")) {
             message = Interpolator.interpolate(
-                    "#{messages['common.invalidIdentificationNumberFinished']}",
+                    UI.getMessages("validation.invalidIdentificationNumberFinished"),
                     new Object[0]);
             throw new ValidatorException(new FacesMessage(message));
         }
@@ -169,7 +167,7 @@ public class CIValidator implements Validator, Serializable {
 
     private void validateTaxpayerDocument(String nid) {
         message = Interpolator.interpolate(
-                "#{messages['common.lengthIdentificationNumberLegalEntity']}",
+                UI.getMessages("validation.lengthIdentificationNumberLegalEntity"),
                 new Object[0]);
         if (nid.length() < 13) {
             throw new ValidatorException(new FacesMessage(message));
@@ -177,7 +175,7 @@ public class CIValidator implements Validator, Serializable {
         String spatron = "[0-9]{13}";// \\d{10}
         if (!Pattern.matches(spatron, nid)) {
             message = Interpolator.interpolate(
-                    "#{messages['common.wrongIdentificationNumberLegalEntity']}",
+                    UI.getMessages("validation.wrongIdentificationNumberLegalEntity"),
                     new Object[0]);
             throw new ValidatorException(new FacesMessage(message));
         }
@@ -195,7 +193,7 @@ public class CIValidator implements Validator, Serializable {
             String _main = nid.substring(10, nid.length());
             if (!_main.matches("[0-9]{2}[0-9&&[^0]]")) {
                 message = Interpolator.interpolate(
-                        "#{messages['common.invalidIdentificationNumberFinished']}",
+                        UI.getMessages("validation.invalidIdentificationNumberFinished"),
                         new Object[0]);
                 throw new ValidatorException(new FacesMessage(message));
             }
@@ -205,14 +203,14 @@ public class CIValidator implements Validator, Serializable {
             this.verifyTaxPayerPrivate(nid);
         } else {
             message = Interpolator.interpolate(
-                    "#{messages['common.wrongTypeIdentificationNumberLegalEntity']}",
+                    UI.getMessages("validation.wrongTypeIdentificationNumberLegalEntity"),
                     new Object[0]);
             throw new ValidatorException(new FacesMessage(message));
         }
         String _main = nid.substring(9, nid.length());
         if (!_main.matches("[0-9]{3}[1-9]")) {
             message = Interpolator.interpolate(
-                    "#{messages['common.invalidIdentificationNumberFinished']}",
+                    UI.getMessages("validation.invalidIdentificationNumberFinished"),
                     new Object[0]);
             throw new ValidatorException(new FacesMessage(message));
         }
