@@ -45,6 +45,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.eqaula.glue.util.UI;
 
 import org.jboss.seam.international.status.Messages;
 import org.jboss.seam.security.Authenticator.AuthenticationStatus;
@@ -139,11 +140,14 @@ public class Authentication
                      "Login failed due to exception" + identity.getAuthenticatorName() + ", "
                               + identity.getAuthenticatorClass()
                               + ", " + identity); // TODO , exception );
-            messages.warn("Whoops! Something went wrong with your login. Care to try again? We'll try to figure out what went wrong.");
+            //messages.warn("Whoops! Something went wrong with your login. Care to try again? We'll try to figure out what went wrong.");
+            messages.warn(UI.getMessages("common.login.fail"));
+            
          }
          else
          {
-            messages.warn("Whoops! We don't recognize that username or password. Care to try again?");
+            //messages.warn("Whoops! We don't recognize that username or password. Care to try again?");
+             messages.warn(UI.getMessages("common.login.bad.usernamepassword"));
          }
          Thread.sleep(500);
 
