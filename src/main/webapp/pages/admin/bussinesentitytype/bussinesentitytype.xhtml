@@ -29,40 +29,72 @@ limitations under the License.
         <f:viewParam name="bussinesEntityTypeId" value="#{bussinesEntityTypeHome.bussinesEntityTypeId}" />             
         <s:viewAction action="#{bussinesEntityTypeHome.load}" if="#{conversation.transient}"/>                          
     </f:metadata>
-    <ui:define name="header-replace">
+    <ui:define name="header-replace">                    
         <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
             <div class="container">
                 <div class="row fl" style="margin-top: 5px;">
-                    <h1>#{bussinesEntityTypeHome.bussinesEntityTypeId != null? messages['common.edit'] : messages['common.add']} 
-                        #{messages['module.BussinesEntityType']} #{bussinesEntityTypeHome.instance.name}</h1>   
-                </div>
+                    <div class="span7 columns">   
+                        <div class="row fl" style="margin-top: 5px;">
+                            <h1>#{bussinesEntityTypeHome.bussinesEntityTypeId != null? messages['common.edit'] : messages['common.add']} 
+                                #{messages['module.BussinesEntityType']} #{bussinesEntityTypeHome.instance.name}</h1>   
+                        </div>                        
+                    </div>
+                    <div class="span4 columns offset3">
+                        <h:form id="control">  
+                            <!--TODO realizar accion para que los botones de add y edit se abran el panel de dialogo-->
+                            <p:commandButton value="#{messages['common.add']}" ajax="true"
+                                             process="@this, :edit-dialog" action=":edit-dialog"
+                                             icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"
+                                             rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId == null}"
+                                             />
+                            <p:commandButton value="#{messages['common.edit']}" ajax="true"
+                                             process="@this, :edit-dialog" action=":edit-dialog"
+                                             icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"
+                                             rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId != null and bussinesEntityTypeHome.associatedToBussinesEntity}"
+                                             />
+                        </h:form>
+                    </div>
+                </div>     
             </div>
-        </div>             
+        </div>
+        <h:panelGroup layout="block" class="clearfix">
+            <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.edit']} #{bussinesEntityTypeHome.instance.name}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="550">
+                <h:form id="form-dialog">                    
+                    <h:panelGroup layout="block" class="clearfix" rendered="true">
+                        <h:outputLabel value="#{messages['module.BussinesEntityType.typeName']}" />
+                        <div class="input">
+                            <p:inputText  value="#{bussinesEntityTypeHome.instance.name}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.typeName']}" 
+                                          rendered="true" disabled="#{!bussinesEntityTypeHome.associatedToBussinesEntity}">
+                                <p:ajax event="keyup" rendered="save" update="save" />  
+                            </p:inputText>
+                        </div>
+                    </h:panelGroup>
+                    <!--<h:commandButton id="save_new" action="#{bussinesEntityTypeHome.saveNewBussinesEntityType()}" 
+                                     value="#{messages['common.save']}" styleClass="btn primary" rendered="#{bussinesEntityTypeHome.instance.id == null}"/>
+                    #{' '}   
+                    <h:commandButton id="save" action="#{bussinesEntityTypeHome.saveBussinesEntityType()}" 
+                                     value="#{messages['common.save']}" styleClass="btn primary" rendered="#{bussinesEntityTypeHome.instance.id != null and bussinesEntityTypeHome.associatedToBussinesEntity}" 
+                                     disabled="false"/>-->
+                    <p:commandButton value="#{messages['common.save']}" rendered="true"
+                                     action="#{bussinesEntityTypeHome.saveNewBussinesEntityType()}" 
+                                     update=" :edit-dialog"
+                                     ajax="true" process="@this" styleClass="btn primary"
+                                     style="margin-top:10px;" icon="ui-icon-disk">  
+                    </p:commandButton>
+                    <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" 
+                                     rendered="true" onclick="editDlg.hide();"                                      
+                                     styleClass="btn"/>  
+                </h:form>
+            </p:dialog>             
+        </h:panelGroup>
     </ui:define>
-    <ui:define name="content">      
-        <h:form id="form">
-            <h:panelGroup layout="block" class="clearfix" rendered="true">
-                <h:outputLabel value="#{messages['module.BussinesEntityType.typeName']}" />
-                <div class="input">
-                    <p:inputText  value="#{bussinesEntityTypeHome.instance.name}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.typeName']}" 
-                                  rendered="true" disabled="#{!bussinesEntityTypeHome.associatedToBussinesEntity}">
-                        <p:ajax event="keyup" rendered="save" update="save" />  
-                    </p:inputText>
-                </div>
-            </h:panelGroup>
-            <div class="actions">
-                <h:commandButton id="save_new" action="#{bussinesEntityTypeHome.saveNewBussinesEntityType()}" 
-                                 value="#{messages['common.save']}" styleClass="btn primary" rendered="#{bussinesEntityTypeHome.instance.id == null}"/>
-                #{' '}   
-                <h:commandButton id="save" action="#{bussinesEntityTypeHome.saveBussinesEntityType()}" 
-                                 value="#{messages['common.save']}" styleClass="btn primary" rendered="#{bussinesEntityTypeHome.instance.id != null and bussinesEntityTypeHome.associatedToBussinesEntity}" 
-                                 disabled="false"/>
-            </div>
+    <ui:define name="content">   
+        <h:form id="form">                       
             <c:forEach items="#{bussinesEntityTypeHome.instance.structures}" var="e" id="forEach">
-                <p:panel id="panel" header="#{messages['common.properties:']} #{instance.name}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{e.name}" rendered="#{bussinesEntityTypeHome.instance.id != null}">
-                    <f:facet name="header">
+                <p:panel id="panel" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{e.name}" rendered="#{bussinesEntityTypeHome.instance.id != null}">
+                    <!--<f:facet name="header">
                         <strong>#{e.name}</strong>#{' '}                            
-                    </f:facet>
+                    </f:facet>-->
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
                     <div class="admin-actions">
                         <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="property" styleClass="btn primary">

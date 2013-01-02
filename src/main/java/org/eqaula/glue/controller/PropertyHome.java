@@ -165,18 +165,11 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             this.getInstance().setValue(converterToType(propertyStringValue));
             save(getInstance());
         } else {
-            try {
-                log.info("eqaula --> saving new:" + getInstance().getName());
-                log.info("eqaula --> id for " + getStructureId());
+            try {                
                 Structure s = bussinesEntityTypeService.getStructure(getStructureId()); //Retornar la estrucura.
                 s.addProperty(this.getInstance());
-                //save(s);
-                log.info("eqaula --> Estructure name" + s.getName());
-//                getInstance().setStructure(s);                
-//                save(getInstance());
-
             } catch (Exception ex) {
-                log.info("eqaula --> error saving new" + getInstance().getName());
+                //log.info("eqaula --> error saving new" + getInstance().getName());
             }
         }
         return "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();
@@ -189,20 +182,11 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
                 throw new NullPointerException("property is null");
             }
 
-            if (getInstance().isPersistent()) {
-                log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());
-                //Remover de la lista de miembros en memoria
-                Structure s = bussinesEntityTypeService.getStructure(getStructureId());
-                log.info("eqaula--> Resultado consulta: " + s.getProperties().size());
-                boolean mensaje = s.removeProperty(getInstance());
-                //this.getInstance().setStructure(null);                 
-                log.info("eqaula--> Se elimino la propiedad :"+ mensaje);
-                log.info("eqaula--> Resultado consulta: " + s.getProperties().size());
-                delete(getInstance());
-                //s.setProperties(s.getProperties());                 
-                save(s);                
-                
-                //save(getInstance());
+            if (getInstance().isPersistent()) {                
+                Structure s = bussinesEntityTypeService.getStructure(getStructureId());                
+                boolean mensaje = s.removeProperty(getInstance());                
+                delete(getInstance());                    
+                save(s);                                
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
                 //RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
                 
@@ -211,8 +195,7 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Debe agregar una propiedad para ser borrada", ""));
             }
 
-        } catch (Exception e) {
-            //System.out.println("deleteBussinessEntity ERROR = " + e.getMessage());
+        } catch (Exception e) {            
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
@@ -249,7 +232,7 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
                 try {
                     fecha = sdf.parse(value);
                 } catch (ParseException pe) {
-                    log.info("eqaula --> error converter date:"+pe.getMessage());
+                    //log.info("eqaula --> error converter date:"+pe.getMessage());
                 }
                 o = fecha;
             } else if ("java.lang.Double".equals(getInstance().getType())) {
@@ -258,7 +241,7 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
                 o = value;
             }
         } catch (Exception e) {
-            log.info("eqaula --> error converter: " + value);
+            //log.info("eqaula --> error converter: " + value);
         }
         return (Serializable) o;
     }      
