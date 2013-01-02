@@ -137,8 +137,7 @@
                                     <div class="input">
                                         <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" 
                                                       rendered="#{a.property.type eq 'java.lang.String'}">
-                                            <o:validator validatorId="#{a.property.validator}" disabled="#{empty a.property.validator}"/>
-                                            <o:validator validatorId="safeTextUTF8Validator" disabled="#{not empty a.property.validator}"/>
+                                            <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                         </p:inputText>
                                         <p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
