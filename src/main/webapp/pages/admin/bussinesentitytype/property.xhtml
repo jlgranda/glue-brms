@@ -8,7 +8,8 @@
       xmlns:s="http://jboss.org/seam/faces"
       xmlns:p="http://primefaces.org/ui"
       xmlns:glue="http://eqaula.org/jsf/facelets"       
-      xmlns:c="http://java.sun.com/jsp/jstl/core">     
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:ocp="http://ocpsoft.com/prettyfaces">     
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>                                 
             <f:viewParam name="propertyId" value="#{propertyHome.propertyId}" />
@@ -39,7 +40,8 @@
                                 value="#{propertyHome.propertyStringValue}" required="false" inlinehelp="#{messages['common.property.value.help']}" execute="@this save" />
                     <glue:input id="label" name="label" type="text" label="#{messages['common.property.label']}" 
                                 value="#{propertyHome.instance.label}" required="true" inlinehelp="#{messages['common.property.label.help']}" execute="@this save" />
-                    <glue:input id="hpline" name="helpInline" type="text" label="#{messages['common.property.helpinline']}" 
+                    
+                   <glue:input id="hpline" name="helpInline" type="textarea" label="#{messages['common.property.helpinline']}" 
                                 value="#{propertyHome.instance.helpInline}" required="false" inlinehelp="#{messages['common.property.helpInline.help']}" execute="@this save" />
                     <glue:input id="rqd" name="requerid" type="checkbox" label="#{messages['common.property.required']}" 
                                 value="#{propertyHome.instance.required}" required="false" inlinehelp="#{messages['common.property.required.help']}" execute="@this save" />                                         
@@ -82,7 +84,7 @@
                         <f:param name="bussinesEntityTypeId" value ="#{propertyHome.bussinesEntityTypeId}"></f:param>                        
                     </h:link>
                 </div>
-               <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
+                <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
                     <h:form id="form-dialog-confirm-delete">
                         <h:panelGroup layout="block" style="padding:5px;">  
                             <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
