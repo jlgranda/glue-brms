@@ -43,8 +43,8 @@ limitations under the License.
                     <div class="span4 columns offset3">
                         <h:form id="control">  
                             <!--TODO realizar accion para que los botones de add y edit se abran el panel de dialogo-->                            
-                            <p:commandButton value="#{messages['common.edit']}" ajax="true"
-                                             process="@this, :edit-dialog" action=":edit-dialog"
+                            <p:commandButton value="#{messages['common.edit']}" ajax="true" type="button"
+                                             process="@this, :edit-dialog" onclick="editDlg.show();"
                                              icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"
                                              rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId != null and bussinesEntityTypeHome.associatedToBussinesEntity}"
                                              />
@@ -52,7 +52,9 @@ limitations under the License.
                     </div>
                 </div>     
             </div>
-        </div>
+        </div>         
+    </ui:define>
+    <ui:define name="content">          
         <h:panelGroup layout="block" class="clearfix">
             <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.edit']} #{bussinesEntityTypeHome.instance.name}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="550">
                 <h:form id="form-dialog">                    
@@ -65,29 +67,25 @@ limitations under the License.
                             </p:inputText>
                         </div>
                     </h:panelGroup>
-                    <!--<h:commandButton id="save_new" action="#{bussinesEntityTypeHome.saveNewBussinesEntityType()}" 
-                                     value="#{messages['common.save']}" styleClass="btn primary" rendered="#{bussinesEntityTypeHome.instance.id == null}"/>
-                    #{' '}   
-                    <h:commandButton id="save" action="#{bussinesEntityTypeHome.saveBussinesEntityType()}" 
-                                     value="#{messages['common.save']}" styleClass="btn primary" rendered="#{bussinesEntityTypeHome.instance.id != null and bussinesEntityTypeHome.associatedToBussinesEntity}" 
-                                     disabled="false"/>-->
-                    <p:commandButton value="#{messages['common.save']}" rendered="true"
-                                     action="#{bussinesEntityTypeHome.saveNewBussinesEntityType()}" 
-                                     update=" :edit-dialog"
-                                     ajax="true" process="@this" styleClass="btn primary"
-                                     style="margin-top:10px;" icon="ui-icon-disk">  
-                    </p:commandButton>
-                    <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" 
-                                     rendered="true" onclick="editDlg.hide();"                                      
-                                     styleClass="btn"/>  
+                    <div class="actions">
+                        <p:commandButton id="save" value="#{messages['common.save']}" rendered="true"
+                                         action="#{bussinesEntityTypeHome.saveBussinesEntityType()}" 
+                                         update=":edit-dialog :form"
+                                         ajax="true" process="@this" styleClass="btn primary"
+                                         style="margin-top:10px;" icon="ui-icon-disk">  
+                        </p:commandButton>
+                        #{' '}   
+                        <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" 
+                                         rendered="true" onclick="editDlg.hide();"                                      
+                                         styleClass="btn"/>  
+                    </div> 
                 </h:form>
-            </p:dialog>             
+            </p:dialog> 
         </h:panelGroup>
-    </ui:define>
-    <ui:define name="content">           
-        <h:form id="form">      
+        <h:form id="form">
             <h:panelGroup layout="block" class="clearfix" rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId == null}">
                                             <!--<h:outputLabel value="#{messages['module.BussinesEntityType.typeName']}" />-->
+                <h:outputLabel value="#{messages['module.BussinesEntityType.typeName']}" />
                 <div class="input">
                     <p:inputText  value="#{bussinesEntityTypeHome.instance.name}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.typeName']}" 
                                   rendered="true" >
@@ -99,8 +97,8 @@ limitations under the License.
                                      action="#{bussinesEntityTypeHome.saveNewBussinesEntityType()}"                                  
                                      styleClass="btn primary" icon="ui-icon-disk"/> 
                     #{' '}                                  
-                    <h:commandButton action="/pages/admin/bussinesentitytype/list.xhtml?faces-redirect=true"                                                                                                                                                        
-                                     value="#{messages['common.cancel']}" styleClass="btn" immediate="true"
+                    <h:commandButton id="cancel" action="/pages/admin/bussinesentitytype/list.xhtml?faces-redirect=true"                                                                                                                                                        
+                                     value="#{messages['common.cancel']}" styleClass="btn" immediate="true" onclick="editDlg.hide();"
                                      rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId == null}"/>
                 </div>
             </h:panelGroup>
@@ -126,8 +124,8 @@ limitations under the License.
                         </h:link>                        
 
                         #{' '}
-                        <h:commandButton action="/pages/admin/bussinesentitytype/list.xhtml?faces-redirect=true"                                                                                                                                                        
-                                         value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/>                         
+                        <h:link outcome="/pages/admin/bussinesentitytype/list.xhtml?faces-redirect=true"                                                                                                                                                        
+                                value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/>                         
                     </div>                     
                     <p:dataTable var="property" value="#{e.properties}" style="width:100%"
                                  editable="false" 
@@ -164,4 +162,14 @@ limitations under the License.
             </c:forEach>
         </h:form>
     </ui:define>
+    <script type="text/javascript">  
+        function handleSaveRequest(xhr, status, args) {  
+            if(args.validationFailed || !args.loggedIn) {  
+                jQuery('#edit-dialog').effect("shake", { times:3 }, 100);  
+            } else {  
+                editDlg.hide();  
+                //jQuery('#loginLink').fadeOut();  
+            }  
+        }  
+    </script>
 </ui:composition>

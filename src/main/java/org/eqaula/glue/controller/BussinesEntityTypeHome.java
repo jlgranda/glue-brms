@@ -155,7 +155,7 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
                 log.info("eqaula --> error saving new" + getInstance().getName());
             }
         }
-        return "/pages/admin/bussinesentitytype/list";
+        return "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();
     }
 
     @TransactionAttribute
