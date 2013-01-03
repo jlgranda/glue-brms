@@ -117,4 +117,7 @@ public class BussinesEntityType implements Serializable {
         this.structures.add(structure);
     }
     
+    public boolean isPersistent() {
+        return getId() != null;
+    }
 }
