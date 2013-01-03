@@ -47,7 +47,7 @@ limitations under the License.
                                              process="@this, :edit-dialog" onclick="editDlg.show();"
                                              icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"
                                              rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId != null and bussinesEntityTypeHome.associatedToBussinesEntity}" />
-                            #{' '}                     
+                            <br/>  
                             <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();"  immediate="true"
                                              update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId != null and bussinesEntityTypeHome.associatedToBussinesEntity}"/>
                         </h:form>
@@ -76,7 +76,7 @@ limitations under the License.
                                          ajax="true" process="@this" styleClass="btn primary"
                                          style="margin-top:10px;" icon="ui-icon-disk">  
                         </p:commandButton>
-                        <br/>   
+                         #{' '}                     
                         <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" 
                                          rendered="true" onclick="editDlg.hide();"                                      
                                          styleClass="btn"/>  
