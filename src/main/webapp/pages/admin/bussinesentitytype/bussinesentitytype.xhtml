@@ -37,16 +37,12 @@ limitations under the License.
                         <div class="row fl" style="margin-top: 5px;">
                             <h1>#{bussinesEntityTypeHome.bussinesEntityTypeId != null? messages['common.edit'] : messages['common.add']} 
                                 #{messages['module.BussinesEntityType']} #{bussinesEntityTypeHome.instance.name}</h1>   
+
                         </div>                        
                     </div>
                     <div class="span4 columns offset3">
                         <h:form id="control">  
-                            <!--TODO realizar accion para que los botones de add y edit se abran el panel de dialogo-->
-                            <p:commandButton value="#{messages['common.add']}" ajax="true"
-                                             process="@this, :edit-dialog" action=":edit-dialog"
-                                             icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"
-                                             rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId == null}"
-                                             />
+                            <!--TODO realizar accion para que los botones de add y edit se abran el panel de dialogo-->                            
                             <p:commandButton value="#{messages['common.edit']}" ajax="true"
                                              process="@this, :edit-dialog" action=":edit-dialog"
                                              icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"
@@ -88,8 +84,26 @@ limitations under the License.
             </p:dialog>             
         </h:panelGroup>
     </ui:define>
-    <ui:define name="content">   
-        <h:form id="form">                       
+    <ui:define name="content">           
+        <h:form id="form">      
+            <h:panelGroup layout="block" class="clearfix" rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId == null}">
+                                            <!--<h:outputLabel value="#{messages['module.BussinesEntityType.typeName']}" />-->
+                <div class="input">
+                    <p:inputText  value="#{bussinesEntityTypeHome.instance.name}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.typeName']}" 
+                                  rendered="true" >
+                        <p:ajax event="keyup" rendered="savenew" update="savenew" />  
+                    </p:inputText>
+                </div>                
+                <div class="actions">                                                                                                                                          
+                    <p:commandButton id="savenew" value="#{messages['common.save']}" rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId == null}"
+                                     action="#{bussinesEntityTypeHome.saveNewBussinesEntityType()}"                                  
+                                     styleClass="btn primary" icon="ui-icon-disk"/> 
+                    #{' '}                                  
+                    <h:commandButton action="/pages/admin/bussinesentitytype/list.xhtml?faces-redirect=true"                                                                                                                                                        
+                                     value="#{messages['common.cancel']}" styleClass="btn" immediate="true"
+                                     rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId == null}"/>
+                </div>
+            </h:panelGroup>
             <c:forEach items="#{bussinesEntityTypeHome.instance.structures}" var="e" id="forEach">
                 <p:panel id="panel" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{e.name}" rendered="#{bussinesEntityTypeHome.instance.id != null}">
                     <!--<f:facet name="header">
@@ -109,7 +123,11 @@ limitations under the License.
                             <f:param name="bussinesEntityTypeId" value ="#{bussinesEntityTypeHome.instance.id}"></f:param>
                             <f:param name="structureId" value ="#{e.id}"></f:param>                             
                             <f:param name="backView" value="bussinesentitytype"></f:param>
-                        </h:link>
+                        </h:link>                        
+
+                        #{' '}
+                        <h:commandButton action="/pages/admin/bussinesentitytype/list.xhtml?faces-redirect=true"                                                                                                                                                        
+                                         value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/>                         
                     </div>                     
                     <p:dataTable var="property" value="#{e.properties}" style="width:100%"
                                  editable="false" 
@@ -142,11 +160,7 @@ limitations under the License.
                             <h:outputText value="#{property.sequence}" />
                         </p:column>     
                     </p:dataTable>
-                </p:panel>
-                <div class="actions">                                                                                                                                          
-                    <h:commandButton action="/pages/admin/bussinesentitytype/list.xhtml?faces-redirect=true"                                                                                                                                                        
-                                     value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/>
-                </div>
+                </p:panel>                 
             </c:forEach>
         </h:form>
     </ui:define>
