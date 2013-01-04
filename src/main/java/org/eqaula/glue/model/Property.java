@@ -57,6 +57,7 @@ public class Property implements Comparable<Property>, Serializable {
     private Long sequence;
     private String type;
     private boolean required;
+    @Column(nullable = true, length = 2048)
     private String helpInline;
     @Basic(fetch = FetchType.LAZY)
     private byte[] valueByteArray;
