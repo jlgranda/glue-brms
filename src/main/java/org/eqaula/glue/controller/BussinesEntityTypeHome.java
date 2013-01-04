@@ -143,7 +143,7 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     @TransactionAttribute
     public String saveBussinesEntityType() {
         log.info("eqaula --> saving " + getInstance().getName());
-        if (getInstance().getId() != null) {
+        if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
             try {
@@ -195,6 +195,30 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
+    }
+
+    @Transactional
+    public String deleteBussinesEntityType(){
+        try {
+            if (getInstance() == null) {
+                throw new NullPointerException("property is null");
+            }
+
+            if (getInstance().isPersistent()) {                
+                delete(getInstance());                 
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
+                //RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
+
+            } else {
+                //remover de la lista, si aún no esta persistido
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se puede borrar este tipo de entidad de negocio", ""));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
+        }
+        return "/pages/admin/bussinesentitytype/list";
     }
 
     @TransactionAttribute
