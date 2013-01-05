@@ -4,7 +4,6 @@
  */
 package org.eqaula.glue.faces.converter;
 
-
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -27,14 +26,13 @@ import org.eqaula.glue.model.profile.Profile;
 @RequestScoped
 @FacesConverter("org.eqaula.glue.faces.converter.AccountConverter")
 public class AccountConverter implements Converter, Serializable {
+
     private static final long serialVersionUID = -3057944404700510467L;
-
-   @Inject
-   @Web
-   private EntityManager em;
-
-   @Inject
-   private AccountService as;
+    @Inject
+    @Web
+    private EntityManager em;
+    @Inject
+    private AccountService as;
 
     @PostConstruct
     public void setup() {
@@ -53,7 +51,7 @@ public class AccountConverter implements Converter, Serializable {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
 
-            
+
         if (value != null && !value.isEmpty() && as != null) {
 
 
@@ -71,6 +69,7 @@ public class AccountConverter implements Converter, Serializable {
 
     private Long getKey(String value) {
         //get id value from string
+        System.out.println("eqaula--> Account Converter "+value);
         int start = value.indexOf("id=");
         int end = value.indexOf(",") == -1 ? value.indexOf("]") : value.indexOf(",");
         return Long.valueOf(value.substring(start + 3, end).trim());
@@ -78,6 +77,10 @@ public class AccountConverter implements Converter, Serializable {
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object value) {
-        return value.toString();
+        if (value != null) {
+            return value.toString();
+        } else {
+            return null;
+        }        
     }
 }

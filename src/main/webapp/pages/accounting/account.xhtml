@@ -1,38 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-	template="/WEB-INF/templates/default.xhtml">
-	<ui:define name="content">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:s="http://jboss.org/seam/faces"
+                xmlns:glue="http://eqaula.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/view/templates/glue.xhtml">
+    <f:metadata>
+        <f:viewParam name="accountId" value="#{accountHome.accountId}" />            
+        <s:viewAction action="#{accountHome.load}" if="#{conversation.transient}"/>
+    </f:metadata>
 
-		<f:metadata>
-			<f:viewParam name="id" value="#{accountService.id}" />
-		</f:metadata>
+    <ui:define name="header-replace">
+        <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
+            <div class="container">
+                <div class="row fl" style="margin-top: 5px;">
+                    <h1>#{accountHome.accountId != null? messages['common.edit'] : messages['common.add']} 
+                        #{messages['Account']}</h1>   
+                </div>
+            </div>
+        </div>             
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form" acceptcharset="UTF-8">
+            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+            <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{accountHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+            <glue:input id="code" name="code" type="text" label="#{messages['common.code']}" value="#{accountHome.instance.code}" required="true" inlinehelp="#{messages['common.code.inlinehelp']}" execute="@this save"/> 
+            <!--<glue:input id="accountType_" name="accountType" type="java.lang.String[]" label="#{messages['Account.type']}" value="#{accountHome.instance.type.values()}" required="false" inlinehelp="#{messages['Account.type.help']}" execute="@this save" render="name"/>-->                         
+            <h:panelGroup layout="block" class="clearfix">
+                <label for="accounttype_" class="">#{messages['Account.type']} #{' '}</label>
+                <div class="input">
+                    <p:selectOneMenu id="accounttype_" value="#{accountHome.instance.accountType}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
+                                     rendered="true">  
+                        <f:selectItems value="#{accountHome.acountTypes}" var="accountType1" itemLabel="#{accountType1}" itemValue="#{accountType1}"/>                          
+                        <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                    </p:selectOneMenu>
+                </div>
+            </h:panelGroup>
 
-		<h:form>
-			<h:link value="&#171; Overview" outcome="index" action="#{accountService.end()}"></h:link>
-		</h:form>
-
-		<div style="padding-bottom: 10px;">
-			<h2>#{accountService.instance.name} - #{accountService.instance.type}</h2>
-
-                        <div class="">
-				#{accountService.instance.author.firstname}, #{accountService.instance.author.surname}
-				-
-				<h:outputText value="#{accountService.instance.created}">
-					<f:convertDateTime pattern="dd-MM-yyyy" />
-				</h:outputText>
-
-				<h:form rendered="#{currentUser.id eq accountService.instance.author.id}">
-					<h:link value="Edit" outcome="edit">
-						<f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-					</h:link>
-					&#160;
-					<h:commandLink value="Delete" action="#{accountService.delete}"/>
-				</h:form>
-			</div>
-		</div>
-	</ui:define>
+            <div class="actions">
+                <p:commandButton id="save" action="#{accountHome.saveAccount()}" value="#{messages['common.save']}" styleClass="btn primary"/>
+                #{' '}
+                <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
+                                 update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{accountHome.accountId != null}"/>
+                #{' '}
+                <h:link outcome="/pages/accounting/accountList.xhtml?faces-redirect=true" onclick="editDlg.hide();"
+                        value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
+                </h:link>
+            </div>
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                     action="#{accountHome.deleteAccount()}"                                         
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
+        </h:form>
+    </ui:define>
 </ui:composition>

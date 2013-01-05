@@ -89,9 +89,7 @@
    <!-- Administracion contabilidad -->
    <url-mapping id="accountingList">
       <pattern value="/admin/accounting/list"></pattern>
-      <view-id value="/pages/admin/list.xhtml"></view-id> 
-      <query-param name="result" decode="false">#{bussinesEntityListService.firstResult}</query-param>
-      <query-param name="typeName" decode="false">#{bussinesEntityListService.typeName}</query-param>
+      <view-id value="/pages/accounting/accountList.xhtml"></view-id>       
    </url-mapping>   
    <url-mapping id="accountingEdit">
       <pattern value="/accounting/accountEdit"></pattern>

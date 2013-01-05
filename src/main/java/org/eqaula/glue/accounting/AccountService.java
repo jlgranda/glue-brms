@@ -36,112 +36,100 @@ public class AccountService extends PersistenceUtil<Account> {
     public AccountService() {
         super(Account.class);
     }
-    
-    
-    
+
     @Override
-   public void setEntityManager(EntityManager em)
-   {
-      this.em = em;
-   }
+    public void setEntityManager(EntityManager em) {
+        this.em = em;
+    }
 
-   @TransactionAttribute(TransactionAttributeType.REQUIRED)
-   public void create(final Account account)
-   {
-      super.create(account);
-   }
+    //metodo count
+    public long count() {
+        return count(Account.class);
+    }
 
-   @TransactionAttribute(TransactionAttributeType.REQUIRED)
-   public void save(final Account account)
-   {
-      super.save(account);
-      em.flush();
-   }
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void create(final Account account) {
+        super.create(account);
+    }
 
-   @TransactionAttribute(TransactionAttributeType.REQUIRED)
-   public String getRandomName(String seed)
-   {
-      String name = Strings.canonicalize(seed);
-      while (!isNameAvailable(name))
-      {
-         name += new Random(System.currentTimeMillis()).nextInt() % 100;
-      }
-      return name;
-   }
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void save(final Account account) {
+        super.save(account);
+        em.flush();
+    }
 
-   public long getAccountCount()
-   {
-      return count(Profile.class);
-   }
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public String getRandomName(String seed) {
+        String name = Strings.canonicalize(seed);
+        while (!isNameAvailable(name)) {
+            name += new Random(System.currentTimeMillis()).nextInt() % 100;
+        }
+        return name;
+    }
 
-   public List<Account> getAccounts(final int limit, final int offset)
-   {
-      return findAll(Account.class);
-   }
+    public long getAccountCount() {
+        return count(Profile.class);
+    }
 
-   public Account getAccountByName(final String name) throws NoResultException
-   {
-      TypedQuery<Account> query = em.createQuery("SELECT a FROM Account a WHERE a.name = :name", Account.class);
-      query.setParameter("name", name);
+    public List<Account> getAccounts(final int limit, final int offset) {
+        return findAll(Account.class);
+    }
 
-      Account result = query.getSingleResult();
-      return result;
-   }
+    public Account getAccountByName(final String name) throws NoResultException {
+        TypedQuery<Account> query = em.createQuery("SELECT a FROM Account a WHERE a.name = :name", Account.class);
+        query.setParameter("name", name);
 
-   public Account getAccountByCode(final String code) throws NoResultException
-   {
-      TypedQuery<Account> query = em.createQuery("SELECT a FROM Account a WHERE a.code = :code", Account.class);
-      query.setParameter("code", code);
+        Account result = query.getSingleResult();
+        return result;
+    }
 
-      Account result = query.getSingleResult();
-      return result;
-   }
+    public Account getAccountByCode(final String code) throws NoResultException {
+        TypedQuery<Account> query = em.createQuery("SELECT a FROM Account a WHERE a.code = :code", Account.class);
+        query.setParameter("code", code);
 
-   /*public boolean hasProfileByIdentityKey(final String key) throws NoResultException
-   {
-      try {
-         getProfileByIdentityKey(key);
-         return true;
-      }
-      catch (NoResultException e) {
-         return false;
-      }
-   }
+        Account result = query.getSingleResult();
+        return result;
+    }
 
-   public Profile getProfileByIdentityKey(final String key) throws NoResultException
-   {
-      TypedQuery<Profile> query = em.createQuery(
-               "SELECT p FROM Profile p JOIN p.identityKeys k WHERE k = :identityKey", Profile.class);
-      query.setParameter("identityKey", key);
+    /*public boolean hasProfileByIdentityKey(final String key) throws NoResultException
+     {
+     try {
+     getProfileByIdentityKey(key);
+     return true;
+     }
+     catch (NoResultException e) {
+     return false;
+     }
+     }
 
-      Profile result = query.getSingleResult();
-      return result;
-   }*/
+     public Profile getProfileByIdentityKey(final String key) throws NoResultException
+     {
+     TypedQuery<Profile> query = em.createQuery(
+     "SELECT p FROM Profile p JOIN p.identityKeys k WHERE k = :identityKey", Profile.class);
+     query.setParameter("identityKey", key);
 
-   public Account getAccountById(final Long id)
-   {
-      return (Account) findById(Account.class, id);
-   }
+     Profile result = query.getSingleResult();
+     return result;
+     }*/
+    public Account getAccountById(final Long id) {
+        return (Account) findById(Account.class, id);
+    }
 
-   public boolean isNameAvailable(String name)
-   {
-      try {
-         getAccountByName(name);
-         return false;
-      }
-      catch (NoResultException e) {
-         return true;
-      }
-   }
+    public boolean isNameAvailable(String name) {
+        try {
+            getAccountByName(name);
+            return false;
+        } catch (NoResultException e) {
+            return true;
+        }
+    }
 
-   public boolean isCodeAvailable(String code)
-   {
-      try {
-         getAccountByCode(code);
-         return false;
-      }
-      catch (NoResultException e) {
-         return true;
-      }
-   }
+    public boolean isCodeAvailable(String code) {
+        try {
+            getAccountByCode(code);
+            return false;
+        } catch (NoResultException e) {
+            return true;
+        }
+    }
 }
