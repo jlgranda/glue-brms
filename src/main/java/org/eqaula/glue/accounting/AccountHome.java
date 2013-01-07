@@ -221,7 +221,7 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
         if (parentId != null ) {
             Account parent = accountService.getAccountById(parentId);
             parent.addSubAccount(getInstance());
-            this.getInstance().setParent(parent);
+            //this.getInstance().setParent(parent);
         } else {
             this.getInstance().setParent(null);
         }

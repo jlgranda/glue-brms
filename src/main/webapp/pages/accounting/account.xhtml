@@ -34,7 +34,7 @@
                 <label for="accounttype_" class="">#{messages['Account.type']} #{' '}</label>
                 <div class="input">
                     <p:selectOneMenu id="accounttype_" value="#{accountHome.instance.accountType}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
-                                     rendered="true">  
+                                     rendered="true" label="#{messages['Account.type']}">  
                         <f:selectItems value="#{accountHome.acountTypes}" var="accountType1" itemLabel="#{accountType1}" itemValue="#{accountType1}"/>                          
                         <p:ajax event="change" update="@parent" partialSubmit="true"/>
                     </p:selectOneMenu>

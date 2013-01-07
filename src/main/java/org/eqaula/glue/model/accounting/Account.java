@@ -183,6 +183,7 @@ public class Account extends BussinesEntity {
     }
 
     public void addSubAccount(Account a) {
+        a.setParent(this);
         subAccounts.put(a.getName(), a);
     }
 
