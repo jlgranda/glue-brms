@@ -22,6 +22,10 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import org.eqaula.glue.model.accounting.Account_;
 import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.PersistenceUtil;
@@ -90,7 +94,17 @@ public class AccountService extends PersistenceUtil<Account> {
         Account result = query.getSingleResult();
         return result;
     }
-
+    
+     public List<Account> getSubAccounts(Account parent){
+         System.out.println("Eqaula--> Ingreso a buscar SubAccount");
+        
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Account> query = builder.createQuery(Account.class);
+        Root<Account> account = query.from(Account.class);
+        query.where(builder.equal(account.get(Account_.parent), parent));                 
+        return getResultList(query);
+        
+    }
     /*public boolean hasProfileByIdentityKey(final String key) throws NoResultException
      {
      try {

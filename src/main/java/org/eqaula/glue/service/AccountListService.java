@@ -123,7 +123,7 @@ public class AccountListService extends LazyDataModel<Account> {
      @PostConstruct
     public void init() {
         log.info("Setup entityManager into AccountService...");
-        accountService.setEntityManager(entityManager);
+        accountService.setEntityManager(entityManager);         
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -133,13 +133,12 @@ public class AccountListService extends LazyDataModel<Account> {
 
     public void onRowUnselect(UnselectEvent event) {
         FacesMessage msg = new FacesMessage("Account Unselected ", ((Account) event.getObject()).getName());
-
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setSelectedAccount(null);
     }
     @Override
     public Account getRowData(String rowKey) {
-        return accountService.getAccountByName(rowKey);
+        return accountService.getAccountByName(rowKey);         
     }
 
     @Override
