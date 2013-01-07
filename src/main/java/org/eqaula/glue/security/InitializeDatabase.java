@@ -49,12 +49,14 @@ import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.Property;
 import org.eqaula.glue.model.Structure;
+import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.model.config.Setting;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.model.security.IdentityObjectCredentialType;
 import org.eqaula.glue.model.security.IdentityObjectType;
+import org.eqaula.glue.profile.ProfileService;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.security.management.picketlink.IdentitySessionProducer;
@@ -204,6 +206,7 @@ public class InitializeDatabase {
         validateStructureForTrayectoriaLaboral();
         validateStructureForOrganization();
         validateStructureForOwner();
+        validateDataForAccont();
     }
 
     private void validateStructureForProfile() {
@@ -229,7 +232,7 @@ public class InitializeDatabase {
             structure.setLastUpdate(now);
 
             //Lista de atributos de entidad de negocios
-            List<Property> attributes = new ArrayList<Property>(); 
+            List<Property> attributes = new ArrayList<Property>();
 
             attributes.add(buildStructureTypeProperty("PersonalData", "Datos personales", "Información personal relevante", "/pages/profile/data/personal", 1L));
             attributes.add(buildGroupTypeProperty("Spouse", "Esposa/o", false, null, 1L, 1L, "Datos de su conyugue", 2L));
@@ -274,20 +277,20 @@ public class InitializeDatabase {
             structure.setName("Data for " + Organization.class.getName());
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
-            
+
             //Lista de atributos de Perfiles
             List<Property> attributes = new ArrayList<Property>();
             attributes.add(buildProperty("mision", "java.lang.MultiLineString", null, false, "Misión", "Ingrese la misión de la Organización", true, 0L));
             attributes.add(buildProperty("vision", "java.lang.MultiLineString", null, false, "Visión", "Ingrese la vision de la Organización", true, 1L));
-            
+
             structure.setProperties(attributes);
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
     }
-    
+
     private void validateStructureForOwner() {
         BussinesEntityType bussinesEntityType = null;
         try {
@@ -308,20 +311,70 @@ public class InitializeDatabase {
             structure.setName("Data for " + Owner.class.getName());
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
-            
+
             //Lista de atributos de Perfiles
             List<Property> attributes = new ArrayList<Property>();
-             attributes.add(buildProperty("address", String.class.getName(), null, false, "Dirección", "Calles y número de casa", true, 1L));
+            attributes.add(buildProperty("address", String.class.getName(), null, false, "Dirección", "Calles y número de casa", true, 1L));
             attributes.add(buildProperty("phone", String.class.getName(), null, false, "Teléfono", "Telefóno de contacto", true, 2L));
-            
+
             structure.setProperties(attributes);
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
     }
-    
+
+    private void validateDataForAccont() {
+        BussinesEntityType bussinesEntityType = null;
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", Account.class.getName());
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(Account.class.getName());
+
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = new Structure();
+            structure.setName("Data for " + Account.class.getName());
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+            bussinesEntityType.addStructure(structure);
+
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+
+            //Datos para Inicializar Account 
+            Account parent = new Account();
+            //org.eqaula.glue.security.Account accountSecurity = new org.eqaula.glue.security.Account();            
+            parent.setType(bussinesEntityType);
+            parent.setCode(DATA[0][0]);
+            parent.setName(DATA[0][1]);
+            parent.setAuthor(null);
+            parent.setAccountType(Account.Type.SCHEMA);
+            parent.setLastUpdate(now);
+            parent.setDescription(DATA[0][3]);
+
+            entityManager.persist(parent);
+            for (int i = 1; i < DATA.length; i++) {
+                Account account = new Account();
+                account.setCode(DATA[i][0]);
+                account.setName(DATA[i][1]);
+                account.setDescription(DATA[i][3]);
+                account.setAuthor(null);
+                account.setAccountType(Account.Type.valueOf(DATA[i][2]));
+                account.setLastUpdate(now);
+                account.setParent(parent);
+                entityManager.persist(account);
+            }
+        }
+
+    }
+
     private void validateStructureForPersonalData() {
         BussinesEntityType bussinesEntityType = null;
         String name = "PersonalData";
@@ -587,7 +640,7 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
 
-            attributes.add(buildPropertyAsSurvey("mision", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser la misión de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente",1L));
+            attributes.add(buildPropertyAsSurvey("mision", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser la misión de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 1L));
             attributes.add(buildPropertyAsSurvey("vision", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser la visión de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 2L));
             attributes.add(buildPropertyAsSurvey("objetivos", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser los objetivos estratégicos de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 3L));
             attributes.add(buildPropertyAsSurvey("fortalezas", "java.lang.MultiLineString", null, true, "Identifique fortalezas para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 4L));
@@ -798,7 +851,7 @@ public class InitializeDatabase {
         property.setSequence(sequence);
         return property;
     }
-    
+
     private Property buildProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, boolean showInColumns, String validator, Long sequence) {
         Property property = new Property();
         property.setName(name);
@@ -844,7 +897,20 @@ public class InitializeDatabase {
         property.setCustomForm(null);
         property.setShowInColumns(false);
         property.setSequence(sequence);
-        property.setSurvey(true);         
+        property.setSurvey(true);
         return property;
     }
+    private static final String[][] DATA = {
+        {"0", "PLAN DE CUENTAS SEGUN NIIF COMPLETAS Y NIIF PARA PYMES", "SCHEMA", "Plan de cuentas según NIIF Completas y NIIF para PYMES"},
+        {"1", "ACTIVO", "GENDER", "Conforman el estado de situación financiera, de flujo de efectivo y de evolución patrimonio"},
+        {"10101", "EFECTIVO Y EQUIVALENTES AL EFECTIVO", "ACCOUNT", "Efectivo, comprende la caja y los depósitos bancarios a la vista.<br/>Equivalente al efectivo, son inversiones a corto plazo de gran liquidez (hasta 90 días), que son fácilmente convertibles en valores en efectivo, con riesgo insignificante de cambios en su valor. <br/>NIC 7p6, 7, 8, 9, 48, 49 NIIF para PYMES p7.2"},
+        {"10102", "ACTIVOS FINANCIEROS", "ACCOUNT", "NIC 32 p11 - NIC 39 - NIIF 7 - NIIF 9 <br/>Secciones 11 y 12 NIIF para las PYMES"},
+        {"1010201", "ACTIVOS FINANCIEROS A VALOR RAZONABLE CON CAMBIOS EN RESULTADOS", "ACCOUNT", "Son los activos financieros adquiridos para negociar activamente, con el objetivo de generar ganancia. <br/>Medición Inicial y Posterior:<br/>A valor razonable<br/>La variación se reconoce resultado del ejercicio"},
+        {"2", "PASIVO", "GENDER", "Conforman el estado de situación financiera, de flujo de efectivo y de evolución patrimonio"},
+        {"3", "PATRIMONIO", "GENDER", "Conforman el estado de situación financiera, de flujo de efectivo y de evolución patrimonio"},
+        {"4", "CUENTAS DE RESULTADO ACREEDORAS", "GENDER", "Cuentas de gestión de partidas de resultados acreedoras y deudoras, indispensable para la elaboración del balance de perdidas y ganancias"},
+        {"5", "CUENTAS DE RESULTADO DEUDORAS", "GENDER", "Cuentas de gestión de partidas de resultados acreedoras y deudoras, indispensable para la elaboración del balance de perdidas y ganancias"},
+        {"6", "CUENTAS CONTINGENTES", "GENDER", "Agrupan las obligaciones eventuales"},
+        {"7", "CUENTAS DE ORDEN", "GENDER", "Cuentas de orden y de control, indispensables para la buena administración"}
+    };
 }

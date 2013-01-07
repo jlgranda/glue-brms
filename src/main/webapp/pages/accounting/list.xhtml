@@ -48,8 +48,7 @@
                 <p:ajax event="rowSelect" listener="#{accountListService.onRowSelect}"   
                         update=":form:button-edit :form:messages"/>                 
                 <p:ajax event="rowUnselect" listener="#{accountListService.onRowUnselect}" update=":form:button-edit :form:messages "/>
-               
-                <p:column selectionMode="single"/>
+                               
                 <p:column headerText="#{messages['Account.code']}" sortBy="#{account_.code}">
                     <h:outputText value="#{account_.code}" />
                 </p:column>

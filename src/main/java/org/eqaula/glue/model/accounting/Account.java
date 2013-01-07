@@ -33,6 +33,7 @@
 */
 package org.eqaula.glue.model.accounting;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +64,7 @@ import org.eqaula.glue.model.PersistentObject;
 @Table(name = "Account")
 @DiscriminatorValue(value = "AC")
 @PrimaryKeyJoinColumn(name = "id")
-public class Account extends BussinesEntity {
+public class Account extends BussinesEntity implements Serializable{
 
     /**
      *
@@ -131,7 +132,7 @@ public class Account extends BussinesEntity {
     }
 
     public Account() {
-        this("Test", Account.Type.ASSET);
+        //this("Test", Account.Type.ASSET);
     }
 
     public Account(String name, Account.Type type) {

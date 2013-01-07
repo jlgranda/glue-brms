@@ -87,16 +87,16 @@
    </url-mapping>
    
    <!-- Administracion contabilidad -->
-   <url-mapping id="accountingList">
+   <url-mapping id="list">
       <pattern value="/admin/accounting/list"></pattern>
-      <view-id value="/pages/accounting/accountList.xhtml"></view-id>       
+      <view-id value="/pages/accounting/list.xhtml"></view-id>       
    </url-mapping>   
-   <url-mapping id="accountingEdit">
-      <pattern value="/accounting/accountEdit"></pattern>
-      <view-id value="/pages/accounting/accountEdit.xhtml"></view-id>       
+   <url-mapping id="view">
+      <pattern value="/admin/accounting/view"></pattern>
+      <view-id value="/pages/accounting/view.xhtml"></view-id>       
    </url-mapping>
    <url-mapping id="account">
-      <pattern value="/accounting/account"></pattern>
+      <pattern value="/admin/accounting/account"></pattern>
       <view-id value="/pages/accounting/account.xhtml"></view-id>       
    </url-mapping>
    
