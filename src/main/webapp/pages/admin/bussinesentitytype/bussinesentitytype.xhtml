@@ -35,8 +35,8 @@ limitations under the License.
                 <div class="row fl" style="margin-top: 5px;">
                     <div class="span7 columns">   
                         <div class="row fl" style="margin-top: 5px;">
-                            <h1>#{bussinesEntityTypeHome.bussinesEntityTypeId != null? messages['common.edit'] : messages['common.add']} 
-                                #{messages['module.BussinesEntityType']} #{bussinesEntityTypeHome.instance.name}</h1>   
+                            <h3>#{bussinesEntityTypeHome.bussinesEntityTypeId != null? messages['common.edit'] : messages['common.add']} 
+                                #{messages['module.BussinesEntityType']} #{bussinesEntityTypeHome.instance.name}</h3>   
 
                         </div>                        
                     </div>
@@ -46,10 +46,10 @@ limitations under the License.
                             <p:commandButton value="#{messages['common.edit']}" ajax="true" type="button"
                                              process="@this, :edit-dialog" onclick="editDlg.show();"
                                              icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"
-                                             rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId != null and bussinesEntityTypeHome.associatedToBussinesEntity}" />
+                                             rendered="#{bussinesEntityTypeHome.instance.persistente and bussinesEntityTypeHome.associatedToBussinesEntity}" />
                             <br/>  
                             <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();"  immediate="true"
-                                             update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId != null and bussinesEntityTypeHome.associatedToBussinesEntity}"/>
+                                             update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{bussinesEntityTypeHome.instance.persistente != null and bussinesEntityTypeHome.associatedToBussinesEntity}"/>
                         </h:form>
                     </div>
                 </div>     
@@ -69,7 +69,7 @@ limitations under the License.
                             </p:inputText>
                         </div>
                     </h:panelGroup>
-                    <div class="actions">
+                    <div class="admin-actions">
                         <p:commandButton id="save" value="#{messages['common.save']}" rendered="true"
                                          action="#{bussinesEntityTypeHome.saveBussinesEntityType()}" 
                                          update=":edit-dialog :form"

@@ -53,8 +53,7 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
     @Inject
     private AccountService accountService;
     private Long parentId;
-    
-    private Account accountSelected;
+    private Account accountSelected;    
 
     public Long getAccountId() {
         return (Long) getId();
@@ -71,7 +70,7 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
     public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
-
+      
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -111,26 +110,11 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
         log.info("eqaula --> AccountHome save instance: " + getInstance().getId());
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
-        String salida = null;
-        if (getInstance().isPersistent()) {
-            if (getInstance().getParent() != null && getParentId() != null) {
-                save(getInstance());
-                salida = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId();
-            } else {
-                log.info("eqaula --> AccountHome save new instance: " + getInstance().getId());
-                save(getInstance());
-                salida = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId();
-            }
-        }
-        return salida;
-    }
-
-    @TransactionAttribute
-    public String saveNewAccount() {
-        Date now = Calendar.getInstance().getTime();
-        getInstance().setLastUpdate(now);
         String outcome = null;
-        if (!getInstance().isPersistent()) {
+        if (getInstance().isPersistent()) {
+            save(getInstance());
+            outcome = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getAccountId();
+        }else{
             if (getParentId() == null) { //Cuenta raíz
                 create(getInstance());
                 outcome = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getInstance().getId();
@@ -164,7 +148,7 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        return "/admin/accounting/list";
+        return hasParent() ? "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId() : "/pages/accounting/list.xhtml";
     }
 
     public boolean isWired() {
@@ -191,7 +175,7 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
         this.setBussinesEntity(null);
     }
 
-    public List<Account.Type> getAccountTypes() {        
+    public List<Account.Type> getAccountTypes() {
         wire();
         List<Account.Type> list = Arrays.asList(getInstance().getAccountType().values());
         log.info("eqaula --> AccountHome Account Type: " + list.toString());
@@ -217,5 +201,7 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
     public void setAccountSelected(Account accountSelected) {
         this.accountSelected = accountSelected;
     }
-    
+
+    public String previousView() {        
+        return hasParent() ? "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId() : "/pages/accounting/list.xhtml";            }
 }
