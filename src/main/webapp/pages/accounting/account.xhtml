@@ -11,6 +11,7 @@
                 template="/WEB-INF/view/templates/glue.xhtml">
     <f:metadata>
         <f:viewParam name="accountId" value="#{accountHome.accountId}" />            
+        <f:viewParam name="backView" value="#{accountHome.backView}" />            
         <s:viewAction action="#{accountHome.load}" if="#{conversation.transient}"/>
     </f:metadata>
 
@@ -79,8 +80,8 @@
         </h:panelGroup>
         <h:form id="form" acceptcharset="UTF-8">
             <!--Code for create new Account-->
-            <h:panelGroup layout="block" class="clearfix" rendered="#{!accountHome.instance.persistent}">
-                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+            <h:panelGroup layout="block" class="clearfix" rendered="#{!accountHome.instance.persistent}">                
+                <p:messages id="messages1" showDetail="true" autoUpdate="true" closable="true" /> 
                 <glue:input id="code" name="code" type="text" label="#{messages['common.code']}" value="#{accountHome.instance.code}" required="false" inlinehelp="#{messages['common.code.inlinehelp']}" execute="@this save" render="code"/> 
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{accountHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <h:panelGroup layout="block" class="clearfix">
@@ -108,7 +109,8 @@
             </h:panelGroup>
 
             <!--Panel of SubAccounts-->
-            <p:panel id="panel" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{e.name}" rendered="#{accountHome.instance.persistent or accountHome.hasParent()}">
+            <p:panel id="panel" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{e.name}" rendered="#{accountHome.instance.persistent or accountHome.hasParent()}">                
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
                 <div class="admin-actions">                    
                     <h:link value="#{messages['common.add']} #{messages['Account.subAcount']}" rendered="#{accountHome.managed != null}" outcome="account" styleClass="btn primary">
                         <f:param name="parentId" value="#{accountHome.accountId}" ></f:param>

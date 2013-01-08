@@ -53,7 +53,8 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
     @Inject
     private AccountService accountService;
     private Long parentId;
-    private Account accountSelected;    
+    private Account accountSelected;
+    private String backview;
 
     public Long getAccountId() {
         return (Long) getId();
@@ -70,7 +71,7 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
     public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
-      
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -114,10 +115,10 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
         if (getInstance().isPersistent()) {
             save(getInstance());
             outcome = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getAccountId();
-        }else{
+        } else {
             if (getParentId() == null) { //Cuenta raíz
                 create(getInstance());
-                outcome = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getInstance().getId();
+                outcome = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getAccountId();
             } else {
                 getInstance().setParent(findParent(getParentId()));
                 create(getInstance()); //
@@ -202,6 +203,13 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
         this.accountSelected = accountSelected;
     }
 
-    public String previousView() {        
-        return hasParent() ? "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId() : "/pages/accounting/list.xhtml";            }
+    public String previousView() {
+        if ("account".equals(this.getBackView())) {
+            return "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId();
+
+        } else {
+            return "/pages/accounting/list.xhtml";
+        }
+
+    }
 }
