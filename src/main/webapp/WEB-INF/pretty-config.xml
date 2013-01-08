@@ -97,7 +97,9 @@
    </url-mapping>
    <url-mapping id="account">
       <pattern value="/admin/accounting/account"></pattern>
-      <view-id value="/pages/accounting/account.xhtml"></view-id>       
+      <view-id value="/pages/accounting/account.xhtml"></view-id>
+      <query-param name="accountId" decode="false">#{accountHome.accountId}</query-param>
+      <query-param name="parentId" decode="false">#{accountHome.parentId}</query-param>
    </url-mapping>
    
    <!--

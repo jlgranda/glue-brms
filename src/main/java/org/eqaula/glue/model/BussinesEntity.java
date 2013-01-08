@@ -45,13 +45,9 @@ import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -78,9 +74,9 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     @ManyToOne(optional = true)
     @JoinColumn(name = "author", nullable = true)
     private Profile author;
-    @ManyToOne
+   /* @ManyToOne
     @JoinColumn(name = "parent")
-    public BussinesEntity parent;
+    public BussinesEntity parent;*/
     /*@OneToMany(targetEntity = Group.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
      @JoinTable(name = "bussinesentity_group", joinColumns =
      @JoinColumn(name = "bussinesEntityId", referencedColumnName = "id"),
@@ -100,13 +96,13 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     @JoinColumn(name = "property_id")
     private Property property;
 
-    public BussinesEntity getParent() {
+    /*public BussinesEntity getParent() {
         return parent;
     }
 
     public void setParent(BussinesEntity parent) {
         this.parent = parent;
-    }
+    }*/
 
     public List<Membership> getMemberships() {
         return memberships;

@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -53,7 +52,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import org.eqaula.glue.model.BussinesEntity;
-import org.eqaula.glue.model.PersistentObject;
 
 /**
  *
@@ -111,10 +109,11 @@ public class Account extends BussinesEntity implements Serializable{
         CascadeType.REFRESH})
     protected List<Entry> entries;
     @ManyToOne
-    @JoinColumn(name = "parent", nullable = true)
-    public Account parent;
+    @JoinColumn(name = "parent")
+    public BussinesEntity parent;
+    
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    @MapKey(name = "name")
+    @MapKey(name = "id")
     private Map<String, Account> subAccounts;
 
     static private AccountName toAccountName(String name) {
@@ -167,20 +166,28 @@ public class Account extends BussinesEntity implements Serializable{
         this.accountType = type;
     }
 
-    public Account getParent() {
-        return parent;
-    }
-
-    public void setParent(Account parent) {
-        this.parent = parent;
-    }
-
     public void setEntries(List<Entry> entries) {
         this.entries = entries;
     }
 
     protected void addEntry(Entry e) {
         this.entries.add(e);
+    }
+    
+    public BussinesEntity getParent() {
+        return parent;
+    }
+
+    public void setParent(BussinesEntity parent) {
+        this.parent = parent;
+    }
+
+    public Map<String, Account> getSubAccounts() {
+        return subAccounts;
+    }
+
+    public void setSubAccounts(Map<String, Account> subAccounts) {
+        this.subAccounts = subAccounts;
     }
 
     public void addSubAccount(Account a) {
@@ -190,6 +197,10 @@ public class Account extends BussinesEntity implements Serializable{
 
     public Account getSubAccount(String accountName) {
         return subAccounts.get(accountName);
+    }
+    
+    public List<Account> getSubAccountsAsList() {
+        return new ArrayList<Account>(subAccounts.values());
     }
 
     public BigDecimal getTrialBalance() {
