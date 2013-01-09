@@ -36,7 +36,8 @@ limitations under the License.
                     <div class="span7 columns">   
                         <div class="row fl" style="margin-top: 5px;">
                             <h3>#{bussinesEntityTypeHome.bussinesEntityTypeId != null? messages['common.edit'] : messages['common.add']} 
-                                #{messages['module.BussinesEntityType']} #{bussinesEntityTypeHome.instance.label}</h3>   
+
+                                #{bussinesEntityTypeHome.instance.label==null ? bussinesEntityTypeHome.instance.name : bussinesEntityTypeHome.instance.label}</h3>   
 
                             <p>#{bussinesEntityTypeHome.bussinesEntityTypeId != null ? bussinesEntityTypeHome.instance.description: ' '}</p>
 
@@ -73,7 +74,7 @@ limitations under the License.
                             </p:inputText>
                         </div>
 
-                       
+
 
                         <br/> 
                         <br/> 
@@ -95,7 +96,7 @@ limitations under the License.
                             </p:inputTextarea>
                         </div>
 
-                       
+
 
 
                     </h:panelGroup>
