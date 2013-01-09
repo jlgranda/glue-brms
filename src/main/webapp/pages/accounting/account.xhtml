@@ -22,7 +22,11 @@
                     <div class="span7 columns">   
                         <div class="row fl" style="margin-top: 5px;">
                             <h3>#{accountHome.managed?  messages['common.edit'] : messages['common.add']} 
-                                #{messages['Account']}#{": "} #{accountHome.instance.persistent ? accountHome.instance.name : ""}</h3>   
+                                    #{accountHome.instance.persistent ? accountHome.instance.name : ""}</h3>   
+                            <p><span style=""><b>#{accountHome.instance.accountType}</b></span>
+                                <br/>
+                                #{accountHome.instance.description}
+                            </p>
                         </div>                        
                     </div>
                     <div class="span4 columns offset3">
@@ -63,6 +67,18 @@
                             </div>
                         </h:panelGroup>
                         <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{accountHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" execute="@this save" render="description"/>
+                        <h:panelGroup layout="block" class="clearfix">
+                            <label for="parent_" class="">#{messages['common.change']}</label>
+                            <div class="input">
+                                <p:selectOneMenu id="parent_" value="#{accountHome.instance.parent}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="false" 
+                                                 rendered="true" label="#{messages['Account']}">
+                                    <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                                    <f:selectItems value="#{accountHome.accounts}" var="parentItem" itemLabel="#{parentItem.name}" itemValue="#{parentItem}"/>                          
+                                    <f:converter converterId="org.eqaula.glue.faces.converter.AccountConverter"/>
+                                    <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                                </p:selectOneMenu>                        
+                            </div>
+                        </h:panelGroup>
                     </h:panelGroup>
                     <div class="actions">
                         <p:commandButton id="save" value="#{messages['common.save']}" rendered="true"

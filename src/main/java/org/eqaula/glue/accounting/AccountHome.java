@@ -215,4 +215,8 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
             return "/pages/accounting/list.xhtml";
         }
     }
+    
+    public List<Account> getAccounts(){
+        return accountService.getAccounts();
+    }
 }

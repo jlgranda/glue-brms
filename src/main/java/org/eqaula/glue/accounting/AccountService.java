@@ -105,6 +105,10 @@ public class AccountService extends PersistenceUtil<Account> {
         return getResultList(query);
         
     }
+     
+    public  List<Account> getAccounts(){        
+        return this.findAll(Account.class);
+    }
     /*public boolean hasProfileByIdentityKey(final String key) throws NoResultException
      {
      try {
