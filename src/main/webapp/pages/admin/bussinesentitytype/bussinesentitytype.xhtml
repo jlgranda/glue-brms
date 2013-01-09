@@ -51,10 +51,10 @@ limitations under the License.
                             <p:commandButton value="#{messages['common.edit']}" ajax="true" type="button"
                                              process="@this, :edit-dialog" onclick="editDlg.show();"
                                              icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"
-                                             rendered="#{bussinesEntityTypeHome.instance.persistent and bussinesEntityTypeHome.associatedToBussinesEntity}" />
+                                             rendered="#{bussinesEntityTypeHome.instance.persistent}" />
                             <br/>  
                             <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();"  immediate="true"
-                                             update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{bussinesEntityTypeHome.instance.persistent != null and bussinesEntityTypeHome.associatedToBussinesEntity}"/>
+                                             update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{bussinesEntityTypeHome.instance.persistent and !bussinesEntityTypeHome.associatedToBussinesEntity}"/>
                         </h:form>
                     </div>
                 </div>     

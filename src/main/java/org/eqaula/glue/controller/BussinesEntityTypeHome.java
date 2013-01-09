@@ -237,6 +237,6 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
         if (! isIdDefined()) return false;
         log.info("eqaula --> Ingreso a buscar bussinesEntity: " + getInstance());
         List<BussinesEntity> bussinesEntityList = bussinesEntityService.findBussinesEntityForType(getInstance());
-        return bussinesEntityList.isEmpty();
+        return ! bussinesEntityList.isEmpty();
     }
 }
