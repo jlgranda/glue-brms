@@ -67,7 +67,11 @@ limitations under the License.
 
                 <p:column headerText="#{messages['module.BussinesEntityType.name']}" sortBy="#{bussinesEntityType.name}">
                     <h:outputText value="#{bussinesEntityType.name}"></h:outputText>
-                </p:column> 
+                </p:column>
+                
+                <p:column headerText="#{messages['module.BussinesEntityType.label']}" sortBy="#{bussinesEntityType.name}">
+                    <h:outputText value="#{bussinesEntityType.label}"></h:outputText>
+                </p:column>
 
                 <p:column headerText="#{messages['module.BussinesEntityType.structureAccount']}" sortBy="#{bussinesEntityType.name}">
                     <h:outputText value="#{bussinesEntityType.structures.size()}"></h:outputText>

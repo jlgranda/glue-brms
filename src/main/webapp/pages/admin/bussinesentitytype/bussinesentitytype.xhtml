@@ -36,7 +36,11 @@ limitations under the License.
                     <div class="span7 columns">   
                         <div class="row fl" style="margin-top: 5px;">
                             <h3>#{bussinesEntityTypeHome.bussinesEntityTypeId != null? messages['common.edit'] : messages['common.add']} 
-                                #{messages['module.BussinesEntityType']} #{bussinesEntityTypeHome.instance.name}</h3>   
+                                #{messages['module.BussinesEntityType']} #{bussinesEntityTypeHome.instance.label}</h3>   
+
+                            <p>#{bussinesEntityTypeHome.bussinesEntityTypeId != null ? bussinesEntityTypeHome.instance.description: ' '}</p>
+
+                            <h:outputLabel value=""/>
 
                         </div>                        
                     </div>
@@ -46,10 +50,10 @@ limitations under the License.
                             <p:commandButton value="#{messages['common.edit']}" ajax="true" type="button"
                                              process="@this, :edit-dialog" onclick="editDlg.show();"
                                              icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"
-                                             rendered="#{bussinesEntityTypeHome.instance.persistente and bussinesEntityTypeHome.associatedToBussinesEntity}" />
+                                             rendered="#{bussinesEntityTypeHome.instance.persistent and bussinesEntityTypeHome.associatedToBussinesEntity}" />
                             <br/>  
                             <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();"  immediate="true"
-                                             update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{bussinesEntityTypeHome.instance.persistente != null and bussinesEntityTypeHome.associatedToBussinesEntity}"/>
+                                             update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{bussinesEntityTypeHome.instance.persistent != null and bussinesEntityTypeHome.associatedToBussinesEntity}"/>
                         </h:form>
                     </div>
                 </div>     
@@ -68,6 +72,32 @@ limitations under the License.
                                 <p:ajax event="keyup" rendered="save" update="save" />  
                             </p:inputText>
                         </div>
+
+                       
+
+                        <br/> 
+                        <br/> 
+                        <h:outputLabel value="#{messages['module.BussinesEntityType.label']}" />
+                        <div class="input">
+                            <p:inputText  value="#{bussinesEntityTypeHome.instance.label}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.label']}" 
+                                          rendered="true" disabled="#{!bussinesEntityTypeHome.associatedToBussinesEntity}">
+                                <p:ajax event="keyup" rendered="save" update="save" />  
+                            </p:inputText>
+                        </div>
+
+
+                        <br/> 
+                        <h:outputLabel value="#{messages['module.BussinesEntityType.description']}" />
+                        <div class="input">
+                            <p:inputTextarea  value="#{bussinesEntityTypeHome.instance.description}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.description']}" 
+                                              rendered="true" disabled="#{!bussinesEntityTypeHome.associatedToBussinesEntity}">
+                                <p:ajax event="keyup" rendered="save" update="save" />  
+                            </p:inputTextarea>
+                        </div>
+
+                       
+
+
                     </h:panelGroup>
                     <div class="admin-actions">
                         <p:commandButton id="save" value="#{messages['common.save']}" rendered="true"
@@ -76,7 +106,7 @@ limitations under the License.
                                          ajax="true" process="@this" styleClass="btn primary"
                                          style="margin-top:10px;" icon="ui-icon-disk">  
                         </p:commandButton>
-                         #{' '}                     
+                        #{' '}                     
                         <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" 
                                          rendered="true" onclick="editDlg.hide();"                                      
                                          styleClass="btn"/>  
@@ -93,7 +123,30 @@ limitations under the License.
                                   rendered="true" >
                         <p:ajax event="keyup" rendered="savenew" update="savenew" />  
                     </p:inputText>
-                </div>                
+                </div>
+
+                <br/> 
+                <br/> 
+                <h:outputLabel value="#{messages['module.BussinesEntityType.label']}" />
+                <div class="input">
+                    <p:inputText  value="#{bussinesEntityTypeHome.instance.label}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.label']}" 
+                                  rendered="true" >
+                        <p:ajax event="keyup" rendered="savenew" update="savenew" />  
+                    </p:inputText>
+                </div>
+
+
+                <br/> 
+                <h:outputLabel value="#{messages['module.BussinesEntityType.description']}" />
+                <div class="input">
+                    <p:inputTextarea  value="#{bussinesEntityTypeHome.instance.description}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.description']}" 
+                                      rendered="true" >
+                        <p:ajax event="keyup" rendered="savenew" update="savenew" />  
+                    </p:inputTextarea>
+                </div>
+
+
+
                 <div class="actions">                                                                                                                                          
                     <p:commandButton id="savenew" value="#{messages['common.save']}" rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId == null}"
                                      action="#{bussinesEntityTypeHome.saveNewBussinesEntityType()}"                                  

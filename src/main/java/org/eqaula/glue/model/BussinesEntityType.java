@@ -50,6 +50,8 @@ public class BussinesEntityType implements Serializable {
     private Long id;
     
     private String name;
+    private String label;
+    private String description;
     
     @OneToMany(mappedBy = "bussinesEntityType", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     private List<Structure> structures = new ArrayList<Structure>();
@@ -70,6 +72,24 @@ public class BussinesEntityType implements Serializable {
     public void setName(final String name) {
         this.name = name;
     }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    
 
     public List<Structure> getStructures() {
         return structures;
