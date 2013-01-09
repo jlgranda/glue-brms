@@ -34,7 +34,6 @@
 package org.eqaula.glue.security.authentication;
 
 import java.io.IOException;
-import javax.ejb.LocalBean;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;

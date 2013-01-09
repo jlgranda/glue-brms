@@ -34,18 +34,41 @@
 package org.eqaula.glue.security.authorization;
 
 import org.eqaula.glue.cdi.Current;
+import org.eqaula.glue.model.BussinesEntity;
+import org.eqaula.glue.model.management.Organization;
+import org.eqaula.glue.model.profile.Profile;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.security.annotations.Secures;
 
 
 public class SecurityRules {
-	/*@Secures
+	@Secures
 	@Owner
-	public boolean isProjectOwner(Identity identity, @Current Project project) {
-		if (project == null || identity.getUser() == null) {
+	public boolean isProfileOwner(Identity identity, @Current Profile profile) {
+		if (profile == null || identity.getUser() == null) {
 			return false;
 		} else {
-			return project.getOwner().getIdentityKeys().contains(identity.getUser().getKey());
+			return profile.getAuthor().getIdentityKeys().contains(identity.getUser().getKey());
+		}
+	}
+        
+        /*@Secures
+	@Owner
+	public boolean isOrganizationOwner(Identity identity, @Current Organization organization) {
+		if (organization == null || identity.getUser() == null) {
+			return false;
+		} else {
+			return organization.getAuthor().getIdentityKeys().contains(identity.getUser().getKey());
+		}
+	}
+        
+        @Secures
+	@Owner
+	public boolean isBussinesEntityOwner(Identity identity, @Current BussinesEntity bussinesEntity) {
+		if (bussinesEntity == null || identity.getUser() == null) {
+			return false;
+		} else {
+			return bussinesEntity.getAuthor().getIdentityKeys().contains(identity.getUser().getKey());
 		}
 	}*/
 }
