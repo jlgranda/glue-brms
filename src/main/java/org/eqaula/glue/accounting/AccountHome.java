@@ -31,6 +31,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
+import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.util.Dates;
 import org.primefaces.context.RequestContext;
@@ -118,7 +119,7 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
         } else {
             if (getParentId() == null) { //Cuenta raíz
                 create(getInstance());
-                outcome = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getAccountId();
+                outcome = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + this.getInstance().getId();
             } else {
                 getInstance().setParent(findParent(getParentId()));
                 create(getInstance()); //
@@ -129,15 +130,18 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
     }
 
     public String deleteAccount() {
+        log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());
+        String outcome=null;
         try {
             if (getInstance() == null) {
                 throw new NullPointerException("Account is null");
             }
-            if (getInstance().isPersistent()) {
-                log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());
-                delete(getInstance());
+            if (getInstance().isPersistent()) {                
+                outcome = hasParent() ? "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getInstance().getParent().getId() : "/pages/accounting/list.xhtml";
+                getInstance().setParent(null);
+                delete(getInstance());                 
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
-                RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
+                //RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
 
             } else {
                 //remover de la lista, si aún no esta persistido
@@ -149,7 +153,7 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        return hasParent() ? "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId() : "/pages/accounting/list.xhtml";
+        return outcome;
     }
 
     public boolean isWired() {
@@ -210,6 +214,5 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
         } else {
             return "/pages/accounting/list.xhtml";
         }
-
     }
 }

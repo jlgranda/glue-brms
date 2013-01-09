@@ -194,7 +194,11 @@ public class Account extends BussinesEntity implements Serializable{
         a.setParent(this);
         subAccounts.put(a.getName(), a);
     }
-
+    
+    public void removeSubAccount(Account a){
+        this.subAccounts.remove(a.getName());
+    }
+    
     public Account getSubAccount(String accountName) {
         return subAccounts.get(accountName);
     }
