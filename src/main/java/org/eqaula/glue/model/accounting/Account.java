@@ -226,4 +226,16 @@ public class Account extends BussinesEntity implements Serializable{
         BigDecimal balance = getTrialBalance();
         return balance.floatValue();
     }
+
+    @Override
+    public String toString() {
+        return "org.eqaula.glue.model.Accounting.Account[ "
+                + "id=" + this.getId() + ","
+                + "name=" + this.getName() + ","
+                + "code=" + this.getCode()+ ","
+                + "description=" + this.getDescription()+ ","
+                + "parent=" + parent+ ","
+                + " ]";
+    }
+    
 }
