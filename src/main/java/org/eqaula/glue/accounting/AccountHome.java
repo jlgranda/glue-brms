@@ -16,7 +16,6 @@
 package org.eqaula.glue.accounting;
 
 import java.io.Serializable;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -27,17 +26,13 @@ import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
-import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.Property;
 import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.util.Dates;
-import org.eqaula.glue.util.UI;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -58,6 +53,8 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
     @Inject
     private AccountService accountService;
     private Long parentId;
+    private Account accountSelected;
+    private String backview;
 
     public Long getAccountId() {
         return (Long) getId();
@@ -98,8 +95,6 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
     @Override
     protected Account createInstance() {
         log.info("eqaula --> AccountHome create instance");
-        //BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Account.class.getName());
-        //org.eqaula.glue.security.Account accountSecurity = new org.eqaula.glue.security.Account();
         Date now = Calendar.getInstance().getTime();
         Account account = new Account();
         account.setCreatedOn(now);
@@ -107,8 +102,7 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
         account.setActivationTime(now);
         account.setExpirationTime(Dates.addDays(now, 364));
         //account.setAuthor(accountSecurity.getLoggedIn());
-        assignParent(account);
-        account.buildAttributes(bussinesEntityService);
+        //account.buildAttributes(bussinesEntityService); //Sólo si se definen tipo personalizados para este tipo de objeto
         return account;
     }
 
@@ -117,37 +111,21 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
         log.info("eqaula --> AccountHome save instance: " + getInstance().getId());
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
-        String salida = null;
+        String outcome = null;
         if (getInstance().isPersistent()) {
-            if (getInstance().getParent() != null && parentId != null) {
-                assignParent(getInstance());
-                save(getInstance());
-                salida = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId();
+            save(getInstance());
+            outcome = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getAccountId();
+        } else {
+            if (getParentId() == null) { //Cuenta raíz
+                create(getInstance());
+                outcome = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getAccountId();
             } else {
-                log.info("eqaula --> AccountHome save new instance: " + getInstance().getId());
-                save(getInstance());
-                salida = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId();
+                getInstance().setParent(findParent(getParentId()));
+                create(getInstance()); //
+                outcome = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId();
             }
         }
-        return salida;
-    }
-
-    @TransactionAttribute
-    public String saveNewAccount() {
-        log.info("eqaula --> AccountHome save new instance: " + getInstance().getId());
-        Date now = Calendar.getInstance().getTime();
-        getInstance().setLastUpdate(now);
-        String salida = null;
-        if (!getInstance().isPersistent()) {
-            if (parentId == null) {
-                save(getInstance());
-                salida = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getInstance().getId();
-            } else {
-                save(getInstance());
-                salida = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId();
-            }
-        }
-        return salida;
+        return outcome;
     }
 
     public String deleteAccount() {
@@ -171,27 +149,11 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        return "/admin/accounting/list";
+        return hasParent() ? "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId() : "/pages/accounting/list.xhtml";
     }
 
     public boolean isWired() {
         return true;
-    }
-
-    public List<Account> getSubAccounts() {
-        List<Account> list = new ArrayList<Account>();
-        if (getParentId() != null) {
-            Account p = accountService.getAccountById(parentId);
-            if (p != null) {
-                log.info("eqaula --> buscar subCuentas  Parent, id= " + p.getId());
-                list = accountService.getSubAccounts(p);
-            } else {
-                log.info("eqaula --> buscar subCuentas, id= " + getAccountId());
-            }
-        } else {
-            log.info("eqaula --> buscar subCuentas, id= " + getAccountId());
-        }
-        return list;
     }
 
     public Account getDefinedInstance() {
@@ -214,7 +176,7 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
         this.setBussinesEntity(null);
     }
 
-    public List<Account.Type> getAccountTypes() {        
+    public List<Account.Type> getAccountTypes() {
         wire();
         List<Account.Type> list = Arrays.asList(getInstance().getAccountType().values());
         log.info("eqaula --> AccountHome Account Type: " + list.toString());
@@ -225,15 +187,29 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
         return getInstance().getParent() != null;
     }
 
-    public void assignParent(Account account) {
-        if (parentId != null) {
-            log.info("eqaula --> AccountHome assign Parent: " + getInstance().getId());
-            Account parent = accountService.getAccountById(parentId);
-            //parent.addSubAccount(getInstance());
-            account.setParent(parent);
+    private Account findParent(Long id) {
+        if (id != null) {
+            return accountService.getAccountById(id);
         } else {
-            account.setParent(null);
+            return null;
         }
     }
-    
+
+    public Account getAccountSelected() {
+        return accountSelected;
+    }
+
+    public void setAccountSelected(Account accountSelected) {
+        this.accountSelected = accountSelected;
+    }
+
+    public String previousView() {
+        if ("account".equals(this.getBackView())) {
+            return "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId();
+
+        } else {
+            return "/pages/accounting/list.xhtml";
+        }
+
+    }
 }
