@@ -234,7 +234,7 @@ public class Account extends BussinesEntity implements Serializable{
                 + "name=" + this.getName() + ","
                 + "code=" + this.getCode()+ ","
                 + "description=" + this.getDescription()+ ","
-                + "parent=" + parent+ ","
+                + "parent=" + (getParent() == null ? "null" : getParent()) + ","
                 + " ]";
     }
     

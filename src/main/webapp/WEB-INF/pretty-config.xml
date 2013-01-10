@@ -48,7 +48,7 @@
       <pattern value="/admin"></pattern>
       <view-id value="/pages/admin/home.xhtml"></view-id>
    </url-mapping>
-   <url-mapping id="admin">
+   <url-mapping id="querytool">
       <pattern value="/admin/querytool"></pattern>
       <view-id value="/pages/admin/query.xhtml"></view-id>
    </url-mapping>

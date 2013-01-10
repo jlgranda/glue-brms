@@ -23,7 +23,7 @@
                 <div class="container">
                     <div class="row fl" style="margin-top: 5px;">
                         <div class="span2 columns">
-                            <h:link outcome="/pages/profile/profile" title="${profileHome.instance.fullName}">
+                            <h:link outcome="profile" title="${profileHome.instance.fullName}">
                                 <ocp:gravatar email="${profileHome.instance.email}" size="90" updatable="false" />
                                 <f:param name="profileId" value="#{profileHome.instance.id}"/>
                             </h:link>
@@ -44,7 +44,7 @@
                                                  update=":control :summary">
                                 </p:commandButton>
                                 <br/>
-                                <h:link outcome="/pages/profile/profile" styleClass="btn" value="#{messages['common.edit']} #{messages['profile']}" rendered="#{profileHome.editionEnabled}">
+                                <h:link outcome="profile" styleClass="btn" value="#{messages['common.edit']} #{messages['profile']}" rendered="#{profileHome.editionEnabled}">
                                     <f:param name="profileId" value="#{profileHome.instance.id}"/>
                                 </h:link>
                                 <br/>

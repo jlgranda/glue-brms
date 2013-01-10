@@ -115,6 +115,11 @@ public class AccountListService extends LazyDataModel<Account> {
         /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
          _filters.putAll(filters);*/
 
+        //Order by code
+        if (sortField.isEmpty()){
+            sortField = "account_.code";
+        }
+        
         QueryData<Account> qData = accountService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();

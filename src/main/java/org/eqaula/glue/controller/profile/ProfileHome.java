@@ -22,18 +22,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
+import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.profile.Profile;
+import org.eqaula.glue.profile.ProfileService;
 import org.eqaula.glue.util.Dates;
+import org.eqaula.glue.web.ParamsBean;
 import org.jboss.seam.international.status.Messages;
 import org.jboss.seam.security.Authenticator;
 import org.jboss.seam.security.Credentials;
@@ -75,6 +79,10 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     private String password;
     private String passwordConfirm;
     private String structureName;
+    @Inject
+    private ParamsBean params;
+    @Inject
+    private ProfileService ps;
 
     public Long getProfileId() {
         return (Long) getId();
@@ -121,13 +129,21 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         return profile;
     }
 
+    @Produces
+    @Named("profile")
+    @Current
     @TransactionAttribute
-    public void load() {
-        log.info("eqaula --> Loading instance from ProfileHome for " + getId());
+    public Profile load() {
         if (isIdDefined()) {
             wire();
+        } else {
+            if (identity.isLoggedIn()){
+                setInstance(ps.getProfileByUsername(identity.getUser().getKey()));
+            } else {
+                setInstance(new Profile());
+            }
         }
-        log.info("eqaula --> Loaded instance" + getInstance());
+        return getInstance();
     }
 
     @TransactionAttribute
@@ -147,6 +163,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     public void init() {
         setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
+        ps.setEntityManager(em);
     }
 
     @Override
@@ -211,11 +228,11 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         log.info("eqaula --> saving " + getInstance().getName());
         getInstance().setLastUpdate(now);
         /*for (BussinesEntityAttribute a : getInstance().getAttributes()) {
-            if (a.getProperty().getType().equals("java.lang.String") && a.getValue() == null) {
-                a.setValue(a.getName());
-                a.setStringValue(a.getName());
-            }
-        }*/
+         if (a.getProperty().getType().equals("java.lang.String") && a.getValue() == null) {
+         a.setValue(a.getName());
+         a.setStringValue(a.getName());
+         }
+         }*/
         save(getInstance());
         //return "/pages/home?faces-redirect=true";
         return "/pages/profile/view?faces-redirect=true&profileId=" + getProfileId();
@@ -225,7 +242,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     public String saveProfile() {
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
-        if (getInstance().isPersistent()){
+        if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
             try {
@@ -252,11 +269,11 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         getInstance().setShowBootcamp(false);
         update();
     }
-    
-    public void commuteEdition(){
-        setEditionEnabled(! isEditionEnabled());
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Edición activa " + isEditionEnabled(), null));
-        
+
+    public void commuteEdition() {
+        setEditionEnabled(!isEditionEnabled());
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Edición activa " + isEditionEnabled(), null));
+
     }
 
     @Transactional

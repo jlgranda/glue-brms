@@ -36,7 +36,6 @@ package org.eqaula.glue.security.authentication;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.security.events.PostAuthenticateEvent;
 import org.jboss.seam.security.external.openid.OpenIdUser;
