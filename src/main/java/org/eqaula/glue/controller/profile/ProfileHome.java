@@ -225,7 +225,6 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     @TransactionAttribute
     public String saveAjax() {
         Date now = Calendar.getInstance().getTime();
-        log.info("eqaula --> saving " + getInstance().getName());
         getInstance().setLastUpdate(now);
         /*for (BussinesEntityAttribute a : getInstance().getAttributes()) {
          if (a.getProperty().getType().equals("java.lang.String") && a.getValue() == null) {
@@ -290,7 +289,6 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         entity.setExpirationTime(Dates.addDays(now, 364));
         entity.setAuthor(null); //Establecer al usuario actual
         entity.buildAttributes(bussinesEntityService);
-        log.info("eqaula --> start attributes for " + group.getName() + " into entity " + entity.getName() + "");
         //Set default values into dinamycs properties
         //TODO idear un mecanismo generico de inicialización de variables dinamicas
         //entity.getBussinessEntityAttribute("title").setValue(name);

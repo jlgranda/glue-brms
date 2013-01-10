@@ -31,7 +31,7 @@
                             </h:link>
                         </div>
                         <div class="span7 columns">
-                            <h2>#{messages['common.edit']} #{profileHome.structureName}: #{profileHome.instance.fullName}</h2>
+                            <h2>#{messages['common.edit']} #{profileHome.instance.fullName}</h2>
                             <br/>
                             <p><span style="">#{profileHome.instance.code}</span>
                                 <span><h:outputText id="email" value="#{profileHome.instance.email}" rendered="#{!profileHome.instance.emailSecret}"/></span>
@@ -108,7 +108,7 @@
                 <div class="actions">
                     <h:commandButton id="save" action="#{profileHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary"/>
                     &nbsp;
-                    <h:link outcome="/pages/profile/view.xhtml?faces-redirect=true"
+                    <h:link outcome="/pages/profile/view"
                             value="#{messages['common.cancel']}" styleClass="btn" immediate="true">
                         <f:param name="profileId" value="#{profileHome.profileId}"></f:param>
                     </h:link>

@@ -27,6 +27,7 @@
       <pattern value="/personal"></pattern>
       <view-id value="/pages/profile/data/personal.xhtml"></view-id>
       <query-param name="profileId" decode="false">#{profileHome.profileId}</query-param>
+      <query-param name="structureName" decode="false">#{profileHome.structureName}</query-param>
    </url-mapping>
    
    <url-mapping id="structure">

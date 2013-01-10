@@ -51,6 +51,9 @@ public interface SecureViewConfig {
         @FacesRedirect
         @ViewPattern("/pages/profile/*")
         @Owner
+        USER,
+        @ViewPattern("/pages/admin/*")
+        @Admin
         ADMIN,
         @FacesRedirect
         @ViewPattern("/*")

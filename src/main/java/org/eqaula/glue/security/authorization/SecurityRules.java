@@ -42,19 +42,6 @@ public class SecurityRules {
     private static Logger log = Logger.getLogger(SecurityRules.class);
 
     /*public @Secures
-     @Owner
-     boolean ownerCheck(Identity identity) {
-     if (identity == null || identity.getUser() == null) {
-     log.info("Identity/User is null");
-     return false;
-     } else {
-     String id = identity.getUser().getId();
-     log.infof("Username is: %s", id);
-     return "jlgranda".equals(id);
-     }
-     }*/
-
-    /*public @Secures
      @Admin
      boolean adminCheck() {
      return false; // No one is an admin!
@@ -68,9 +55,17 @@ public class SecurityRules {
         } else {
             log.infof("profile is: %s", profile);
             log.infof("identityKeys is: %s", profile.getIdentityKeys());
-            return profile.getIdentityKeys().contains(identity.getUser().getKey());
+            return profile.getIdentityKeys().contains(identity.getUser().getKey()) 
+                    ||  identity.hasRole("admin", "USERS", "GROUP");
         }
     }
+    
+    @Secures
+    @Admin
+    public boolean isAdmin(Identity identity) {
+         return identity.hasRole("admin", "USERS", "GROUP");
+    }
+    
     /*    
      @Secures
      @Owner

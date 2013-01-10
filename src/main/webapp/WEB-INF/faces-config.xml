@@ -20,7 +20,7 @@
 	
     <application>
         <locale-config>
-            <default-locale>en</default-locale>
+            <default-locale>es</default-locale>
             <supported-locale>es</supported-locale>
             <supported-locale>en</supported-locale>
         </locale-config>

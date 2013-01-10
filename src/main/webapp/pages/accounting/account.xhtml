@@ -142,9 +142,8 @@
                         <f:param name="backView" value="account"></f:param>
                     </h:link>
                     #{' '}
-                    <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{account_.id!=null}" outcome="account" styleClass="btn" 
-                            disabled="#{account_.id==null}" >
-                        <f:param name="accountId" value="#{account_.id}"></f:param>
+                    <h:link id="button-edit" value="#{messages['common.edit']}" outcome="account" styleClass="btn" disabled="#{empty accountHome.accountSelected}">
+                        <f:param name="accountId" value="#{accountHome.accountSelected.id}"></f:param>
                         <f:param name="parentId" value="#{accountHome.accountId}"></f:param>
                         <f:param name="backView" value="account"></f:param>
                     </h:link>
