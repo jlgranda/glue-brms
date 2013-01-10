@@ -69,7 +69,7 @@ limitations under the License.
                         <h:outputLabel value="#{messages['module.BussinesEntityType.typeName']}" />
                         <div class="input">
                             <p:inputText  value="#{bussinesEntityTypeHome.instance.name}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.typeName']}" 
-                                          rendered="true" disabled="#{!bussinesEntityTypeHome.associatedToBussinesEntity}">
+                                          rendered="true" disabled="true">
                                 <p:ajax event="keyup" rendered="save" update="save" />  
                             </p:inputText>
                         </div>
@@ -81,7 +81,7 @@ limitations under the License.
                         <h:outputLabel value="#{messages['module.BussinesEntityType.label']}" />
                         <div class="input">
                             <p:inputText  value="#{bussinesEntityTypeHome.instance.label}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.label']}" 
-                                          rendered="true" disabled="#{!bussinesEntityTypeHome.associatedToBussinesEntity}">
+                                          rendered="true">
                                 <p:ajax event="keyup" rendered="save" update="save" />  
                             </p:inputText>
                         </div>
@@ -91,7 +91,7 @@ limitations under the License.
                         <h:outputLabel value="#{messages['module.BussinesEntityType.description']}" />
                         <div class="input">
                             <p:inputTextarea  value="#{bussinesEntityTypeHome.instance.description}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.description']}" 
-                                              rendered="true" disabled="#{!bussinesEntityTypeHome.associatedToBussinesEntity}">
+                                              rendered="true">
                                 <p:ajax event="keyup" rendered="save" update="save" />  
                             </p:inputTextarea>
                         </div>
