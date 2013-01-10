@@ -50,7 +50,8 @@
     <ui:define name="content">
         <!--Dialog for edit Account-->
         <h:panelGroup layout="block" class="clearfix">
-            <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.edit']} #{bussinesEntityTypeHome.instance.name}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="650">
+            <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.edit']} #{bussinesEntityTypeHome.instance.name}" widgetVar="editDlg" 
+                      modal="true" resizable="true" dynamic="true" width="650">
                 <h:form id="form-dialog">                    
                     <h:panelGroup layout="block" class="clearfix" rendered="true">
                         <glue:input id="code" name="code" type="text" label="#{messages['common.code']}" value="#{accountHome.instance.code}" required="false" inlinehelp="#{messages['common.code.inlinehelp']}" execute="@this save" render="code"/> 
