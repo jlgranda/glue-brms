@@ -32,6 +32,7 @@ import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
+import org.eqaula.glue.util.UI;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
@@ -127,12 +128,12 @@ public class OrganizationListService extends LazyDataModel<Organization> {
     }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("Organization Selected ", ((Organization) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.organization") + " " + UI.getMessages("common.selected") , ((Organization) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage("Organization Unselected ", ((Organization) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.organization") + " " + UI.getMessages("common.unselected") , ((Organization) event.getObject()).getName());
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setSelectedOrganization(null);

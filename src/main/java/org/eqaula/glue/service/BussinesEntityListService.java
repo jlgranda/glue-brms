@@ -33,6 +33,7 @@ import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.BussinesEntity_;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
+import org.eqaula.glue.util.UI;
 import org.jboss.solder.logging.Logger;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -175,13 +176,13 @@ public class BussinesEntityListService extends LazyDataModel<BussinesEntity> {
     }
     
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("BussinesEntity Selected ", ((BussinesEntity) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("BussinesEntity") + " " + UI.getMessages("common.selected"), ((BussinesEntity) event.getObject()).getName());
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage("BussinesEntity Unselected ", ((BussinesEntity) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("BussinesEntity") + " " + UI.getMessages("common.unselected"), ((BussinesEntity) event.getObject()).getName());
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setSelectedBussinesEntity(null);
