@@ -27,6 +27,7 @@
       <pattern value="/personal"></pattern>
       <view-id value="/pages/profile/data/personal.xhtml"></view-id>
       <query-param name="profileId" decode="false">#{profileHome.profileId}</query-param>
+      <query-param name="structureName" decode="false">#{profileHome.structureName}</query-param>
    </url-mapping>
    
    <url-mapping id="structure">
@@ -48,7 +49,7 @@
       <pattern value="/admin"></pattern>
       <view-id value="/pages/admin/home.xhtml"></view-id>
    </url-mapping>
-   <url-mapping id="admin">
+   <url-mapping id="querytool">
       <pattern value="/admin/querytool"></pattern>
       <view-id value="/pages/admin/query.xhtml"></view-id>
    </url-mapping>
@@ -113,7 +114,7 @@
        <pattern value="/new-project"></pattern>
        <view-id value="/pages/project/create.xhtml"></view-id>
     </url-mapping>
-    -->
+-->    
    
 
     <!-- Begin Exception Mappings -->

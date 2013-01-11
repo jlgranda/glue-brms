@@ -159,7 +159,38 @@ public class InitializeDatabase {
         TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
                 BussinesEntityType.class);
         query.setParameter("name", Profile.class.getName());
+        Profile p = null;
+        Profile admin = null;
         bussinesEntityType = query.getSingleResult();
+        if (session.getPersistenceManager().findUser("admin") == null) {
+            User u = session.getPersistenceManager().createUser("admin");
+            session.getAttributesManager().updatePassword(u, "4dm1nglu3");
+            session.getAttributesManager().addAttribute(u, "email", "glue@eqaula.org");
+
+            p = new Profile();
+            p.setEmail("glue@eqaula.org");
+            p.setUsername("admin");
+            p.setPassword("4dm1nglue3");
+            p.getIdentityKeys().add(u.getKey());
+            p.setUsernameConfirmed(true);
+            p.setShowBootcamp(true);
+
+            p.setName("Administrador");
+            p.setFirstname("Glue");
+            p.setSurname("Adhesive Software");
+            p.setCreatedOn(now);
+            p.setLastUpdate(now);
+            p.setActivationTime(now);
+            p.setExpirationTime(Dates.addDays(now, 364));
+            p.setAuthor(null); //Establecer al usuario actual
+            p.setType(bussinesEntityType); //Relacionar con un tipo de entidad de negocio y su estructura
+            p.buildAttributes(bussinesEntityService); //Crear la estructura de datos glue
+            entityManager.persist(p);
+            entityManager.flush();
+            admin = p;
+
+        }
+        
         if (session.getPersistenceManager().findUser("jlgranda") == null) {
             User u = session.getPersistenceManager().createUser("jlgranda");
             session.getAttributesManager().updatePassword(u, "password");
@@ -168,7 +199,7 @@ public class InitializeDatabase {
 
 
 
-            Profile p = new Profile();
+            p = new Profile();
             p.setEmail("jlgranda81@gmail.com");
             p.setUsername("jlgranda");
             p.setPassword("password");
@@ -183,7 +214,7 @@ public class InitializeDatabase {
             p.setLastUpdate(now);
             p.setActivationTime(now);
             p.setExpirationTime(Dates.addDays(now, 364));
-            p.setAuthor(null); //Establecer al usuario actual
+            p.setAuthor(admin); //Establecer al usuario actual
             p.setType(bussinesEntityType); //Relacionar con un tipo de entidad de negocio y su estructura
             p.buildAttributes(bussinesEntityService); //Crear la estructura de datos glue
             entityManager.persist(p);
@@ -201,7 +232,7 @@ public class InitializeDatabase {
 
 
 
-            Profile p = new Profile();
+            p = new Profile();
             p.setEmail("luchitoflores84@gmail.com");
             p.setUsername("lflores");
             p.setPassword("password");
@@ -216,7 +247,7 @@ public class InitializeDatabase {
             p.setLastUpdate(now);
             p.setActivationTime(now);
             p.setExpirationTime(Dates.addDays(now, 364));
-            p.setAuthor(null); //Establecer al usuario actual
+            p.setAuthor(admin); //Establecer al usuario actual
             p.setType(bussinesEntityType); //Relacionar con un tipo de entidad de negocio y su estructura
             p.buildAttributes(bussinesEntityService); //Crear la estructura de datos glue
             entityManager.persist(p);

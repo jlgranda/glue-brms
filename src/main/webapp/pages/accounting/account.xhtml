@@ -22,10 +22,10 @@
                     <div class="span7 columns">   
                         <div class="row fl" style="margin-top: 5px;">
                             <h3>#{accountHome.managed?  messages['common.edit'] : messages['common.add']} 
-                                    #{accountHome.instance.persistent ? accountHome.instance.name : ""}</h3>   
+                                #{accountHome.instance.persistent ? accountHome.instance.name : ""}</h3>   
                             <p><span style=""><b>#{accountHome.instance.accountType}</b></span>
                                 <br/>
-                                #{accountHome.instance.description}
+                                <h:outputText escape="false" value="#{accountHome.instance.description}"/>                                
                             </p>
                         </div>                        
                     </div>
@@ -50,7 +50,8 @@
     <ui:define name="content">
         <!--Dialog for edit Account-->
         <h:panelGroup layout="block" class="clearfix">
-            <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.edit']} #{bussinesEntityTypeHome.instance.name}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="650">
+            <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.edit']} #{bussinesEntityTypeHome.instance.name}" widgetVar="editDlg" 
+                      modal="true" resizable="true" dynamic="true" width="650">
                 <h:form id="form-dialog">                    
                     <h:panelGroup layout="block" class="clearfix" rendered="true">
                         <glue:input id="code" name="code" type="text" label="#{messages['common.code']}" value="#{accountHome.instance.code}" required="false" inlinehelp="#{messages['common.code.inlinehelp']}" execute="@this save" render="code"/> 
@@ -70,10 +71,16 @@
                         <h:panelGroup layout="block" class="clearfix">
                             <label for="parent_" class="">#{messages['common.change']}</label>
                             <div class="input">
-                                <p:selectOneMenu id="parent_" value="#{accountHome.instance.parent}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="false" 
-                                                 rendered="true" label="#{messages['Account']}">
+                                <p:selectOneMenu id="parent_" value="#{accountHome.instance.parent}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="false"  var="p"
+                                                 rendered="true" label="#{messages['Account']}" filter="true" filterMatchMode="startsWith">
                                     <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
                                     <f:selectItems value="#{accountHome.accounts}" var="parentItem" itemLabel="#{parentItem.name}" itemValue="#{parentItem}"/>                          
+                                    <p:column >  
+                                        #{p.code}
+                                    </p:column> 
+                                    <p:column>  
+                                        #{p.name}
+                                    </p:column> 
                                     <f:converter converterId="org.eqaula.glue.faces.converter.AccountConverter"/>
                                     <p:ajax event="change" update="@parent " partialSubmit="true"/>
                                 </p:selectOneMenu>                        
@@ -135,9 +142,8 @@
                         <f:param name="backView" value="account"></f:param>
                     </h:link>
                     #{' '}
-                    <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{accountHome.accountId!=null}" outcome="account" styleClass="btn" 
-                            disabled="#{!accountHome.instance.persistent}">
-                        <f:param name="accountId" value="#{account_.id}"></f:param>
+                    <h:link id="button-edit" value="#{messages['common.edit']}" outcome="account" styleClass="btn" disabled="#{empty accountHome.accountSelected}">
+                        <f:param name="accountId" value="#{accountHome.accountSelected.id}"></f:param>
                         <f:param name="parentId" value="#{accountHome.accountId}"></f:param>
                         <f:param name="backView" value="account"></f:param>
                     </h:link>
@@ -158,7 +164,7 @@
                                 update=":form:button-edit :form:messages"/>                 
                         <p:ajax event="rowUnselect" listener="#{accountHome.onRowUnselect}" update=":form:button-edit :form:messages"/>
 
-                        <p:column headerText="#{messages['Account.code']}" orderBy="#{account_.code}">
+                        <p:column headerText="#{messages['Account.code']}" sortBy="#{account_.code}">
                             <h:outputText value="#{account_.code}" />
                         </p:column>
 

@@ -16,13 +16,13 @@
         </ui:define>
 
         <ui:define name="topnav-post-template">
-            <h:panelGroup rendered="#{not empty userProfile.id}">
+            <h:panelGroup rendered="#{profile.persistent}">
                 <li>
                     <div class="linkball">◗</div>
                     <h:link outcome="/pages/profile/profile"
                             style="padding-left: 15px;"
                             value="#{profile.username}">
-                        <f:param name="profileId" value="#{userProfile.id}" />
+                        <f:param name="profileId" value="#{profile.id}" />
                     </h:link>
                 </li>
             </h:panelGroup>

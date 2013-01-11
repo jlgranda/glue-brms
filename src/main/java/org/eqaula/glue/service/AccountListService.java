@@ -30,6 +30,8 @@ import org.eqaula.glue.accounting.AccountService;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.accounting.Account;
+import org.eqaula.glue.model.accounting.Account.Type;
+import org.eqaula.glue.model.accounting.Account_;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.QueryData;
@@ -112,9 +114,15 @@ public class AccountListService extends LazyDataModel<Account> {
             order = QuerySortOrder.DESC;
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
-        /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
-         _filters.putAll(filters);*/
+        _filters.put(Account_.accountType.getName(), Type.SCHEMA); //Filtro por defecto
+        _filters.putAll(filters);
 
+        //Order by code
+        System.out.println("AccountListService sortField " +sortField);
+        if (sortField==null){
+            sortField = "code";
+        }
+        
         QueryData<Account> qData = accountService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();

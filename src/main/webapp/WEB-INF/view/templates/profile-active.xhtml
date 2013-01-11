@@ -47,15 +47,17 @@
 		<h:panelGroup rendered="#{profile.persistent}">
 			<li class="dropdown">
 				<div class="linkball">◗</div>
-				<h:link outcome="/pages/profile.xhtml"
+				<h:link outcome="profile"
 					style="padding-left: 15px;"
 					class="dropdown-toggle"
 					value="#{profile.username}">
 					<f:param name="profile" value="#{profile.username}" />
 				</h:link>
-				<ul class="dropdown-menu">
+				<!--
+                                <ul class="dropdown-menu">
 					<li><h:link value="Message" outcome="/pages/project/backlog"/></li>
 				</ul>
+                                -->
 			</li>
 		</h:panelGroup>
 		

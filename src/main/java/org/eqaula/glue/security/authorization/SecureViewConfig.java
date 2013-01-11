@@ -49,13 +49,15 @@ public interface SecureViewConfig {
     static enum Pages {
 
         @FacesRedirect
-        @ViewPattern("/pages/project/view.xhtml")
+        @ViewPattern("/pages/profile/*")
         @Owner
+        USER,
+        @ViewPattern("/pages/admin/*")
+        @Admin
         ADMIN,
-
         @FacesRedirect
         @ViewPattern("/*")
-        @AccessDeniedView("/pages/404.xhtml")
+        @AccessDeniedView("/pages/denied.xhtml")
         @LoginView("/pages/login.xhtml")
         ALL;
 

@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -217,6 +218,8 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
     }
     
     public List<Account> getAccounts(){
-        return accountService.getAccounts();
+        List list = accountService.getAccounts();
+        Collections.sort(list);
+        return list;
     }
 }

@@ -34,8 +34,6 @@
 package org.eqaula.glue.security.authentication;
 
 import java.io.IOException;
-import javax.ejb.LocalBean;
-
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.faces.application.NavigationHandler;
@@ -46,7 +44,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.eqaula.glue.util.UI;
-
 import org.jboss.seam.international.status.Messages;
 import org.jboss.seam.security.Authenticator.AuthenticationStatus;
 import org.jboss.seam.security.Identity;
