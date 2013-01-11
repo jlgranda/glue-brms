@@ -42,6 +42,7 @@
       <view-id value="/pages/profile/data/group.xhtml"></view-id>
       <query-param name="groupId" decode="false">#{groupHome.groupId}</query-param>
       <query-param name="profileId" decode="false">#{groupHome.profileId}</query-param>
+      <query-param name="structureName" decode="false">#{profileHome.structureName}</query-param>
    </url-mapping>
    
    <!-- Admin Pages -->

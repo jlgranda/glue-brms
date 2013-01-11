@@ -72,13 +72,13 @@
                             <label for="parent_" class="">#{messages['common.change']}</label>
                             <div class="input">
                                 <p:selectOneMenu id="parent_" value="#{accountHome.instance.parent}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="false"  var="p"
-                                                 rendered="true" label="#{messages['Account']}" filter="true" filterMatchMode="startsWith">
+                                                 rendered="true" label="#{messages['Account']}" filter="true" filterMatchMode="contains">
                                     <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
-                                    <f:selectItems value="#{accountHome.accounts}" var="parentItem" itemLabel="#{parentItem.name}" itemValue="#{parentItem}"/>                          
-                                    <p:column >  
+                                    <f:selectItems value="#{accountHome.accounts}" var="parentItem" itemLabel="#{parentItem.code} #{parentItem.name}" itemValue="#{parentItem}"/>                          
+                                    <p:column>  
                                         #{p.code}
                                     </p:column> 
-                                    <p:column>  
+                                    <p:column >  
                                         #{p.name}
                                     </p:column> 
                                     <f:converter converterId="org.eqaula.glue.faces.converter.AccountConverter"/>
