@@ -29,13 +29,19 @@
                 <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="organization" styleClass="btn primary">
                     <f:param name="organizationId"></f:param>
                     <f:param name="backView" value="list"></f:param>
-                </h:link>
+                </h:link>                
                 #{' '}
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="organization" styleClass="btn" 
-                        disabled="#{organizationListService.selectedOrganization.id==null}">
+                        disabled="#{false}">
+                    <f:param name="organizationId" value="#{organizationListService.selectedOrganization.id}"></f:param>
+                    <f:param name="backView" value="list"></f:param>rue
+                </h:link> 
+                #{' '}
+                <h:link id="button-view" value="#{messages['common.view']}" rendered="#{true}" outcome="view" styleClass="btn"
+                        disabled="#{false}">
                     <f:param name="organizationId" value="#{organizationListService.selectedOrganization.id}"></f:param>
                     <f:param name="backView" value="list"></f:param>
-                </h:link>               
+                </h:link>
             </div>
             <p:dataTable var="organization" value="#{organizationListService}"
                          paginator="true" rows="10"
@@ -49,8 +55,8 @@
                          selectionMode="single">
            
                 <p:ajax event="rowSelect" listener="#{organizationListService.onRowSelect}"   
-                        update=":form:button-edit :form:messages"/>                 
-                <p:ajax event="rowUnselect" listener="#{organizationListService.onRowUnselect}" update=":form:button-edit :form:messages "/>
+                        update=":form:button-edit: :form:button-view :form:messages"/>                 
+                <p:ajax event="rowUnselect" listener="#{organizationListService.onRowUnselect}" update=":form:button-edit :form:button-view :form:messages"/>
                
                 <p:column headerText="#{messages['common.name']}" sortBy="#{organization.name}">
                     <h:outputText value="#{organization.name}" />
