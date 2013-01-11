@@ -68,7 +68,7 @@
                 <p:dialog id="dialog" header="#{messages['common.cancel']}" widgetVar="confirmDlg" resizable="false">  
                     <h:form id="form-dialog-confirm-return">
                         <h:panelGroup layout="block" style="padding:5px;">  
-                            <h:outputText value="Está seguro que quiere salir sin guardar los cambios"/>  
+                            <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                         </h:panelGroup>  
                         <p:commandButton value="#{messages['common.yes']}" oncomplete="confirmDlg.hide();"  
                                          action="/pages/profile/view.xhtml?faces-redirect=true" 
@@ -144,7 +144,8 @@
                     <p:commandButton id="save" action="#{groupHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary" rendered="true"/>
                     &nbsp;
 
-                   <p:commandButton value="#{messages['common.cancel']}"
+                    estoy trabajando aqui
+                    <p:commandButton value="#{messages['common.cancel']}"
                                      styleClass="btn"
                                      oncomplete="confirmDlg.show()"
                                      ajax="true"
@@ -153,7 +154,14 @@
                         <f:param name="profileId" value="#{groupHome.profile.id}" />
                     </p:commandButton>
 
-                    </div>
+                    hasta aqui estoy haciendo
+
+
+                    <h:link outcome="/pages/profile/view.xhtml?faces-redirect=true"
+                            styleClass="btn" immediate="true">
+                        <f:param name="profileId" value="#{groupHome.profile.id}"></f:param>
+                    </h:link>
+                </div>
             </h:form>
 
             <h:panelGroup layout="block" class="clearfix">

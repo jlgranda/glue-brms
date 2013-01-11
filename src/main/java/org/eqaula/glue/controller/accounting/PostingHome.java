@@ -24,6 +24,7 @@ import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -113,17 +114,17 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
         return posting;
     }
 
-    
-    public void addEntry() {
-       // Date now = Calendar.getInstance().getTime();
-        Entry entry = new Entry();
+    public String addEntry(ActionEvent e) {
+        // Date now = Calendar.getInstance().getTime();
+      //  Entry entry = new Entry();
 //        entry.setCreatedOn(now);
 //        entry.setLastUpdate(now);
 //        entry.setActivationTime(now);
 //        entry.setExpirationTime(Dates.addDays(now, 364));
-        getInstance().addEntry(entry);
+        getInstance().addEntry(new Entry());
+        return null;
     }
-    
+
     @TransactionAttribute
     public String savePosting() {
         log.info("eqaula --> PostingHome save instance: " + getInstance().getId());
