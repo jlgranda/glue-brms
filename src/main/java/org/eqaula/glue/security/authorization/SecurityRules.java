@@ -53,8 +53,7 @@ public class SecurityRules {
         if (profile == null || identity.getUser() == null) {
             return false;
         } else {
-            log.infof("profile is: %s", profile);
-            log.infof("identityKeys is: %s", profile.getIdentityKeys());
+            log.infof("admin: %s", identity.hasRole("admin", "USERS", "GROUP"));
             return profile.getIdentityKeys().contains(identity.getUser().getKey()) 
                     ||  identity.hasRole("admin", "USERS", "GROUP");
         }
@@ -63,7 +62,17 @@ public class SecurityRules {
     @Secures
     @Admin
     public boolean isAdmin(Identity identity) {
+        log.infof("admin: %s", identity.hasRole("admin", "USERS", "GROUP"));
          return identity.hasRole("admin", "USERS", "GROUP");
+    }
+    
+    @Secures
+    @Accountant
+    public boolean isAccountant(Identity identity) {
+        log.infof("accountant: %s", identity.hasRole("accountant", "USERS", "GROUP"));
+        log.infof("admin: %s", identity.hasRole("admin", "USERS", "GROUP"));
+         return identity.hasRole("accountant", "USERS", "GROUP") 
+                 || identity.hasRole("admin", "USERS", "GROUP") ;
     }
     
     /*    
