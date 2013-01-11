@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2012 jlgranda.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:s="http://jboss.org/seam/faces"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:glue="http://eqaula.org/jsf/facelets"
+                template="/WEB-INF/view/templates/glue.xhtml"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <ui:define name="header-replace">                    
+        <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
+            <div class="container">
+                <div class="row fl" style="margin-top: 5px;">
+                    <div class="span7 columns">   
+                        <div class="row fl" style="margin-top: 5px;">
+                            <h3>EQAULA TECNOLOGIAS CIA LTDA</h3> 
+                            <h3>1191725932001</h3> 
+                            <h4>COMPROBANTE DE PAGO N° EQ-PAGO-000</h4>   
+                            <h:outputLabel value=""/>
+                        </div>                        
+                    </div>
+                </div>     
+            </div>
+        </div>         
+    </ui:define>
+
+    <ui:define name="content">          
+
+        <h:form id="form">
+            <h:panelGroup layout="block" class="clearfix" rendered="true">
+                <h:outputLabel value="POR:" />
+                <h:outputText value="$5" styleClass="xLarge span4" />
+
+                <br/>
+                <br/>
+                <br/>
+                <h:outputLabel value="Fecha de Pago:" />
+                <!-- <div class="input">
+                     <p:calendar value="#" navigator="true" label="#"
+                                 rendered="#">
+                         <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
+                     </p:calendar>
+                 </div> -->
+
+                <div class="input">
+                    <p:inputText  value="1/03/2013" styleClass="xLarge span4" required="true" label="#" 
+                                  rendered="true" >
+                    </p:inputText>
+                </div>
+
+                <h:outputLabel value="Pago a favor de:" />
+                <div class="input">
+                    <p:inputText  value="José Luis Granda" styleClass="xLarge span4" required="true" label="#" 
+                                  rendered="true" >
+                    </p:inputText>
+                </div>
+
+                <h:outputLabel value="Son:" />
+                <div class="input">
+                    <p:inputText  value="5 Dólares" styleClass="xLarge span4" required="true" label="#" 
+                                  rendered="true" >
+                    </p:inputText>
+                </div>
+
+                <h:outputLabel value="Docuemento de respaldo:" />
+                <div class="input">
+                    <p:inputText  value="Factura" styleClass="xLarge span4" required="true" label="#" 
+                                  rendered="true" >
+                    </p:inputText>
+                </div>
+
+
+
+            </h:panelGroup>
+
+
+            <div class="admin-actions">
+                <p:commandButton id="save" value="#{messages['common.add']}" rendered="true"
+                                 action="#{postingHome.addEntry()}" 
+                                 update="entries"
+                                 ajax="true" 
+                                 process="@this" styleClass="btn primary"
+                                 style="margin-top:10px;" icon="ui-icon-disk">  
+
+                </p:commandButton>
+            </div> 
+
+            <p:dataTable var="entry" value="#{postingHome.instance.entries}" style="width:100%"
+                         editable="true" 
+                         id="entries"
+                         rowKey="#{entry.id}"> 
+
+
+                <f:facet name="header">  
+                    Registros contables
+                </f:facet>  
+
+               <!-- <p:ajax event="rowEdit" listener="#{tableBean.onEdit}" update=":form:messages" />  
+                <p:ajax event="rowEditCancel" listener="#{tableBean.onCancel}" update=":form:messages" /> -->
+
+                <p:column headerText="Id">
+                    <h:outputText value="#{entry.account.id}" />
+                </p:column>
+
+                <p:column headerText="Nombre" sortBy="">
+
+                    <p:cellEditor>  
+                        <f:facet name="output">  
+                            <h:outputText value="#{entry.account.name}" />  
+                        </f:facet>  
+
+                        <f:facet name="input">  
+                            <p:selectOneMenu id="parent_" value="#{entry.account}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="false" 
+                                             rendered="true" label="#{messages['Account']}">
+                                <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                                <f:selectItems value="#{accountHome.accounts}" var="parentItem" itemLabel="#{parentItem.name}" itemValue="#{parentItem}"/>                          
+                                <f:converter converterId="org.eqaula.glue.faces.converter.AccountConverter"/>
+                                <!-- <p:ajax event="change" update="@parent " partialSubmit="true"/>-->
+                            </p:selectOneMenu>
+
+                        </f:facet>  
+                    </p:cellEditor>  
+                </p:column>               
+
+                <p:column headerText="Debe">
+                    <p:cellEditor>  
+                        <f:facet name="output">  
+                            <h:outputText value="#{entry.amount}" />
+                        </f:facet>  
+                        <f:facet name="input">  
+                            <p:inputText value="#{entry.amount}" style="width:100%"/>
+                        </f:facet>  
+                    </p:cellEditor>
+                </p:column>    
+
+                <p:column headerText="Haber">
+                    <p:cellEditor>  
+                        <f:facet name="output">  
+                            <h:outputText value="#{entry.amount}" />
+                        </f:facet>  
+                        <f:facet name="input">  
+                            <p:inputText value="#{entry.amount}" style="width:100%"/>
+                        </f:facet>  
+                    </p:cellEditor>
+                </p:column>               
+
+                <p:column headerText="Cheque">
+                    <p:selectBooleanCheckbox value="#"/>
+                </p:column>               
+
+                <p:column headerText="Efectivo" >
+                    <p:selectBooleanCheckbox value="#"/>
+                </p:column>   
+
+                <p:column headerText="Options" style="width:50px">  
+                    <p:rowEditor />  
+                </p:column> 
+
+            </p:dataTable>
+
+        </h:form>
+
+    </ui:define>
+    <script type="text/javascript">  
+        function handleSaveRequest(xhr, status, args) {  
+            if(args.validationFailed || !args.loggedIn) {  
+                jQuery('#edit-dialog').effect("shake", { times:3 }, 100);  
+            } else {  
+                editDlg.hide();  
+                //jQuery('#loginLink').fadeOut();  
+            }  
+        }  
+    </script>
+</ui:composition>
