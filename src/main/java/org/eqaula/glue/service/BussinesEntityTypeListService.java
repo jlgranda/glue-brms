@@ -31,6 +31,7 @@ import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
+import org.eqaula.glue.util.UI;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
@@ -176,13 +177,13 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
         return qData.getResult();
     }
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("BussinesEntityType Selected ", ((BussinesEntityType) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.BussinesEntityType") + " " + UI.getMessages("common.selected"), ((BussinesEntityType) event.getObject()).getName());
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage("BussinesEntityType Unselected ", ((BussinesEntityType) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.BussinesEntityType") + " " + UI.getMessages("common.unselected"), ((BussinesEntityType) event.getObject()).getName());
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setSelectedBussinesEntityType(null);

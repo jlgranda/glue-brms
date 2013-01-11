@@ -36,6 +36,7 @@ import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
+import org.eqaula.glue.util.UI;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
@@ -135,12 +136,12 @@ public class AccountListService extends LazyDataModel<Account> {
     }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("Account Selected ", ((Account) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("Account") + " " + UI.getMessages("common.selected"), ((Account) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage("Account Unselected ", ((Account) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("Account") + " " + UI.getMessages("common.unselected"), ((Account) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setSelectedAccount(null);
     }

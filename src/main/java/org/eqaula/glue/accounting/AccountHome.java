@@ -35,6 +35,7 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.util.Dates;
+import org.eqaula.glue.util.UI;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -171,12 +172,12 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
     }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("SubAccount Selected ", ((Account) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("Account.subAcount") + " " + UI.getMessages("common.selected"), ((Account) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage("SubAccount Unselected ", ((Account) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("Account.subAcount") + " " + UI.getMessages("common.unselected"), ((Account) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setBussinesEntity(null);
     }

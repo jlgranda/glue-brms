@@ -31,6 +31,7 @@ import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.profile.ProfileService;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
+import org.eqaula.glue.util.UI;
 import org.jboss.solder.logging.Logger;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -156,13 +157,13 @@ public class ProfileListService extends LazyDataModel<Profile> {
         this.selectedProfile = selectedProfile;
     }
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("Profile Selected ", ((Profile) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("profile") + " " + UI.getMessages("common.selected"), ((Profile) event.getObject()).getName());
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage("Profile Unselected ", ((Profile) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("profile") + " " + UI.getMessages("common.unselected"), ((Profile) event.getObject()).getName());
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setSelectedProfile(null);
