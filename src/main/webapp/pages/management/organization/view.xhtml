@@ -64,7 +64,7 @@
                                              editable="false" 
                                              emptyMessage="#{messages['common.emptyList']}">  
 
-                                    <p:columns value="themes" var="column" columnIndexVar="colIndex"   
+                                    <p:columns value="theme" var="column" columnIndexVar="colIndex"   
                                                sortBy="#{themes.name}">  
                                         <f:facet name="header">  
                                             #{column.header}  
@@ -72,7 +72,7 @@
                                         <!--#{m.findAttributeValue(column.property)}  -->
                                         <h:outputText value="#{themes.name}" />
                                     </p:columns>
-                                    <p:column value="themes" var="column" columnIndexVar="colIndex"   
+                                    <p:column value="theme" var="column" columnIndexVar="colIndex"   
                                                sortBy="#{themes.code}">
                                         <h:outputText value="#{themes.name}" />
                                     </p:column> 
