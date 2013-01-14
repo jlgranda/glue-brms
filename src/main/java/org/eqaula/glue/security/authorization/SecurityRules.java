@@ -63,7 +63,8 @@ public class SecurityRules {
     @Admin
     public boolean isAdmin(Identity identity) {
         log.infof("admin: %s", identity.hasRole("admin", "USERS", "GROUP"));
-         return identity.hasRole("admin", "USERS", "GROUP") || true;
+         return identity.hasRole("admin", "USERS", "GROUP") 
+                 || true;
     }
     
     @Secures
