@@ -53,6 +53,7 @@ import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.model.config.Setting;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
+import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.model.security.IdentityObjectCredentialType;
 import org.eqaula.glue.model.security.IdentityObjectType;
@@ -190,7 +191,7 @@ public class InitializeDatabase {
             admin = p;
 
         }
-        
+
         if (session.getPersistenceManager().findUser("jlgranda") == null) {
             User u = session.getPersistenceManager().createUser("jlgranda");
             session.getAttributesManager().updatePassword(u, "password");
@@ -221,9 +222,9 @@ public class InitializeDatabase {
             entityManager.flush();
 
         }
-        
-        
-        
+
+
+
         if (session.getPersistenceManager().findUser("lflores") == null) {
             User u = session.getPersistenceManager().createUser("lflores");
             session.getAttributesManager().updatePassword(u, "password");
@@ -352,6 +353,33 @@ public class InitializeDatabase {
 
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
+
+            Organization org = new Organization();
+            org.setName("Data for " + Organization.class.getName());
+            org.setCreatedOn(now);
+            org.setLastUpdate(now);
+
+            Theme t = new Theme();
+            t.setName("Data for " + Organization.class.getName());
+            t.setCreatedOn(now);
+            t.setLastUpdate(now);
+            t.setName("tema 1");
+            t.setCode("t01");
+            entityManager.persist(t);
+
+            Owner o = new Owner();
+            o.setName("Data for " + Organization.class.getName());
+            o.setCreatedOn(now);
+            o.setLastUpdate(now);
+            o.setName("Administrador 1");
+            o.setCode("Admin01");
+            o.addTheme(t);
+            entityManager.persist(o);
+            
+            org.addOwner(o);
+            org.setDescription("Universiad");
+            
+            entityManager.persist(org);            
         }
     }
 

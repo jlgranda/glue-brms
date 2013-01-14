@@ -87,6 +87,10 @@
       <pattern value="/admin/management/list"></pattern>
       <view-id value="/pages/management/organization/list.xhtml"></view-id>       
    </url-mapping>
+   <url-mapping id="OrganizationView">
+      <pattern value="/admin/managament/view"></pattern>
+      <view-id value="/pages/management/organization/view.xhtml"></view-id>       
+   </url-mapping>
    
    <!-- Administracion contabilidad -->
    <url-mapping id="list">
