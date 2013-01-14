@@ -55,63 +55,7 @@
                 </div></div>             
         </ui:define>
         <ui:define name="content">
-            
-            
-            
-
             <h:form id="form-table">
-                
-                
-                
-                
-                <p:dialog id="dialog" header="#{messages['common.cancel']}" widgetVar="confirmDlg" resizable="false">  
-                    <h:form id="form-dialog-confirm-return">
-                        <h:panelGroup layout="block" style="padding:5px;">  
-                            <h:outputText value="Está seguro que quiere salir sin guardar los cambios"/>  
-                        </h:panelGroup>  
-                        <p:commandButton value="#{messages['common.yes']}" oncomplete="confirmDlg.hide();"  
-                                         action="/pages/profile/view.xhtml?faces-redirect=true" 
-                                         update=":form-table:dataTable :form-dialog:messages-dialog"
-                                         ajax="true" process="@this"  
-                                         style="margin-top:10px;">  
-                        </p:commandButton>  
-                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="confirmDlg.hide();"  
-                                         style="margin-top:10px;"/>  
-                    </h:form>
-                </p:dialog>
-
-                
-                <!--
-                
-                 <p:confirmDialog  header="#{bundle['header.eliminarRegistros']}"
-                              message="#{bundle['mensaje.confirmacion']}: #{asignaturaController.current.nombreAsignatura}"
-                              id="idConfirmDialog" 
-                              widgetVar="confirmacion"
-                              severity="alert">
-
-                <p:commandButton action="#{asignaturaController.delete()}"
-                                 value="#{bundle['boton.si']}"
-                                 update=":formAsignaturaList:idTabla"
-                                 oncomplete="confirmacion.hide()">
-                    <f:param name="asignaturaId" value="#{asignaturaController.current.id}"/>
-                </p:commandButton>
-
-                <p:commandButton value="#{bundle['boton.no']}" 
-                                 action="#{asignaturaController.cancelEdit()}"
-                                 oncomplete="confirmacion.hide()"/>
-
-            </p:confirmDialog>
-
--->
-                
-
-
-
-
-
-
-
-                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <h:panelGroup layout="block" class="clearfix">
                     <p:commandButton value="#{messages['common.add']} #{groupHome.instance.property.label}" ajax="true"
@@ -142,17 +86,14 @@
                 <div class="actions">
                     <p:commandButton id="save" action="#{groupHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary" rendered="true"/>
                     &nbsp;
-
-                   <p:commandButton value="#{messages['common.cancel']}"
+                    <p:commandButton value="#{messages['common.cancel']}"
                                      styleClass="btn"
-                                     oncomplete="confirmDlg.show()"
+                                     oncomplete="exitDlg.show()"
                                      ajax="true"
-                                     process="@this"
-                                     update=":form-table:dialog">
+                                     process="@this">
                         <f:param name="profileId" value="#{groupHome.profile.id}" />
                     </p:commandButton>
-
-                    </div>
+                </div>
             </h:form>
 
             <h:panelGroup layout="block" class="clearfix">
@@ -201,7 +142,6 @@
                                             <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                         </p:inputText>
-                                        dialog
                                         <p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
                                                     rendered="#{a.property.type eq 'java.util.Date'}">
                                             <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
@@ -260,15 +200,20 @@
                                          style="margin-top:10px;"/>  
                     </h:form>
                 </p:dialog>  
-
-                
-                
-                
-               
-
-
-
-
+                <p:dialog id="exit-dialog" header="#{messages['common.cancel']}" widgetVar="exitDlg" resizable="false">  
+                    <h:form id="form-exit-dialog">
+                        <h:panelGroup layout="block" style="padding:5px;">  
+                            <h:outputText value="Está seguro que quiere salir sin guardar los cambios?"/>  
+                        </h:panelGroup>  
+                        <p:commandButton value="#{messages['common.yes']}" oncomplete="exitDlg.hide();"  
+                                         action="/pages/profile/view.xhtml?faces-redirect=true" 
+                                         ajax="true" process="@this"  immediate="true"
+                                         style="margin-top:10px;">  
+                        </p:commandButton>  
+                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="exitDlg.hide();"  
+                                         style="margin-top:10px;"/>  
+                    </h:form>
+                </p:dialog>
             </h:panelGroup>
 
         </ui:define>
