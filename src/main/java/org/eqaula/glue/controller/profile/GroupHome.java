@@ -146,6 +146,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
         } else {
             persist();
         }
+        log.info("---------------> Salvando objeto" + getProfileId());
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizó con exito " + getInstance().getName(), ""));
         return "/pages/profile/view?faces-redirect=true&profileId=" + getProfileId();
     }
