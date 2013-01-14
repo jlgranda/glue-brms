@@ -45,6 +45,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
+import javax.validation.constraints.AssertTrue;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.Property;
@@ -67,6 +68,7 @@ import org.jboss.solder.servlet.WebApplication;
 import org.jboss.solder.servlet.event.Initialized;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.IdentitySessionFactory;
+import org.picketlink.idm.api.RelationshipManager;
 import org.picketlink.idm.api.User;
 import org.picketlink.idm.common.exception.IdentityException;
 
@@ -162,11 +164,20 @@ public class InitializeDatabase {
         query.setParameter("name", Profile.class.getName());
         Profile p = null;
         Profile admin = null;
+        List<User> members = new ArrayList<User>();
+        org.picketlink.idm.api.Group g = session.getPersistenceManager().createGroup("grupo1", "GROUP");
+        System.out.println("EQAULA-->  ingreso a crear grupo " + g.toString());
+
         bussinesEntityType = query.getSingleResult();
         if (session.getPersistenceManager().findUser("admin") == null) {
             User u = session.getPersistenceManager().createUser("admin");
             session.getAttributesManager().updatePassword(u, "4dm1nglu3");
             session.getAttributesManager().addAttribute(u, "email", "glue@eqaula.org");
+            members.add(u);
+            //revisar error al implementar la relacion entre un grupo y usuario.... 
+            System.out.println("EQAULA-->  ingreso a Relacionar Usuarios con grupo");
+            //session.getRelationshipManager().associateUser(g, u);             
+            System.out.println("EQAULA-->  fin ---- relacion");
 
             p = new Profile();
             p.setEmail("glue@eqaula.org");
@@ -197,9 +208,6 @@ public class InitializeDatabase {
             session.getAttributesManager().updatePassword(u, "password");
             session.getAttributesManager().addAttribute(u, "email", "jlgranda81@gmail.com");
 
-
-
-
             p = new Profile();
             p.setEmail("jlgranda81@gmail.com");
             p.setUsername("jlgranda");
@@ -223,15 +231,10 @@ public class InitializeDatabase {
 
         }
 
-
-
         if (session.getPersistenceManager().findUser("lflores") == null) {
             User u = session.getPersistenceManager().createUser("lflores");
             session.getAttributesManager().updatePassword(u, "password");
             session.getAttributesManager().addAttribute(u, "email", "luchitoflores84@gmail.com");
-
-
-
 
             p = new Profile();
             p.setEmail("luchitoflores84@gmail.com");
@@ -253,7 +256,6 @@ public class InitializeDatabase {
             p.buildAttributes(bussinesEntityService); //Crear la estructura de datos glue
             entityManager.persist(p);
             entityManager.flush();
-
         }
 
     }
@@ -352,34 +354,35 @@ public class InitializeDatabase {
             bussinesEntityType.addStructure(structure);
 
             entityManager.persist(bussinesEntityType);
-            entityManager.flush();
 
             Organization org = new Organization();
-            org.setName("Data for " + Organization.class.getName());
             org.setCreatedOn(now);
             org.setLastUpdate(now);
+            org.setName("UNL");
+            org.setCode("001");
+            org.setType(bussinesEntityType);
+            //org.buildAttributes(bussinesEntityService);
 
             Theme t = new Theme();
-            t.setName("Data for " + Organization.class.getName());
             t.setCreatedOn(now);
             t.setLastUpdate(now);
             t.setName("tema 1");
             t.setCode("t01");
-            entityManager.persist(t);
 
             Owner o = new Owner();
-            o.setName("Data for " + Organization.class.getName());
             o.setCreatedOn(now);
             o.setLastUpdate(now);
             o.setName("Administrador 1");
             o.setCode("Admin01");
             o.addTheme(t);
-            entityManager.persist(o);
-            
+
             org.addOwner(o);
             org.setDescription("Universiad");
-            
-            entityManager.persist(org);            
+
+            entityManager.persist(t);
+            entityManager.persist(o);
+            entityManager.persist(org);
+            entityManager.flush();
         }
     }
 

@@ -31,7 +31,7 @@
             <h:form id="form" acceptcharset="UTF-8">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{organizationHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
-                <glue:input id="code" name="code" type="text" label="#{messages['common.code']}" value="#{organizationHome.instance.code}" required="true" inlinehelp="#{messages['common.code.inlinehelp']}" execute="@this save"/> 
+                <glue:input id="code" name="code" type="text" label="#{messages['common.ruc']}" value="#{organizationHome.instance.code}" required="true" inlinehelp="#{messages['common.code.inlinehelp']}" execute="@this save"/> 
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{accountHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" execute="@this save" render="description"/>
                 <!-- Attributos personalizados -->
                 <h:panelGroup id="attributes" layout="block" class="clearfix">                                         
