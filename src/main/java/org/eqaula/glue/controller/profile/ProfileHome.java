@@ -202,7 +202,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         AttributesManager attributesManager = security.getAttributesManager();
         attributesManager.updatePassword(user, getPassword());
         attributesManager.addAttribute(user, "email", getInstance().getEmail());
-
+        
         em.flush();
 
         // TODO figure out a good pattern for this...
@@ -233,7 +233,6 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
          }
          }*/
         save(getInstance());
-        //return "/pages/home?faces-redirect=true";
         return "/pages/profile/view?faces-redirect=true&profileId=" + getProfileId();
     }
 

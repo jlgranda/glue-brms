@@ -101,7 +101,7 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
                         setPropertyStringValue(fecha);
                     } else {
                         log.info("eqaula --> Instance from Property Value not Date for " + propertyStringValue);
-                        setPropertyStringValue((String) getInstance().getValue());
+                        setPropertyStringValue(getInstance().getValue().toString());
                     }
                 } else {
                     log.info("eqaula --> Instance from Property Value not Date for " + propertyStringValue);

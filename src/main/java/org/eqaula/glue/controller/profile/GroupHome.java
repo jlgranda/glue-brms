@@ -169,7 +169,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
             BussinesEntity entity = new BussinesEntity();
             entity.setName(name);
             //TODO implementar generador de códigos para entidad de negocio
-            entity.setCode((g.getProperty() != null ? g.getProperty().getLabel() : "elemento") + " " + (g.findOtherMembers(getProfile()).size() + 1));
+            entity.setCode("" + now.getTime());
             entity.setCreatedOn(now);
             entity.setLastUpdate(now);
             entity.setActivationTime(now);
