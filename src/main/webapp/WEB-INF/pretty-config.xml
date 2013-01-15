@@ -108,6 +108,17 @@
       <query-param name="parentId" decode="false">#{accountHome.parentId}</query-param>
    </url-mapping>
    
+   
+    <url-mapping id="warehouse">
+      <pattern value="/warehouse"></pattern>
+      <view-id value="/pages/stocklist/warehouse/warehouse.xhtml"></view-id>
+    </url-mapping>
+   <url-mapping id="warehouse-list">
+      <pattern value="/warehouse/list"></pattern>
+      <view-id value="/pages/stocklist/warehouse/list.xhtml"></view-id>       
+   </url-mapping>  
+   
+   
    <!--
    <url-mapping id="project-view">
       <pattern value="/p/#{projects.current.name}"></pattern>
