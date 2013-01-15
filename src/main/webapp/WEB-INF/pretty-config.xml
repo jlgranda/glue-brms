@@ -108,6 +108,15 @@
       <query-param name="parentId" decode="false">#{accountHome.parentId}</query-param>
    </url-mapping>
    
+   <!--Security-->
+   <url-mapping id="securityGroup">
+      <pattern value="/admin/security/group"></pattern>
+      <view-id value="/pages/security/group.xhtml"></view-id>       
+   </url-mapping>
+   <url-mapping id="securityGroupList">
+      <pattern value="/admin/security/list"></pattern>
+      <view-id value="/pages/security/list.xhtml"></view-id>       
+   </url-mapping>
    <!--
    <url-mapping id="project-view">
       <pattern value="/p/#{projects.current.name}"></pattern>
