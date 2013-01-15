@@ -15,14 +15,13 @@
  */
 package org.eqaula.glue.controller.stocklist;
 
-import org.eqaula.glue.service.WerehouseService;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -30,11 +29,9 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
-import org.eqaula.glue.controller.accounting.PostingHome;
-import org.eqaula.glue.model.accounting.Account;
-import org.eqaula.glue.model.accounting.Posting;
 import org.eqaula.glue.model.stocklist.Item;
 import org.eqaula.glue.model.stocklist.Werehouse;
+import org.eqaula.glue.service.ItemService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 
@@ -42,31 +39,29 @@ import org.jboss.seam.transaction.Transactional;
  *
  * @author lucho
  */
-@Named(value = "werehouseHome")
+@Named(value = "itemHome")
 @ViewScoped
-public class WerehouseHome extends BussinesEntityHome<Werehouse> implements Serializable {
+public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
 
-    /**
-     * Creates a new instance of WerehouseHome
-     */
-    public WerehouseHome() {
-    }
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(WerehouseHome.class);
+    private static final long serialVersionUID = 4819808125494695197L;
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ItemHome.class);
     @Inject
     @Web
     private EntityManager em;
     @Inject
-    private WerehouseService werehouseService;
-    private Werehouse werehouseSelected;
-    private String backview;
+    private ItemService itemService;
+    private Item itemSelected;
     private Long parentId;
 
-    public Long getWerehouseId() {
+    public ItemHome() {
+    }
+
+    public Long getItemId() {
         return (Long) getId();
     }
 
-    public void setWerehouseId(Long werehouseId) {
-        setId(werehouseId);
+    public void setItemId(Long itemId) {
+        setId(itemId);
     }
 
     public Long getParentId() {
@@ -75,6 +70,14 @@ public class WerehouseHome extends BussinesEntityHome<Werehouse> implements Seri
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
+    }
+
+    public Item getItemSelected() {
+        return itemSelected;
+    }
+
+    public void setItemSelected(Item itemSelected) {
+        this.itemSelected = itemSelected;
     }
 
     @TransactionAttribute
@@ -88,7 +91,7 @@ public class WerehouseHome extends BussinesEntityHome<Werehouse> implements Seri
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        werehouseService.setEntityManager(em);
+        itemService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
 
     }
@@ -99,40 +102,40 @@ public class WerehouseHome extends BussinesEntityHome<Werehouse> implements Seri
     }
 
     @Override
-    protected Werehouse createInstance() {
-        log.info("eqaula --> WerehouseHome create instance");
+    protected Item createInstance() {
+        log.info("eqaula --> ItemHome create instance");
         Date now = Calendar.getInstance().getTime();
-        Werehouse werehouse = new Werehouse();
-        werehouse.setCreatedOn(now);
-        werehouse.setLastUpdate(now);
-        werehouse.setActivationTime(now);
-        werehouse.setExpirationTime(Dates.addDays(now, 364));
-        return werehouse;
+        Item item = new Item();
+        item.setCreatedOn(now);
+        item.setLastUpdate(now);
+        item.setActivationTime(now);
+        item.setExpirationTime(Dates.addDays(now, 364));
+        return item;
     }
 
     @TransactionAttribute
-    public String saveWerehouse() {
-        log.info("eqaula --> WerehouseHome save instance: " + getInstance().getId());
+    public String saveItem() {
+        log.info("eqaula --> ItemHome save instance: " + getInstance().getId());
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         String outcome = null;
         if (getInstance().isPersistent()) {
             save(getInstance());
-            outcome = "/pages/stocklist/warehouse/list";
+            outcome = "/pages/stocklist/item/list";
         } else {
             save(getInstance());
-            outcome = "/pages/stocklist/warehouse/list";
+            outcome = "/pages/stocklist/item/list";
         }
         return outcome;
     }
 
     @Transactional
-    public String deleteWerehouse() {
+    public String deleteItem() {
         log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());
         String outcome = null;
         try {
             if (getInstance() == null) {
-                throw new NullPointerException("Werehouse is null");
+                throw new NullPointerException("Item is null");
             }
             if (getInstance().isPersistent()) {
                 //  outcome = hasParent() ? "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getInstance().getParent().getId() : "/pages/accounting/list.xhtml";
@@ -143,7 +146,7 @@ public class WerehouseHome extends BussinesEntityHome<Werehouse> implements Seri
 
             } else {
                 //remover de la lista, si aún no esta persistido
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un Asiento Contable para ser borrado!", ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un Producto para ser borrado!", ""));
             }
 
         } catch (Exception e) {
@@ -151,27 +154,19 @@ public class WerehouseHome extends BussinesEntityHome<Werehouse> implements Seri
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", e.toString()));
         }
-        return "/pages/stocklist/warehouse/list";
+        return "/pages/stocklist/item/list";
     }
 
     public boolean isWired() {
         return true;
     }
 
-    public Werehouse getDefinedInstance() {
+    public Item getDefinedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
 
     @Override
-    public Class<Werehouse> getEntityClass() {
-        return Werehouse.class;
-    }
-
-    public Werehouse getWerehouseSelected() {
-        return werehouseSelected;
-    }
-
-    public void setWerehouseSelected(Werehouse werehouseSelected) {
-        this.werehouseSelected = werehouseSelected;
+    public Class<Item> getEntityClass() {
+        return Item.class;
     }
 }
