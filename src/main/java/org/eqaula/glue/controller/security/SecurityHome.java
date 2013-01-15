@@ -16,16 +16,27 @@
 package org.eqaula.glue.controller.security;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.profile.ProfileHome;
+import org.eqaula.glue.model.profile.Profile;
+import org.eqaula.glue.profile.ProfileService;
 import org.jboss.seam.international.status.Messages;
 import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
+import org.jboss.seam.security.management.picketlink.IdentitySessionProducer;
+import org.picketlink.idm.api.Group;
 import org.picketlink.idm.api.IdentitySession;
+import org.picketlink.idm.api.IdentitySessionFactory;
+import org.picketlink.idm.api.User;
+import org.picketlink.idm.common.exception.IdentityException;
 
 /**
  *
@@ -46,9 +57,59 @@ public class SecurityHome implements Serializable{
     private Credentials credentials;
     @Inject
     private IdentitySession security; 
+    @Inject
+    private ProfileService ps;
+    @Inject
+    private IdentitySessionFactory identitySessionFactory;
     private Messages msg;
     private Long profileId;
+
     
-    //TODO: extraer metodo 
+    public Long getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(Long profileId) {
+        this.profileId = profileId;
+    } 
     
+    public void initSesion() throws IdentityException{
+        Map<String, Object> sessionOptions = new HashMap<String, Object>();
+        sessionOptions.put(IdentitySessionProducer.SESSION_OPTION_ENTITY_MANAGER, em);
+        security = identitySessionFactory.createIdentitySession("default", sessionOptions);
+    }
+    
+    @PostConstruct
+    public void init() {        
+        ps.setEntityManager(em);        
+    }
+    
+    
+    //TODO: obtener el usuarios
+    public User getUser() throws IdentityException{
+        initSesion();
+         if (identity.isLoggedIn()){
+                Profile p = ps.getProfileById(profileId);
+                return security.getPersistenceManager().findUser(p.getUsername());
+            } else {
+                return null;
+            }
+    }
+    //TODO: crear un grupo 
+    public Group getGroup(){
+        
+        return null;
+    }
+    //TODO: buscar un grupo
+//    public List<Group> getGroup(){
+//        List<Group> groups = (List<Group>) security.getPersistenceManager().findGroup(null); 
+//        return null;
+//    }
+    //TODO: asignar el usuario a un grupo 
+    public void associateUserGroup(){
+        
+    }
+    //TODO: crear roles 
+    //TODO: buscar roles 
+    //TODO: asignar roles 
 }
