@@ -165,7 +165,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
     private BussinesEntity makeBussinessEntity(Group g){
         Date now = Calendar.getInstance().getTime();
             //TODO internacionalizar cadenas estáticas
-            String name = "Nuevo " + (g.getProperty() != null ? g.getProperty().getLabel() : "elemento") + " " + (g.findOtherMembers(getProfile()).size() + 1);
+            String name = "Nuevo " + (g.getProperty() != null ? g.getProperty().getLabel() : "elemento") + " " + (now);
             BussinesEntity entity = new BussinesEntity();
             entity.setName(name);
             //TODO implementar generador de códigos para entidad de negocio
