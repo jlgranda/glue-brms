@@ -65,6 +65,15 @@ limitations under the License.
                 <f:param name="result"></f:param>
                 <f:param name="typeName" value="org.eqaula.glue.model.accounting.Account"></f:param>
             </h:link>
+            
+            <h:link value="#{messages['module.stocklist']}" rendered="#{true}" 
+                    outcome="/pages/stocklist/warehouse/list">
+                <f:param name="result"></f:param>
+                <f:param name="typeName" value="org.eqaula.glue.model.stocklist.Warehouse"></f:param>
+            </h:link>
+            
+            
+            
         </p:panel>
 
     </ui:define>
