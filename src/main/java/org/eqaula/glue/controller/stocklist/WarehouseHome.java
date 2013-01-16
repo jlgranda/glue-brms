@@ -15,7 +15,7 @@
  */
 package org.eqaula.glue.controller.stocklist;
 
-import org.eqaula.glue.service.WerehouseService;
+import org.eqaula.glue.service.WarehouseService;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,19 +44,19 @@ import org.jboss.seam.transaction.Transactional;
  */
 @Named(value = "werehouseHome")
 @ViewScoped
-public class WerehouseHome extends BussinesEntityHome<Warehouse> implements Serializable {
+public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Serializable {
 
     /**
-     * Creates a new instance of WerehouseHome
+     * Creates a new instance of WarehouseHome
      */
-    public WerehouseHome() {
+    public WarehouseHome() {
     }
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(WerehouseHome.class);
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(WarehouseHome.class);
     @Inject
     @Web
     private EntityManager em;
     @Inject
-    private WerehouseService werehouseService;
+    private WarehouseService werehouseService;
     private Warehouse werehouseSelected;
     private String backview;
     private Long parentId;

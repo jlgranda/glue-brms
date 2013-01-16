@@ -23,18 +23,18 @@ import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Organization_;
 import org.eqaula.glue.model.stocklist.Warehouse;
-import org.eqaula.glue.model.stocklist.Werehouse_;
+import org.eqaula.glue.model.stocklist.Warehouse_;
 import org.eqaula.glue.util.PersistenceUtil;
 
 /**
  *
  * @author lucho
  */
-public class WerehouseService extends PersistenceUtil<Warehouse> {
+public class WarehouseService extends PersistenceUtil<Warehouse> {
 
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityService.class);
 
-    public WerehouseService() {
+    public WarehouseService() {
         super(Warehouse.class);
     }
 
@@ -56,7 +56,7 @@ public class WerehouseService extends PersistenceUtil<Warehouse> {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Warehouse> query = builder.createQuery(Warehouse.class);
         Root<Warehouse> bussinesEntityType = query.from(Warehouse.class);
-        query.where(builder.equal(bussinesEntityType.get(Werehouse_.name), name));
+        query.where(builder.equal(bussinesEntityType.get(Warehouse_.name), name));
         return getSingleResult(query);
     }
 }

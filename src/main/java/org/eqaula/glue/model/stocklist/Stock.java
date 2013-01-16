@@ -34,6 +34,7 @@ import org.eqaula.glue.model.BussinesEntity;
 @DiscriminatorValue(value = "STK")
 @PrimaryKeyJoinColumn(name = "id")
 public class Stock extends BussinesEntity implements Serializable {
+    
     private static final long serialVersionUID = -2919823726033685255L;
     
     @ManyToOne
@@ -44,5 +45,63 @@ public class Stock extends BussinesEntity implements Serializable {
     
     String unit;
     Float amount;
+
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
+    }
+
+    public Item getItems() {
+        return items;
+    }
+
+    public void setItems(Item items) {
+        this.items = items;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public Float getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Float amount) {
+        this.amount = amount;
+    }
+    
+    
+      @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (getId() != null ? getId().hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Stock)) {
+            return false;
+        }
+        Stock other = (Stock) object;
+        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.getId().equals(other.getId()))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "org.eqaula.glue.model.stocklist.Stock[ id=" + getId() + " ]";
+    }
     
 }

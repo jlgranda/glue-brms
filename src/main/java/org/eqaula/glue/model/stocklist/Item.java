@@ -53,23 +53,20 @@ import org.eqaula.glue.model.PersistentObject;
 @DiscriminatorValue(value = "IT")
 @PrimaryKeyJoinColumn(name = "id")
 public class Item extends BussinesEntity implements Serializable {
+
     private static final long serialVersionUID = -3274892332151079519L;
+    
     
     @OneToMany(mappedBy = "items")
     private List<Stock> stocks;
 
-    private Boolean stock;
-
-    public Boolean getStock() {
-        return stock;
+    public List<Stock> getStocks() {
+        return stocks;
     }
 
-    public void setStock(Boolean stock) {
-        this.stock = stock;
+    public void setStocks(List<Stock> stocks) {
+        this.stocks = stocks;
     }
-    
-    
-    
 
     @Override
     public int hashCode() {

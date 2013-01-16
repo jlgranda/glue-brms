@@ -54,7 +54,7 @@ public class WarehouseListService extends LazyDataModel<Warehouse> {
     @Web
     private EntityManager entityManager;
     @Inject
-    private WerehouseService warehouseService;
+    private WarehouseService warehouseService;
     private List<Warehouse> resultList;
     private int firstResult = 0;
     private Warehouse[] selectedWareHouses;
