@@ -34,6 +34,7 @@ import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.profile.ProfileHome;
 import org.eqaula.glue.model.Property;
 import org.eqaula.glue.model.Structure;
+import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.BussinesEntityTypeService;
 import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
@@ -55,7 +56,7 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
     @Web
     private EntityManager em;
     @Inject
-    private BussinesEntityTypeHome bussinesEntityTypeHome;
+    private BussinesEntityService bussinesEntityService;
     @Inject
     private BussinesEntityTypeService bussinesEntityTypeService;
     private Long structureId;
@@ -151,6 +152,7 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
     public void init() {
         setEntityManager(em);
         bussinesEntityTypeService.setEntityManager(em);
+        bussinesEntityService.setEntityManager(em);
     }
 
     @Override
@@ -166,7 +168,7 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             this.getInstance().setValue(converterToType(propertyStringValue));
             save(getInstance());
         } else {
-            try {                
+            try {
                 Structure s = bussinesEntityTypeService.getStructure(getStructureId()); //Retornar la estrucura.
                 s.addProperty(this.getInstance());
             } catch (Exception ex) {
@@ -178,29 +180,38 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
 
     @Transactional
     public String deleteProperty() {
+        String outcome = null;
         try {
             if (getInstance() == null) {
                 throw new NullPointerException("property is null");
             }
 
-            if (getInstance().isPersistent()) {                
-                Structure s = bussinesEntityTypeService.getStructure(getStructureId());                
-                boolean mensaje = s.removeProperty(getInstance());                
-                delete(getInstance());                    
-                save(s);                                
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
-                //RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
-                
+            if (getInstance().isPersistent()) {
+                if (hasValuesBussinesEntity()) {
+                    Structure s = bussinesEntityTypeService.getStructure(getStructureId());
+                    boolean mensaje = s.removeProperty(getInstance());
+                    delete(getInstance());
+                    save(s);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
+                    RequestContext.getCurrentInstance().execute("deletedDlg.hide()"); //cerrar el popup si se grabo correctamente
+                    outcome = "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();                    
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.property.hasValues")+" "+ getInstance().getName(), ""));
+                    RequestContext.getCurrentInstance().execute("deletedDlg.hide()"); //cerrar el popup si se grabo correctamente
+                    outcome = "/pages/admin/bussinesentitytype/property?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId()+"&propertyId="+getPropertyId();
+                }
+
+
             } else {
                 //remover de la lista, si aún no esta persistido
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Debe agregar una propiedad para ser borrada", ""));
             }
 
-        } catch (Exception e) {            
+        } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        return "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();
+        return outcome;
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -245,5 +256,9 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             //log.info("eqaula --> error converter: " + value);
         }
         return (Serializable) o;
-    }      
+    }
+
+    public boolean hasValuesBussinesEntity() {
+        return bussinesEntityService.findBussinesEntityForProperty(getInstance()).isEmpty() && bussinesEntityService.findBussinesEntityAttributeForProperty(getInstance()).isEmpty();
+    }
 }

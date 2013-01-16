@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityAttribute;
+import org.eqaula.glue.model.BussinesEntityAttribute_;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.BussinesEntityType_;
 import org.eqaula.glue.model.BussinesEntity_;
@@ -180,12 +181,28 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
         return value;
     }
 
-    public List<BussinesEntity> findBussinesEntityForType(BussinesEntityType type) {          
+    public List<BussinesEntity> findBussinesEntityForType(BussinesEntityType type) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<BussinesEntity> query = builder.createQuery(BussinesEntity.class);
         Root<BussinesEntity> bussinesEntity = query.from(BussinesEntity.class);
-        query.where(builder.equal(bussinesEntity.get(BussinesEntity_.type), type));                 
+        query.where(builder.equal(bussinesEntity.get(BussinesEntity_.type), type));
         return getResultList(query);
-        
+
+    }
+
+    public List<BussinesEntity> findBussinesEntityForProperty(Property property) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<BussinesEntity> query = builder.createQuery(BussinesEntity.class);
+        Root<BussinesEntity> bussinesEntity = query.from(BussinesEntity.class);
+        query.where(builder.equal(bussinesEntity.get(BussinesEntity_.property), property));
+        return getResultList(query);
+    }
+    
+    public List<BussinesEntityAttribute> findBussinesEntityAttributeForProperty(Property property) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<BussinesEntityAttribute> query = builder.createQuery(BussinesEntityAttribute.class);
+        Root<BussinesEntityAttribute> bussinesEntity = query.from(BussinesEntityAttribute.class);
+        query.where(builder.equal(bussinesEntity.get(BussinesEntityAttribute_.property), property));
+        return getResultList(query);
     }
 }
