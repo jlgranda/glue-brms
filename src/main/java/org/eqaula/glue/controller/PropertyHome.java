@@ -259,6 +259,8 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
     }
 
     public boolean hasValuesBussinesEntity() {
-        return bussinesEntityService.findBussinesEntityForProperty(getInstance()).isEmpty() && bussinesEntityService.findBussinesEntityAttributeForProperty(getInstance()).isEmpty();
+        boolean ban = bussinesEntityService.findBussinesEntityForProperty(getInstance()).isEmpty() && bussinesEntityService.findBussinesEntityAttributeForProperty(getInstance()).isEmpty();
+        //log.info("eqaula --> property tiene valores : " + ban);
+        return ban;
     }
 }
