@@ -22,7 +22,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Organization_;
-import org.eqaula.glue.model.stocklist.Werehouse;
+import org.eqaula.glue.model.stocklist.Warehouse;
 import org.eqaula.glue.model.stocklist.Werehouse_;
 import org.eqaula.glue.util.PersistenceUtil;
 
@@ -30,12 +30,12 @@ import org.eqaula.glue.util.PersistenceUtil;
  *
  * @author lucho
  */
-public class WerehouseService extends PersistenceUtil<Werehouse> {
+public class WerehouseService extends PersistenceUtil<Warehouse> {
 
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityService.class);
 
     public WerehouseService() {
-        super(Werehouse.class);
+        super(Warehouse.class);
     }
 
     @Override
@@ -43,19 +43,19 @@ public class WerehouseService extends PersistenceUtil<Werehouse> {
         this.em = em;
     }
 
-    public Werehouse getWerehouseById(final Long id) {
-        return (Werehouse) findById(Werehouse.class, id);
+    public Warehouse getWerehouseById(final Long id) {
+        return (Warehouse) findById(Warehouse.class, id);
     }
 
-    public List<Werehouse> getWareHouses(final int limit, final int offset) {
-        return findAll(Werehouse.class);
+    public List<Warehouse> getWareHouses(final int limit, final int offset) {
+        return findAll(Warehouse.class);
     }
 
-    public Werehouse findByName(final String name) {
+    public Warehouse findByName(final String name) {
         log.info("find Profile with name " + name);
         CriteriaBuilder builder = getCriteriaBuilder();
-        CriteriaQuery<Werehouse> query = builder.createQuery(Werehouse.class);
-        Root<Werehouse> bussinesEntityType = query.from(Werehouse.class);
+        CriteriaQuery<Warehouse> query = builder.createQuery(Warehouse.class);
+        Root<Warehouse> bussinesEntityType = query.from(Warehouse.class);
         query.where(builder.equal(bussinesEntityType.get(Werehouse_.name), name));
         return getSingleResult(query);
     }

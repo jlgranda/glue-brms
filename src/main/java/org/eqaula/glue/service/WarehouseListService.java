@@ -27,7 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
-import org.eqaula.glue.model.stocklist.Werehouse;
+import org.eqaula.glue.model.stocklist.Warehouse;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.eqaula.glue.util.UI;
@@ -42,7 +42,7 @@ import org.primefaces.model.SortOrder;
  */
 @Named(value = "warehouseListService")
 @RequestScoped
-public class WarehouseListService extends LazyDataModel<Werehouse> {
+public class WarehouseListService extends LazyDataModel<Warehouse> {
 
     /**
      * Creates a new instance of WarehouseListService
@@ -55,18 +55,18 @@ public class WarehouseListService extends LazyDataModel<Werehouse> {
     private EntityManager entityManager;
     @Inject
     private WerehouseService warehouseService;
-    private List<Werehouse> resultList;
+    private List<Warehouse> resultList;
     private int firstResult = 0;
-    private Werehouse[] selectedWareHouses;
-    private Werehouse selectedWarehouse;
+    private Warehouse[] selectedWareHouses;
+    private Warehouse selectedWarehouse;
 
     public WarehouseListService() {
         setPageSize(MAX_RESULTS);
-        resultList = new ArrayList<Werehouse>();
+        resultList = new ArrayList<Warehouse>();
         //log.info("Service initialized!");
     }
 
-    public List<Werehouse> getResultList() {
+    public List<Warehouse> getResultList() {
         log.info("load BussinesEntityType");
         if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
             resultList = warehouseService.getWareHouses(this.getPageSize(), firstResult);
@@ -75,7 +75,7 @@ public class WarehouseListService extends LazyDataModel<Werehouse> {
         return resultList;
     }
 
-    public void setResultList(List<Werehouse> resultList) {
+    public void setResultList(List<Warehouse> resultList) {
         this.resultList = resultList;
     }
 
@@ -89,11 +89,11 @@ public class WarehouseListService extends LazyDataModel<Werehouse> {
         return firstResult;
     }
 
-    public Werehouse getSelectedWarehouse() {
+    public Warehouse getSelectedWarehouse() {
         return selectedWarehouse;
     }
 
-    public void setSelectedWarehouse(Werehouse selectedWarehouse) {
+    public void setSelectedWarehouse(Warehouse selectedWarehouse) {
         this.selectedWarehouse = selectedWarehouse;
     }
 
@@ -106,7 +106,7 @@ public class WarehouseListService extends LazyDataModel<Werehouse> {
     }
     
     @Override
-    public List<Werehouse> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+    public List<Warehouse> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
         int end = first + pageSize;
 
         QuerySortOrder order = QuerySortOrder.ASC;
@@ -117,7 +117,7 @@ public class WarehouseListService extends LazyDataModel<Werehouse> {
         /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
          _filters.putAll(filters);*/
 
-        QueryData<Werehouse> qData = warehouseService.find(first, end, sortField, order, _filters);
+        QueryData<Warehouse> qData = warehouseService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();
     }
@@ -129,25 +129,25 @@ public class WarehouseListService extends LazyDataModel<Werehouse> {
     }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.warehouse") + " " + UI.getMessages("common.selected"), ((Werehouse) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.warehouse") + " " + UI.getMessages("common.selected"), ((Warehouse) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.warehouse") + " " + UI.getMessages("common.unselected"), ((Werehouse) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.warehouse") + " " + UI.getMessages("common.unselected"), ((Warehouse) event.getObject()).getName());
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setSelectedWarehouse(null);
     }
 
     @Override
-    public Werehouse getRowData(String rowKey) {
+    public Warehouse getRowData(String rowKey) {
 
         return warehouseService.findByName(rowKey);
     }
 
     @Override
-    public Object getRowKey(Werehouse entity) {
+    public Object getRowKey(Warehouse entity) {
         return entity.getName();
     }
 }

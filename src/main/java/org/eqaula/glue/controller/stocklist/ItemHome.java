@@ -30,7 +30,7 @@ import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.stocklist.Item;
-import org.eqaula.glue.model.stocklist.Werehouse;
+import org.eqaula.glue.model.stocklist.Warehouse;
 import org.eqaula.glue.service.ItemService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;

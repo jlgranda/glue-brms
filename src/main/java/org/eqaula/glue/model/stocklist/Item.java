@@ -32,11 +32,13 @@
 package org.eqaula.glue.model.stocklist;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import org.eqaula.glue.model.BussinesEntity;
@@ -51,8 +53,11 @@ import org.eqaula.glue.model.PersistentObject;
 @DiscriminatorValue(value = "IT")
 @PrimaryKeyJoinColumn(name = "id")
 public class Item extends BussinesEntity implements Serializable {
+    private static final long serialVersionUID = -3274892332151079519L;
+    
+    @OneToMany(mappedBy = "items")
+    private List<Stock> stocks;
 
-    private static final long serialVersionUID = 1L;
     private Boolean stock;
 
     public Boolean getStock() {

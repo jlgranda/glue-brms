@@ -34,8 +34,11 @@
 package org.eqaula.glue.model.stocklist;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import org.eqaula.glue.model.BussinesEntity;
@@ -49,7 +52,10 @@ import org.eqaula.glue.model.PersistentObject;
 @Table(name = "Werehouse")
 @DiscriminatorValue(value = "WH")
 @PrimaryKeyJoinColumn(name = "id")
-public class Werehouse extends BussinesEntity implements Serializable {
+public class Warehouse extends BussinesEntity implements Serializable {
+    @OneToMany(mappedBy = "warehouse")
+    private List<Stock> stocks;
+
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -62,10 +68,10 @@ public class Werehouse extends BussinesEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Werehouse)) {
+        if (!(object instanceof Warehouse)) {
             return false;
         }
-        Werehouse other = (Werehouse) object;
+        Warehouse other = (Warehouse) object;
         if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.getId().equals(other.getId()))) {
             return false;
         }

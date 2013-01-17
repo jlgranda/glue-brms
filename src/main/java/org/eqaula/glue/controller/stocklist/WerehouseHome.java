@@ -34,7 +34,7 @@ import org.eqaula.glue.controller.accounting.PostingHome;
 import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.model.accounting.Posting;
 import org.eqaula.glue.model.stocklist.Item;
-import org.eqaula.glue.model.stocklist.Werehouse;
+import org.eqaula.glue.model.stocklist.Warehouse;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 
@@ -44,7 +44,7 @@ import org.jboss.seam.transaction.Transactional;
  */
 @Named(value = "werehouseHome")
 @ViewScoped
-public class WerehouseHome extends BussinesEntityHome<Werehouse> implements Serializable {
+public class WerehouseHome extends BussinesEntityHome<Warehouse> implements Serializable {
 
     /**
      * Creates a new instance of WerehouseHome
@@ -57,7 +57,7 @@ public class WerehouseHome extends BussinesEntityHome<Werehouse> implements Seri
     private EntityManager em;
     @Inject
     private WerehouseService werehouseService;
-    private Werehouse werehouseSelected;
+    private Warehouse werehouseSelected;
     private String backview;
     private Long parentId;
 
@@ -99,10 +99,10 @@ public class WerehouseHome extends BussinesEntityHome<Werehouse> implements Seri
     }
 
     @Override
-    protected Werehouse createInstance() {
+    protected Warehouse createInstance() {
         log.info("eqaula --> WerehouseHome create instance");
         Date now = Calendar.getInstance().getTime();
-        Werehouse werehouse = new Werehouse();
+        Warehouse werehouse = new Warehouse();
         werehouse.setCreatedOn(now);
         werehouse.setLastUpdate(now);
         werehouse.setActivationTime(now);
@@ -158,20 +158,20 @@ public class WerehouseHome extends BussinesEntityHome<Werehouse> implements Seri
         return true;
     }
 
-    public Werehouse getDefinedInstance() {
+    public Warehouse getDefinedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
 
     @Override
-    public Class<Werehouse> getEntityClass() {
-        return Werehouse.class;
+    public Class<Warehouse> getEntityClass() {
+        return Warehouse.class;
     }
 
-    public Werehouse getWerehouseSelected() {
+    public Warehouse getWerehouseSelected() {
         return werehouseSelected;
     }
 
-    public void setWerehouseSelected(Werehouse werehouseSelected) {
+    public void setWerehouseSelected(Warehouse werehouseSelected) {
         this.werehouseSelected = werehouseSelected;
     }
 }
