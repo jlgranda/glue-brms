@@ -6,7 +6,7 @@
         <param-value>cupertino</param-value>
     </context-param>
 
-     <context-param>  
+    <context-param>  
         <param-name>javax.faces.DEFAULT_SUFFIX</param-name>  
         <param-value>.xhtml</param-value>  
     </context-param>
@@ -138,5 +138,13 @@
         </init-param>
  
     </servlet>
+    
+    <persistence-context-ref>
+        <description>Convertidor genérico que combierte cualquier objeto a string y viceversa
+        </description>
+        <persistence-context-ref-name>persistence/em</persistence-context-ref-name>
+        <persistence-unit-name>glue</persistence-unit-name>
+    </persistence-context-ref>
+    
     
 </web-app>

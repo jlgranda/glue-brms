@@ -15,15 +15,12 @@
  */
 package org.eqaula.glue.controller.stocklist;
 
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -31,9 +28,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
-import org.eqaula.glue.model.stocklist.Item;
-import org.eqaula.glue.model.stocklist.Warehouse;
-import org.eqaula.glue.service.ItemService;
+import org.eqaula.glue.model.stocklist.Stock;
+import org.eqaula.glue.service.StockService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 
@@ -41,29 +37,32 @@ import org.jboss.seam.transaction.Transactional;
  *
  * @author lucho
  */
-@Named(value = "itemHome")
+@Named(value = "stockHome")
 @ViewScoped
-public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
+public class StockHome extends BussinesEntityHome<Stock> implements Serializable {
 
-    private static final long serialVersionUID = 4819808125494695197L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ItemHome.class);
+    /**
+     * Creates a new instance of StockHome
+     */
+    public StockHome() {
+    }
+    
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(StockHome.class);
     @Inject
     @Web
     private EntityManager em;
     @Inject
-    private ItemService itemService;
-    private Item itemSelected;
+    private StockService stockService;
+    private Stock stockSelected;
+    private String backview;
     private Long parentId;
 
-    public ItemHome() {
-    }
-
-    public Long getItemId() {
+    public Long getStockId() {
         return (Long) getId();
     }
 
-    public void setItemId(Long itemId) {
-        setId(itemId);
+    public void setStockId(Long stockId) {
+        setId(stockId);
     }
 
     public Long getParentId() {
@@ -72,14 +71,6 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
-    }
-
-    public Item getItemSelected() {
-        return itemSelected;
-    }
-
-    public void setItemSelected(Item itemSelected) {
-        this.itemSelected = itemSelected;
     }
 
     @TransactionAttribute
@@ -93,7 +84,7 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        itemService.setEntityManager(em);
+        stockService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
 
     }
@@ -104,40 +95,40 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
     }
 
     @Override
-    protected Item createInstance() {
-        log.info("eqaula --> ItemHome create instance");
+    protected Stock createInstance() {
+        log.info("eqaula --> StockHome create instance");
         Date now = Calendar.getInstance().getTime();
-        Item item = new Item();
-        item.setCreatedOn(now);
-        item.setLastUpdate(now);
-        item.setActivationTime(now);
-        item.setExpirationTime(Dates.addDays(now, 364));
-        return item;
+        Stock stock = new Stock();
+        stock.setCreatedOn(now);
+        stock.setLastUpdate(now);
+        stock.setActivationTime(now);
+        stock.setExpirationTime(Dates.addDays(now, 364));
+        return stock;
     }
 
     @TransactionAttribute
-    public String saveItem() {
-        log.info("eqaula --> ItemHome save instance: " + getInstance().getId());
+    public String saveStock() {
+        log.info("eqaula --> StockHome save instance: " + getInstance().getId());
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         String outcome = null;
         if (getInstance().isPersistent()) {
             save(getInstance());
-            outcome = "/pages/stocklist/item/list";
+            outcome = "/pages/stocklist/stock/list";
         } else {
             save(getInstance());
-            outcome = "/pages/stocklist/item/list";
+            outcome = "/pages/stocklist/stock/list";
         }
         return outcome;
     }
 
     @Transactional
-    public String deleteItem() {
+    public String deleteStock() {
         log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());
-        String outcome = null;
+        
         try {
             if (getInstance() == null) {
-                throw new NullPointerException("Item is null");
+                throw new NullPointerException("Stock is null");
             }
             if (getInstance().isPersistent()) {
                 //  outcome = hasParent() ? "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getInstance().getParent().getId() : "/pages/accounting/list.xhtml";
@@ -148,7 +139,7 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
 
             } else {
                 //remover de la lista, si aún no esta persistido
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un Producto para ser borrado!", ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un Asiento Contable para ser borrado!", ""));
             }
 
         } catch (Exception e) {
@@ -156,26 +147,31 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", e.toString()));
         }
-        return "/pages/stocklist/item/list";
+        return "/pages/stocklist/stock/list";
     }
 
     public boolean isWired() {
         return true;
     }
 
-    public Item getDefinedInstance() {
+    public Stock getDefinedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
 
     @Override
-    public Class<Item> getEntityClass() {
-        return Item.class;
+    public Class<Stock> getEntityClass() {
+        return Stock.class;
+    }
+
+    public Stock getStockSelected() {
+        return stockSelected;
+    }
+
+    public void setStockSelected(Stock stockSelected) {
+        this.stockSelected = stockSelected;
     }
     
     
-    public List<Item> getItems(){
-        List list = itemService.getItems();
-        return list;
-    }
+    
     
 }

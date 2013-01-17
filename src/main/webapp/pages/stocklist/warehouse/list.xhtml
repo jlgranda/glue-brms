@@ -17,6 +17,9 @@
             </div>
         </div>             
     </ui:define>
+    
+    
+    
     <ui:define name="content">
 
         <f:metadata>
@@ -27,7 +30,7 @@
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
             <div class="admin-actions">
                 <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="warehouse" styleClass="btn primary">
-                    <f:param name="werehouseId"></f:param>
+                    <f:param name="werehouseId" value="#{warehouseListService.selectedWarehouse.id}"></f:param>
                     <f:param name="backView" value="list"></f:param>
                 </h:link>                
                 #{' '}
@@ -37,8 +40,10 @@
                     <f:param name="backView" value="list"></f:param>
                 </h:link> 
                 #{' '}
-                <h:link id="button-admin" value="#{messages['common.admin']}" rendered="#{true}" outcome="view.xhtml" styleClass="btn"
-                        disabled="false">
+                <h:link id="button-admin" value="#{messages['common.admin']}" rendered="#{true}" outcome="view" styleClass="btn"
+                        disabled="#{warehouseListService.selectedWarehouse.id==null}">
+                    <f:param name="werehouseId" value="#{warehouseListService.selectedWarehouse.id}"></f:param>
+                    <f:param name="backView" value="list"></f:param>
                 </h:link>
 
             </div>
@@ -54,8 +59,8 @@
                          selectionMode="single">
 
                 <p:ajax event="rowSelect" listener="#{warehouseListService.onRowSelect}"   
-                        update=":form:button-edit: :form:messages"/>                 
-                <p:ajax event="rowUnselect" listener="#{warehouseListService.onRowUnselect}" update=":form:button-edit :form:messages"/>
+                        update=":form:button-edit :form:button-admin :form:messages"/>                 
+                <p:ajax event="rowUnselect" listener="#{warehouseListService.onRowUnselect}" update=":form:button-edit :form:button-admin :form:messages"/>
 
                 <p:column headerText="#{messages['common.name']}" sortBy="#{warehouse.name}">
                     <h:outputText value="#{warehouse.name}" />

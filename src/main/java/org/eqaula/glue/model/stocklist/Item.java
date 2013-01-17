@@ -39,6 +39,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import org.eqaula.glue.model.BussinesEntity;
@@ -52,12 +53,13 @@ import org.eqaula.glue.model.PersistentObject;
 @Table(name = "Item")
 @DiscriminatorValue(value = "IT")
 @PrimaryKeyJoinColumn(name = "id")
-public class Item extends BussinesEntity implements Serializable {
+public class Item extends BussinesEntity implements Serializable, Comparable<Item> {
 
     private static final long serialVersionUID = -3274892332151079519L;
     
     
-    @OneToMany(mappedBy = "items")
+   
+    @OneToMany(mappedBy = "item")
     private List<Stock> stocks;
 
     public List<Stock> getStocks() {
@@ -67,7 +69,12 @@ public class Item extends BussinesEntity implements Serializable {
     public void setStocks(List<Stock> stocks) {
         this.stocks = stocks;
     }
-
+    
+    
+    
+    
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -90,6 +97,11 @@ public class Item extends BussinesEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.stocklist.Item[ id=" + getId() + " ]";
+        return getName();
+    }
+    
+    @Override
+    public int compareTo(Item o) {
+        return this.getName().compareTo(o.getName());
     }
 }

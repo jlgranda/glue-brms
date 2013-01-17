@@ -34,15 +34,12 @@ import org.eqaula.glue.model.BussinesEntity;
 @DiscriminatorValue(value = "STK")
 @PrimaryKeyJoinColumn(name = "id")
 public class Stock extends BussinesEntity implements Serializable {
-    
+
     private static final long serialVersionUID = -2919823726033685255L;
-    
     @ManyToOne
     Warehouse warehouse;
-    
     @ManyToOne
-    Item items;
-    
+    private Item item;
     String unit;
     Float amount;
 
@@ -52,14 +49,6 @@ public class Stock extends BussinesEntity implements Serializable {
 
     public void setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
-    }
-
-    public Item getItems() {
-        return items;
-    }
-
-    public void setItems(Item items) {
-        this.items = items;
     }
 
     public String getUnit() {
@@ -77,9 +66,16 @@ public class Stock extends BussinesEntity implements Serializable {
     public void setAmount(Float amount) {
         this.amount = amount;
     }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
     
-    
-      @Override
+   @Override
     public int hashCode() {
         int hash = 0;
         hash += (getId() != null ? getId().hashCode() : 0);
@@ -103,5 +99,4 @@ public class Stock extends BussinesEntity implements Serializable {
     public String toString() {
         return "org.eqaula.glue.model.stocklist.Stock[ id=" + getId() + " ]";
     }
-    
 }

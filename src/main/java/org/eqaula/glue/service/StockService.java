@@ -15,27 +15,26 @@
  */
 package org.eqaula.glue.service;
 
-import java.util.Collections;
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import org.eqaula.glue.model.accounting.Account;
-import org.eqaula.glue.model.stocklist.Item;
-import org.eqaula.glue.model.stocklist.Item_;
+import org.eqaula.glue.model.stocklist.Stock;
+import org.eqaula.glue.model.stocklist.Stock_;
 import org.eqaula.glue.util.PersistenceUtil;
 
 /**
  *
  * @author lucho
  */
-public class ItemService extends PersistenceUtil<Item> {
+public class StockService extends PersistenceUtil<Stock> implements Serializable {
 
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityService.class);
 
-    public ItemService() {
-        super(Item.class);
+    public StockService() {
+        super(Stock.class);
     }
 
     @Override
@@ -43,27 +42,20 @@ public class ItemService extends PersistenceUtil<Item> {
         this.em = em;
     }
 
-    public Item getItemById(final Long id) {
-        return (Item) findById(Item.class, id);
+    public Stock getStockById(final Long id) {
+        return (Stock) findById(Stock.class, id);
     }
 
-    public List<Item> getItems(final int limit, final int offset) {
-        return findAll(Item.class);
+    public List<Stock> getStock(final int limit, final int offset) {
+        return findAll(Stock.class);
     }
 
-    public Item findByName(final String name) {
-        log.info("find Item with name " + name);
+    public Stock findByName(final String name) {
+        log.info("find Profile with name " + name);
         CriteriaBuilder builder = getCriteriaBuilder();
-        CriteriaQuery<Item> query = builder.createQuery(Item.class);
-        Root<Item> bussinesEntityType = query.from(Item.class);
-        query.where(builder.equal(bussinesEntityType.get(Item_.name), name));
+        CriteriaQuery<Stock> query = builder.createQuery(Stock.class);
+        Root<Stock> bussinesEntityType = query.from(Stock.class);
+        query.where(builder.equal(bussinesEntityType.get(Stock_.name), name));
         return getSingleResult(query);
-    }
-
-    public List<Item> getItems() {
-        List list = this.findAll(Item.class);
-        Collections.sort(list);
-        return list;
-
     }
 }

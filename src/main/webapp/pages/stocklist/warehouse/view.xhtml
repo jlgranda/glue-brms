@@ -1,70 +1,87 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-                xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/view/templates/glue.xhtml">
-    <ui:param name="title" value="#{messages['module.stocklist']} - #{werehouseHome.instance.name}" />
-    <ui:define name="header-replace">
-        <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
-            <div class="container">
-                <div class="row fl" style="margin-top: 5px;">
-                    <h1>#{messages['module.stocklist']}</h1>   
-                </div>
-            </div>
-        </div>             
-    </ui:define>
-    <ui:define name="content">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
 
+    <ui:composition template="/WEB-INF/view/templates/profile-active.xhtml">
         <f:metadata>
-            <f:viewParam name="result" value="#{warehouseListService.firstResult}" />
+            <f:viewParam name="werehouseId" value="#{werehouseHome.werehouseId}" />                
         </f:metadata>
 
-        <h:form id="form">
-            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-            <div class="admin-actions">
-                <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="warehouse" styleClass="btn primary">
-                    <f:param name="werehouseId"></f:param>
-                    <f:param name="backView" value="list"></f:param>
-                </h:link>                
-                #{' '}
-                <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="warehouse" styleClass="btn" 
-                        disabled="#{warehouseListService.selectedWarehouse.id==null}">
-                    <f:param name="werehouseId" value="#{warehouseListService.selectedWarehouse.id}"></f:param>
-                    <f:param name="backView" value="list"></f:param>
-                </h:link> 
-                #{' '}
-                <h:link id="button-admin" value="#{messages['common.admin']}" rendered="#{true}" outcome="/pages/stocklist/warehouse/view.xhtml" styleClass="btn"
-                        disabled="#{warehouseListService.selectedWarehouse.id==null}">
-                </h:link>
+        <ui:param name="title" value="#{messages['module.stocklist']} - #{werehouseHome.instance.name}" />
+        <ui:define name="header-replace">
+            <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
+                <div class="container">
+                    <div class="row fl" style="margin-top: 5px;">
+                        <h1>#{werehouseHome.instance.name}</h1>   
+                    </div>
+                </div>
+            </div>             
+        </ui:define>
 
-            </div>
-            <p:dataTable var="warehouse" value="#"
-                         paginator="true" rows="10"
-                         paginatorAlwaysVisible="false"
-                         paginatorPosition="top"
-                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
-                         rowsPerPageTemplate="5,10,15"
-                         id="warehouseTable" lazy="true"
-                         selection="#{warehouseListService.selectedWarehouse}"
-                         rendered="true"
-                         selectionMode="single">
+        <ui:define name="content">
+            <f:metadata>
+                <f:viewParam name="result" value="#{stockListService.firstResult}" />
+            </f:metadata>
 
-                <p:ajax event="rowSelect" listener="#{warehouseListService.onRowSelect}"   
-                        update=":form:button-edit: :form:messages"/>                 
-                <p:ajax event="rowUnselect" listener="#{warehouseListService.onRowUnselect}" update=":form:button-edit :form:messages"/>
+            <h:form id="form">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
 
-                <p:column headerText="Item" sortBy="#{warehouse.name}">
-                    <h:outputText value="#{warehouse}" />
-                </p:column>
-                <p:column headerText="Cantidad" sortBy="#{warehouse.description}">
-                    <h:outputText value="#{warehouse}" />
-                </p:column>                
-            </p:dataTable>
-        </h:form>
 
-    </ui:define>
-</ui:composition>
+                <div class="admin-actions">
+                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="/pages/stocklist/stock/stock" styleClass="btn primary">
+
+                        <f:param name="stockId" value="#{stockListService.selectedStock.id}"></f:param>
+                        <f:param name="backView" value="list"></f:param>
+                    </h:link> 
+
+                    #{' '}
+                    <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="/pages/stocklist/stock/stock" styleClass="btn" 
+                            disabled="#{stockListService.selectedStock.id==null}">
+                        <f:param name="stockId" value="#{stockListService.selectedStock.id}"></f:param>
+                        <f:param name="backView" value="list"></f:param>
+                    </h:link> 
+                    #{' '}
+
+                </div>
+
+                <h3> #{messages['module.stocklist.stock']}</h3>
+
+                <p:dataTable var="stock" value="#{werehouseHome.instance.stocks}"
+                             paginator="true" rows="10"
+                             paginatorAlwaysVisible="false"
+                             paginatorPosition="top"
+                             paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                             rowsPerPageTemplate="5,10,15"
+                             id="stockTable" lazy="true"
+                             selection="#{stockListService.selectedStock}"
+                             rendered="true"
+                             selectionMode="single">
+
+                    <p:ajax event="rowSelect" listener="#{stockListService.onRowSelect}"   
+                            update=":form:button-edit :form:messages"/>                 
+                    <p:ajax event="rowUnselect" listener="#{stockListService.onRowUnselect}" 
+                            update=":form:button-edit :form:messages"/>
+
+
+                    <p:column headerText="Item" sortBy="#{stock.item.name}">
+                        <h:outputText value="#{stock.item.name}" />
+                    </p:column>
+                    <p:column headerText="Unidades" sortBy="#{stock.unit}">
+                        <h:outputText value="#{stock.unit}" />
+                    </p:column>
+                    <p:column headerText="Precio" sortBy="#{stock.unit}">
+                        <h:outputText value="#{stock.amount}" />
+                    </p:column>                
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

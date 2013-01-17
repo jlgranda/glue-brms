@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"      
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+            <f:viewParam name="itemId" value="#{itemHome.itemId}" />            
+            <s:viewAction action="#{itemHome.load}" if="#{conversation.transient}"/>
+        </f:metadata>
+
+        <ui:define name="header-replace">
+            <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
+                <div class="container">
+                    <div class="row fl" style="margin-top: 5px;">
+                        <h3>#{itemHome.itemId != null? messages['common.edit'] : messages['common.add']} 
+                            #{messages['module.stocklist.stock']}</h3>   
+                    </div>
+                </div>
+            </div>             
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="form" acceptcharset="UTF-8">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+
+                <glue:input id="name" name="unit" type="text" label="Unidades" value="#{stockHome.instance.unit}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                <glue:input id="description" name="amount" type="text" label="Precio" value="#{stockHome.instance.amount}" required="false" inlinehelp="#{messages['common.description.help']}" execute="@this save" render="description"/>
+
+
+                <h:panelGroup layout="block" class="clearfix">
+                    <label for="itemtype_" class="">Productos</label>
+                    <div class="input">
+                        <p:selectOneMenu id="itemtype_" value="#{stockHome.instance.item}" effect="fade"  
+                                         rendered="true" label="Items"
+                                         converter="genericConverter" >
+                            <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                            <f:selectItems value="#{itemHome.items}" var="accountType1" itemLabel="#{accountType1}" itemValue="#{accountType1}"/>                          
+                        </p:selectOneMenu>                        
+                    </div>
+                </h:panelGroup>
+
+
+                <div class="actions">
+                    <p:commandButton id="save" action="#{stockHome.saveStock()}" value="#{messages['common.save']}" styleClass="btn primary"/>
+                    &nbsp;
+                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
+                                     update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{stockHome.instance.id != null}"/>
+                    &nbsp;
+                    <h:link outcome="/pages/stocklist/stock/list.xhtml?faces-redirect=true" onclick="editDlg.hide();"
+                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
+                    </h:link>
+                </div>
+
+                <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
+                    <h:form id="form-dialog-confirm-delete">
+                        <h:panelGroup layout="block" style="padding:5px;">  
+                            <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                        </h:panelGroup>  
+                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                         action="#{stockHome.deleteItem()}"                                          
+                                         ajax="true" process="@this"  
+                                         style="margin-top:10px;">  
+                        </p:commandButton>  
+                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                         style="margin-top:10px;"/>  
+                    </h:form>
+                </p:dialog> 
+
+            </h:form>                 
+        </ui:define>             
+    </ui:composition>
+</html>
+
