@@ -19,20 +19,20 @@
     <ui:define name="content">
 
         <f:metadata>
-            <f:viewParam name="result" value="#{securityGroupListService.firstResult}" />
+            <f:viewParam name="result" value="#{securityGroupListService.resultList}" />
         </f:metadata>
 
         <h:form id="form">
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
             <div class="admin-actions">
                 <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="group" styleClass="btn primary">
-                    <f:param name="groupId"></f:param>
+                    <f:param name="groupName"></f:param>
                     <f:param name="backView" value="list"></f:param>
                 </h:link>                
                 #{' '}
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="true" outcome="group" styleClass="btn" 
                         disabled="#{false}">
-                    <f:param name="groupId" ></f:param>
+                    <f:param name="groupName" value="#{securityGroupListService.selectedGroup.name}"></f:param>
                     <f:param name="backView" value="list"></f:param>
                 </h:link> 
                 <!--#{' '}
@@ -42,21 +42,18 @@
                     <f:param name="backView" value="list"></f:param>
                 </h:link>-->
             </div>
-            <p:dataTable var="group" value="#{securityGroupListService}"
-                         paginator="true" rows="10"
-                         paginatorAlwaysVisible="false"
-                         paginatorPosition="top"
-                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
-                         rowsPerPageTemplate="5,10,15"
-                         id="groupTable" lazy="true"
-                         selection="#{securityGroupListService.selectedGroup}"
-                         rendered="true"
+            <p:dataTable var="group" value="#{securityGroupListService.resultList}"
+                         editable="false" id="groupTable" rendered="true"                          
+                         rows="10" >
+                        <!-- rowKey="#{securityGroupListService.selectedGroup.name}"                         
+                         selection="#{securityGroupListService.selectedGroup}"                         
                          selectionMode="single">
-           
+
                 <p:ajax event="rowSelect" listener="#{securityGroupListService.onRowSelect}"   
                         update=":form:button-edit :form:messages"/>                 
                 <p:ajax event="rowUnselect" listener="#{securityGroupListService.onRowUnselect}" update=":form:button-edit :form:messages"/>
-               
+                -->
+                <p:column selectionMode="single"/>
                 <p:column headerText="#{messages['security.group.name']}" sortBy="#{group.name}">
                     <h:outputText value="#{group.name}" />
                 </p:column>

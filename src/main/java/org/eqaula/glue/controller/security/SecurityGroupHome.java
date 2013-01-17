@@ -25,7 +25,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -65,7 +67,7 @@ public class SecurityGroupHome extends BussinesEntityHome<Group> implements Seri
     @Inject
     private IdentitySession security;
     @Inject
-    private IdentitySessionFactory identitySessionFactory;
+    private SecurityGroupService securityGroupService;
     @Inject
     private SecurityGroupService sgs;
     private Long groupId;
@@ -89,10 +91,8 @@ public class SecurityGroupHome extends BussinesEntityHome<Group> implements Seri
     }
 
     public String getGroupType() {
-        for (String t : TypesGroup()) {
-            if (t.equals("GROUP")) {
-                groupType = t;
-            }
+        if (this.isPersistent()) {
+            groupType = getInstance().getGroupType();
         }
         return groupType;
     }
@@ -108,31 +108,41 @@ public class SecurityGroupHome extends BussinesEntityHome<Group> implements Seri
     @PostConstruct
     public void init() {
         //initSesion();
+        setEntityManager(em);
         try {
             log.info("eqaula security -->  Inicio Security group");
+
         } catch (Exception e) {
         }
 
     }
-   
+
     @TransactionAttribute
     private void createGroup() throws IdentityException {
-        Group g = security.getPersistenceManager().createGroup(getGroupName(), getGroupType());
+        Group u = security.getPersistenceManager().createGroup(getGroupName(), getGroupType());
+        log.info("Eqaula SecurityGroup -- new group ");
     }
 
     @TransactionAttribute
     public String saveGroup() {
-        if (this.isPersistent()) {
-            save(getInstance());
-        } else {
+        if (groupName != null) {
             try {
-                createGroup();
+                //security.getPersistenceManager().removeGroup(getInstance(), false);
+                if (securityGroupService.findByName(groupName) != null) {                    
+                    createGroup();                    
+                } else {
+                    createGroup();
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Se agrego correctamente grupo ", null));
+                    log.info("Eqaula  save new 1");
+                }
+
             } catch (IdentityException ex) {
                 Logger.getLogger(Group.class.getName()).log(Level.SEVERE, null, ex);
+                log.info("Eqaula error save new");
             }
 
         }
-        return "/admin/security/list";
+        return "/pages/admin/security/list?faces-redirect=true";
     }
 
     @Override
@@ -143,10 +153,17 @@ public class SecurityGroupHome extends BussinesEntityHome<Group> implements Seri
 
     @TransactionAttribute
     public Group load() {
-        if (isIdDefined()) {
+        log.info("Eqaula SecurityGroup load");
+        if (this.isPersistent()) {
         } else {
             if (identity.isLoggedIn()) {
-                setInstance(sgs.find(groupId));
+                try {
+                    setInstance(security.getPersistenceManager().findGroupByKey(this.groupName));
+                    log.info("Eqaula  load");
+                } catch (IdentityException ex) {
+                    log.info("Eqaula  load");
+                    Logger.getLogger(SecurityGroupHome.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
                 log.info("Eqaula");
             }
@@ -157,11 +174,16 @@ public class SecurityGroupHome extends BussinesEntityHome<Group> implements Seri
     @Transactional
     public String deleteGroup() {
         return "/pages/admin/security/list";
-    }    
-    
+    }
+
+    @TransactionAttribute
+    public void wire() {
+        getInstance();
+    }
 
     public List<String> TypesGroup() {
-        List<String> type = em.createQuery("select t from IdentityObjectCredentialType t").getResultList();
+        List<String> type = em.createQuery("select t from IdentityObjectType t").getResultList();
+        log.info("typeGroup list... " + type.get(0).toString());
         return type;
     }
 
@@ -171,6 +193,6 @@ public class SecurityGroupHome extends BussinesEntityHome<Group> implements Seri
     }
 
     public boolean isPersistent() {
-        return groupId != null;
+        return getInstance() != null;
     }
 }

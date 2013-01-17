@@ -56,6 +56,12 @@ limitations under the License.
                     <f:param name="profileId" value="#{profileListService.selectedProfile.id}"></f:param>
                     <f:param name="backView" value="list"></f:param>
                 </h:link>
+                #{' '}
+                <h:link id="button-view" value="#{messages['common.authorize']}" rendered="#{true}" outcome="/pages/admin/security/list" styleClass="btn"
+                        disabled="#{profileListService.selectedProfile.id==null}">
+                    <f:param name="profileId" value="#{profileListService.selectedProfile.id}"></f:param>
+                    <f:param name="backView" value="list"></f:param>
+                </h:link>
             </div>
             <p:dataTable var="profile_" value="#{profileListService}"
                          paginator="true" rows="10"

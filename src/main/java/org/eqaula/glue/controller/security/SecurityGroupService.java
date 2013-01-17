@@ -73,7 +73,7 @@ public class SecurityGroupService extends PersistenceUtil<Group> {
         return count(Group.class);
     }
 
-    public List<Group> getGroups(final int limit, final int offset) {
+    public List<Group> getGroups() {
         List<Group> groups = null;
         try {
             groups = (List<Group>) security.getPersistenceManager().findGroup("GROUP", new IdentitySearchCriteriaImpl());
@@ -85,7 +85,10 @@ public class SecurityGroupService extends PersistenceUtil<Group> {
     }
 
     public Group getGroupById(final Long id) throws IdentityException {
-        return security.getPersistenceManager().findGroupByKey(String.valueOf(id));
+        Group g = security.getPersistenceManager().findGroupByKey(String.valueOf(id));
+        log.info("eqaula --> grupo key "+g.getKey());
+        return g;
+        
     }
 
     public Group findByName(final String name) throws IdentityException {
