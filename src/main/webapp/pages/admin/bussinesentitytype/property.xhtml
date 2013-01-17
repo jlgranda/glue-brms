@@ -78,7 +78,7 @@
                                      value="#{messages['common.save']}" styleClass="btn primary"/>
                     #{' '}                     
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();"  immediate="true"
-                                     update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{propertyHome.instance.id !=null}"/>
+                                     update=":cancel-dialog:form-dialog-confirm-delete :exit-dialog:form-exit-dialog" rendered="#{propertyHome.instance.id !=null}"/>
                     #{' '}
                     <h:link id="cancel" value="#{messages['common.cancel']}" rendered="true" outcome="/pages/admin/bussinesentitytype/bussinesentitytype.xhtml?faces-redirect=true" styleClass="btn" >                        
                         <f:param name="bussinesEntityTypeId" value ="#{propertyHome.bussinesEntityTypeId}"></f:param>                        
@@ -89,7 +89,7 @@
                         <h:panelGroup layout="block" style="padding:5px;">  
                             <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                         </h:panelGroup>  
-                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"                                           
                                          action="#{propertyHome.deleteProperty()}"                                          
                                          ajax="true" process="@this"  
                                          style="margin-top:10px;">  
@@ -97,7 +97,16 @@
                         <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
                                          style="margin-top:10px;"/>  
                     </h:form>
-                </p:dialog> 
+                </p:dialog>
+                <p:dialog id="exit-dialog" header="#{messages['common.alert']}" widgetVar="alertDlg" resizable="false">  
+                    <h:form id="form-exit-dialog">
+                        <h:panelGroup layout="block" style="padding:5px;">  
+                            <h:outputText value="#{messages['common.property.hasValues']}"/>  
+                        </h:panelGroup>                          
+                        <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="alertDlg.hide();"                                           
+                                         style="margin-top:10px;"/>  
+                    </h:form>
+                </p:dialog>
             </h:form>
         </ui:define>
     </ui:composition>
