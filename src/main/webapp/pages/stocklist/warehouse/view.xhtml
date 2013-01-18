@@ -60,16 +60,7 @@
                              paginatorPosition="top"
                              paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
                              rowsPerPageTemplate="5,10,15"
-                             id="stockTable" lazy="true"
-                             selection="#{stockListService.selectedStock}"
-                             rendered="true"
-                             selectionMode="single">
-
-                    <p:ajax event="rowSelect" listener="#{stockListService.onRowSelect}"   
-                            update=":form:button-edit :form:messages"/>                 
-                    <p:ajax event="rowUnselect" listener="#{stockListService.onRowUnselect}" 
-                            update=":form:button-edit :form:messages"/>
-
+                             rendered="true">
 
                     <p:column headerText="Item" sortBy="#{stock.item.name}">
                         <h:outputText value="#{stock.item.name}" />
