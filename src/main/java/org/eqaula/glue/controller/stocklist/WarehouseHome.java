@@ -42,7 +42,7 @@ import org.jboss.seam.transaction.Transactional;
  *
  * @author lucho
  */
-@Named(value = "werehouseHome")
+@Named(value = "warehouseHome")
 @ViewScoped
 public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Serializable {
 
@@ -56,19 +56,23 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
     @Web
     private EntityManager em;
     @Inject
-    private WarehouseService werehouseService;
-    private Warehouse werehouseSelected;
+    private WarehouseService warehouseService;
+    private Warehouse warehouseSelected;
     private String backview;
     private Long parentId;
+   
 
-    public Long getWerehouseId() {
+    public Long getWarehouseId() {
         return (Long) getId();
     }
 
-    public void setWerehouseId(Long werehouseId) {
-        setId(werehouseId);
+    public void setWarehouseId(Long warehouseId) {
+        setId(warehouseId);
     }
+    
+    
 
+    
     public Long getParentId() {
         return parentId;
     }
@@ -88,7 +92,7 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        werehouseService.setEntityManager(em);
+        warehouseService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
 
     }
@@ -100,19 +104,19 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
 
     @Override
     protected Warehouse createInstance() {
-        log.info("eqaula --> WerehouseHome create instance");
+        log.info("eqaula --> WarehouseHome create instance");
         Date now = Calendar.getInstance().getTime();
-        Warehouse werehouse = new Warehouse();
-        werehouse.setCreatedOn(now);
-        werehouse.setLastUpdate(now);
-        werehouse.setActivationTime(now);
-        werehouse.setExpirationTime(Dates.addDays(now, 364));
-        return werehouse;
+        Warehouse warehouse = new Warehouse();
+        warehouse.setCreatedOn(now);
+        warehouse.setLastUpdate(now);
+        warehouse.setActivationTime(now);
+        warehouse.setExpirationTime(Dates.addDays(now, 364));
+        return warehouse;
     }
 
     @TransactionAttribute
-    public String saveWerehouse() {
-        log.info("eqaula --> WerehouseHome save instance: " + getInstance().getId());
+    public String saveWarehouse() {
+        log.info("eqaula --> WarehouseHome save instance: " + getInstance().getId());
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         String outcome = null;
@@ -127,12 +131,12 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
     }
 
     @Transactional
-    public String deleteWerehouse() {
+    public String deleteWarehouse() {
         log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());
         String outcome = null;
         try {
             if (getInstance() == null) {
-                throw new NullPointerException("Werehouse is null");
+                throw new NullPointerException("Warehouse is null");
             }
             if (getInstance().isPersistent()) {
                 //  outcome = hasParent() ? "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getInstance().getParent().getId() : "/pages/accounting/list.xhtml";
@@ -167,11 +171,11 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
         return Warehouse.class;
     }
 
-    public Warehouse getWerehouseSelected() {
-        return werehouseSelected;
+    public Warehouse getWarehouseSelected() {
+        return warehouseSelected;
     }
 
-    public void setWerehouseSelected(Warehouse werehouseSelected) {
-        this.werehouseSelected = werehouseSelected;
+    public void setWarehouseSelected(Warehouse warehouseSelected) {
+        this.warehouseSelected = warehouseSelected;
     }
 }

@@ -17,6 +17,8 @@ package org.eqaula.glue.service;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -24,6 +26,9 @@ import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.stocklist.Stock;
 import org.eqaula.glue.model.stocklist.Stock_;
 import org.eqaula.glue.util.PersistenceUtil;
+import org.eqaula.glue.util.UI;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -58,4 +63,8 @@ public class StockService extends PersistenceUtil<Stock> implements Serializable
         query.where(builder.equal(bussinesEntityType.get(Stock_.name), name));
         return getSingleResult(query);
     }
+    
+    
+    
+    
 }

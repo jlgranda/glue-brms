@@ -30,8 +30,12 @@ import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.stocklist.Stock;
 import org.eqaula.glue.service.StockService;
+import org.eqaula.glue.service.WarehouseService;
 import org.eqaula.glue.util.Dates;
+import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -46,16 +50,18 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
      */
     public StockHome() {
     }
-    
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(StockHome.class);
     @Inject
     @Web
     private EntityManager em;
     @Inject
     private StockService stockService;
+    @Inject
+    private WarehouseService warehouseService;
     private Stock stockSelected;
     private String backview;
     private Long parentId;
+    private Long warehouseId;
 
     public Long getStockId() {
         return (Long) getId();
@@ -73,6 +79,14 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
         this.parentId = parentId;
     }
 
+    public Long getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -85,7 +99,8 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
     public void init() {
         setEntityManager(em);
         stockService.setEntityManager(em);
-        bussinesEntityService.setEntityManager(em);
+        warehouseService.setEntityManager(em);
+
 
     }
 
@@ -108,24 +123,29 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
 
     @TransactionAttribute
     public String saveStock() {
-        log.info("eqaula --> StockHome save instance: " + getInstance().getId());
+        log.info("eqaula --> StockHome save instance: " + getInstance());
+
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         String outcome = null;
         if (getInstance().isPersistent()) {
+            warehouseId =getInstance().getWarehouse().getId();
             save(getInstance());
-            outcome = "/pages/stocklist/stock/list";
+            outcome = "/pages/stocklist/warehouse/view?faces-redirect=true&warehouseId=" + getWarehouseId();
         } else {
-            save(getInstance());
-            outcome = "/pages/stocklist/stock/list";
+            getInstance().setWarehouse(warehouseService.getWerehouseById(warehouseId));
+            create(getInstance());
+            outcome = "/pages/stocklist/warehouse/view?faces-redirect=true&warehouseId=" + getWarehouseId();
         }
         return outcome;
     }
 
     @Transactional
     public String deleteStock() {
-        log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());
-        
+        log.info("eqaula --> ingreso a eliminar: " + getInstance());
+
+        warehouseId = getInstance().getWarehouse().getId();
+
         try {
             if (getInstance() == null) {
                 throw new NullPointerException("Stock is null");
@@ -147,7 +167,7 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", e.toString()));
         }
-        return "/pages/stocklist/stock/list";
+        return "/pages/stocklist/warehouse/view?faces-redirect=true&warehouseId=" + getWarehouseId();
     }
 
     public boolean isWired() {
@@ -170,8 +190,16 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
     public void setStockSelected(Stock stockSelected) {
         this.stockSelected = stockSelected;
     }
-    
-    
-    
-    
+
+    public void onRowSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.items") + " " + UI.getMessages("common.selected"), ((Stock) event.getObject()).getName());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.items") + " " + UI.getMessages("common.unselected"), ((Stock) event.getObject()).getName());
+
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        this.setBussinesEntity(null);
+    }
 }
