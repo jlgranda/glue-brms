@@ -46,7 +46,6 @@ import org.picketlink.idm.api.User;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
-import org.primefaces.model.LazyDataModel;
 
 /**
  *
@@ -80,10 +79,6 @@ public class SecurityHome implements Serializable {
     private Group selectedGroup;
 
     public SecurityHome() {        
-        log.info("eqaula --> constructor resultlist " + listGroups);        
-        listGroups = new SecurityGroupLasyDataService().assignGroups(listGroups, em);
-        lazyGroup = new SecurityGroupLasyDataService(em, listGroups);
-        log.info("eqaula --> constructor lasyGroup " + lazyGroup.toString());        
     }
 
     public Long getProfileId() {

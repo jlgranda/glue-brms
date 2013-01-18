@@ -45,7 +45,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
-import javax.validation.constraints.AssertTrue;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.Property;
@@ -58,7 +57,6 @@ import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.model.security.IdentityObjectCredentialType;
 import org.eqaula.glue.model.security.IdentityObjectType;
-import org.eqaula.glue.profile.ProfileService;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.security.management.picketlink.IdentitySessionProducer;
@@ -68,7 +66,6 @@ import org.jboss.solder.servlet.WebApplication;
 import org.jboss.solder.servlet.event.Initialized;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.IdentitySessionFactory;
-import org.picketlink.idm.api.RelationshipManager;
 import org.picketlink.idm.api.User;
 import org.picketlink.idm.common.exception.IdentityException;
 
@@ -165,8 +162,10 @@ public class InitializeDatabase {
         Profile p = null;
         Profile admin = null;
         List<User> members = new ArrayList<User>();
-        org.picketlink.idm.api.Group g = session.getPersistenceManager().createGroup("grupo1", "GROUP");
-        System.out.println("EQAULA-->  ingreso a crear grupo " + g.toString());
+        org.picketlink.idm.api.Group g = session.getPersistenceManager().findGroup("Admin", "GROUP");
+        if (g == null) {
+            g = session.getPersistenceManager().createGroup("Admin", "GROUP");
+        }
 
         bussinesEntityType = query.getSingleResult();
         if (session.getPersistenceManager().findUser("admin") == null) {
@@ -174,11 +173,9 @@ public class InitializeDatabase {
             session.getAttributesManager().updatePassword(u, "4dm1nglu3");
             session.getAttributesManager().addAttribute(u, "email", "glue@eqaula.org");
             members.add(u);
-            //revisar error al implementar la relacion entre un grupo y usuario.... 
-            System.out.println("EQAULA-->  ingreso a Relacionar Usuarios con grupo");
+            //TODO revisar error al implementar la relacion entre un grupo y usuario.... 
             //session.getRelationshipManager().associateUser(g, u);             
-            System.out.println("EQAULA-->  fin ---- relacion");
-
+            
             p = new Profile();
             p.setEmail("glue@eqaula.org");
             p.setUsername("admin");

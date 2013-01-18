@@ -112,10 +112,12 @@
    <url-mapping id="securityGroup">
       <pattern value="/admin/security/group"></pattern>
       <view-id value="/pages/admin/security/group.xhtml"></view-id>       
+      <query-param name="groupKey" decode="false">#{securityGroupHome.groupKey}</query-param>   
    </url-mapping>
    <url-mapping id="securityGroupList">
       <pattern value="/admin/security/list"></pattern>
-      <view-id value="/pages/admin/security/list.xhtml"></view-id>       
+      <view-id value="/pages/admin/security/list.xhtml"></view-id>    
+      <query-param name="result" decode="false">#{securityGroupListService.firstResult}</query-param>   
    </url-mapping>
    <url-mapping id="securityAuthorization">
       <pattern value="/admin/security/authorization"></pattern>

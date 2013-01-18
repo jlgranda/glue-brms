@@ -16,34 +16,20 @@
 package org.eqaula.glue.controller.security;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
-import org.eqaula.glue.controller.BussinesEntityHome;
-import org.eqaula.glue.controller.profile.ProfileHome;
-import org.eqaula.glue.profile.ProfileService;
-import org.hibernate.mapping.Collection;
-import org.jboss.seam.security.Credentials;
-import org.jboss.seam.security.GroupImpl;
 import org.jboss.seam.security.Identity;
-import org.jboss.seam.security.management.picketlink.IdentitySessionProducer;
 import org.jboss.seam.transaction.Transactional;
 import org.picketlink.idm.api.Group;
 import org.picketlink.idm.api.IdentitySession;
-import org.picketlink.idm.api.IdentitySessionFactory;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.model.SimpleGroup;
 
@@ -53,35 +39,44 @@ import org.picketlink.idm.impl.api.model.SimpleGroup;
  */
 @Named
 @ViewScoped
-public class SecurityGroupHome extends BussinesEntityHome<Group> implements Serializable {
+public class SecurityGroupHome implements Serializable {
 
     private static final long serialVersionUID = 7632987414391869389L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(SecurityGroupHome.class);
     @Inject
     @Web
-    private EntityManager em;
+    private EntityManager entityManager;
     @Inject
     private Identity identity;
     @Inject
-    private Credentials credentials;
-    @Inject
     private IdentitySession security;
+    
+    private Group instance;
+    
     @Inject
     private SecurityGroupService securityGroupService;
-    @Inject
-    private SecurityGroupService sgs;    
-    private String groupName;
-    private String groupType;
 
-    public Long getGroupId() {
-        return (Long) getId();
+    private String groupKey;
+    
+    private String groupName;
+    
+    @PostConstruct
+    public void init() {
+        securityGroupService.setSecurity(security);
     }
 
-    public void setGroupId(Long groupId) {
-        setId(groupId);
+    public String getGroupKey() {
+        return groupKey;
+    }
+
+    public void setGroupKey(String groupKey) {
+        this.groupKey = groupKey;
     }
 
     public String getGroupName() {
+        if (isManaged()){
+            setGroupName(getInstance().getName());
+        }
         return groupName;
     }
 
@@ -89,85 +84,37 @@ public class SecurityGroupHome extends BussinesEntityHome<Group> implements Seri
         this.groupName = groupName;
     }
 
-    public String getGroupType() {
-        if (this.isPersistent()) {
-            groupType = getInstance().getGroupType();
-        }
-        return groupType;
-    }
-    
-    public void setGroupType(String groupType) {
-        this.groupType = groupType;
+    public void setInstance(Group instance) {
+        this.instance = instance;
     }
 
-    public Class<Group> getEntityClass() {
-        return Group.class;
-    }
-
-    @PostConstruct
-    public void init() {
-        //initSesion();
-        setEntityManager(em);
-        try {
-            log.info("eqaula security -->  Inicio Security group");
-
-        } catch (Exception e) {
-        }
-
-    }
 
     @TransactionAttribute
-    private void createGroup() throws IdentityException {
-        Group u = security.getPersistenceManager().createGroup(getGroupName(), getGroupType());
-        log.info("Eqaula SecurityGroup -- new group ");
-    }
-
-    @TransactionAttribute
-    public String saveGroup() {
-        if (groupName != null) {
+    public String saveGroup(){
+        log.info("Save instance for " + getInstance().getKey() + " with name "+ getGroupName());
+        if (isManaged()){
+            //TODO implementar actualización de nombre de grupo, evaluar si es necesario
+        } else{
             try {
-                //security.getPersistenceManager().removeGroup(getInstance(), false);
-                if (securityGroupService.findByName(groupName) != null) {                    
-                    createGroup();                    
-                } else {
-                    createGroup();
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Se agrego correctamente grupo ", null));
-                    log.info("Eqaula  save new 1");
-                }
-
+                security.getPersistenceManager().createGroup(getGroupName(), "GROUP");
             } catch (IdentityException ex) {
-                Logger.getLogger(Group.class.getName()).log(Level.SEVERE, null, ex);
-                log.info("Eqaula error save new");
+                Logger.getLogger(SecurityGroupHome.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
         return "/pages/admin/security/list?faces-redirect=true";
     }
 
-    @Override
     protected Group createInstance() {
-        Group u = new SimpleGroup("", "GROUP");
+        Group u = new SimpleGroup("New Group", "GROUP");
         return u;
     }
 
     @TransactionAttribute
-    public Group load() {
-        log.info("Eqaula SecurityGroup load");
-        if (this.isPersistent()) {
-        } else {
-            if (identity.isLoggedIn()) {
-                try {
-                    setInstance(security.getPersistenceManager().findGroupByKey(this.groupName));
-                    log.info("Eqaula  load");
-                } catch (IdentityException ex) {
-                    log.info("Eqaula  load");
-                    Logger.getLogger(SecurityGroupHome.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else {
-                log.info("Eqaula");
-            }
+    public void load() {
+        if (isIdDefined()) {
+            wire();
         }
-        return getInstance();
+        log.info("eqaula --> Loaded instance " + getInstance());
     }
 
     @Transactional
@@ -182,17 +129,65 @@ public class SecurityGroupHome extends BussinesEntityHome<Group> implements Seri
     }
 
     public List<String> TypesGroup() {
-        List<String> type = em.createQuery("select t from IdentityObjectType t").getResultList();
-        log.info("typeGroup list... " + type.get(0).toString());
-        return type;
+        List<String> types = entityManager.createQuery("select t from IdentityObjectType t").getResultList();
+        return types;
     }
-
-    public List<Group> getGroups() throws IdentityException {
-        List<Group> groups = (List<Group>) security.getPersistenceManager().findGroup("GROUP");
-        return groups;
-    }
-
+    
     public boolean isPersistent() {
-        return getInstance() != null;
+        return getInstance().getKey() != null;
+    }
+
+    public boolean isIdDefined() {
+        return getGroupKey() != null && !"".equals(getGroupKey());
+    }
+    
+    public Group find() throws IdentityException {
+        if (securityGroupService.getSecurity() !=  null) {
+            Group result = securityGroupService.findByKey(getGroupKey());
+            if (result == null) {
+                result = handleNotFound();
+            }
+            return result;
+        } else {
+            return null;
+        }
+    }
+    
+    public Group getInstance() {
+        if (instance == null) {
+            initInstance();
+        }
+        return instance;
+    }
+
+    public void clearInstance() {
+        setInstance(null);
+        setGroupKey(null);
+    }
+
+    protected void initInstance() {
+        if (isIdDefined()) {
+            if (true /*!isTransactionMarkedRollback()*/) {
+                try {
+                    //we cache the instance so that it does not "disappear"
+                    //after remove() is called on the instance
+                    //is this really a Good Idea??
+                    setInstance(find());
+                } catch (IdentityException ex) {
+                    Logger.getLogger(SecurityGroupHome.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else {
+            setInstance(createInstance());
+        }
+    }
+
+    private Group handleNotFound() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+    
+    public boolean isManaged() {
+        return getInstance() != null
+                && getGroupKey() != null;
     }
 }
