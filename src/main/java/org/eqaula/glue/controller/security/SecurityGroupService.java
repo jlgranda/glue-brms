@@ -17,6 +17,7 @@ package org.eqaula.glue.controller.security;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ import org.eqaula.glue.util.PersistenceUtil;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.picketlink.idm.api.Group;
+import org.picketlink.idm.api.IdentitySearchCriteriumType;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.SortOrder;
 import org.picketlink.idm.api.UnsupportedCriterium;
@@ -82,19 +84,13 @@ public class SecurityGroupService implements Serializable {
         return 0;
     }
 
-/*    public List<SimpleGroup> getGroups() {
-        List<SimpleGroup> groups = null;
-        try {
-            //initSesion();
-            groups = (List<SimpleGroup>) security.getPersistenceManager().findGroup("GROUP", new IdentitySearchCriteriaImpl());
-        } catch (IdentityException ex) {
-            Logger.getLogger(SecurityGroupService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+   public List<Group> getGroups() throws IdentityException {
+        List<Group> groups = new ArrayList<Group>(security.getPersistenceManager().findGroup("GROUP"));        
         log.info("eqaula --> lista de grupos " + groups.get(0).toString());
         return groups;
     }
-*/
-    public Group getGroupById(final Long id) throws IdentityException {
+
+    public Group getGroupById(final Long id) throws IdentityException {        
         Group g = security.getPersistenceManager().findGroupByKey(String.valueOf(id));
         log.info("eqaula --> grupo key " + g.getKey());
         return g;
@@ -111,13 +107,14 @@ public class SecurityGroupService implements Serializable {
         return security.getPersistenceManager().findGroupByKey(key);
     }
 
-    List<Group> find(int first, int end, String sortField, QuerySortOrder order, Map<String, Object> _filters) throws UnsupportedCriterium, IdentityException {
-        IdentitySearchCriteriaImpl identitySearchCriteria = new IdentitySearchCriteriaImpl();
+    public List<Group> find(int first, int end, String sortField, QuerySortOrder order, Map<String, Object> _filters) throws UnsupportedCriterium, IdentityException {
+        
+        IdentitySearchCriteriaImpl identitySearchCriteria = new IdentitySearchCriteriaImpl();        
         identitySearchCriteria.sort(SortOrder.ASCENDING);
         if (QuerySortOrder.DESC.equals(order)){
             identitySearchCriteria.sort(SortOrder.DESCENDING);
         }
-        identitySearchCriteria.sortAttributeName(sortField);
+        identitySearchCriteria.sortAttributeName(sortField);        
         identitySearchCriteria.setPaged(true);
         identitySearchCriteria.page(first, end);
         String[] values = new String[1];
@@ -126,7 +123,9 @@ public class SecurityGroupService implements Serializable {
             identitySearchCriteria.attributeValuesFilter((String) entry.getKey(), values);
         }
         log.info("retrieve from" + first + " to "+ end);
-        return new ArrayList<Group>(security.getPersistenceManager().findGroup("GROUP", identitySearchCriteria));
+        List<Group> tem = new ArrayList<Group>(security.getPersistenceManager().findGroup("GROUP", identitySearchCriteria));
+        return tem;
+        
     }
     
 }

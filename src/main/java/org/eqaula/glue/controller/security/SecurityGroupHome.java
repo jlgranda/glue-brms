@@ -50,16 +50,12 @@ public class SecurityGroupHome implements Serializable {
     private Identity identity;
     @Inject
     private IdentitySession security;
-    
     private Group instance;
-    
     @Inject
     private SecurityGroupService securityGroupService;
-
     private String groupKey;
-    
     private String groupName;
-    
+
     @PostConstruct
     public void init() {
         securityGroupService.setSecurity(security);
@@ -74,7 +70,7 @@ public class SecurityGroupHome implements Serializable {
     }
 
     public String getGroupName() {
-        if (isManaged()){
+        if (isManaged()) {
             setGroupName(getInstance().getName());
         }
         return groupName;
@@ -88,13 +84,19 @@ public class SecurityGroupHome implements Serializable {
         this.instance = instance;
     }
 
+    public Group getInstance() {
+        if (instance == null) {
+            initInstance();
+        }
+        return instance;
+    }
 
     @TransactionAttribute
-    public String saveGroup(){
-        log.info("Save instance for " + getInstance().getKey() + " with name "+ getGroupName());
-        if (isManaged()){
+    public String saveGroup() {
+        log.info("Save instance for " + getInstance().getKey() + " with name " + getGroupName());
+        if (isManaged()) {
             //TODO implementar actualización de nombre de grupo, evaluar si es necesario
-        } else{
+        } else {
             try {
                 security.getPersistenceManager().createGroup(getGroupName(), "GROUP");
             } catch (IdentityException ex) {
@@ -116,23 +118,12 @@ public class SecurityGroupHome implements Serializable {
         }
         log.info("eqaula --> Loaded instance " + getInstance());
     }
-
-    @Transactional
-    public String deleteGroup() {
-        
-        return "/pages/admin/security/list?faces-redirect=true";
-    }
-
+  
     @TransactionAttribute
     public void wire() {
         getInstance();
     }
-
-    public List<String> TypesGroup() {
-        List<String> types = entityManager.createQuery("select t from IdentityObjectType t").getResultList();
-        return types;
-    }
-    
+  
     public boolean isPersistent() {
         return getInstance().getKey() != null;
     }
@@ -140,9 +131,9 @@ public class SecurityGroupHome implements Serializable {
     public boolean isIdDefined() {
         return getGroupKey() != null && !"".equals(getGroupKey());
     }
-    
+
     public Group find() throws IdentityException {
-        if (securityGroupService.getSecurity() !=  null) {
+        if (securityGroupService.getSecurity() != null) {
             Group result = securityGroupService.findByKey(getGroupKey());
             if (result == null) {
                 result = handleNotFound();
@@ -151,13 +142,6 @@ public class SecurityGroupHome implements Serializable {
         } else {
             return null;
         }
-    }
-    
-    public Group getInstance() {
-        if (instance == null) {
-            initInstance();
-        }
-        return instance;
     }
 
     public void clearInstance() {
@@ -185,7 +169,7 @@ public class SecurityGroupHome implements Serializable {
     private Group handleNotFound() {
         throw new UnsupportedOperationException("Not yet implemented");
     }
-    
+
     public boolean isManaged() {
         return getInstance() != null
                 && getGroupKey() != null;

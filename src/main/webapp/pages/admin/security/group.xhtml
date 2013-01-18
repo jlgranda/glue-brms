@@ -40,21 +40,7 @@
                     <h:link outcome="/pages/admin/security/list.xhtml?faces-redirect=true" onclick="editDlg.hide();"
                             value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
                     </h:link>
-                </div>
-                <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
-                    <h:form id="form-dialog-confirm-delete">
-                        <h:panelGroup layout="block" style="padding:5px;">  
-                            <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
-                        </h:panelGroup>  
-                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
-                                         action="#{securityGroupHome.deleteGroup()}"                                         
-                                         ajax="true" process="@this"  
-                                         style="margin-top:10px;">  
-                        </p:commandButton>  
-                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
-                                         style="margin-top:10px;"/>  
-                    </h:form>
-                </p:dialog> 
+                </div>               
             </h:form>                 
         </ui:define>             
     </ui:composition>
