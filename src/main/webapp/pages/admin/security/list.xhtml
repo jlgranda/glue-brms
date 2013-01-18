@@ -19,7 +19,7 @@
     <ui:define name="content">
 
         <f:metadata>
-            <f:viewParam name="result" value="#{securityGroupListService.resultList}" />
+            <f:viewParam name="result" value="#{securityGroupListService.firstResult}" />
         </f:metadata>
 
         <h:form id="form">
@@ -44,16 +44,16 @@
             </div>
             <p:dataTable var="group" value="#{securityGroupListService.resultList}"
                          editable="false" id="groupTable" rendered="true"                          
-                         rows="10" >
-                        <!-- rowKey="#{securityGroupListService.selectedGroup.name}"                         
+                         rows="10"> <!-- 
+                         rowKey="#{securityGroupListService.selectedGroup.name}"                         
                          selection="#{securityGroupListService.selectedGroup}"                         
                          selectionMode="single">
 
                 <p:ajax event="rowSelect" listener="#{securityGroupListService.onRowSelect}"   
                         update=":form:button-edit :form:messages"/>                 
                 <p:ajax event="rowUnselect" listener="#{securityGroupListService.onRowUnselect}" update=":form:button-edit :form:messages"/>
-                -->
-                <p:column selectionMode="single"/>
+               
+                <p:column selectionMode="single"/> -->
                 <p:column headerText="#{messages['security.group.name']}" sortBy="#{group.name}">
                     <h:outputText value="#{group.name}" />
                 </p:column>

@@ -117,6 +117,10 @@
       <pattern value="/admin/security/list"></pattern>
       <view-id value="/pages/admin/security/list.xhtml"></view-id>       
    </url-mapping>
+   <url-mapping id="securityAuthorization">
+      <pattern value="/admin/security/authorization"></pattern>
+      <view-id value="/pages/admin/security/authorization.xhtml"></view-id>       
+   </url-mapping>
    
     <url-mapping id="warehouse">
       <pattern value="/warehouse"></pattern>

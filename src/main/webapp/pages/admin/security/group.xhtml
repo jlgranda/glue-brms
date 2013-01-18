@@ -32,19 +32,7 @@
                 <glue:input id="name" name="name" type="text" label="#{messages['security.group.name']}" value="#{securityGroupHome.groupName}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="type" name="code" type="text" label="#{messages['security.group.type']}" value="#{securityGroupHome.groupType}" required="true" inlinehelp="#{messages['common.type.inlinehelp']}" execute="@this save" render="type"/> 
                 
-                <!-- Attributos personalizados -->
-                <p:dataTable var="group" value="#{securityGroupHome.groups}"
-                         editable="false"                                 
-                         id="groupTable"                          
-                         rendered="true">                                       
-
-                <p:column headerText="#{messages['security.group.name']}" sortBy="#{group.name}">
-                    <h:outputText value="#{group.name}" />
-                </p:column>
-                <p:column headerText="#{messages['security.group.type']}" sortBy="#{group.groupType}">
-                    <h:outputText value="#{group.groupType}" />
-                </p:column>                
-            </p:dataTable>
+                <!-- Attributos personalizados -->                
                 <div class="actions">
                     <p:commandButton id="save" action="#{securityGroupHome.saveGroup()}" value="#{messages['common.save']}" styleClass="btn primary"/>
                     <!--&nbsp;

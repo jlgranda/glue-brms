@@ -16,7 +16,9 @@
 package org.eqaula.glue.controller.security;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -24,7 +26,9 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -41,6 +45,7 @@ import org.picketlink.idm.common.exception.IdentityException;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SelectableDataModel;
 import org.primefaces.model.SortOrder;
 
 /**
@@ -63,41 +68,31 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
     private int firstResult = 0;
     private Group[] selectedGroups;
     private Group selectedGroup;
+    private String groupName;
 
-    public SecurityGroupListService() {
-        setPageSize(MAX_RESULTS);
+    public SecurityGroupListService() {        
+        setPageSize(MAX_RESULTS); 
         resultList = new ArrayList<Group>();
     }
 
-    public List<Group> getResultList() {
-        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-            resultList = securityGroupService.getGroups(this.getPageSize(), firstResult);
-            log.info("eqaula --> resultlist " + resultList);
-        }
-        return resultList;
+    public SecurityGroupListService(List<Group> groups) {
+        this.resultList = groups;
+    }
 
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public List<Group> getResultList() {
+        return resultList;
     }
 
     public void setResultList(List<Group> resultList) {
         this.resultList = resultList;
-    }
-
-    public int getFirstResult() {
-        return firstResult;
-    }
-
-    public void setFirstResult(int firstResult) {
-
-        this.firstResult = firstResult;
-        this.resultList = null;
-    }
-
-    public Group getSelectedGroup() {         
-        return selectedGroup;
-    }
-
-    public void setSelectedGroup(Group selectedGroup) {
-        this.selectedGroup = selectedGroup;
     }
 
     public int getNextFirstResult() {
@@ -108,12 +103,37 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
         return this.getPageSize() >= firstResult ? 0 : firstResult - this.getPageSize();
     }
 
+    public int getFirstResult() {
+        return firstResult;
+    }
+
+    public void setFirstResult(int firstResult) {
+        log.info("set first result + firstResult");
+        this.firstResult = firstResult;
+        this.resultList = null;
+    }
+
+    public Group getSelectedGroup() {
+        return selectedGroup;
+    }
+
+    public void setSelectedGroup(Group selectedGroup) {
+        this.selectedGroup = selectedGroup;
+    }
+
+    public void assignGroups(List<Group> g){        
+        if (g.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
+            g = securityGroupService.getGroups();
+            log.info("eqaula --> resultlist " + resultList);
+        }
+    }
+    
     @PostConstruct
     public void init() {
         log.info("Setup entityManager into GroupService...");
         securityGroupService.setEntityManager(entityManager);
     }
-    
+
     public void onRowSelect(SelectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("Group") + " " + UI.getMessages("common.selected"), ((Group) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -124,14 +144,15 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setSelectedGroup(null);
     }
+
     @Override
     public Group getRowData(String rowKey) {
         Group p = null;
-        try {         
-            p =  securityGroupService.findByName(rowKey);
-        } catch (IdentityException ex) {
-            log.info("Error "+ex);
-        }        
+        for (Group group : this.resultList) {
+            if (group.getName().equals(rowKey)) {
+                return group;
+            }
+        }
         return p;
     }
 
@@ -142,18 +163,52 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
 
     @Override
     public List<Group> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
-         log.info("Eqaula-->  ingreso a buscar Grupos");
-        int end = first + pageSize;
-        QuerySortOrder order = QuerySortOrder.ASC;
-        if (sortOrder == SortOrder.DESCENDING) {
-            order = QuerySortOrder.DESC;
+        List<Group> data = new ArrayList<Group>();
+        assignGroups(this.resultList);
+        //filter  
+        for (Group group : this.resultList) {
+            boolean match = true;
+
+            for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
+                try {
+                    String filterProperty = it.next();
+                    String filterValue = filters.get(filterProperty);
+                    String fieldValue = String.valueOf(group.getClass().getField(filterProperty).get(group));
+
+                    if (filterValue == null || fieldValue.startsWith(filterValue)) {
+                        match = true;
+                    } else {
+                        match = false;
+                        break;
+                    }
+                } catch (Exception e) {
+                    match = false;
+                }
+            }
+
+            if (match) {
+                data.add(group);
+            }
         }
-        Map<String, Object> _filters = new HashMap<String, Object>();
-        /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
-         _filters.putAll(filters);*/      
-        
-        //TODO revisar metodo en vista si me 
-        log.info("Eqaula-->  lista de lazy Group "+securityGroupService.getGroups(pageSize, first).toString());
-        return securityGroupService.getGroups(pageSize, first);
+
+//        //sort  
+//        if(sortField != null) {  
+//            Collections.sort(data, new LazySorter(sortField, sortOrder));  
+//        }  
+
+        //rowCount  
+        int dataSize = data.size();
+        this.setRowCount(dataSize);
+
+        //paginate  
+        if (dataSize > pageSize) {
+            try {
+                return data.subList(first, first + pageSize);
+            } catch (IndexOutOfBoundsException e) {
+                return data.subList(first, first + (dataSize % pageSize));
+            }
+        } else {
+            return data;
+        }
     }
 }
