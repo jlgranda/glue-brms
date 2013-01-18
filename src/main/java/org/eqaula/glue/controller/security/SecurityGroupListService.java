@@ -1,18 +1,18 @@
 /*
- * Copyright 2013 cesar.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+* Copyright 2013 cesar.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 package org.eqaula.glue.controller.security;
 
 import java.util.ArrayList;
@@ -34,11 +34,6 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.accounting.AccountService;
 import org.eqaula.glue.cdi.Web;
-import org.eqaula.glue.model.accounting.Account;
-import org.eqaula.glue.model.management.Organization;
-import org.eqaula.glue.service.AccountListService;
-import org.eqaula.glue.util.QueryData;
-import org.eqaula.glue.util.QuerySortOrder;
 import org.eqaula.glue.util.UI;
 import org.picketlink.idm.api.Group;
 import org.picketlink.idm.common.exception.IdentityException;
@@ -49,9 +44,9 @@ import org.primefaces.model.SelectableDataModel;
 import org.primefaces.model.SortOrder;
 
 /**
- *
- * @author cesar
- */
+*
+* @author cesar
+*/
 @Named
 @RequestScoped
 public class SecurityGroupListService extends LazyDataModel<Group> {
@@ -70,8 +65,8 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
     private Group selectedGroup;
     private String groupName;
 
-    public SecurityGroupListService() {        
-        setPageSize(MAX_RESULTS); 
+    public SecurityGroupListService() {
+        setPageSize(MAX_RESULTS);
         resultList = new ArrayList<Group>();
     }
 
@@ -88,10 +83,14 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
     }
 
     public List<Group> getResultList() {
+        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
+            resultList = securityGroupService.getGroups();
+            log.info("eqaula --> resultlist " + resultList);
+        }
         return resultList;
     }
 
-    public void setResultList(List<Group> resultList) {
+    public void setResultList(List<Group> resultList) {        
         this.resultList = resultList;
     }
 
@@ -121,7 +120,7 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
         this.selectedGroup = selectedGroup;
     }
 
-    public void assignGroups(List<Group> g){        
+    public void assignGroups(List<Group> g){
         if (g.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
             g = securityGroupService.getGroups();
             log.info("eqaula --> resultlist " + resultList);
@@ -165,7 +164,7 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
     public List<Group> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
         List<Group> data = new ArrayList<Group>();
         assignGroups(this.resultList);
-        //filter  
+        //filter
         for (Group group : this.resultList) {
             boolean match = true;
 
@@ -191,16 +190,16 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
             }
         }
 
-//        //sort  
-//        if(sortField != null) {  
-//            Collections.sort(data, new LazySorter(sortField, sortOrder));  
-//        }  
+// //sort
+// if(sortField != null) {
+// Collections.sort(data, new LazySorter(sortField, sortOrder));
+// }
 
-        //rowCount  
+        //rowCount
         int dataSize = data.size();
         this.setRowCount(dataSize);
 
-        //paginate  
+        //paginate
         if (dataSize > pageSize) {
             try {
                 return data.subList(first, first + pageSize);

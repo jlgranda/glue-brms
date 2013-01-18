@@ -69,8 +69,7 @@ public class SecurityGroupHome extends BussinesEntityHome<Group> implements Seri
     @Inject
     private SecurityGroupService securityGroupService;
     @Inject
-    private SecurityGroupService sgs;
-    private Long groupId;
+    private SecurityGroupService sgs;    
     private String groupName;
     private String groupType;
 
@@ -96,7 +95,7 @@ public class SecurityGroupHome extends BussinesEntityHome<Group> implements Seri
         }
         return groupType;
     }
-
+    
     public void setGroupType(String groupType) {
         this.groupType = groupType;
     }
@@ -173,7 +172,8 @@ public class SecurityGroupHome extends BussinesEntityHome<Group> implements Seri
 
     @Transactional
     public String deleteGroup() {
-        return "/pages/admin/security/list";
+        
+        return "/pages/admin/security/list?faces-redirect=true";
     }
 
     @TransactionAttribute

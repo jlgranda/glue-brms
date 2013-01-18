@@ -73,7 +73,11 @@ limitations under the License.
                 <f:param name="typeName" value="org.eqaula.glue.model.stocklist.Warehouse"></f:param>
             </h:link>
             
-            
+            <br />
+            <h:link value="#{messages['common.authorize']} #{messages['common.permissions']}" rendered="#{true}" 
+                    outcome="/pages/admin/security/list">
+                <f:param name="result"></f:param>                
+            </h:link>
             
         </p:panel>
 
