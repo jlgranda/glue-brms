@@ -73,12 +73,6 @@ limitations under the License.
                 <f:param name="typeName" value="org.eqaula.glue.model.stocklist.Warehouse"></f:param>
             </h:link>
             
-            <br />
-            <h:link value="#{messages['security.group']}" rendered="#{true}" 
-                    outcome="/pages/admin/security/list">
-                <f:param name="result"></f:param>                
-            </h:link>
-            
             
             <br />
             <h:link value="#{messages['module.stocklist.items']}" rendered="#{true}" 
@@ -86,6 +80,15 @@ limitations under the License.
                 <f:param name="result"></f:param>
                 <f:param name="typeName" value="org.eqaula.glue.model.stocklist.Item"></f:param>
             </h:link>
+            
+            <br />
+            <h:link value="#{messages['security.group']}" rendered="#{true}" 
+                    outcome="/pages/admin/security/list">
+                <f:param name="result"></f:param>                
+            </h:link>
+            
+            
+            
             
         </p:panel>
 
