@@ -118,8 +118,6 @@ public class AccountListService extends LazyDataModel<Account> {
         _filters.put(Account_.accountType.getName(), Type.SCHEMA); //Filtro por defecto
         _filters.putAll(filters);
 
-        //Order by code
-        System.out.println("AccountListService sortField " +sortField);
         if (sortField==null){
             sortField = "code";
         }

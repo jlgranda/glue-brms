@@ -65,14 +65,14 @@ public class SecurityGroupLasyDataService extends ListDataModel<Group> implement
         this.resultList = resultList;
     }
 
-    public List<Group> assignGroups(List<Group> g, EntityManager em) {
-        if (g.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-            this.em = em;            
-            g = securityGroupService.getGroups();
-            log.info("eqaula --> assignGroups " + g);
-        }
-        return g;
-    }
+//    public List<Group> assignGroups(List<Group> g, EntityManager em) {
+//        if (g.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
+//            this.em = em;            
+//            g = securityGroupService.getGroups();
+//            log.info("eqaula --> assignGroups " + g);
+//        }
+//        return g;
+//    }
 
     @Override
     public Object getRowKey(Group entity) {

@@ -29,7 +29,8 @@
                 </h:link>
                 #{' '}
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="account" styleClass="btn" 
-                        disabled="#{accountListService.selectedAccount.id == null}">
+                        disabled="#{accountListService.selectedAccount.id == null}"
+                        rendered="true">
                     <f:param name="accountId" value="#{accountListService.selectedAccount.id}"></f:param>
                     <f:param name="backView" value="list"></f:param>
                 </h:link>               
@@ -45,8 +46,7 @@
                          rendered="true"
                          selectionMode="single">
            
-                <p:ajax event="rowSelect" listener="#{accountListService.onRowSelect}"   
-                        update=":form:button-edit :form:messages"/>                 
+                <p:ajax event="rowSelect" listener="#{accountListService.onRowSelect}" update=":form:button-edit :form:messages"/>                 
                 <p:ajax event="rowUnselect" listener="#{accountListService.onRowUnselect}" update=":form:button-edit :form:messages "/>
                                
                 <p:column headerText="#{messages['Account.code']}" sortBy="#{account_.code}">
