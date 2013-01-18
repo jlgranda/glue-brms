@@ -75,13 +75,15 @@ public class SecurityHome implements Serializable {
     private SecurityGroupService securityGroupService;
     private Messages msg;
     private Long profileId;
-    private LazyDataModel<Group> lazyGroup;
+    private SecurityGroupLasyDataService lazyGroup;
     private List<Group> listGroups = new ArrayList<Group>();
     private Group selectedGroup;
 
     public SecurityHome() {        
-        log.info("eqaula --> resultlist " + listGroups);        
-        lazyGroup = new SecurityGroupListService();
+        log.info("eqaula --> constructor resultlist " + listGroups);        
+        listGroups = new SecurityGroupLasyDataService().assignGroups(listGroups, em);
+        lazyGroup = new SecurityGroupLasyDataService(em, listGroups);
+        log.info("eqaula --> constructor lasyGroup " + lazyGroup.toString());        
     }
 
     public Long getProfileId() {
@@ -90,15 +92,7 @@ public class SecurityHome implements Serializable {
 
     public void setProfileId(Long profileId) {
         this.profileId = profileId;
-    }
-
-    public LazyDataModel<Group> getLazyGroup() {
-        return lazyGroup;
-    }
-
-    public void setLazyGroup(LazyDataModel<Group> lazyGroup) {
-        this.lazyGroup = lazyGroup;
-    }
+    }    
 
     public Group getSelectedGroup() {
         return selectedGroup;
@@ -108,14 +102,29 @@ public class SecurityHome implements Serializable {
         this.selectedGroup = selectedGroup;
     }
 
-    public List<Group> getListGroups() {        
+    public List<Group> getListGroups() {                
         return listGroups;
     }
 
     public void setListGroups(List<Group> listGroups) {
         this.listGroups = listGroups;
     }
-        
+
+    public SecurityGroupLasyDataService getLazyGroup() {
+        return lazyGroup;
+    }
+
+    public void setLazyGroup(SecurityGroupLasyDataService lazyGroup) {
+        this.lazyGroup = lazyGroup;
+    }
+    
+    public void assignGroups(List<Group> g){
+        if (g.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
+            //g = securityGroupService.getGroups();
+            log.info("eqaula --> assignGroups " + g);
+        }
+    }
+    
     public void initSesion() throws IdentityException {
         Map<String, Object> sessionOptions = new HashMap<String, Object>();
         sessionOptions.put(IdentitySessionProducer.SESSION_OPTION_ENTITY_MANAGER, em);

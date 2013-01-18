@@ -55,7 +55,7 @@
             </div>
             <p:dataTable var="group" value="#{securityGroupListService.resultList}"
                          editable="false" id="groupTable" rendered="true"                          
-                         rows="10"> <!-- 
+                         rows="10"> <!--
                          rowKey="#{securityGroupListService.selectedGroup.name}"                         
                          selection="#{securityGroupListService.selectedGroup}"                         
                          selectionMode="single">
@@ -64,7 +64,7 @@
                         update=":form:button-edit :form:messages"/>                 
                 <p:ajax event="rowUnselect" listener="#{securityGroupListService.onRowUnselect}" update=":form:button-edit :form:messages"/>
                
-                <p:column selectionMode="single"/> -->
+                <p:column selectionMode="single"/>-->
                 <p:column headerText="#{messages['security.group.name']}" sortBy="#{group.name}">
                     <h:outputText value="#{group.name}" />
                 </p:column>

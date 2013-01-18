@@ -64,18 +64,17 @@
                             <f:param name="backView" value="authorization"></f:param>
                         </h:link>                        
                     </div>
-                    <p:dataTable var="group" value="#{securityGroupListService.resultList}"
+                    <p:dataTable var="group" value="#{securityHome.lazyGroup}"
                                  editable="false" id="groupTable" rendered="true"                          
-                                 rows="10" > <!--
-                                 rowKey="#{securityHome.selectedGroup.name}"                         
+                                 rows="10"                                                            
                                  selection="#{securityHome.selectedGroup}"                         
                                  selectionMode="single">
 
                         <p:ajax event="rowSelect" listener="#{securityHome.onRowSelect}"   
-                                update=":form:button-edit :form:messages :form:save"/>                 
-                        <p:ajax event="rowUnselect" listener="#{securityHome.onRowUnselect}" update=":form:button-edit :form:messages :form:save"/>
+                                update=":form:messages :form:save"/>                 
+                        <p:ajax event="rowUnselect" listener="#{securityHome.onRowUnselect}" update=":form:messages :form:save"/>
 
-                        <p:column selectionMode="single"/>-->
+                        <p:column selectionMode="single"/>
                         <p:column headerText="#{messages['security.group.name']}" sortBy="#{group.name}">
                             <h:outputText value="#{group.name}" />
                         </p:column>

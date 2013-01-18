@@ -34,6 +34,9 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.accounting.AccountService;
 import org.eqaula.glue.cdi.Web;
+import org.eqaula.glue.model.management.Organization;
+import org.eqaula.glue.util.QueryData;
+import org.eqaula.glue.util.QuerySortOrder;
 import org.eqaula.glue.util.UI;
 import org.picketlink.idm.api.Group;
 import org.picketlink.idm.common.exception.IdentityException;
@@ -162,52 +165,20 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
 
     @Override
     public List<Group> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
-        List<Group> data = new ArrayList<Group>();
-        assignGroups(this.resultList);
-        //filter
-        for (Group group : this.resultList) {
-            boolean match = true;
+        log.info("ingreso a load ---  sgls");
+        int end = first + pageSize;
 
-            for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
-                try {
-                    String filterProperty = it.next();
-                    String filterValue = filters.get(filterProperty);
-                    String fieldValue = String.valueOf(group.getClass().getField(filterProperty).get(group));
-
-                    if (filterValue == null || fieldValue.startsWith(filterValue)) {
-                        match = true;
-                    } else {
-                        match = false;
-                        break;
-                    }
-                } catch (Exception e) {
-                    match = false;
-                }
-            }
-
-            if (match) {
-                data.add(group);
-            }
+        QuerySortOrder order = QuerySortOrder.ASC;
+        if (sortOrder == SortOrder.DESCENDING) {
+            order = QuerySortOrder.DESC;
         }
+        Map<String, Object> _filters = new HashMap<String, Object>();
+        /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
+         _filters.putAll(filters);*/
 
-// //sort
-// if(sortField != null) {
-// Collections.sort(data, new LazySorter(sortField, sortOrder));
-// }
-
-        //rowCount
-        int dataSize = data.size();
-        this.setRowCount(dataSize);
-
-        //paginate
-        if (dataSize > pageSize) {
-            try {
-                return data.subList(first, first + pageSize);
-            } catch (IndexOutOfBoundsException e) {
-                return data.subList(first, first + (dataSize % pageSize));
-            }
-        } else {
-            return data;
-        }
+        QueryData<Group> qData = securityGroupService.find(first, end, sortField, order, _filters);
+        this.setRowCount(qData.getTotalResultCount().intValue());
+        log.info("ingreso a load ---  resultado "+qData.getResult());
+        return qData.getResult();
     }
 }
