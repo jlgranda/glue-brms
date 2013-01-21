@@ -35,11 +35,13 @@ import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.eqaula.glue.util.UI;
 import org.jboss.seam.security.management.picketlink.IdentitySessionProducer;
+import org.jboss.seam.transaction.Transactional;
 import org.picketlink.idm.api.Group;
 import org.picketlink.idm.api.IdentitySessionFactory;
 import org.picketlink.idm.api.UnsupportedCriterium;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.model.SimpleGroup;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
@@ -67,9 +69,11 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
     private Group[] selectedGroups;
     private Group selectedGroup;
     private String groupName;
+    private List<Group> listGroups;
 
     public SecurityGroupListService() {
         setPageSize(MAX_RESULTS);
+        listGroups = new ArrayList<Group>();
     }
 
     public String getGroupName() {
@@ -109,15 +113,37 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
         return selectedGroups;
     }
 
+    public List<Group> getListGroups() {
+        return listGroups;
+    }
+
+    public void setListGroups(List<Group> listGroups) {
+        this.listGroups = listGroups;
+    }
+
     public void setSelectedGroups(Group[] selectedGroups) {
         this.selectedGroups = selectedGroups;
     }
-
-    // public void assignGroups(List<Group> g){
-    //     if (g.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-    //      g = securityGroupService.getGroups();
-    //     }
-    //}
+    
+    @Transactional
+    public String deleteGroup() {
+        log.info("Eqaula-->  Ingreso a borrar grupo");
+        if(getSelectedGroup() != null){
+            try {                 
+                log.info("Eqaula-->  Ingreso a borrar grupo seleccionado");
+                securityGroupService.getSecurity().getPersistenceManager().removeGroup(getSelectedGroup(), true);
+                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  "+getSelectedGroup().getName(),""));
+                    RequestContext.getCurrentInstance().execute("deletedDlg.hide();"); //cerrar el popup si se grabo correctamente
+                this.setSelectedGroup(null);
+            } catch (IdentityException ex) {
+                Logger.getLogger(SecurityGroupListService.class.getName()).log(Level.SEVERE, null, ex);
+                log.info("Eqaula--> Error delete group");
+            }
+            
+        }
+        return "/pages/admin/security/list.xhtml?faces-redirect=true";
+    }
+    
     @PostConstruct
     public void init() {
         securityGroupService.setEntityManager(entityManager);
@@ -148,8 +174,7 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
         } catch (IdentityException ex) {
             FacesMessage msg = new FacesMessage(UI.getMessages("common.error"), ex.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            Logger.getLogger(SecurityGroupListService.class.getName()).log(Level.SEVERE, null, ex);
-            
+            Logger.getLogger(SecurityGroupListService.class.getName()).log(Level.SEVERE, null, ex);            
         }
         return null;
     }
@@ -171,12 +196,13 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
             }
             Map<String, Object> _filters = new HashMap<String, Object>();
             result = securityGroupService.find(first, end, sortField, order, _filters);
-            this.setRowCount(result.size());
+            this.setRowCount(result.size());  //importante para cargar datos 
         } catch (UnsupportedCriterium ex) {
             Logger.getLogger(SecurityGroupListService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IdentityException ex) {
             Logger.getLogger(SecurityGroupListService.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.listGroups = result;
         return result;
     }
 }

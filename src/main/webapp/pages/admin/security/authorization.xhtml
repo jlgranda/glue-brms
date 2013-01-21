@@ -43,11 +43,30 @@
             </div>
         </ui:define>
         <ui:define name="content">
-            <h:form id="form" acceptcharset="UTF-8">
+            <h:form id="form" acceptcharset="UTF-8">                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-                <p:dataTable var="group" value="#{securityHome.lazyGroup}"
-                             editable="false" id="groupTable" rendered="true"                          
-                             rows="10"                                                            
+                <label for="group_" class=" ">#{messages['panel.Group']}</label>                 
+                <div class="input">                     
+                    <p:selectOneMenu id="group_" value="#{securityHome.selectedGroup}" effect="fade" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="false"  var="p"
+                                     rendered="true" label="#{messages['security.group']}" filter="false" filterMatchMode="contains">                         
+                        <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                        <f:selectItems value="#{securityHome.valuesAsSelectItem}" var="groupItem" itemLabel="#{groupItem}" itemValue="#{groupItem}"/>                                                                          
+                        <p:ajax event="change" update="@parent save" partialSubmit="true"/>
+                    </p:selectOneMenu>                     
+                    #{' '}
+                    
+                </div>                     
+                <div class="actions">                        
+                    <h:commandButton id="save" action="#{securityHome.saveAssocition()}" value="#{messages['common.save']}" styleClass="btn primary" type="button"
+                                     rendered="true"/>              
+                </div>
+                <p:dataTable var="group" value="#{securityHome.listGroups}"
+                             editable="false" id="groupTable" rendered="true"                                                 
+                             paginator="true" rows="20"><!--
+                             paginatorAlwaysVisible="false"
+                             paginatorPosition="top"
+                             paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                             lazy="true"
                              selection="#{securityHome.selectedGroup}"                         
                              selectionMode="single">
 
@@ -55,22 +74,14 @@
                             update=":form:messages :form:save"/>                 
                     <p:ajax event="rowUnselect" listener="#{securityHome.onRowUnselect}" update=":form:messages :form:save"/>
 
-                    <p:column selectionMode="single"/>
+                    <p:column selectionMode="single"/>-->
                     <p:column headerText="#{messages['security.group.name']}" sortBy="#{group.name}">
                         <h:outputText value="#{group.name}" />
                     </p:column>
                     <p:column headerText="#{messages['security.group.type']}" sortBy="#{group.groupType}">
                         <h:outputText value="#{group.groupType}" />
                     </p:column>                
-                </p:dataTable>
-                <div class="admin-actions">                         
-                    <h:commandButton id="save" action="#{securityHome.saveAssocition()}" value="#{messages['common.save']}" styleClass="btn primary" type="button"
-                                     disabled="false"/>
-                    #{' '}
-                    <h:link value="#{messages['common.admin']} #{messages['security.group']}" rendered="#{true}" outcome="list" styleClass="btn" type="button">                            
-                        <f:param name="backView" value="authorization"></f:param>
-                    </h:link>                        
-                </div>
+                </p:dataTable>             
             </h:form>                 
         </ui:define>             
     </ui:composition>

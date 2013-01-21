@@ -16,6 +16,7 @@
 package org.eqaula.glue.controller.security;
 
 import java.io.Serializable;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -51,7 +53,7 @@ import org.primefaces.event.UnselectEvent;
  *
  * @author cesar
  */
-@Named(value="securityHome")
+@Named(value = "securityHome")
 @ViewScoped
 public class SecurityHome implements Serializable {
 
@@ -68,17 +70,17 @@ public class SecurityHome implements Serializable {
     private IdentitySession security;
     @Inject
     private ProfileService ps;
-    @Inject
-    private IdentitySessionFactory identitySessionFactory;    
+//    @Inject
+//    private SecurityGroupListService securityGroupListService;
     @Inject
     private SecurityGroupService securityGroupService;
     private Messages msg;
     private Long profileId;
-    private SecurityGroupLasyDataService lazyGroup;
-    private List<Group> listGroups = new ArrayList<Group>();
+    private List<Group> listGroups;
     private Group selectedGroup;
 
-    public SecurityHome() {        
+    public SecurityHome() {
+        this.listGroups = new ArrayList<Group>();
     }
 
     public Long getProfileId() {
@@ -87,7 +89,7 @@ public class SecurityHome implements Serializable {
 
     public void setProfileId(Long profileId) {
         this.profileId = profileId;
-    }    
+    }
 
     public Group getSelectedGroup() {
         return selectedGroup;
@@ -97,47 +99,50 @@ public class SecurityHome implements Serializable {
         this.selectedGroup = selectedGroup;
     }
 
-    public List<Group> getListGroups() {                
+    public List<Group> getListGroups() {
+        log.info("eqaula --> lista de grupos ");
+        try {
+            this.listGroups = securityGroupService.getGroups();
+        } catch (IdentityException ex) {
+            Logger.getLogger(SecurityHome.class.getName()).log(Level.SEVERE, null, ex);
+            log.info("eqaula --> lista de grupos " + ex);
+        }
+        log.info("eqaula --> lista de grupos tamaño " + listGroups.size());
         return listGroups;
+    }
+
+    public List<SelectItem> getValuesAsSelectItem() {
+        log.info("eqaula --> lista de Items ");
+        List<SelectItem> items = new ArrayList<SelectItem>();
+        SelectItem item = null;
+        item = new SelectItem(null, UI.getMessages("common.choice"));
+        items.add(item);
+        for (Group g : getListGroups()) {
+            item = new SelectItem(g, g.getName());
+            items.add(item);
+            log.info("eqaula --> Items add grupo " + item.getValue());
+        }
+        this.saveAssocition();
+        return items;
     }
 
     public void setListGroups(List<Group> listGroups) {
         this.listGroups = listGroups;
     }
 
-    public SecurityGroupLasyDataService getLazyGroup() {
-        return lazyGroup;
-    }
-
-    public void setLazyGroup(SecurityGroupLasyDataService lazyGroup) {
-        this.lazyGroup = lazyGroup;
-    }
-    
-    public void assignGroups(List<Group> g){
-        if (g.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-            //g = securityGroupService.getGroups();
-            log.info("eqaula --> assignGroups " + g);
-        }
-    }
-    
-    public void initSesion() throws IdentityException {
-        Map<String, Object> sessionOptions = new HashMap<String, Object>();
-        sessionOptions.put(IdentitySessionProducer.SESSION_OPTION_ENTITY_MANAGER, em);
-        security = identitySessionFactory.createIdentitySession("default", sessionOptions);
-    }
-
     @PostConstruct
     public void init() {
         log.info("eqaula --> init SecurityHome ");
-        ps.setEntityManager(em);        
+        ps.setEntityManager(em);
         securityGroupService.setEntityManager(em);
+        securityGroupService.setSecurity(security);
+
     }
 
     //TODO: obtener el usuarios
     public User getUser() throws IdentityException {
-        initSesion();
         if (identity.isLoggedIn()) {
-            return security.getPersistenceManager().findUser(getProfile().getUsername());
+            return securityGroupService.getSecurity().getPersistenceManager().findUser(getProfile().getUsername());
         } else {
             return null;
         }
@@ -150,38 +155,44 @@ public class SecurityHome implements Serializable {
 //    }
     //TODO: asignar el usuario a un grupo 
     public void associateUserGroup() {
+        log.info("Eqaula SecurityHome -- asociatedgroup");
         try {
-            security.getRelationshipManager().associateUser(getSelectedGroup(), getUser());
+            this.selectedGroup = securityGroupService.findByName("Admin");
+            log.info("Eqaula SecurityHome -- user " + getUser().getKey() + "group " + selectedGroup.getName());
+            securityGroupService.getSecurity().getRelationshipManager().associateUser(this.selectedGroup, getUser());
         } catch (IdentityException ex) {
             Logger.getLogger(SecurityHome.class.getName()).log(Level.SEVERE, null, ex);
+            log.info("Eqaula SecurityHome -- error save asociatedgroup " + ex);
         }
     }
 
     @TransactionAttribute
     public String saveAssocition() {
         log.info("Eqaula SecurityHome -- save asociatedgroup");
-        try {
-            if (getUser() != null & getSelectedGroup() != null) {
-                associateUserGroup();
-            } else {
-                log.info("Eqaula SecurityHome -- error save asociatedgroup");
-            }
-        } catch (IdentityException ex) {
-            Logger.getLogger(SecurityHome.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            
+//            //if (getUser() != null & this.selectedGroup  != null) {
+        associateUserGroup();
+////            } else {
+////                log.info("Eqaula SecurityHome -- error save asociatedgroup");
+////            }
+//        } catch (IdentityException ex) {
+//            Logger.getLogger(SecurityHome.class.getName()).log(Level.SEVERE, null, ex);
+//            log.info("Eqaula SecurityHome -- error save asociatedgroup " + ex);
+//        }
 
-        return "";
+        return "/pages/admin/security/authorization.xhtml?faces-redirect=true&&profileId=" + getProfileId();
 
     }
 
-    public Profile getProfile() {        
+    public Profile getProfile() {
         return ps.getProfileById(profileId);
 
     }
     //TODO: crear roles 
     //TODO: buscar roles 
     //TODO: asignar roles
-    
+
     public void onRowSelect(SelectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("Group") + " " + UI.getMessages("common.selected"), ((Group) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
