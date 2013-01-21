@@ -54,6 +54,8 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
     private ItemService itemService;
     private Item itemSelected;
     private Long parentId;
+    private Long warehouseId;
+    private Long stockId;
 
     public ItemHome() {
     }
@@ -80,6 +82,22 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
 
     public void setItemSelected(Item itemSelected) {
         this.itemSelected = itemSelected;
+    }
+
+    public Long getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+
+    public Long getStockId() {
+        return stockId;
+    }
+
+    public void setStockId(Long stockId) {
+        this.stockId = stockId;
     }
 
     @TransactionAttribute
@@ -122,11 +140,35 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
         getInstance().setLastUpdate(now);
         String outcome = null;
         if (getInstance().isPersistent()) {
-            save(getInstance());
-            outcome = "/pages/stocklist/item/list";
+
+            if (warehouseId != null && stockId != null) {
+                save(getInstance());
+                outcome = "/pages/stocklist/stock/stock?faces-redirect=true&warehouseId=" + getWarehouseId() + "&stockId=" + getStockId();
+            } else {
+
+                if (warehouseId != null) {
+                    save(getInstance());
+                    outcome = "/pages/stocklist/stock/stock?faces-redirect=true&warehouseId=" + getWarehouseId();
+                } else {
+                    save(getInstance());
+                    outcome = "/pages/stocklist/item/list";
+                }
+            }
+
         } else {
-            save(getInstance());
-            outcome = "/pages/stocklist/item/list";
+            if (warehouseId != null && stockId != null) {
+                save(getInstance());
+                outcome = "/pages/stocklist/stock/stock?faces-redirect=true&warehouseId=" + getWarehouseId() + getWarehouseId() + "&stockId=" + getStockId();
+            } else {
+                if (warehouseId != null) {
+                    save(getInstance());
+                    outcome = "/pages/stocklist/stock/stock?faces-redirect=true&warehouseId=" + getWarehouseId();
+                } else {
+                    save(getInstance());
+                    outcome = "/pages/stocklist/item/list";
+                }
+            }
+
         }
         return outcome;
     }
@@ -134,7 +176,8 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
     @Transactional
     public String deleteItem() {
         log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());
-        String outcome = null;
+
+
         try {
             if (getInstance() == null) {
                 throw new NullPointerException("Item is null");
@@ -171,11 +214,17 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
     public Class<Item> getEntityClass() {
         return Item.class;
     }
-    
-    
-    public List<Item> getItems(){
+
+    public List<Item> getItems() {
         List list = itemService.getItems();
         return list;
     }
-    
+
+    public boolean isAssociatedToItem() {
+        if (getInstance().getStocks().size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

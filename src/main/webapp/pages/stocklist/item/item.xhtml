@@ -13,7 +13,9 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-            <f:viewParam name="itemId" value="#{itemHome.itemId}" />            
+            <f:viewParam name="itemId" value="#{itemHome.itemId}" />  
+            <f:viewParam name="stockId" value="#{itemHome.stockId}"/>
+            <f:viewParam name="warehouseId" value="#{itemHome.warehouseId}" />  
             <s:viewAction action="#{itemHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
 
@@ -38,11 +40,18 @@
                 <div class="actions">
                     <p:commandButton id="save" action="#{itemHome.saveItem()}" value="#{messages['common.save']}" styleClass="btn primary"/>
                     &nbsp;
-                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
+                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" 
+                                     onclick="#{itemHome.isAssociatedToItem()?'alertDlg.show();':'deletedDlg.show();'}" immediate="true"
                                      update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{itemHome.instance.id != null}"/>
                     &nbsp;
-                    <h:link outcome="/pages/stocklist/item/list.xhtml?faces-redirect=true" onclick="editDlg.hide();"
-                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
+                    <h:link outcome="#{empty itemHome.warehouseId ? '/pages/stocklist/item/list.xhtml?faces-redirect=true':'/pages/stocklist/stock/stock.xhtml?faces-redirect=true'}" 
+                            onclick="editDlg.hide();"
+                            value="#{messages['common.cancel']}" 
+                            styleClass="btn" 
+                            immediate="true"> 
+                        <f:param name="warehouseId" value="#{itemHome.warehouseId}"/>
+                        <f:param name="stockId" value="#{itemHome.stockId}"/>
+                        <f:param name="backView" value="list"></f:param>
                     </h:link>
                 </div>
 
@@ -60,6 +69,16 @@
                                          style="margin-top:10px;"/>  
                     </h:form>
                 </p:dialog> 
+                
+                <p:dialog id="alerts-dialog" header="#{messages['common.alert']}" widgetVar="alertDlg" resizable="false">  
+                    <h:form id="form-alerts-dialog">
+                        <h:panelGroup layout="block" style="padding:5px;">  
+                            <h:outputText value="#{messages['module.stocklist.delete.confirm']}"/>  
+                        </h:panelGroup>                          
+                        <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="alertDlg.hide();"                                           
+                                         style="margin-top:10px;"/>  
+                    </h:form>
+                </p:dialog>
 
             </h:form>                 
         </ui:define>             

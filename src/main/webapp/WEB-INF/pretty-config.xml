@@ -128,6 +128,8 @@
       <pattern value="/warehouse"></pattern>
       <view-id value="/pages/stocklist/warehouse/warehouse.xhtml"></view-id>
     </url-mapping>
+    
+    
    <url-mapping id="warehouse-list">
       <pattern value="/warehouse/list"></pattern>
       <view-id value="/pages/stocklist/warehouse/list.xhtml"></view-id>       
@@ -140,11 +142,11 @@
       <action>#{projects.loadCurrent}</action>
    </url-mapping>
    
-    <url-mapping id="project-create">
-       <pattern value="/new-project"></pattern>
-       <view-id value="/pages/project/create.xhtml"></view-id>
-    </url-mapping>
--->    
+        <url-mapping id="project-create">
+           <pattern value="/new-project"></pattern>
+           <view-id value="/pages/project/create.xhtml"></view-id>
+        </url-mapping>
+    -->    
    
 
     <!-- Begin Exception Mappings -->

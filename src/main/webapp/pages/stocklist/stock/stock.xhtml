@@ -30,15 +30,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="span4 columns offset3">
-                    <h:form id="control">                                                         
-                        <h:link value="#{messages['common.add']} #{messages['module.stocklist.item']} " rendered="#{true}" 
-                                outcome="/pages/stocklist/item/item.xhtml?faces-redirect=true" styleClass="btn secondary">                                
-                        </h:link>                            
-                    </h:form>
-                </div>
-                    
                 </div>
             </div>             
         </ui:define>
@@ -54,9 +45,22 @@
                                          converter="genericConverter" >
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
                             <f:selectItems value="#{itemHome.items}" var="item" itemLabel="#{item}" itemValue="#{item}"/>                          
-                        </p:selectOneMenu>                        
+                        </p:selectOneMenu>  
+
+                        <p:button value="" icon="ui-icon-circle-plus" rendered="#{true}" 
+                                  outcome="/pages/stocklist/item/item.xhtml?faces-redirect=true"
+                                  style="height: 26px; width: 32px">     
+                            <f:param name="warehouseId" value="#{stockHome.warehouseId}"/>
+                            <c:if test="#{not empty stockHome.stockId}">
+                                <f:param name="stockId" value="#{stockHome.stockId}"/>
+                            </c:if>
+                            <f:param name="backView" value="list"></f:param>
+                        </p:button>                            
+
+
                     </div>
                 </h:panelGroup>
+
                 <glue:input id="description" name="amount" type="java.lang.Double" label="#{messages['module.stocklist.stock.amount']}" value="#{stockHome.instance.amount}" required="false" inlinehelp="#{messages['common.description.help']}" execute="@this save" render="description"/>
                 <glue:input id="name" name="unit" type="text" label="#{messages['module.stocklist.stock.unit']}" value="#{stockHome.instance.unit}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
 

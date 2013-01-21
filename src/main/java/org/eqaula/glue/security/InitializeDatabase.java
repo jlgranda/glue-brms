@@ -883,6 +883,60 @@ public class InitializeDatabase {
             entityManager.flush();
         }
     }
+    
+    
+    private void validateStructureForWareHouse() {
+        
+        BussinesEntityType bussinesEntityType = null;
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", Account.class.getName());
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(Account.class.getName());
+
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = new Structure();
+            structure.setName("Data for " + Account.class.getName());
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+            bussinesEntityType.addStructure(structure);
+
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+
+            //Datos para Inicializar Account 
+            Account parent = new Account();
+            //org.eqaula.glue.security.Account accountSecurity = new org.eqaula.glue.security.Account();            
+            parent.setType(bussinesEntityType);
+            parent.setCode(DATA[0][0]);
+            parent.setName(DATA[0][1]);
+            parent.setAuthor(null);
+            parent.setAccountType(Account.Type.SCHEMA);
+            parent.setLastUpdate(now);
+            parent.setDescription(DATA[0][3]);
+
+            entityManager.persist(parent);
+            for (int i = 1; i < DATA.length; i++) {
+                Account account = new Account();
+                account.setCode(DATA[i][0]);
+                account.setName(DATA[i][1]);
+                account.setDescription(DATA[i][3]);
+                account.setAuthor(null);
+                account.setAccountType(Account.Type.valueOf(DATA[i][2]));
+                account.setLastUpdate(now);
+                account.setParent(parent);
+                entityManager.persist(account);
+            }
+        }
+
+    
+    }
+    
 
     private Property buildGroupTypeProperty(String name, String label, boolean showDefaultBussinesEntityProperties, String generatorName, Long minimumMembers, Long maximumMembers, String helpinline, Long sequence) {
         Property property = new Property();

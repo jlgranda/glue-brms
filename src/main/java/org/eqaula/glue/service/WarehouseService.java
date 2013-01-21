@@ -59,4 +59,13 @@ public class WarehouseService extends PersistenceUtil<Warehouse> {
         query.where(builder.equal(bussinesEntityType.get(Warehouse_.name), name));
         return getSingleResult(query);
     }
+    
+//    public List<Warehouse> findWarehousesWithStocks() {
+//        CriteriaBuilder builder = getCriteriaBuilder();
+//        CriteriaQuery<Warehouse> query = builder.createQuery(Warehouse.class);
+//        Root<Warehouse> warehouse = query.from(Warehouse.class);
+//        query.where(builder. equal(warehouse.get(Warehouse_.stocks)));
+//        return getResultList(query);
+//
+//    }
 }

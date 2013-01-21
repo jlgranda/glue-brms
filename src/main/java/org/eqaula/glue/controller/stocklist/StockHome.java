@@ -28,7 +28,9 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
+import org.eqaula.glue.model.stocklist.Item;
 import org.eqaula.glue.model.stocklist.Stock;
+import org.eqaula.glue.model.stocklist.Warehouse;
 import org.eqaula.glue.service.StockService;
 import org.eqaula.glue.service.WarehouseService;
 import org.eqaula.glue.util.Dates;
@@ -192,12 +194,12 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
     }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.items") + " " + UI.getMessages("common.selected"), ((Stock) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.item") + " " + UI.getMessages("common.selected"), ((Stock) event.getObject()).getItem().getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.items") + " " + UI.getMessages("common.unselected"), ((Stock) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.item") + " " + UI.getMessages("common.unselected"), ((Stock) event.getObject()).getItem().getName());
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setBussinesEntity(null);
