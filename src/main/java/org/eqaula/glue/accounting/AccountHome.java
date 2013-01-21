@@ -16,6 +16,7 @@
 package org.eqaula.glue.accounting;
 
 import java.io.Serializable;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -36,9 +37,12 @@ import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
+import org.omnifaces.component.tree.TreeNodeItem;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 
 /**
  *
@@ -58,6 +62,11 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
     private Long parentId;
     private Account accountSelected;
     private String backview;
+    private TreeNode treeAccount;
+
+    public AccountHome() {
+        this.treeAccount = new DefaultTreeNode();
+    }
 
     public Long getAccountId() {
         return (Long) getId();
@@ -73,6 +82,18 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
+    }
+
+    public TreeNode getTreeAccount() {
+        if (getInstance().isPersistent()) {
+            log.info("eqaula --> getTreeAccount");
+            this.treeAccount = getRootAccount();
+        }
+        return treeAccount;
+    }
+
+    public void setTreeAccount(TreeNode treeAccount) {
+        this.treeAccount = treeAccount;
     }
 
     @TransactionAttribute
@@ -133,15 +154,15 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
 
     public String deleteAccount() {
         log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());
-        String outcome=null;
+        String outcome = null;
         try {
             if (getInstance() == null) {
                 throw new NullPointerException("Account is null");
             }
-            if (getInstance().isPersistent()) {                
+            if (getInstance().isPersistent()) {
                 outcome = hasParent() ? "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getInstance().getParent().getId() : "/pages/accounting/list.xhtml";
                 getInstance().setParent(null);
-                delete(getInstance());                 
+                delete(getInstance());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
                 //RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
 
@@ -217,10 +238,40 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
             return "/pages/accounting/list.xhtml";
         }
     }
-    
-    public List<Account> getAccounts(){
+
+    public List<Account> getAccounts() {
         List list = accountService.getAccounts();
         Collections.sort(list);
         return list;
+    }
+
+    public TreeNode assignTreeAccount(Account account, TreeNode parent) {
+        //log.info("eqaula --> AccountHome ingreso a TreeAccount");        
+        String type = account.getAccountType().name() == "ACCOUNT"? "Account" : "default";
+        TreeNode tAccount = new DefaultTreeNode(account, parent);
+        TreeNode tsubA = new DefaultTreeNode();         
+        for (Account a : account.getSubAccountsAsList()) {
+            if (a.getSubAccountsAsList().isEmpty()) { 
+                type = a.getAccountType().name() == "ACCOUNT"? "Account" : "default";
+                tsubA = new DefaultTreeNode(a, tAccount);                 
+            } else {                
+                tsubA = assignTreeAccount(a, tAccount);                
+            }
+        }
+        return tAccount;
+    }
+    
+    public TreeNode getRootAccount(){
+        if (getInstance().isPersistent()) {
+            String type = getInstance().getAccountType().name() == "ACCOUNT"? "Account" : "default";
+            TreeNode root = new DefaultTreeNode(getInstance(), null);
+            this.assignTreeAccount((Account)root.getData(), root);
+            log.info("eqaula --> getRootAccount getData = "+root.getData());
+            log.info("eqaula --> getRootAccount getType = "+root.getType());
+            
+            return root;            
+        }else{
+            return null;
+        }
     }
 }
