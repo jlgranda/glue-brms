@@ -124,26 +124,30 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
     public void setSelectedGroups(Group[] selectedGroups) {
         this.selectedGroups = selectedGroups;
     }
-    
+
     @Transactional
-    public String deleteGroup() {
-        log.info("Eqaula-->  Ingreso a borrar grupo");
-        if(getSelectedGroup() != null){
+    public void deleteGroup() {
+        log.info("Eqaula-->  Ingreso a borrar grupo seleccionado "+getSelectedGroup());
+        if (this.getSelectedGroup() != null) {            
             try {                 
-                log.info("Eqaula-->  Ingreso a borrar grupo seleccionado");
-                securityGroupService.getSecurity().getPersistenceManager().removeGroup(getSelectedGroup(), true);
-                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  "+getSelectedGroup().getName(),""));
+                if (securityGroupService.isAssociatedUser(selectedGroup)) {
+                    securityGroupService.removeGroup(selectedGroup);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getSelectedGroup().getName(), ""));
                     RequestContext.getCurrentInstance().execute("deletedDlg.hide();"); //cerrar el popup si se grabo correctamente
-                this.setSelectedGroup(null);
+                    this.setSelectedGroup(null);
+                }else{
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se pudo borrar! \nEste gropu tiene usuarios asociados:",""));
+                }
             } catch (IdentityException ex) {
-                Logger.getLogger(SecurityGroupListService.class.getName()).log(Level.SEVERE, null, ex);
-                log.info("Eqaula--> Error delete group");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se pudo borrar :  " + getSelectedGroup().getName(), ""));
+                Logger.getLogger(SecurityGroupListService.class.getName()).log(Level.SEVERE, "Error al eliminar grupo", ex);
+
             }
-            
+
         }
-        return "/pages/admin/security/list.xhtml?faces-redirect=true";
+        
     }
-    
+
     @PostConstruct
     public void init() {
         securityGroupService.setEntityManager(entityManager);
@@ -159,6 +163,7 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
     public void onRowSelect(SelectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("Group") + " " + UI.getMessages("common.selected"), ((Group) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        this.setSelectedGroup((Group) event.getObject());
     }
 
     public void onRowUnselect(UnselectEvent event) {
@@ -174,7 +179,7 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
         } catch (IdentityException ex) {
             FacesMessage msg = new FacesMessage(UI.getMessages("common.error"), ex.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            Logger.getLogger(SecurityGroupListService.class.getName()).log(Level.SEVERE, null, ex);            
+            Logger.getLogger(SecurityGroupListService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -204,5 +209,9 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
         }
         this.listGroups = result;
         return result;
+    }
+    
+    public void assignGroup(Group g){
+        this.selectedGroup = g;
     }
 }

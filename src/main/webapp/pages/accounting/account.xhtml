@@ -170,25 +170,20 @@
                                 update=":form:button-edit :form:button-view :form:messages"/>                 
                         <p:ajax event="rowUnselect" listener="#{accountHome.onRowUnselect}" update=":form:button-edit :form:button-view :form:messages"/>
 
-                        <p:column headerText="#{messages['Account.code']}" sortBy="#{account_.code}">
+                        <p:column headerText="#{messages['account.code']}" sortBy="#{account_.code}">
                             <h:outputText value="#{account_.code}" />
                         </p:column>
 
-                        <p:column headerText="#{messages['Account.name']}" sortBy="#{account_.name}">
+                        <p:column headerText="#{messages['account.name']}" sortBy="#{account_.name}">
                             <h:outputText value="#{account_.name}" />
                         </p:column>
 
-                        <p:column headerText="#{messages['Account.type']}" sortBy="#{account_.accountType}">
+                        <p:column headerText="#{messages['account.type']}" sortBy="#{account_.accountType}">
                             <h:outputText value="#{account_.accountType}" />
                         </p:column>
 
                         <f:facet name="footer">                     
-                        </f:facet>
-                        <!--<f:facet name="footer">
-                            <p:commandButton id="multiViewButton" value="#{messages['common.view']}" icon="ui-icon-search"  
-                                             update=":form:displayMulti" oncomplete="multiAccountDialog.show()"/>  
-                        </f:facet>-->
-
+                        </f:facet>                        
                     </p:dataTable>
                 </h:panelGroup>            
             </p:panel>

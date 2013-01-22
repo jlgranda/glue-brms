@@ -122,7 +122,10 @@ public class SecurityGroupService implements Serializable {
         return tem;
 
     }
-
+    public void removeGroup(Group g) throws IdentityException {    
+        security.getPersistenceManager().removeGroup(g, true);
+    }
+    
     public void associate(Group g, User u) throws IdentityException {
         security.getRelationshipManager().associateUser(g, u);
     }
@@ -143,5 +146,11 @@ public class SecurityGroupService implements Serializable {
 
     boolean isAssociated(Group group, User user) throws IdentityException {
         return security.getRelationshipManager().isAssociated(group, user);
+    }
+    
+    boolean isAssociatedUser(Group group) throws IdentityException {
+        boolean b = security.getRelationshipManager().findAssociatedUsers(group, true).isEmpty();
+        log.info("Eqaula-->  valor de asociacion "+b);
+        return b;
     }
 }
