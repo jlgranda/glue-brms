@@ -40,8 +40,8 @@ import org.jboss.solder.logging.Logger;
 public class SecurityRules {
 
     private static Logger log = Logger.getLogger(SecurityRules.class);
-    public static String ADMIN="Admin";
-    private static String ACCOUNTANT="Accountant";
+    public static String ADMIN = "Admin";
+    private static String ACCOUNTANT = "Accountant";
 
     /*public @Secures
      @Admin
@@ -55,35 +55,38 @@ public class SecurityRules {
         if (profile == null || identity.getUser() == null) {
             return false;
         } else {
-            log.infof("admin: %s", identity.hasRole("admin", "USERS", "GROUP"));
-            log.infof("admin by group: %s", identity.inGroup(SecurityRules.ADMIN, "GROUP"));
-            return profile.getIdentityKeys().contains(getUsername(identity)) 
+            return profile.getIdentityKeys().contains(getUsername(identity))
                     || identity.hasRole("admin", "USERS", "GROUP")
                     || identity.inGroup(SecurityRules.ADMIN, "GROUP")
                     || "admin".contains(getUsername(identity));
         }
     }
-    
+
     @Secures
     @Admin
     public boolean isAdmin(Identity identity) {
-        log.infof("admin: %s", identity.hasRole("admin", "USERS", "GROUP"));
-        log.infof("admin by group: %s", identity.inGroup("admin", getUsername(identity)));
-         return "admin".contains(getUsername(identity))
-                 || identity.hasRole("admin", "USERS", "GROUP") 
-                 || identity.inGroup(SecurityRules.ADMIN, "GROUP");
+        if (identity.getUser() == null) {
+            return false;
+        } else {
+            return "admin".contains(getUsername(identity))
+                    || identity.hasRole("admin", "USERS", "GROUP")
+                    || identity.inGroup(SecurityRules.ADMIN, "GROUP");
+        }
     }
-    
+
     @Secures
     @Accountant
     public boolean isAccountant(Identity identity) {
-        log.infof("accountant: %s", identity.hasRole("accountant", "USERS", "GROUP"));
-        log.infof("admin: %s", identity.hasRole("admin", "USERS", "GROUP"));
-         return identity.hasRole("accountant", "USERS", "GROUP") 
-                 || identity.inGroup(ACCOUNTANT, "GROUP")
-                 || "admin".contains(getUsername(identity));
+        if (identity.getUser() == null) {
+            return false;
+        } else {
+            return identity.hasRole(ACCOUNTANT, "USERS", "GROUP")
+                || identity.inGroup(ACCOUNTANT, "GROUP")
+                || identity.inGroup(SecurityRules.ADMIN, "GROUP")
+                || "admin".contains(getUsername(identity));
+        }
     }
-    
+
     /*    
      @Secures
      @Owner
@@ -104,10 +107,9 @@ public class SecurityRules {
      return bussinesEntity.getAuthor().getIdentityKeys().contains(identity.getUser().getKey());
      }
      }*/
-
     private String getUsername(Identity identity) {
         String user = "";
-        if (identity !=  null && identity.getUser() != null){
+        if (identity != null && identity.getUser() != null) {
             user = identity.getUser().getKey();
         }
         return user;

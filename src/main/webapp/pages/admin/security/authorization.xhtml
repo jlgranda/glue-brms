@@ -14,13 +14,14 @@
     <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
             <f:viewParam name="username" value="#{securityHome.username}" />                                    
+            <f:viewParam name="groupname" value="#{securityHome.groupname}" /> 
         </f:metadata>
 
         <ui:define name="header-replace">            
             <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
                 <div class="container">
                     <div class="row fl" style="margin-top: 5px;">
-                        <div class="span7 columns">   
+                        <div class="span9 columns">   
                             <div class="row fl" style="margin-top: 5px;">
                                 <h3>#{not empty securityHome.username ? messages['common.authorize'] : ''}
                                     #{messages['common.permissions']} #{messages['common.for']}
@@ -51,61 +52,53 @@
                             <f:selectItems value="#{securityHome.findAllGroups}" var="g" itemValue="#{g}" itemLabel="#{g.name}"/>
                         </p:selectOneMenu>  
                         #{' '}
-                        <p:commandButton id="add" actionListener="#{securityHome.associateTo()}" styleClass="btn primary"
-                                         icon="ui-icon-circle-plus" 
+                        <p:commandButton id="add" value="#{messages['common.assignto']} #{messages['common.group']}" actionListener="#{securityHome.associateTo()}" styleClass="btn primary"
+                                         icon="ui-icon-disk" 
                                          rendered="true" update="groupTable"/>
-                        <p:commandButton id="management" value="#{messages['common.admin']} #{messages['security.group']}" styleClass="btn primary"
+                        <p:commandButton id="management" value="#{messages['common.admin']} #{messages['security.group']}" styleClass="btn"
                                          icon="ui-icon-plusthick" 
                                          rendered="true" action="list"/>
                         <span class="help-inline"><br/>#{messages['common.security.associateto.inlinehelp']} <ocp:message forId="#{name}" /></span>
                     </div>   
                 </h:panelGroup>
-                <h:panelGroup id="group-table" layout="block" class="clearfix">
-                    <label for="groupTable" class="">#{messages['panel.Group']}</label>
-                    <div class="input"> 
-                        <p:dataTable id="groupTable" var="group" value="#{securityHome.findGroups()}"
-                                     editable="false" rendered="true"                                                 
-                                     paginator="true" rows="10"
-                                     paginatorAlwaysVisible="false">
-                            
-                            <p:column headerText="#{messages['security.group.name']}" sortBy="#{group.name}">
-                                <h:outputText value="#{group.name}" />
-                            </p:column>             
-                            <p:column headerText="Accines" style="width:10%">
-                                <p:commandButton id="button-delete" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" 
-                                                 process="@this, :form:delete-dialog" type="button" immediate="true" 
-                                                 update=":form:delete-dialog" rendered="true"/>
-                            </p:column>
+                <div> 
+                    <h4>#{messages['security.assignedgroups']}</h4>
+                    <p:dataTable id="groupTable" var="group" value="#{securityHome.findGroups()}"
+                                 editable="false" rendered="true"                                                 
+                                 paginator="true" rows="10"
+                                 paginatorAlwaysVisible="false">
 
-                        </p:dataTable>      
-                    </div>
-                </h:panelGroup>
-                <p:dialog id="delete-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
-                    <h:form id="form-dialog-confirm-delete">
-                        <h:panelGroup layout="block" style="padding:5px;">  
-                            <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
-                        </h:panelGroup>  
-                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
-                                         action="#{securityHome.disassociateTo()}"                                         
-                                         ajax="true" process="@this" update=":form:groupTable" 
-                                         style="margin-top:10px;">  
-                        </p:commandButton>  
-                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"                                       
-                                         style="margin-top:10px;"/>  
-                    </h:form>
-                </p:dialog> 
-            </h:form>                 
+                        <p:column headerText="#{messages['security.group.name']}" sortBy="#{group.name}">
+                            <h:outputText value="#{group.name}" />
+                        </p:column>             
+                        <p:column headerText="#{messages['common.actions']}" style="width:10%">
+                            <p:commandLink value="#{messages['common.remove']}" 
+                                           type="button" immediate="true" styleClass="btn"
+                                             onclick="deletedDlg.show();"
+                                             rendered="true">
+                                <f:setPropertyActionListener target="#{securityHome.group}" value="#{group}"/>
+                                <p:ajax process="@this" update=":delete-dialog" />
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>      
+                </div>
+            </h:form>    
+            <p:dialog id="delete-dialog" header="#{messages['common.delete.confirm']}" 
+                      widgetVar="deletedDlg" resizable="false" dynamic="true" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']} #{securityHome.group.name}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                     actionListener="#{securityHome.disassociate()}"                                         
+                                     ajax="true" process="@this" update=":form:groupTable" 
+                                     style="margin-top:10px;">
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"                                       
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
         </ui:define>
-        <script type="text/javascript">  
-            function handleSaveRequest(xhr, status, args) {  
-                if(args.validationFailed || !args.loggedIn) {  
-                    jQuery('#calce-dialog').effect("shake", { times:3 }, 100);  
-                } else {  
-                    editDlg.hide();  
-                    //jQuery('#loginLink').fadeOut();  
-                }  
-            }  
-        </script>
     </ui:composition>
 </html>
 

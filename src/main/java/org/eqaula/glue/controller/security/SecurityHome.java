@@ -67,6 +67,7 @@ public class SecurityHome implements Serializable {
     private SecurityGroupService securityGroupService;
     private Messages msg;
     private String username;
+    private String groupname;
     private Group group;
     private User user;
 
@@ -82,7 +83,12 @@ public class SecurityHome implements Serializable {
 
     }
 
-    public Group getGroup() {
+    public Group getGroup() throws IdentityException {
+        if (this.group == null) {
+            if (getGroupname() != null && !getGroupname().isEmpty()) {
+                group = securityGroupService.findByName(getGroupname());
+            }
+        }
         return group;
     }
 
@@ -112,15 +118,25 @@ public class SecurityHome implements Serializable {
         this.username = username;
     }
 
+    public String getGroupname() {
+        return groupname;
+    }
+
+    public void setGroupname(String groupname) {
+        System.out.println("--> set groupname " + groupname);
+        this.groupname = groupname;
+    }
+    
+
     @Transactional
     public void associateTo() {
         try {
             if (getGroup() != null && getUser() != null) {
                 if (!securityGroupService.isAssociated(group, user)) {
                     securityGroupService.associate(getGroup(), getUser());
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Authorization was established succesfully into " + getGroup().getName() + " for " + getUser().getKey(), null));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Authorization was established succesfully!", "Add " + getUser().getKey() + " into " + getGroup().getName() ));
                 } else {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Authorization is assined for " + getGroup().getName() + " and " + getUser().getKey(), null));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Authorization exists!", "User " + getUser().getKey() + " was assig into " + getGroup().getName() ));
                 }
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cann't assign authorization for " + getGroup().getName() + " and " + getUser().getKey(), null));
@@ -132,18 +148,24 @@ public class SecurityHome implements Serializable {
     }
     
     @Transactional
-    public void disassociateTo() {
+    public void disassociate() {
+        Group g = null;
         try {
-            if (getGroup() != null && getUser() != null) {
-                if (securityGroupService.isAssociated(group, user)) {
-                    securityGroupService.disassociate(getGroup(), getUser());
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Disassociated  was established succesfully into" + getGroup().getName() + " for " + getUser().getKey(), null));
+            g = getGroup();
+        } catch (IdentityException ex) {
+            Logger.getLogger(SecurityHome.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            if (g != null && getUser() != null) {
+                if (securityGroupService.isAssociated(g, user)) {
+                    securityGroupService.disassociate(g, getUser());
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Disassociated was established succesfully!",   "" + getUser().getKey() + " removed from " + g.getName()));
                     RequestContext.getCurrentInstance().execute("deletedDlg.hide();");
                 } else {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not is assined for " + getGroup().getName() + " and " + getUser().getKey(), null));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Disassociated incorrect! ",  "Association " + g.getName() + ", " + getUser().getKey() + " not exists"));
                 }
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cann't assign authorization for " + getGroup().getName() + " and " + getUser().getKey(), null));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cann't unassign authorization!", "Please provide a group and user"));
             }
 
         } catch (IdentityException ex) {
