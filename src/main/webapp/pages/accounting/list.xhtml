@@ -67,32 +67,8 @@
                 </p:column>
 
                 <f:facet name="footer">                     
-                </f:facet>
-                <!--<f:facet name="footer">
-                    <p:commandButton id="multiViewButton" value="#{messages['common.view']}" icon="ui-icon-search"  
-                                     update=":form:displayMulti" oncomplete="multiAccountDialog.show()"/>  
-                </f:facet>-->
+                </f:facet>                
             </p:dataTable>
-
-            <!--<p:dialog id="multiDialog" header="#{messages['Account.detail']}"
-                      widgetVar="multiAccountDialog" height="300" showEffect="fade"
-                      hideEffect="explode">
-
-                <p:dataList id="displayMulti" value="#{accountListService.selectedAccount}"
-                            var="selectedAccount">  
-                    Code: #{selectedAccount.code}, Name: #{selectedAccount.name}  
-                </p:dataList>
-
-            </p:dialog>
-            
-            <p:dialog header="Plan de cuentas seleccionado" modal="true" showEffect="fade" hideEffect="fade" widgetVar="dlg">  
-                    <h:panelGrid columns="1" id="display">  
-                                <h:outputText value="#{accountListService.selectedAccount.name}" />  
-    		    </h:panelGrid>  
-             </p:dialog>  -->
-
         </h:form>
-
-
     </ui:define>
 </ui:composition>

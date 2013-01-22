@@ -40,6 +40,7 @@ import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.User;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.model.SimpleUser;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -117,12 +118,32 @@ public class SecurityHome implements Serializable {
             if (getGroup() != null && getUser() != null) {
                 if (!securityGroupService.isAssociated(group, user)) {
                     securityGroupService.associate(getGroup(), getUser());
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Authorization was established succesfully into " + getGroup() + " for " + getUser(), null));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Authorization was established succesfully into " + getGroup().getName() + " for " + getUser().getKey(), null));
                 } else {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Authorization is assined for " + getGroup() + " and " + getUser(), null));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Authorization is assined for " + getGroup().getName() + " and " + getUser().getKey(), null));
                 }
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cann't assign authorization for " + getGroup() + " and " + getUser(), null));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cann't assign authorization for " + getGroup().getName() + " and " + getUser().getKey(), null));
+            }
+
+        } catch (IdentityException ex) {
+            Logger.getLogger(SecurityHome.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Transactional
+    public void disassociateTo() {
+        try {
+            if (getGroup() != null && getUser() != null) {
+                if (securityGroupService.isAssociated(group, user)) {
+                    securityGroupService.disassociate(getGroup(), getUser());
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Disassociated  was established succesfully into" + getGroup().getName() + " for " + getUser().getKey(), null));
+                    RequestContext.getCurrentInstance().execute("deletedDlg.hide();");
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not is assined for " + getGroup().getName() + " and " + getUser().getKey(), null));
+                }
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cann't assign authorization for " + getGroup().getName() + " and " + getUser().getKey(), null));
             }
 
         } catch (IdentityException ex) {
@@ -169,5 +190,6 @@ public class SecurityHome implements Serializable {
             Logger.getLogger(SecurityHome.class.getName()).log(Level.SEVERE, null, ex);
         }
         return groups;
-    }
+    }     
+    
 }

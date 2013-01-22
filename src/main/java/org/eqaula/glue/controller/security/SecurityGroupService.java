@@ -53,7 +53,6 @@ public class SecurityGroupService implements Serializable {
 
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(SecurityGroupService.class);
     private static final long serialVersionUID = -8856264241192917839L;
-    
     private EntityManager entityManager;
     private IdentitySession security;
 
@@ -86,7 +85,7 @@ public class SecurityGroupService implements Serializable {
         return 0;
     }
 
-    public Group getGroupById(final Long id) throws IdentityException {        
+    public Group getGroupById(final Long id) throws IdentityException {
         Group g = security.getPersistenceManager().findGroupByKey(String.valueOf(id));
         log.info("eqaula --> grupo key " + g.getKey());
         return g;
@@ -97,35 +96,41 @@ public class SecurityGroupService implements Serializable {
         log.info("finByName: " + name);
         return security.getPersistenceManager().findGroup(name, "GROUP");
     }
-    
+
     public Group findByKey(final String key) throws IdentityException {
         log.info("finByKey: " + key);
         return security.getPersistenceManager().findGroupByKey(key);
     }
 
     public List<Group> find(int first, int end, String sortField, QuerySortOrder order, Map<String, Object> _filters) throws UnsupportedCriterium, IdentityException {
-        
-        IdentitySearchCriteriaImpl identitySearchCriteria = new IdentitySearchCriteriaImpl();        
+
+        IdentitySearchCriteriaImpl identitySearchCriteria = new IdentitySearchCriteriaImpl();
         identitySearchCriteria.sort(SortOrder.ASCENDING);
-        if (QuerySortOrder.DESC.equals(order)){
+        if (QuerySortOrder.DESC.equals(order)) {
             identitySearchCriteria.sort(SortOrder.DESCENDING);
         }
-        identitySearchCriteria.sortAttributeName(sortField);        
+        identitySearchCriteria.sortAttributeName(sortField);
         identitySearchCriteria.setPaged(true);
         identitySearchCriteria.page(first, end);
         String[] values = new String[1];
-        for (Map.Entry entry : _filters.entrySet()){
+        for (Map.Entry entry : _filters.entrySet()) {
             values[1] = (String) entry.getValue();
             identitySearchCriteria.attributeValuesFilter((String) entry.getKey(), values);
         }
-        log.info("retrieve from" + first + " to "+ end);
+        log.info("retrieve from" + first + " to " + end);
         List<Group> tem = new ArrayList<Group>(security.getPersistenceManager().findGroup("GROUP", identitySearchCriteria));
         return tem;
-        
+
     }
-    
-    public void associate(Group g, User u) throws IdentityException{
+
+    public void associate(Group g, User u) throws IdentityException {
         security.getRelationshipManager().associateUser(g, u);
+    }
+
+    public void disassociate(Group g, User u) throws IdentityException {
+        Collection<User> listUser= new ArrayList<User>();
+        listUser.add(u);
+        security.getRelationshipManager().disassociateUsers(g, listUser);
     }
 
     public User findUser(String usr) throws IdentityException {
@@ -133,11 +138,10 @@ public class SecurityGroupService implements Serializable {
     }
 
     Collection<Group> find(User user) throws IdentityException {
-       return security.getRelationshipManager().findAssociatedGroups(user);
+        return security.getRelationshipManager().findAssociatedGroups(user);
     }
 
     boolean isAssociated(Group group, User user) throws IdentityException {
         return security.getRelationshipManager().isAssociated(group, user);
     }
-    
 }
