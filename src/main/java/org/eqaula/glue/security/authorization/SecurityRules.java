@@ -40,6 +40,7 @@ import org.jboss.solder.logging.Logger;
 public class SecurityRules {
 
     private static Logger log = Logger.getLogger(SecurityRules.class);
+    public static String ADMIN="Admin";
 
     /*public @Secures
      @Admin
@@ -54,8 +55,11 @@ public class SecurityRules {
             return false;
         } else {
             log.infof("admin: %s", identity.hasRole("admin", "USERS", "GROUP"));
-            return profile.getIdentityKeys().contains(identity.getUser().getKey()) 
-                    ||  identity.hasRole("admin", "USERS", "GROUP");
+            log.infof("admin by group: %s", identity.inGroup(SecurityRules.ADMIN, "GROUP"));
+            return profile.getIdentityKeys().contains(getUsername(identity)) 
+                    || identity.hasRole("admin", "USERS", "GROUP")
+                    || identity.inGroup(SecurityRules.ADMIN, "GROUP")
+                    || "admin".contains(getUsername(identity));
         }
     }
     
@@ -63,8 +67,10 @@ public class SecurityRules {
     @Admin
     public boolean isAdmin(Identity identity) {
         log.infof("admin: %s", identity.hasRole("admin", "USERS", "GROUP"));
-         return identity.hasRole("admin", "USERS", "GROUP") 
-                 || true;
+        log.infof("admin by group: %s", identity.inGroup("admin", getUsername(identity)));
+         return "admin".contains(getUsername(identity))
+                 || identity.hasRole("admin", "USERS", "GROUP") 
+                 || identity.inGroup(SecurityRules.ADMIN, "GROUP");
     }
     
     @Secures
@@ -73,7 +79,7 @@ public class SecurityRules {
         log.infof("accountant: %s", identity.hasRole("accountant", "USERS", "GROUP"));
         log.infof("admin: %s", identity.hasRole("admin", "USERS", "GROUP"));
          return identity.hasRole("accountant", "USERS", "GROUP") 
-                 || true ;
+                 || "admin".contains(getUsername(identity));
     }
     
     /*    
@@ -96,4 +102,12 @@ public class SecurityRules {
      return bussinesEntity.getAuthor().getIdentityKeys().contains(identity.getUser().getKey());
      }
      }*/
+
+    private String getUsername(Identity identity) {
+        String user = "";
+        if (identity !=  null && identity.getUser() != null){
+            user = identity.getUser().getKey();
+        }
+        return user;
+    }
 }

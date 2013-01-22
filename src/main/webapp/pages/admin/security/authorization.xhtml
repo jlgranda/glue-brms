@@ -13,7 +13,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-            <f:viewParam name="profileId" value="#{securityHome.profileId}" />                                    
+            <f:viewParam name="username" value="#{securityHome.username}" />                                    
         </f:metadata>
 
         <ui:define name="header-replace">            
@@ -22,19 +22,14 @@
                     <div class="row fl" style="margin-top: 5px;">
                         <div class="span7 columns">   
                             <div class="row fl" style="margin-top: 5px;">
-                                <h3>#{not empty securityHome.profileId ? messages['common.authorize'] : ''}
+                                <h3>#{not empty securityHome.username ? messages['common.authorize'] : ''}
                                     #{messages['common.permissions']} #{messages['common.for']}
-                                    #{not empty securityHome.profile ? securityHome.profile.firstname : '' } #{securityHome.profile.surname}</h3>     
-                                <p><span style=""><b>#{messages['common.username']} #{': '}</b>#{securityHome.profile.username}</span>
-                                    <br/>
-                                    <h:outputText escape="false" value="#{securityHome.profile.email}"/>                                
-                                </p>
+                                    #{not empty securityHome.username ? securityHome.username : '' }</h3>     
                             </div>                        
                         </div>
                         <div class="span4 columns offset3">
                             <h:form id="control">                                                         
                                 <h:link value="#{messages['common.cancel']} #{'a'} #{messages['module.profile.profiles']} " rendered="#{true}" outcome="/pages/profile/list.xhtml?faces-redirect=true" styleClass="btn secondary">
-
                                 </h:link>                            
                             </h:form>
                         </div>
@@ -45,43 +40,39 @@
         <ui:define name="content">
             <h:form id="form" acceptcharset="UTF-8">                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-                <label for="group_" class=" ">#{messages['panel.Group']}</label>                 
-                <div class="input">                     
-                    <p:selectOneMenu id="group_" value="#{securityHome.selectedGroup}" effect="fade" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="false"  var="p"
-                                     rendered="true" label="#{messages['security.group']}" filter="false" filterMatchMode="contains">                         
-                        <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
-                        <f:selectItems value="#{securityHome.valuesAsSelectItem}" var="groupItem" itemLabel="#{groupItem}" itemValue="#{groupItem}"/>                                                                          
-                        <p:ajax event="change" update="@parent save" partialSubmit="true"/>
-                    </p:selectOneMenu>                     
-                    #{' '}
-                    
-                </div>                     
-                <div class="actions">                        
-                    <h:commandButton id="save" action="#{securityHome.saveAssocition()}" value="#{messages['common.save']}" styleClass="btn primary" type="button"
-                                     rendered="true"/>              
-                </div>
-                <p:dataTable var="group" value="#{securityHome.listGroups}"
-                             editable="false" id="groupTable" rendered="true"                                                 
-                             paginator="true" rows="20"><!--
-                             paginatorAlwaysVisible="false"
-                             paginatorPosition="top"
-                             paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
-                             lazy="true"
-                             selection="#{securityHome.selectedGroup}"                         
-                             selectionMode="single">
-
-                    <p:ajax event="rowSelect" listener="#{securityHome.onRowSelect}"   
-                            update=":form:messages :form:save"/>                 
-                    <p:ajax event="rowUnselect" listener="#{securityHome.onRowUnselect}" update=":form:messages :form:save"/>
-
-                    <p:column selectionMode="single"/>-->
-                    <p:column headerText="#{messages['security.group.name']}" sortBy="#{group.name}">
-                        <h:outputText value="#{group.name}" />
-                    </p:column>
-                    <p:column headerText="#{messages['security.group.type']}" sortBy="#{group.groupType}">
-                        <h:outputText value="#{group.groupType}" />
-                    </p:column>                
-                </p:dataTable>             
+                <h:panelGroup id="group-add" layout="block" class="clearfix">
+                    <label for="group_" class="">#{messages['common.security.associateto']}</label>
+                    <div class="input">
+                        <p:selectOneMenu id="group_" value="#{securityHome.group}" effect="fade" 
+                                         converter="omnifaces.SelectItemsConverter" 
+                                         required="true" requiredMessage="false"
+                                         rendered="true" label="#{messages['security.group']}">                         
+                             <f:selectItem itemLabel="#{messages['common.choice']}"  itemValue = ""  />  
+                             <f:selectItems value="#{securityHome.findAllGroups}" var="g" itemValue="#{g}" itemLabel="#{g.name}"/>
+                        </p:selectOneMenu>  
+                        #{' '}
+                        <p:commandButton id="add" actionListener="#{securityHome.associateTo()}" styleClass="btn primary"
+                                         icon="ui-icon-circle-plus" 
+                                         rendered="true" update="groupTable"/>
+                        <p:commandButton id="management" styleClass="btn primary"
+                                         icon="ui-icon-plusthick" 
+                                         rendered="true" action="securityGroupList"/>
+                        <span class="help-inline"><br/>#{messages['common.security.associateto.inlinehelp']} <ocp:message forId="#{name}" /></span>
+                    </div>   
+                </h:panelGroup>
+                <h:panelGroup id="group-table" layout="block" class="clearfix">
+                    <label for="groupTable" class="">#{messages['panel.Group']}</label>
+                    <div class="input"> 
+                        <p:dataTable id="groupTable" var="group" value="#{securityHome.findGroups()}"
+                                     editable="false" rendered="true"                                                 
+                                     paginator="true" rows="10"
+                                     paginatorAlwaysVisible="false">
+                            <p:column headerText="#{messages['security.group.name']}" sortBy="#{group.name}">
+                                <h:outputText value="#{group.name}" />
+                            </p:column>             
+                        </p:dataTable>      
+                    </div>
+                </h:panelGroup>
             </h:form>                 
         </ui:define>             
     </ui:composition>

@@ -17,6 +17,7 @@ package org.eqaula.glue.controller.security;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +40,7 @@ import org.picketlink.idm.api.IdentitySearchCriteriumType;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.SortOrder;
 import org.picketlink.idm.api.UnsupportedCriterium;
+import org.picketlink.idm.api.User;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.IdentitySearchCriteriaImpl;
 import org.picketlink.idm.impl.api.model.SimpleGroup;
@@ -84,12 +86,6 @@ public class SecurityGroupService implements Serializable {
         return 0;
     }
 
-   public List<Group> getGroups() throws IdentityException {
-        List<Group> groups = new ArrayList<Group>(security.getPersistenceManager().findGroup("GROUP"));        
-        log.info("eqaula --> lista de grupos " + groups.get(0).toString());
-        return groups;
-    }
-
     public Group getGroupById(final Long id) throws IdentityException {        
         Group g = security.getPersistenceManager().findGroupByKey(String.valueOf(id));
         log.info("eqaula --> grupo key " + g.getKey());
@@ -126,6 +122,22 @@ public class SecurityGroupService implements Serializable {
         List<Group> tem = new ArrayList<Group>(security.getPersistenceManager().findGroup("GROUP", identitySearchCriteria));
         return tem;
         
+    }
+    
+    public void associate(Group g, User u) throws IdentityException{
+        security.getRelationshipManager().associateUser(g, u);
+    }
+
+    public User findUser(String usr) throws IdentityException {
+        return security.getPersistenceManager().findUser(usr);
+    }
+
+    Collection<Group> find(User user) throws IdentityException {
+       return security.getRelationshipManager().findAssociatedGroups(user);
+    }
+
+    boolean isAssociated(Group group, User user) throws IdentityException {
+        return security.getRelationshipManager().isAssociated(group, user);
     }
     
 }
