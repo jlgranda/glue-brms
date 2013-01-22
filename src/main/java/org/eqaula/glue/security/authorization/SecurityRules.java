@@ -41,6 +41,7 @@ public class SecurityRules {
 
     private static Logger log = Logger.getLogger(SecurityRules.class);
     public static String ADMIN="Admin";
+    private static String ACCOUNTANT="Accountant";
 
     /*public @Secures
      @Admin
@@ -79,6 +80,7 @@ public class SecurityRules {
         log.infof("accountant: %s", identity.hasRole("accountant", "USERS", "GROUP"));
         log.infof("admin: %s", identity.hasRole("admin", "USERS", "GROUP"));
          return identity.hasRole("accountant", "USERS", "GROUP") 
+                 || identity.inGroup(ACCOUNTANT, "GROUP")
                  || "admin".contains(getUsername(identity));
     }
     
