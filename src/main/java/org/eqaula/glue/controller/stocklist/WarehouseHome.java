@@ -19,6 +19,7 @@ import org.eqaula.glue.service.WarehouseService;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.inject.Named;
@@ -60,7 +61,6 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
     private Warehouse warehouseSelected;
     private String backview;
     private Long parentId;
-   
 
     public Long getWarehouseId() {
         return (Long) getId();
@@ -69,10 +69,7 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
     public void setWarehouseId(Long warehouseId) {
         setId(warehouseId);
     }
-    
-    
 
-    
     public Long getParentId() {
         return parentId;
     }
@@ -133,7 +130,8 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
     @Transactional
     public String deleteWarehouse() {
         log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());
-        String outcome = null;
+
+
         try {
             if (getInstance() == null) {
                 throw new NullPointerException("Warehouse is null");
@@ -147,7 +145,7 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
 
             } else {
                 //remover de la lista, si aún no esta persistido
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un Asiento Contable para ser borrado!", ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe entidad para ser borrada!", ""));
             }
 
         } catch (Exception e) {
@@ -177,5 +175,13 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
 
     public void setWarehouseSelected(Warehouse warehouseSelected) {
         this.warehouseSelected = warehouseSelected;
+    }
+
+    public boolean isAssociatedToWarehouse() {
+        if (getInstance().getStocks().size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

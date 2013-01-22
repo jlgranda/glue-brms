@@ -29,11 +29,16 @@
                 </h:link>
                 #{' '}
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="account" styleClass="btn" 
-                        disabled="#{accountListService.selectedAccount.id == null}"
-                        rendered="true">
+                        disabled="#{empty  accountListService.selectedAccount.id}">
                     <f:param name="accountId" value="#{accountListService.selectedAccount.id}"></f:param>
                     <f:param name="backView" value="list"></f:param>
-                </h:link>               
+                </h:link>
+                #{' '}
+                <h:link id="button-view" value="#{messages['common.view']}" rendered="#{true}" outcome="view" styleClass="btn" 
+                        disabled="#{empty accountListService.selectedAccount.id}">
+                    <f:param name="accountId" value="#{accountListService.selectedAccount.id}"></f:param>
+                    <f:param name="backView" value="list"></f:param>
+                </h:link>
             </div>
             <p:dataTable var="account_" value="#{accountListService}"
                          paginator="true" rows="10"
@@ -46,8 +51,8 @@
                          rendered="true"
                          selectionMode="single">
            
-                <p:ajax event="rowSelect" listener="#{accountListService.onRowSelect}" update=":form:button-edit :form:messages"/>                 
-                <p:ajax event="rowUnselect" listener="#{accountListService.onRowUnselect}" update=":form:button-edit :form:messages "/>
+                <p:ajax event="rowSelect" listener="#{accountListService.onRowSelect}" update=":form:button-edit :form:button-view :form:messages"/>                 
+                <p:ajax event="rowUnselect" listener="#{accountListService.onRowUnselect}" update=":form:button-edit :form:button-view :form:messages "/>
                                
                 <p:column headerText="#{messages['Account.code']}" sortBy="#{account_.code}">
                     <h:outputText value="#{account_.code}" />

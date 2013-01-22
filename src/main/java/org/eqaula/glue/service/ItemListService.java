@@ -127,12 +127,12 @@ public class ItemListService extends LazyDataModel<Item>{
     }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.items") + " " + UI.getMessages("common.selected"), ((Item) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.item") + " " + UI.getMessages("common.selected"), ((Item) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.items") + " " + UI.getMessages("common.unselected"), ((Item) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.item") + " " + UI.getMessages("common.unselected"), ((Item) event.getObject()).getName());
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setSelectedItem(null);

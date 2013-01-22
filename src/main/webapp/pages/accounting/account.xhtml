@@ -125,7 +125,7 @@
                     #{' '}                    
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
                                      update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{accountHome.accountId != null}"/>
-                    #{' '}
+                    #{' '}                    
                     <h:link outcome="#{accountHome.previousView()}" onclick="editDlg.hide();"
                             value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
                     </h:link>
@@ -148,6 +148,12 @@
                         <f:param name="backView" value="account"></f:param>
                     </h:link>
                     #{' '}
+                    <h:link id="button-view" value="#{messages['common.view']}" rendered="#{true}" outcome="view" styleClass="btn" 
+                            disabled="#{empty accountHome.accountSelected}">
+                        <f:param name="accountId" value="#{accountHome.accountSelected.id}"></f:param>
+                        <f:param name="backView" value="account"></f:param>
+                    </h:link>
+                    #{' '}
                     <h:link outcome="#{accountHome.previousView()}" onclick="editDlg.hide();"
                             value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
                     </h:link>
@@ -161,8 +167,8 @@
                                  selectionMode="single" > 
 
                         <p:ajax event="rowSelect" listener="#{accountHome.onRowSelect}"   
-                                update=":form:button-edit :form:messages"/>                 
-                        <p:ajax event="rowUnselect" listener="#{accountHome.onRowUnselect}" update=":form:button-edit :form:messages"/>
+                                update=":form:button-edit :form:button-view :form:messages"/>                 
+                        <p:ajax event="rowUnselect" listener="#{accountHome.onRowUnselect}" update=":form:button-edit :form:button-view :form:messages"/>
 
                         <p:column headerText="#{messages['Account.code']}" sortBy="#{account_.code}">
                             <h:outputText value="#{account_.code}" />
