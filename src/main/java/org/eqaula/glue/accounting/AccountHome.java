@@ -244,34 +244,33 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
         Collections.sort(list);
         return list;
     }
-
-    public TreeNode assignTreeAccount(Account account, TreeNode parent) {
-        //log.info("eqaula --> AccountHome ingreso a TreeAccount");        
-        String type = account.getAccountType().name() == "ACCOUNT"? "Account" : "default";
-        TreeNode tAccount = new DefaultTreeNode(account, parent);
-        TreeNode tsubA = new DefaultTreeNode();         
-        for (Account a : account.getSubAccountsAsList()) {
-            if (a.getSubAccountsAsList().isEmpty()) { 
-                type = a.getAccountType().name() == "ACCOUNT"? "Account" : "default";
-                tsubA = new DefaultTreeNode(a, tAccount);                 
-            } else {                
-                tsubA = assignTreeAccount(a, tAccount);                
-            }
-        }
-        return tAccount;
-    }
-    
+   
+    //metodos para generaar un TreeNode de Cuentas
     public TreeNode getRootAccount(){
         if (getInstance().isPersistent()) {
-            String type = getInstance().getAccountType().name() == "ACCOUNT"? "Account" : "default";
-            TreeNode root = new DefaultTreeNode(getInstance(), null);
-            this.assignTreeAccount((Account)root.getData(), root);
-            log.info("eqaula --> getRootAccount getData = "+root.getData());
-            log.info("eqaula --> getRootAccount getType = "+root.getType());
-            
+            String type = getInstance().getAccountType().name() == "SCHEMA"? getInstance().getAccountType().name() : treeAccount.getType();
+            TreeNode root = new DefaultTreeNode(type, getInstance(), null);
+            this.getNodeAccount((Account)root.getData(), root);            
             return root;            
         }else{
             return null;
         }
     }
+    
+    private TreeNode getNodeAccount(Account account, TreeNode parent) {
+        //log.info("eqaula --> AccountHome ingreso a TreeAccount");        
+        String type = account.getAccountType().name() == "ACCOUNT"? account.getAccountType().name() : parent.getType();
+        TreeNode tAccount = new DefaultTreeNode(type, account, parent);
+        TreeNode tsubA ;         
+        for (Account a : account.getSubAccountsAsList()) {
+            if (a.getSubAccountsAsList().isEmpty()) { 
+                type = a.getAccountType().name() == "ACCOUNT"? a.getAccountType().name() : tAccount.getType();
+                tsubA = new DefaultTreeNode(type, a, tAccount);                 
+            } else {                
+                tsubA = getNodeAccount(a, tAccount);                
+            }
+        }
+        return tAccount;
+    }
+   
 }

@@ -49,13 +49,17 @@
     </ui:define>
     <ui:define name="content">
         <p:tree value="#{accountHome.treeAccount}" var="accountN" dynamic="true" cache="true" id="tree">              
-            <p:treeNode expandedIcon="ui-icon-folder-open"  
+            <p:treeNode type ="default" expandedIcon="ui-icon-folder-open"  
                         collapsedIcon="ui-icon-folder-collapsed">
                 <h:outputText value="#{accountN.code}"/> 
                 #{' '}
                 <h:outputText value="#{accountN.name}"/>  
-            </p:treeNode>            
-            <p:treeNode type="#{accountN.type == 'ACCOUNT'}" icon="ui-icon-document"  >  
+            </p:treeNode>  
+            <p:treeNode type ="SCHEMA" expandedIcon="ui-icon-folder-open"  
+                        collapsedIcon="ui-icon-folder-collapsed">                
+                <h:outputText value="#{accountN.name}"/>  
+            </p:treeNode> 
+            <p:treeNode type="ACCOUNT" icon="ui-icon-document"  >  
                 <h:outputText value="#{accountN.code}"/> 
                 #{' '}
                 <h:outputText value="#{accountN.name}"/>  
