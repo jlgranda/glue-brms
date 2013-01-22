@@ -47,16 +47,16 @@
                                          converter="omnifaces.SelectItemsConverter" 
                                          required="true" requiredMessage="false"
                                          rendered="true" label="#{messages['security.group']}">                         
-                             <f:selectItem itemLabel="#{messages['common.choice']}"  itemValue = ""  />  
-                             <f:selectItems value="#{securityHome.findAllGroups}" var="g" itemValue="#{g}" itemLabel="#{g.name}"/>
+                            <f:selectItem itemLabel="#{messages['common.choice']}"  itemValue = ""  />  
+                            <f:selectItems value="#{securityHome.findAllGroups}" var="g" itemValue="#{g}" itemLabel="#{g.name}"/>
                         </p:selectOneMenu>  
                         #{' '}
                         <p:commandButton id="add" actionListener="#{securityHome.associateTo()}" styleClass="btn primary"
                                          icon="ui-icon-circle-plus" 
                                          rendered="true" update="groupTable"/>
-                        <p:commandButton id="management" styleClass="btn primary"
+                        <p:commandButton id="management" value="#{messages['common.admin']} #{messages['security.group']}" styleClass="btn primary"
                                          icon="ui-icon-plusthick" 
-                                         rendered="true" action="securityGroupList"/>
+                                         rendered="true" action="list"/>
                         <span class="help-inline"><br/>#{messages['common.security.associateto.inlinehelp']} <ocp:message forId="#{name}" /></span>
                     </div>   
                 </h:panelGroup>
@@ -67,14 +67,45 @@
                                      editable="false" rendered="true"                                                 
                                      paginator="true" rows="10"
                                      paginatorAlwaysVisible="false">
+                            
                             <p:column headerText="#{messages['security.group.name']}" sortBy="#{group.name}">
                                 <h:outputText value="#{group.name}" />
                             </p:column>             
+                            <p:column headerText="Accines" style="width:10%">
+                                <p:commandButton id="button-delete" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" 
+                                                 process="@this, :form:delete-dialog" type="button" immediate="true" 
+                                                 update=":form:delete-dialog" rendered="true"/>
+                            </p:column>
+
                         </p:dataTable>      
                     </div>
                 </h:panelGroup>
+                <p:dialog id="delete-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
+                    <h:form id="form-dialog-confirm-delete">
+                        <h:panelGroup layout="block" style="padding:5px;">  
+                            <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                        </h:panelGroup>  
+                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                         action="#{securityHome.disassociateTo()}"                                         
+                                         ajax="true" process="@this" update=":form:groupTable" 
+                                         style="margin-top:10px;">  
+                        </p:commandButton>  
+                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"                                       
+                                         style="margin-top:10px;"/>  
+                    </h:form>
+                </p:dialog> 
             </h:form>                 
-        </ui:define>             
+        </ui:define>
+        <script type="text/javascript">  
+            function handleSaveRequest(xhr, status, args) {  
+                if(args.validationFailed || !args.loggedIn) {  
+                    jQuery('#calce-dialog').effect("shake", { times:3 }, 100);  
+                } else {  
+                    editDlg.hide();  
+                    //jQuery('#loginLink').fadeOut();  
+                }  
+            }  
+        </script>
     </ui:composition>
 </html>
 
