@@ -92,7 +92,7 @@ public class Authentication
 
       String viewId = context.getViewRoot().getViewId();
       logger.info("viewId [{}]", viewId);
-      if (!"/pages/signup.xhtml".equals(viewId) && !"/pages/login.xhtml".equals(viewId)  )
+      if (!"/pages/signup.xhtml".equals(viewId) && !"/pages/login.xhtml".equals(viewId) && !"/pages/reset.xhtml".equals(viewId) )
       {
          // TODO need a better way to navigate: this doesn't work with AJAX requests
           HttpInboundServletRewrite rewrite = new HttpInboundRewriteImpl(request, response);

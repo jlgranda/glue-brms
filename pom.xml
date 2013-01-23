@@ -38,6 +38,8 @@
         <jboss-javaee-6.0.version>2.0.0.Final</jboss-javaee-6.0.version>
         <primefaces.version>3.4.2</primefaces.version>
         <prettyfaces-jsf2.version>3.3.2</prettyfaces-jsf2.version>
+        <seam.mail.version>3.1.1.Final</seam.mail.version>
+        
     </properties>
 
 
@@ -402,6 +404,24 @@
             <version>2.0</version>
             <type>jar</type>
         </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.seam.mail</groupId>
+            <artifactId>seam-mail</artifactId>
+            <version>${seam.mail.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.seam.mail</groupId>
+            <artifactId>seam-mail-api</artifactId>
+            <scope>compile</scope>
+            <version>${seam.mail.version}</version>
+        </dependency>
+        
+        
+        
+        
     </dependencies>
 
     <build>
