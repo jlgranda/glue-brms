@@ -1,10 +1,11 @@
 <beans xmlns="http://java.sun.com/xml/ns/javaee"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xmlns:s="urn:java:ee" 
-   xmlns:plidm="urn:java:org.jboss.seam.security.management.picketlink"
-   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://jboss.org/schema/cdi/beans_1_0.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:s="urn:java:ee" 
+       xmlns:plidm="urn:java:org.jboss.seam.security.management.picketlink"
+       xmlns:mail="urn:java:org.jboss.seam.mail.core"
+       xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://jboss.org/schema/cdi/beans_1_0.xsd">
 
-   <!-- em:EntityManager>
+    <!-- em:EntityManager>
         <s:Produces />
         <em:PersistenceContext unitName="primary" />
     </em:EntityManager -->
@@ -22,6 +23,12 @@
         
         
     </plidm:JpaIdentityStoreConfiguration>
+    
+    <mail:MailConfig
+        serverHost="my-server.test.com"
+        serverPort="25">
+        <s:modifies/>
+    </mail:MailConfig>
 
 </beans>
 

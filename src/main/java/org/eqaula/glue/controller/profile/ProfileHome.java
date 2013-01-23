@@ -36,11 +36,13 @@ import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.profile.ProfileService;
+import org.eqaula.glue.security.authentication.Authentication;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.web.ParamsBean;
 import org.jboss.seam.international.status.Messages;
 import org.jboss.seam.security.Authenticator;
 import org.jboss.seam.security.Credentials;
+import org.jboss.seam.security.CredentialsImpl;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.security.external.openid.OpenIdAuthenticator;
 import org.jboss.seam.security.management.IdmAuthenticator;
@@ -83,6 +85,10 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     private ParamsBean params;
     @Inject
     private ProfileService ps;
+    @Inject
+    private Authentication authentication;
+    @Inject
+    private CredentialsImpl credentialsImpl;
 
     public Long getProfileId() {
         return (Long) getId();
@@ -137,7 +143,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         if (isIdDefined()) {
             wire();
         } else {
-            if (identity.isLoggedIn()){
+            if (identity.isLoggedIn()) {
                 setInstance(ps.getProfileByUsername(identity.getUser().getKey()));
             } else {
                 setInstance(new Profile());
@@ -164,6 +170,8 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
         ps.setEntityManager(em);
+
+
     }
 
     @Override
@@ -194,6 +202,52 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     }
 
     @TransactionAttribute
+    public String changePassword() throws IdentityException, InterruptedException {
+
+        PersistenceManager identityManager = security.getPersistenceManager();
+        User user = identityManager.findUser(getInstance().getUsername());
+
+        AttributesManager attributesManager = security.getAttributesManager();
+        attributesManager.updatePassword(user, getPassword());
+
+        getInstance().setPassword(getPassword());
+        save(getInstance());
+
+        em.flush();
+
+//        credentialsImpl.setUsername(getInstance().getUsername());
+//         credentialsImpl.setPassword(getInstance().getPassword());
+//
+//        authentication.login();
+
+
+
+
+        /*
+         * Try twice to work around some state bug in Seam Security
+         * TODO file issue in seam security
+         */
+        // return "/pages/profile/profile.xhtml";
+
+        credentials.setUsername(getInstance().getUsername());
+        credentials.setCredential(new PasswordCredential(getPassword()));
+
+        oidAuth.setStatus(Authenticator.AuthenticationStatus.FAILURE);
+        identity.setAuthenticatorClass(IdmAuthenticator.class);
+
+        /*
+         * Try twice to work around some state bug in Seam Security
+         * TODO file issue in seam security
+         */
+        String result = identity.login();
+        if (Identity.RESPONSE_LOGIN_EXCEPTION.equals(result)) {
+            result = identity.login();
+        }
+
+        return result;
+    }
+
+    @TransactionAttribute
     private void createUser() throws IdentityException {
         // TODO validate username, email address, and user existence
         PersistenceManager identityManager = security.getPersistenceManager();
@@ -202,7 +256,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         AttributesManager attributesManager = security.getAttributesManager();
         attributesManager.updatePassword(user, getPassword());
         attributesManager.addAttribute(user, "email", getInstance().getEmail());
-        
+
         em.flush();
 
         // TODO figure out a good pattern for this...

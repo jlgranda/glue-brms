@@ -42,12 +42,13 @@
                     <div class="input">
                         <p:selectOneMenu id="itemtype_" value="#{stockHome.instance.item}" effect="fade"  
                                          rendered="true" label="Items"
-                                         converter="genericConverter" >
+                                         converter="genericConverter" 
+                                         disabled="#{empty stockHome.stockId?false : true}">
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
                             <f:selectItems value="#{itemHome.items}" var="item" itemLabel="#{item}" itemValue="#{item}"/>                          
                         </p:selectOneMenu>  
 
-                        <p:button value="" icon="ui-icon-circle-plus" rendered="#{true}" 
+                        <p:button value="" icon="ui-icon-circle-plus" rendered="#{stockHome.stockId==null}" 
                                   outcome="/pages/stocklist/item/item.xhtml?faces-redirect=true"
                                   style="height: 26px; width: 32px">     
                             <f:param name="warehouseId" value="#{stockHome.warehouseId}"/>

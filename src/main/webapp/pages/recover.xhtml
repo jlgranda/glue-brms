@@ -1,19 +1,63 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"      
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
-<ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
 
-	<ui:param name="title" value="Recover Password" />
+        <ui:param name="title" value="Recover Password" />
 
-	<ui:define name="header"> Lost password? </ui:define>
-	<ui:define name="header-right"> Don't worry, we can get this sorted out.  </ui:define>
+        <ui:define name="header"> <h1>#{messages['common.password.forget']}</h1> </ui:define>
 
-	<ui:define name="content">
-	Coming soon.
-	</ui:define>
-</ui:composition>
+        <ui:define name="content">
+
+
+            <h:form id="form" acceptcharset="UTF-8">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+
+
+                <p>#{messages['common.password.forget.message']}</p>
+                <br/>
+                <h:panelGroup id="eml" layout="block" class="clearfix">
+                    <label for="email">#{messages['common.email']}</label>
+                    <div class="input">
+                        <h:inputText id="email" value="#{profileHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
+                            <f:validator validatorId="emailValidator" />
+                            <f:validator validatorId="signupEmailAvailabilityValidator" />
+                            <f:ajax execute="@this" render="eml"  />
+                        </h:inputText>
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.email != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-inline"><br/>Prometemos <b>nunca</b> compartir su dirección de correo. <ocp:message forId="email" /></span>
+                    </div>
+                </h:panelGroup>
+
+
+                <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
+                <s:validateForm id="signupValidator" validatorId="signupValidator" />
+
+                <div class="actions">
+                    <h:link id="save" outcome="/pages/reset.xhtml?faces-redirect=true" 
+                            value="#{messages['common.submit']}" styleClass="btn">
+                        <f:param name="profileId" value="432" />
+                        <f:param name="key" value="4444"/>
+                    </h:link>
+
+                    <h:link outcome="/pages/login.xhtml?faces-redirect=true"
+                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
+                    </h:link>
+                </div>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
 </html>
