@@ -79,27 +79,28 @@
                     <p:commandButton id="save" action="#{organizationHome.saveOrganization()}" value="#{messages['common.save']}" styleClass="btn primary"/>
                     &nbsp;
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
-                                     update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{organizationHome.organizationId != null}"/>
+                                     update=":cancel-dialog" rendered="#{organizationHome.organizationId != null}">                        
+                    </p:commandButton>
                     &nbsp;
-                    <h:link outcome="/pages/management/organization/list.xhtml?faces-redirect=true" onclick="editDlg.hide();"
+                    <h:link outcome="/pages/management/organization/list.xhtml?faces-redirect=true"
                             value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
                     </h:link>
-                </div>
-                <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
-                    <h:form id="form-dialog-confirm-delete">
-                        <h:panelGroup layout="block" style="padding:5px;">  
-                            <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
-                        </h:panelGroup>  
-                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
-                                         action="#{organizationHome.deleteOrganization()}"                                         
-                                         ajax="true" process="@this"  
-                                         style="margin-top:10px;">  
-                        </p:commandButton>  
-                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
-                                         style="margin-top:10px;"/>  
-                    </h:form>
-                </p:dialog> 
-            </h:form>                 
+                </div>                
+            </h:form> 
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">   
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                     action="#{organizationHome.deleteOrganization()}"                                         
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
         </ui:define>             
     </ui:composition>
 </html>

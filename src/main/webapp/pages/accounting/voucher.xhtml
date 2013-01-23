@@ -179,15 +179,5 @@ limitations under the License.
 
         </h:form>
 
-    </ui:define>
-    <script type="text/javascript">  
-        function handleSaveRequest(xhr, status, args) {  
-            if(args.validationFailed || !args.loggedIn) {  
-                jQuery('#edit-dialog').effect("shake", { times:3 }, 100);  
-            } else {  
-                editDlg.hide();  
-                //jQuery('#loginLink').fadeOut();  
-            }  
-        }  
-    </script>
+    </ui:define>    
 </ui:composition>
