@@ -42,7 +42,8 @@
                     <div class="input">
                         <p:selectOneMenu id="itemtype_" value="#{stockHome.instance.item}" effect="fade"  
                                          rendered="true" label="Items"
-                                         converter="org.eqaula.glue.faces.converter.GenericConverter" >
+                                         converter="org.eqaula.glue.faces.converter.GenericConverter"
+                                         disabled="#{empty stockHome.stockId?false : true}">
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
                             <f:selectItems value="#{itemHome.items}" var="item" itemLabel="#{item}" itemValue="#{item}"/>                          
                         </p:selectOneMenu>  
