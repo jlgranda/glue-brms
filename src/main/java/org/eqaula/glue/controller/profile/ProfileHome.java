@@ -367,7 +367,6 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
             }
 
         } catch (Exception e) {
-            System.out.println("saveBussinesEntity ERROR = " + e.getMessage());
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }

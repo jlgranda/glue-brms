@@ -37,35 +37,41 @@ limitations under the License.
                 <f:param name="result"></f:param>                
             </h:link>
         </p:panel>
-        
         <p:panel header="#{messages['panel.admin.entities']}" toggleable="true" toggleOrientation="vertical">
-            <h:link value="#{messages['module.BussinesEntity']}" rendered="#{true}" 
+             <h:link value="#{messages['module.BussinesEntity']}" rendered="#{true}" 
                     outcome="/pages/admin/bussinesentitytype/list">
                 <f:param name="result"></f:param>
                 <f:param name="typeName" value="org.eqaula.glue.model.BussinesEntityType"></f:param>
             </h:link>
             <br />
-
-            <h:link value="#{messages['module.profile.profiles']}" rendered="#{true}" 
+        </p:panel>
+        <p:panel header="#{messages['panel.admin.organizations']}" toggleable="true" toggleOrientation="vertical">
+              <h:link value="#{messages['module.organization']}" rendered="#{true}" 
+                    outcome="/pages/management/organization/list">
+                <f:param name="result"></f:param>
+                <f:param name="typeName" value="org.eqaula.glue.model.management.Organization"></f:param>
+            </h:link>
+            <br />
+        </p:panel>
+        <p:panel header="#{messages['panel.admin.profiles']}" toggleable="true" toggleOrientation="vertical">
+              <h:link value="#{messages['module.profile.profiles']}" rendered="#{true}" 
                     outcome="/pages/profile/list">
                 <f:param name="result"></f:param>
                 <f:param name="typeName" value="org.eqaula.glue.model.profile.Profile"></f:param>
             </h:link>
             <br />
-
-            <h:link value="#{messages['module.organization']}" rendered="#{true}" 
-                    outcome="/pages/management/organization/list">
-                <f:param name="result"></f:param>
-                <f:param name="typeName" value="org.eqaula.glue.model.management.Organization"></f:param>
+            <h:link value="#{messages['security.group']}" rendered="#{true}" 
+                    outcome="/pages/admin/security/list">
+                <f:param name="result"></f:param>                
             </h:link>
-
-            <br />
-            <h:link value="#{messages['module.accounting']}" rendered="#{true}" 
+        </p:panel>
+        
+        <p:panel header="#{messages['panel.admin.accounting']}" toggleable="true" toggleOrientation="vertical">
+           <h:link value="#{messages['module.accounting']}" rendered="#{true}" 
                     outcome="/pages/accounting/list">
                 <f:param name="result"></f:param>
                 <f:param name="typeName" value="org.eqaula.glue.model.accounting.Account"></f:param>
             </h:link>
-            
             <br />
             <h:link value="#{messages['module.stocklist']}" rendered="#{true}" 
                     outcome="/pages/stocklist/warehouse/list">
@@ -80,18 +86,8 @@ limitations under the License.
                 <f:param name="result"></f:param>
                 <f:param name="typeName" value="org.eqaula.glue.model.stocklist.Item"></f:param>
             </h:link>
-            
             <br />
-            <h:link value="#{messages['security.group']}" rendered="#{true}" 
-                    outcome="/pages/admin/security/list">
-                <f:param name="result"></f:param>                
-            </h:link>
-            
-            
-            
-            
         </p:panel>
-
     </ui:define>
 </ui:composition>
 

@@ -12,7 +12,7 @@
         <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
             <div class="container">
                 <div class="row fl" style="margin-top: 5px;">
-                    <div class="span7 columns">   
+                    <div class="span9 columns">   
                         <div class="row fl" style="margin-top: 5px;">
                             <h2>#{messages['security.group']}</h2>                                 
                         </div>                        
@@ -33,6 +33,8 @@
             <f:viewParam name="result" value="#{securityGroupListService.firstResult}" />
         </f:metadata>
         <h:form id="form">
+
+
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
             <div class="admin-actions">
                 <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="group" styleClass="btn primary">
@@ -40,19 +42,20 @@
                     <f:param name="backView" value="authorization"></f:param>
                 </h:link>                                
                 &nbsp;
-                <p:commandButton id="button-delete" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" 
-                                 process="@this, :form:cancel-dialog" type="button"
-                                 immediate="true" disabled="#{empty securityGroupListService.selectedGroup}"
-                                 update=":form:cancel-dialog" rendered="true"/>
-                
+                <p:commandLink id="button-delete" value="#{messages['common.delete']}" 
+                               type="button" immediate="false" styleClass="btn"
+                               onclick="deletedDlg.show();"
+                               rendered="true">                     
+                    <p:ajax process="@this"  update=":cancel-dialog" />
+                </p:commandLink>
             </div>
             <p:dataTable var="g" value="#{securityGroupListService}"
                          editable="false" id="groupTable" rendered="true"                          
                          paginator="true" rows="20"
                          paginatorAlwaysVisible="false"
-                         paginatorPosition="top"
+                         paginatorPosition="top" 
                          paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
-                         lazy="true"
+                         lazy="true"                         
                          selection="#{securityGroupListService.selectedGroup}"                         
                          selectionMode="single">
 
@@ -65,32 +68,24 @@
                 <p:column headerText="#{messages['security.group.type']}" sortBy="#{g.groupType}">
                     <h:outputText value="#{g.groupType}" />
                 </p:column>                
-            </p:dataTable>
-            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
-                <h:form id="form-dialog-confirm-delete">
-                    <h:panelGroup layout="block" style="padding:5px;">  
-                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
-                    </h:panelGroup>  
-                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
-                                     action="#{securityGroupListService.deleteGroup()}"                                         
-                                     ajax="true" process="@this"  
-                                     style="margin-top:10px;">  
-                    </p:commandButton>  
-                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"                                       
-                                     style="margin-top:10px;"/>  
-                </h:form>
-            </p:dialog> 
-        </h:form> 
-    </ui:define>
-    <script type="text/javascript">  
-        function handleSaveRequest(xhr, status, args) {  
-            if(args.validationFailed || !args.loggedIn) {  
-                jQuery('#calce-dialog').effect("shake", { times:3 }, 100);  
-            } else {  
-                editDlg.hide();  
-                //jQuery('#loginLink').fadeOut();  
-            }  
-        }  
-    </script>
+            </p:dataTable>          
+        </h:form>       
+        <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+            <h:form id="form-dialog-confirm-delete">
+                <h:panelGroup layout="block" style="padding:5px;">  
+                    <h:outputText value="#{messages['common.delete.confirm.message']}"/> 
+                    <br/>
+                    <h:outputText value="#{securityGroupListService.selectedGroup.name}"/> 
+                </h:panelGroup>  
+                <p:commandButton id ="delete-yes" value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                 action="#{securityGroupListService.deleteGroup()}"                                         
+                                 ajax="true" process="@this"  update=":form:groupTable"
+                                 style="margin-top:10px;">                                                  
+                </p:commandButton>  
+                <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"                                       
+                                 style="margin-top:10px;"/>  
+            </h:form>
+        </p:dialog>
+    </ui:define>    
 </ui:composition>
 
