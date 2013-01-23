@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -52,7 +53,7 @@ import org.primefaces.model.SortOrder;
  * @author cesar
  */
 @Named
-@RequestScoped
+@ViewScoped
 public class SecurityGroupListService extends LazyDataModel<Group> {
 
     private static final long serialVersionUID = 4819808125494695197L;
@@ -127,7 +128,7 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
 
     @Transactional
     public void deleteGroup() {
-        log.info("Eqaula-->  Ingreso a borrar grupo seleccionado "+getSelectedGroup());
+        log.info("Eqaula-->  Ingreso a borrar grupo seleccionado " + getSelectedGroup());
         if (this.getSelectedGroup() != null) {            
             try {                 
                 if (securityGroupService.isAssociatedUser(selectedGroup)) {
@@ -144,6 +145,8 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
 
             }
 
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cann't delete group!", "Please provide a group"));
         }
         
     }

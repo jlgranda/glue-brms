@@ -43,10 +43,9 @@
                 </h:link>                                
                 &nbsp;
                 <p:commandLink id="button-delete" value="#{messages['common.delete']}" 
-                               type="button" immediate="false" styleClass="btn"
+                               type="button" immediate="true" styleClass="btn"
                                onclick="deletedDlg.show();"
                                rendered="true">                     
-                    <p:ajax process="@this"  update=":cancel-dialog" />
                 </p:commandLink>
             </div>
             <p:dataTable var="g" value="#{securityGroupListService}"
@@ -70,7 +69,8 @@
                 </p:column>                
             </p:dataTable>          
         </h:form>       
-        <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+        <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" 
+                  widgetVar="deletedDlg" dynamic="true" resizable="false" modal="true">  
             <h:form id="form-dialog-confirm-delete">
                 <h:panelGroup layout="block" style="padding:5px;">  
                     <h:outputText value="#{messages['common.delete.confirm.message']}"/> 
