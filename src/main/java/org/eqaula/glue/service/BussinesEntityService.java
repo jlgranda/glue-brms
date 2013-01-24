@@ -205,4 +205,12 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
         query.where(builder.equal(bussinesEntity.get(BussinesEntityAttribute_.property), property));
         return getResultList(query);
     }
+    
+    public BussinesEntity findBussinesEntityByCode(final String code){
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<BussinesEntity> query = builder.createQuery(BussinesEntity.class);
+        Root<BussinesEntity> bussinesEntity = query.from(BussinesEntity.class);
+        query.where(builder.equal(bussinesEntity.get(BussinesEntity_.code), code));        
+        return getSingleResult(query);
+    }
 }

@@ -148,6 +148,9 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
         } else {
             try {
                 log.info("eqaula --> saving new" + getInstance().getName());
+                create(getInstance());
+                setBussinesEntityTypeId(getInstance().getId());
+                wire();
                 getInstance().getStructures().get(0).setName("Propiedades para el tipo " + getInstance().getName());
                 save(getInstance());
 
@@ -155,24 +158,6 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
                 log.info("eqaula --> error saving new" + getInstance().getName());
             }
         }
-        return "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();
-    }
-
-    @TransactionAttribute
-    public String saveNewBussinesEntityType() {
-        log.info("eqaula --> saving " + getInstance().getName());
-        try {
-            log.info("eqaula --> saving new" + getInstance().getName());
-            create(getInstance());
-            setBussinesEntityTypeId(getInstance().getId());
-            wire();
-            getInstance().getStructures().get(0).setName("Data for " + getInstance().getName());
-            save(getInstance());
-
-        } catch (Exception ex) {
-            log.info("eqaula --> error saving new" + getInstance().getName());
-        }
-
         return "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();
     }
 
@@ -198,14 +183,14 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     }
 
     @Transactional
-    public String deleteBussinesEntityType(){
+    public String deleteBussinesEntityType() {
         try {
             if (getInstance() == null) {
                 throw new NullPointerException("property is null");
             }
 
-            if (getInstance().isPersistent()) {                
-                delete(getInstance());                 
+            if (getInstance().isPersistent()) {
+                delete(getInstance());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
                 //RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
 
@@ -234,9 +219,28 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     }
 
     public boolean isAssociatedToBussinesEntity() {
-        if (! isIdDefined()) return false;
-        log.info("eqaula --> Ingreso a buscar bussinesEntity: " + getInstance());
+        if (!isIdDefined()) {
+            return false;
+        }
+        boolean b = false;        
         List<BussinesEntity> bussinesEntityList = bussinesEntityService.findBussinesEntityForType(getInstance());
-        return ! bussinesEntityList.isEmpty();
+        b = (!bussinesEntityList.isEmpty() || isPropertyAssociatedBussinesEntityAttributes());
+        log.info("eqaula --> Ingreso a verificar bussinesEntity: " + b);  //true si esta asociado 
+        return b;
     }
+    
+      
+    public boolean isPropertyAssociatedBussinesEntityAttributes(){
+        if (!isIdDefined()) {
+            return false;
+        }
+        for (Property p : getInstance().getStructures().get(0).getProperties()) {
+            if(!bussinesEntityService.findBussinesEntityAttributeForProperty(p).isEmpty()){
+                return true;   //retorna true si esta relacionado con Atributos
+            }            
+        }        
+        return false;
+    }
+    
+    
 }

@@ -45,9 +45,11 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.util.PersistenceUtil;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.model.profile.Profile_;
+import org.eqaula.glue.service.BussinesEntityService;
 
 import org.eqaula.glue.util.Strings;
 
@@ -59,7 +61,10 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
 
     private static final long serialVersionUID = -4022772083704382039L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ProfileService.class);
-
+    
+    @Inject
+    private BussinesEntityService bussinesEntityService;
+    
     public ProfileService() {
         super(Profile.class);
     }
@@ -67,6 +72,7 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
     @Override
     public void setEntityManager(EntityManager em) {
         this.em = em;
+        bussinesEntityService.setEntityManager(em);
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -109,7 +115,6 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
     public Profile getProfileByEmail(final String email) throws NoResultException {
         TypedQuery<Profile> query = em.createQuery("SELECT p FROM Profile p WHERE p.email = :email", Profile.class);
         query.setParameter("email", email);
-
         Profile result = query.getSingleResult();
         return result;
     }
@@ -131,7 +136,16 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
         Profile result = query.getResultList().isEmpty() ? null : query.getResultList().get(0);
         return result;
     }
+    
+    public BussinesEntity getBussinesEntityForCode(final String code) throws NoResultException {
+        TypedQuery<BussinesEntity> query = em.createQuery(
+                "SELECT b FROM BussinesEntity b WHERE b. = :identityKey", BussinesEntity.class);
+        query.setParameter("identityKey", code);
 
+        BussinesEntity result = query.getResultList().isEmpty() ? null : query.getResultList().get(0);
+        return result;
+    }
+    
     public Profile getProfileById(final Long id) {
         return (Profile) findById(Profile.class, id);
     }
@@ -144,7 +158,20 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
             return true;
         }
     }
-
+    
+    public boolean isDniAviable(String code){
+        try {            
+            BussinesEntity b = bussinesEntityService.findBussinesEntityByCode(code);            
+            if(b != null){
+                return false;
+            }else{
+                return true;
+            }            
+        } catch (NoResultException e) {
+            return true;
+        }
+    }
+    
     public boolean isEmailAddressAvailable(String email) {
         try {
             getProfileByEmail(email);
