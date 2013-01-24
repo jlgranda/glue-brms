@@ -161,13 +161,13 @@
    
     <url-mapping id="setting">
       <pattern value="/setting"></pattern>
-      <view-id value="/pages/setting/setting.xhtml"></view-id>
+      <view-id value="/pages/admin/setting/setting.xhtml"></view-id>
     </url-mapping>
     
     
    <url-mapping id="setting-list">
       <pattern value="/setting/list"></pattern>
-      <view-id value="/pages/setting/list.xhtml"></view-id>       
+      <view-id value="/pages/admin/setting/list.xhtml"></view-id>       
    </url-mapping> 
    
     
