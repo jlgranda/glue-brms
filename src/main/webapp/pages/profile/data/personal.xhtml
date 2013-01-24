@@ -58,9 +58,20 @@
             <h:form id="form" acceptcharset="UTF-8">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <glue:input id="fstn" name="firstname" type="text" label="#{messages['common.firstname']}" value="#{profileHome.instance.firstname}" required="true" inlinehelp="#{messages['common.firstname.inlinehelp']}" execute="@this save" render="fstn"/>
-                <glue:input id="srn" name="surname" type="text" label="#{messages['common.surname']}" value="#{profileHome.instance.surname}" required="true" inlinehelp="#{messages['common.surname.inlinehelp']}" execute="@this save"/>
-                <glue:input id="cod" name="code" type="text" label="#{messages['profile.dni']}" value="#{profileHome.instance.code}" required="false" inlinehelp="#{messages['profile.dni.inlinehelp']}" execute="@this save" validator="ciValidator" />
-
+                <glue:input id="srn" name="surname" type="text" label="#{messages['common.surname']}" value="#{profileHome.instance.surname}" required="true" inlinehelp="#{messages['common.surname.inlinehelp']}" execute="@this save"/>                
+                <h:panelGroup id="cod" layout="block" class="clearfix" rendered="true">
+                    <label for="dni">#{messages['profile.dni']}</label>
+                    <div class="input">
+                        <h:inputText id="dni" value="#{profileHome.instance.code}" styleClass="xLarge" required="true" label="#{messages['profile.dni']}">
+                            <f:validator validatorId="ciValidator" />
+                            <f:validator validatorId="ciAvailabilityValidator" />
+                            <f:ajax execute="@this" render="cod"  />
+                        </h:inputText>
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.code != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-inline"><br/>"#{messages['profile.dni.inlinehelp']}"<ocp:message forId="dni" /></span>
+                    </div>
+                </h:panelGroup>
                 <h:panelGroup id="eml" layout="block" class="clearfix">
                     <label for="email">#{messages['common.email']}</label>
                     <div class="input">

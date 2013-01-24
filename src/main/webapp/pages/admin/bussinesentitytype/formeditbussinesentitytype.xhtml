@@ -1,10 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"                  
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"         
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:composition >      
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:glue="http://eqaula.org/jsf/facelets">
+           
         <h2>#{'ingreso a formEdit'}</h2>
         <h:panelGroup layout="block" class="clearfix">
             <h:outputLabel value="#{messages['module.BussinesEntityType.typeName']}" />
@@ -36,5 +37,5 @@
             </div> 
         </h:panelGroup>
     </ui:composition>
-</html>
+
 
