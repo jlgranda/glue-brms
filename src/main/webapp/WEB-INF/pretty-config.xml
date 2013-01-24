@@ -135,6 +135,46 @@
       <view-id value="/pages/stocklist/warehouse/list.xhtml"></view-id>       
    </url-mapping>  
    
+   
+    <url-mapping id="warehouse-view">
+      <pattern value="/warehouse/view"></pattern>
+      <view-id value="/pages/stocklist/warehouse/view.xhtml"></view-id>       
+   </url-mapping>  
+   
+   
+    <url-mapping id="item">
+      <pattern value="/item"></pattern>
+      <view-id value="/pages/stocklist/item/item.xhtml"></view-id>
+    </url-mapping>
+    
+    
+   <url-mapping id="item-list">
+      <pattern value="/item/list"></pattern>
+      <view-id value="/pages/stocklist/item/list.xhtml"></view-id>       
+   </url-mapping> 
+   
+   
+    <url-mapping id="stock">
+      <pattern value="/stock"></pattern>
+      <view-id value="/pages/stocklist/stock/stock.xhtml"></view-id>
+    </url-mapping>
+   
+    <url-mapping id="setting">
+      <pattern value="/setting"></pattern>
+      <view-id value="/pages/setting/setting.xhtml"></view-id>
+    </url-mapping>
+    
+    
+   <url-mapping id="setting-list">
+      <pattern value="/setting/list"></pattern>
+      <view-id value="/pages/setting/list.xhtml"></view-id>       
+   </url-mapping> 
+   
+    
+   
+   
+   
+   
    <!--
    <url-mapping id="project-view">
       <pattern value="/p/#{projects.current.name}"></pattern>

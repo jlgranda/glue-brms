@@ -15,18 +15,20 @@
  */
 package org.eqaula.glue.service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
+import org.eqaula.glue.model.config.Setting;
 import org.eqaula.glue.model.stocklist.Warehouse;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
@@ -40,13 +42,10 @@ import org.primefaces.model.SortOrder;
  *
  * @author lucho
  */
-@Named(value = "warehouseListService")
+@Named(value = "settingListService")
 @RequestScoped
-public class WarehouseListService extends LazyDataModel<Warehouse> {
+public class SettingListService extends LazyDataModel<Setting> implements Serializable {
 
-    /**
-     * Creates a new instance of WarehouseListService
-     */
     private static final long serialVersionUID = 4819808125494695197L;
     private static final int MAX_RESULTS = 5;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(WarehouseListService.class);
@@ -54,28 +53,27 @@ public class WarehouseListService extends LazyDataModel<Warehouse> {
     @Web
     private EntityManager entityManager;
     @Inject
-    private WarehouseService warehouseService;
-    private List<Warehouse> resultList;
+    private SettingService settingService;
+    private List<Setting> resultList;
     private int firstResult = 0;
-    private Warehouse[] selectedWareHouses;
-    private Warehouse selectedWarehouse;
+    private Setting[] selectedSettings;
+    private Setting selectedSetting;
 
-    public WarehouseListService() {
+    public SettingListService() {
         setPageSize(MAX_RESULTS);
-        resultList = new ArrayList<Warehouse>();
-        //log.info("Service initialized!");
+        resultList = new ArrayList<Setting>();
     }
 
-    public List<Warehouse> getResultList() {
+    public List<Setting> getResultList() {
         log.info("load BussinesEntityType");
         if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-            resultList = warehouseService.getWareHouses(this.getPageSize(), firstResult);
+            resultList = settingService.getSettings(this.getPageSize(), firstResult);
             log.info("eqaula --> resultlist " + resultList);
         }
         return resultList;
     }
 
-    public void setResultList(List<Warehouse> resultList) {
+    public void setResultList(List<Setting> resultList) {
         this.resultList = resultList;
     }
 
@@ -97,16 +95,16 @@ public class WarehouseListService extends LazyDataModel<Warehouse> {
         return this.getPageSize() >= firstResult ? 0 : firstResult - this.getPageSize();
     }
 
-    public Warehouse getSelectedWarehouse() {
-        return selectedWarehouse;
+    public Setting getSelectedSetting() {
+        return selectedSetting;
     }
 
-    public void setSelectedWarehouse(Warehouse selectedWarehouse) {
-        this.selectedWarehouse = selectedWarehouse;
+    public void setSelectedSetting(Setting selectedSetting) {
+        this.selectedSetting = selectedSetting;
     }
 
-    @Override
-    public List<Warehouse> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+     @Override
+    public List<Setting> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
         int end = first + pageSize;
 
         QuerySortOrder order = QuerySortOrder.ASC;
@@ -117,7 +115,7 @@ public class WarehouseListService extends LazyDataModel<Warehouse> {
         /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
          _filters.putAll(filters);*/
 
-        QueryData<Warehouse> qData = warehouseService.find(first, end, sortField, order, _filters);
+        QueryData<Setting> qData = settingService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();
     }
@@ -125,29 +123,29 @@ public class WarehouseListService extends LazyDataModel<Warehouse> {
     @PostConstruct
     public void init() {
         log.info("Setup entityManager into WareHouseService...");
-        warehouseService.setEntityManager(entityManager);
+        settingService.setEntityManager(entityManager);
     }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.warehouse") + " " + UI.getMessages("common.selected"), ((Warehouse) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.setting") + " " + UI.getMessages("common.selected"), ((Setting) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.stocklist.warehouse") + " " + UI.getMessages("common.unselected"), ((Warehouse) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.setting") + " " + UI.getMessages("common.unselected"), ((Setting) event.getObject()).getName());
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        this.setSelectedWarehouse(null);
+        this.setSelectedSetting(null);
     }
 
     @Override
-    public Warehouse getRowData(String rowKey) {
+    public Setting getRowData(String rowKey) {
 
-        return warehouseService.findByName(rowKey);
+        return settingService.findByName(rowKey);
     }
 
     @Override
-    public Object getRowKey(Warehouse entity) {
+    public Object getRowKey(Setting entity) {
         return entity.getName();
     }
 }

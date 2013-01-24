@@ -26,7 +26,7 @@
                         <div class="span7 columns"> 
                             <div class="row fl" style="margin-top: 5px;">
                                 <h3>#{stockHome.stockId != null? messages['common.edit'] : messages['common.add']} 
-                                    #{messages['module.stocklist.stock']} #{stockHome.instance.warehouse.name}</h3>   
+                                    #{messages['module.stocklist.item']} #{stockHome.instance.item.name}</h3>   
                             </div>
                         </div>
                     </div>
@@ -38,10 +38,10 @@
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
 
                 <h:panelGroup layout="block" class="clearfix">
-                    <label for="itemtype_" class=""> #{messages['module.stocklist.item']}</label>
+                    <label for="itemtype_" class=""> #{messages['module.stocklist.item']}*</label>
                     <div class="input">
                         <p:selectOneMenu id="itemtype_" value="#{stockHome.instance.item}" effect="fade"  
-                                         rendered="true" label="Items"
+                                         rendered="true" label="Items" required="true"
                                          converter="org.eqaula.glue.faces.converter.GenericConverter"
                                          disabled="#{empty stockHome.stockId?false : true}">
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
@@ -62,8 +62,8 @@
                     </div>
                 </h:panelGroup>
 
-                <glue:input id="description" name="amount" type="java.lang.Double" label="#{messages['module.stocklist.stock.amount']}" value="#{stockHome.instance.amount}" required="false" inlinehelp="#{messages['common.description.help']}" execute="@this save" render="description"/>
-                <glue:input id="name" name="unit" type="text" label="#{messages['module.stocklist.stock.unit']}" value="#{stockHome.instance.unit}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                <glue:input id="amount" name="amount" type="java.lang.Double" label="#{messages['module.stocklist.stock.amount']}" value="#{stockHome.instance.amount}" required="true" inlinehelp="#{messages['module.stocklist.amount.inlinehelp']}" execute="@this save" render="amount"/>
+                <glue:input id="unit" name="unit" type="text" label="#{messages['module.stocklist.stock.unit']}" value="#{stockHome.instance.unit}" required="true" inlinehelp="#{messages['module.stocklist.unit.inlinehelp']}" execute="@this save" render="unit"/>
 
 
                 <div class="actions">
@@ -73,7 +73,7 @@
                     </p:commandButton>
                     &nbsp;
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
-                                     update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{stockHome.instance.id != null}">
+                                     update="form-dialog-confirm-delete" rendered="#{stockHome.instance.id != null}">
 
                         <f:param name="warehouseId" value="#{stockHome.warehouseId}"/>
                         <f:param name="backView" value="list"></f:param>
@@ -86,23 +86,24 @@
 
                     </h:link>
                 </div>
+            </h:form>
 
-                <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
-                    <h:form id="form-dialog-confirm-delete">
-                        <h:panelGroup layout="block" style="padding:5px;">  
-                            <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
-                        </h:panelGroup>  
-                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
-                                         action="#{stockHome.deleteStock()}"                                          
-                                         ajax="true" process="@this"  
-                                         style="margin-top:10px;">  
-                        </p:commandButton>  
-                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
-                                         style="margin-top:10px;"/>  
-                    </h:form>
-                </p:dialog> 
-
-            </h:form>                 
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                     action="#{stockHome.deleteStock()}"                                          
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
+            
+            
         </ui:define>             
     </ui:composition>
 </html>

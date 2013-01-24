@@ -42,7 +42,7 @@
                             <f:validator validatorId="passwordValidator" />
                         </h:inputSecret>
                         <h:panelGroup id="pwg">
-                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.password != null}"
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.password != null}"
                                             styleClass="validation-status"/>
                             <span class="help-inline"><ocp:message id="pm"  forId="password" /></span>
                         </h:panelGroup>

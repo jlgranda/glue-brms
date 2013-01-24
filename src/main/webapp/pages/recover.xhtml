@@ -24,6 +24,11 @@
             <h:form id="form" acceptcharset="UTF-8">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
 
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $('#form\\:email').attr("placeholder", "¿Su correo electrónico?");
+                    });
+                </script>
 
                 <p>#{messages['common.password.forget.message']}</p>
                 <br/>

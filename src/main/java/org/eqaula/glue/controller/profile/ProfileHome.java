@@ -85,10 +85,8 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     private ParamsBean params;
     @Inject
     private ProfileService ps;
-    @Inject
-    private Authentication authentication;
-    @Inject
-    private CredentialsImpl credentialsImpl;
+    
+   
 
     public Long getProfileId() {
         return (Long) getId();
@@ -215,30 +213,12 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
 
         em.flush();
 
-//        credentialsImpl.setUsername(getInstance().getUsername());
-//         credentialsImpl.setPassword(getInstance().getPassword());
-//
-//        authentication.login();
-
-
-
-
-        /*
-         * Try twice to work around some state bug in Seam Security
-         * TODO file issue in seam security
-         */
-        // return "/pages/profile/profile.xhtml";
-
         credentials.setUsername(getInstance().getUsername());
         credentials.setCredential(new PasswordCredential(getPassword()));
 
         oidAuth.setStatus(Authenticator.AuthenticationStatus.FAILURE);
         identity.setAuthenticatorClass(IdmAuthenticator.class);
 
-        /*
-         * Try twice to work around some state bug in Seam Security
-         * TODO file issue in seam security
-         */
         String result = identity.login();
         if (Identity.RESPONSE_LOGIN_EXCEPTION.equals(result)) {
             result = identity.login();
