@@ -206,7 +206,7 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
         return getResultList(query);
     }
     
-    public BussinesEntity findBussinesEntityForCode(final String code){
+    public BussinesEntity findBussinesEntityByCode(final String code){
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<BussinesEntity> query = builder.createQuery(BussinesEntity.class);
         Root<BussinesEntity> bussinesEntity = query.from(BussinesEntity.class);
