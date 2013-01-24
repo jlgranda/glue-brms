@@ -24,6 +24,7 @@
             <h:form id="form" acceptcharset="UTF-8">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
 
+
                 <script type="text/javascript">
                     $(document).ready(function() {
                         $('#form\\:email').attr("placeholder", "¿Su correo electrónico?");
@@ -35,10 +36,12 @@
                 <h:panelGroup id="eml" layout="block" class="clearfix">
                     <label for="email">#{messages['common.email']}</label>
                     <div class="input">
-                        <h:inputText id="email" value="#{profileHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
+                        <h:inputText id="email" value="#{profileHome.instance.email}" 
+                                     styleClass="xLarge" required="true" 
+                                     label="#{messages['common.email']}"
+                                     >
                             <f:validator validatorId="emailValidator" />
-                            <!--f:validator validatorId="signupEmailAvailabilityValidator" />-->
-                            <f:ajax execute="@this" render="eml"  />
+                            <p:ajax process="@this" render="eml"  event="blur" listener="#{profileHome.activateButtonByEmail()}" update="save"/>
                         </h:inputText>
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.email != null}"
                                         styleClass="validation-status" />
@@ -47,13 +50,13 @@
                 </h:panelGroup>
 
 
-               <!-- <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
-                <s:validateForm id="signupValidator" validatorId="signupValidator" />
--->
+                <!-- <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
+                 <s:validateForm id="signupValidator" validatorId="signupValidator" />
+                -->
                 <div class="actions">
                     <p:commandButton id="save" action="#{profileHome.profileByEmail()}" 
-                            value="#{messages['common.submit']}" styleClass="btn">
-                        <p:ajax update="form:messages" process="@this"/>
+                                     value="#{messages['common.submit']}" styleClass="btn"
+                                     disabled="true">                        
                     </p:commandButton>
 
                     <h:link outcome="/pages/login.xhtml?faces-redirect=true"

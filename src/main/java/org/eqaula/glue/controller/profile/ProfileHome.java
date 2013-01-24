@@ -25,6 +25,10 @@ import javax.ejb.TransactionAttribute;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIOutput;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -53,6 +57,7 @@ import org.picketlink.idm.api.PersistenceManager;
 import org.picketlink.idm.api.User;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.PasswordCredential;
+import org.primefaces.component.commandbutton.CommandButton;
 
 /**
  *
@@ -202,8 +207,26 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
             setInstance(ps.getProfileByEmail(getInstance().getEmail()));
             return "/pages/reset?faces-redirect=true&profileId=" + getInstance().getId();
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "La dirección de correo electrónico introducida no está asociada a ningún usuario. ", null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "La dirección de correo electrónico introducida no está asociada a ningún usuario. ", ""));
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
             return "/pages/recover";
+        }
+
+    }
+
+    //TODO- Revisar implementación de envío de mensaje para cambio de contraseña
+    public void activateButtonByEmail() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        UIViewRoot uiViewRoot = fc.getViewRoot();
+
+        CommandButton commandButton = (CommandButton) uiViewRoot.findComponent("form:save");
+
+        try {
+            setInstance(ps.getProfileByEmail(getInstance().getEmail()));
+            commandButton.setDisabled(false);
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "La dirección de correo electrónico introducida no está asociada a ningún usuario. ", ""));
+            commandButton.setDisabled(true);
         }
 
     }
