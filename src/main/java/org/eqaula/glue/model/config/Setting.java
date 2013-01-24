@@ -45,10 +45,7 @@ import org.eqaula.glue.model.PersistentObject;
 public class Setting extends PersistentObject<Setting> {
 
     private static final long serialVersionUID = -7485883311296510018L;
-    
     private String value;
-    private String dateformat;
-    private Long rowsnumber;
 
     public Setting() {
     }
@@ -65,22 +62,4 @@ public class Setting extends PersistentObject<Setting> {
     public void setValue(String value) {
         this.value = value;
     }
-
-    public String getDateformat() {
-        return dateformat;
-    }
-
-    public void setDateformat(String dateformat) {
-        this.dateformat = dateformat;
-    }
-
-    public Long getRowsnumber() {
-        return rowsnumber;
-    }
-
-    public void setRowsnumber(Long rowsNumber) {
-        this.rowsnumber = rowsNumber;
-    }
-
-    
 }

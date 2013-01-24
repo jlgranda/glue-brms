@@ -30,10 +30,7 @@
             <h:form id="form" acceptcharset="UTF-8">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{settingHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
-              <!--  <glue:input id="value" name="value" type="decimal" label="#{messages['module.setting.value']}" value="#{settingHome.instance.value}" inlinehelp="#{messages['module.setting.value.inlinehelp']}" execute="@this save" render="value"/>-->
-                <!--<glue:input id="version" name="version" type="decimal" label="#{messages['common.version']}" value="#{settingHome.instance.version}" required="true" inlinehelp="#{messages['common.version.inlinehelp']}" execute="@this save" render="version"/>-->
-                <glue:input id="dateformat" name="dateformat" type="text" label="#{messages['module.setting.dateformat']}" value="#{settingHome.instance.dateformat}"  inlinehelp="#{messages['module.setting.dateformat.inlinehelp']}" execute="@this save" render="dateformat"/>
-                <glue:input id="rowsnumber" name="rowsnumber" type="decimal" label="#{messages['module.setting.row']}" value="#{settingHome.instance.rowsnumber}"  inlinehelp="#{messages['module.setting.row.inlinehelp']}" execute="@this save" render="rowsnumber"/>
+                <glue:input id="value" name="value" type="decimal" label="#{messages['module.setting.value']}" value="#{settingHome.instance.value}" inlinehelp="#{messages['module.setting.value.inlinehelp']}" execute="@this save" render="value"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{settingHome.instance.description}" inlinehelp="#{messages['common.description.help']}" execute="@this save" render="description"/>
 
 

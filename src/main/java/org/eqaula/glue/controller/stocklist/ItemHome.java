@@ -141,12 +141,12 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
         String outcome = null;
         if (getInstance().isPersistent()) {
 
-            if (warehouseId != null && stockId != null) {
+            if (getWarehouseId() != null && getStockId() != null) {
                 save(getInstance());
                 outcome = "/pages/stocklist/stock/stock?faces-redirect=true&warehouseId=" + getWarehouseId() + "&stockId=" + getStockId();
             } else {
 
-                if (warehouseId != null) {
+                if (getWarehouseId() != null) {
                     save(getInstance());
                     outcome = "/pages/stocklist/stock/stock?faces-redirect=true&warehouseId=" + getWarehouseId();
                 } else {
@@ -156,15 +156,15 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
             }
 
         } else {
-            if (warehouseId != null && stockId != null) {
+            if (getWarehouseId() != null && getStockId() != null) {
                 save(getInstance());
                 outcome = "/pages/stocklist/stock/stock?faces-redirect=true&warehouseId=" + getWarehouseId() + getWarehouseId() + "&stockId=" + getStockId();
             } else {
-                if (warehouseId != null) {
-                    save(getInstance());
-                    outcome = "/pages/stocklist/stock/stock?faces-redirect=true&warehouseId=" + getWarehouseId();
+                if (getWarehouseId() != null) {
+                    create(getInstance());
+                    outcome = "/pages/stocklist/stock/stock?faces-redirect=true&warehouseId=" + getWarehouseId()+"&itemId=" + getInstance().getId();
                 } else {
-                    save(getInstance());
+                    create(getInstance());
                     outcome = "/pages/stocklist/item/list";
                 }
             }

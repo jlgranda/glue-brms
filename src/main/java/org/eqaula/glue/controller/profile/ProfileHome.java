@@ -85,8 +85,6 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     private ParamsBean params;
     @Inject
     private ProfileService ps;
-    
-   
 
     public Long getProfileId() {
         return (Long) getId();
@@ -204,26 +202,19 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
 
         PersistenceManager identityManager = security.getPersistenceManager();
         User user = identityManager.findUser(getInstance().getUsername());
-
         AttributesManager attributesManager = security.getAttributesManager();
         attributesManager.updatePassword(user, getPassword());
-
         getInstance().setPassword(getPassword());
         save(getInstance());
-
         em.flush();
-
         credentials.setUsername(getInstance().getUsername());
         credentials.setCredential(new PasswordCredential(getPassword()));
-
         oidAuth.setStatus(Authenticator.AuthenticationStatus.FAILURE);
         identity.setAuthenticatorClass(IdmAuthenticator.class);
-
         String result = identity.login();
         if (Identity.RESPONSE_LOGIN_EXCEPTION.equals(result)) {
             result = identity.login();
         }
-
         return result;
     }
 

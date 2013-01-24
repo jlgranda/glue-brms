@@ -118,10 +118,10 @@ public class SettingHome extends BussinesEntityHome<Setting> implements Serializ
         String outcome = null;
         if (getInstance().isPersistent()) {
             save(getInstance());
-            outcome = "/pages/setting/list";
+            outcome = "/pages/admin/setting/list";
         } else {
             create(getInstance());
-            outcome = "/pages/setting/list";
+            outcome = "/pages/admin/setting/list";
         }
         return outcome;
     }
@@ -145,7 +145,7 @@ public class SettingHome extends BussinesEntityHome<Setting> implements Serializ
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", e.toString()));
         }
-        return "/pages/setting/list";
+        return "/pages/admin/setting/list";
     }
 
     public boolean isWired() {

@@ -64,6 +64,7 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
     private String backview;
     private Long parentId;
     private Long warehouseId;
+    
 
     public Long getStockId() {
         return (Long) getId();

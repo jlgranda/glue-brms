@@ -86,12 +86,8 @@
                     <h:outputText value="#{setting.version}" />
                 </p:column>
 
-                <p:column headerText="#{messages['module.setting.dateformat']}" sortBy="#{setting.dateformat}">
-                    <h:outputText value="#{setting.dateformat}" />
-                </p:column>
-
-                <p:column headerText="#{messages['module.setting.row']}" sortBy="#{setting.rowsnumber}">
-                    <h:outputText value="#{setting.rowsnumber}" />
+                <p:column headerText="#{messages['common.description']}" sortBy="#{setting.description}">
+                    <h:outputText value="#{setting.description}" />
                 </p:column>                
             </p:dataTable>
         </h:form>
