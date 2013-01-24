@@ -60,7 +60,24 @@
                 <glue:input id="fstn" name="firstname" type="text" label="#{messages['common.firstname']}" value="#{profileHome.instance.firstname}" required="true" inlinehelp="#{messages['common.firstname.inlinehelp']}" execute="@this save" render="fstn"/>
                 <glue:input id="srn" name="surname" type="text" label="#{messages['common.surname']}" value="#{profileHome.instance.surname}" required="true" inlinehelp="#{messages['common.surname.inlinehelp']}" execute="@this save"/>
                 <glue:input id="cod" name="code" type="text" label="#{messages['profile.dni']}" value="#{profileHome.instance.code}" required="false" inlinehelp="#{messages['profile.dni.inlinehelp']}" execute="@this save" validator="ciValidator" />
-                <glue:input id="eml" name="text" type="email" label="#{messages['common.email']}" value="#{profileHome.instance.email}" required="true" validator="emailValidator" inlinehelp="#{messages['common.email.inlinehelp']}" execute="@this save"/>
+
+                <h:panelGroup id="eml" layout="block" class="clearfix">
+                    <label for="email">#{messages['common.email']}</label>
+                    <div class="input">
+                        <h:inputText id="email" value="#{profileHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
+                            <f:validator validatorId="emailValidator" />
+                            <f:validator validatorId="signupEmailAvailabilityValidator" />
+                            <f:ajax execute="@this" render="eml"  />
+                        </h:inputText>
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.email != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-inline"><br/>Prometemos <b>nunca</b> compartir su dirección de correo. <ocp:message forId="email" /></span>
+                    </div>
+                </h:panelGroup>
+                <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
+                <s:validateForm id="signupValidator" validatorId="signupValidator" />
+
+
 
                 <!-- Attributos personalizados -->
                 <h:panelGroup id="attributes" layout="block" class="clearfix">
@@ -104,6 +121,9 @@
                         </h:panelGroup>  
                     </ui:repeat>
                 </h:panelGroup>
+
+
+
                 <div class="actions">
                     <h:commandButton id="save" action="#{profileHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary"/>
                     &nbsp;

@@ -197,9 +197,19 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         return result;
     }
 
+    public String profileByEmail() {
+        try {
+            setInstance(ps.getProfileByEmail(getInstance().getEmail()));
+            return "/pages/reset?faces-redirect=true&profileId=" + getInstance().getId();
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "La dirección de correo electrónico introducida no está asociada a ningún usuario. ", null));
+            return "/pages/recover";
+        }
+
+    }
+
     @TransactionAttribute
     public String changePassword() throws IdentityException, InterruptedException {
-
         PersistenceManager identityManager = security.getPersistenceManager();
         User user = identityManager.findUser(getInstance().getUsername());
         AttributesManager attributesManager = security.getAttributesManager();
@@ -216,6 +226,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
             result = identity.login();
         }
         return result;
+
     }
 
     @TransactionAttribute
@@ -241,8 +252,10 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         setProfileId(getInstance().getId());
         wire();
         getInstance().setName(getInstance().getUsername()); //Para referencia
-        getInstance().setType(bussinesEntityService.findBussinesEntityTypeByName(Profile.class.getName()));
-        getInstance().buildAttributes(bussinesEntityService);
+        getInstance().setType(bussinesEntityService.findBussinesEntityTypeByName(Profile.class
+                .getName()));
+        getInstance()
+                .buildAttributes(bussinesEntityService);
         save(getInstance()); //Actualizar estructura de datos
 
     }
@@ -270,8 +283,13 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         } else {
             try {
                 register();
+
+
+
+
             } catch (IdentityException ex) {
-                Logger.getLogger(ProfileHome.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ProfileHome.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
         if ("list".equalsIgnoreCase(getBackView())) {

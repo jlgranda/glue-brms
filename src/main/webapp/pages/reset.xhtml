@@ -73,6 +73,10 @@
                                      styleClass="btn primary">
                         <f:ajax execute="@form" render="@form" />
                     </h:commandButton>
+                    
+                     <h:link outcome="/pages/login.xhtml?faces-redirect=true"
+                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
+                    </h:link>
                 </div>
 
             </h:form>

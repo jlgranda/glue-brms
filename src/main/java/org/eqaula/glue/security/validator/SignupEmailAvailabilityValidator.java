@@ -68,7 +68,7 @@ public class SignupEmailAvailabilityValidator implements Validator
    {
       if (value instanceof String && !value.equals(profile.getUsername())) {
          ps.setEntityManager(em);
-         if (!ps.isEmailAddressAvailable((String) value))
+         if (!ps.isEmailAddressAvailable((String) value) && !(value.equals(profile.getEmail())))
             throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "La dirección de correo ya esta en uso",
                      null));
       }

@@ -37,7 +37,7 @@
                     <div class="input">
                         <h:inputText id="email" value="#{profileHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
                             <f:validator validatorId="emailValidator" />
-                            <f:validator validatorId="signupEmailAvailabilityValidator" />
+                            <!--f:validator validatorId="signupEmailAvailabilityValidator" />-->
                             <f:ajax execute="@this" render="eml"  />
                         </h:inputText>
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.email != null}"
@@ -47,15 +47,14 @@
                 </h:panelGroup>
 
 
-                <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
+               <!-- <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
                 <s:validateForm id="signupValidator" validatorId="signupValidator" />
-
+-->
                 <div class="actions">
-                    <h:link id="save" outcome="/pages/reset.xhtml?faces-redirect=true" 
+                    <p:commandButton id="save" action="#{profileHome.profileByEmail()}" 
                             value="#{messages['common.submit']}" styleClass="btn">
-                        <f:param name="profileId" value="432" />
-                        <f:param name="key" value="4444"/>
-                    </h:link>
+                        <p:ajax update="form:messages" process="@this"/>
+                    </p:commandButton>
 
                     <h:link outcome="/pages/login.xhtml?faces-redirect=true"
                             value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
