@@ -40,8 +40,8 @@
                                 value="#{propertyHome.propertyStringValue}" required="false" inlinehelp="#{messages['common.property.value.help']}" execute="@this save" />
                     <glue:input id="label" name="label" type="text" label="#{messages['common.property.label']}" 
                                 value="#{propertyHome.instance.label}" required="true" inlinehelp="#{messages['common.property.label.help']}" execute="@this save" />
-                    
-                   <glue:input id="hpline" name="helpInline" type="textarea" label="#{messages['common.property.helpinline']}" 
+
+                    <glue:input id="hpline" name="helpInline" type="textarea" label="#{messages['common.property.helpinline']}" 
                                 value="#{propertyHome.instance.helpInline}" required="false" inlinehelp="#{messages['common.property.helpInline.help']}" execute="@this save" />
                     <glue:input id="rqd" name="requerid" type="checkbox" label="#{messages['common.property.required']}" 
                                 value="#{propertyHome.instance.required}" required="false" inlinehelp="#{messages['common.property.required.help']}" execute="@this save" />                                         
@@ -78,36 +78,37 @@
                                      value="#{messages['common.save']}" styleClass="btn primary"/>
                     #{' '}                     
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="#{propertyHome.hasValuesBussinesEntity()?  'deletedDlg.show()' : 'alertDlg.show()' }"  immediate="true"
-                                     update=":cancel-dialog:form-dialog-confirm-delete :alerts-dialog:form-alerts-dialog" rendered="#{not empty propertyHome.instance.id}"/>
+                                     update=":cancel-dialog :alerts-dialog:" rendered="#{not empty propertyHome.instance.id}">                        
+                    </p:commandButton>
                     #{' '}
                     <h:link id="cancel" value="#{messages['common.cancel']}" rendered="true" outcome="/pages/admin/bussinesentitytype/bussinesentitytype.xhtml?faces-redirect=true" styleClass="btn" >                        
                         <f:param name="bussinesEntityTypeId" value ="#{propertyHome.bussinesEntityTypeId}"></f:param>                        
                     </h:link>
-                </div>
-                <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
-                    <h:form id="form-dialog-confirm-delete">
-                        <h:panelGroup layout="block" style="padding:5px;">  
-                            <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
-                        </h:panelGroup>  
-                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"                                           
-                                         action="#{propertyHome.deleteProperty()}"                                          
-                                         ajax="true" process="@this"  
-                                         style="margin-top:10px;">  
-                        </p:commandButton>  
-                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
-                                         style="margin-top:10px;"/>  
-                    </h:form>
-                </p:dialog>
-                <p:dialog id="alerts-dialog" header="#{messages['common.alert']}" widgetVar="alertDlg" resizable="false">  
-                    <h:form id="form-alerts-dialog">
-                        <h:panelGroup layout="block" style="padding:5px;">  
-                            <h:outputText value="#{messages['common.property.hasValues']}"/>  
-                        </h:panelGroup>                          
-                        <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="alertDlg.hide();"                                           
-                                         style="margin-top:10px;"/>  
-                    </h:form>
-                </p:dialog>
+                </div>                
             </h:form>
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"                                           
+                                     action="#{propertyHome.deleteProperty()}"                                          
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog>
+            <p:dialog id="alerts-dialog" header="#{messages['common.alert']}" widgetVar="alertDlg" resizable="false" modal="true">  
+                <h:form id="form-alerts-dialog">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.property.hasValues']}"/>  
+                    </h:panelGroup>                          
+                    <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="alertDlg.hide();"                                           
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog>
         </ui:define>
     </ui:composition>
 </html>
