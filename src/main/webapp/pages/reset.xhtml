@@ -17,16 +17,14 @@
     <f:metadata>
         <f:viewParam name="profileId" value="#{profileHome.profileId}"/>
     </f:metadata>
-    
+
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
 
         <ui:param name="title" value="Recover Password" />
 
-        <ui:define name="header"> <h1>#{messages['common.password.change']} #{profileHome.instance.firstname}</h1> </ui:define>
+        <ui:define name="header"> <h1>#{messages['common.password.change']} #{not empty profileHome.instance.firstname?profileHome.instance.firstname:profileHome.instance.username}</h1> </ui:define>
 
 
-        
-        
         <ui:define name="content">
 
 
@@ -73,10 +71,7 @@
                                      styleClass="btn primary">
                         <f:ajax execute="@form" render="@form" />
                     </h:commandButton>
-                    
-                     <h:link outcome="/pages/login.xhtml?faces-redirect=true"
-                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
-                    </h:link>
+
                 </div>
 
             </h:form>

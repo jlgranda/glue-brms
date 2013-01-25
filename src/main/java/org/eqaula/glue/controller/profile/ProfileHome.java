@@ -202,7 +202,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         return result;
     }
 
-    public String profileByEmail() {
+    public String sendEmail() {
         try {
             setInstance(ps.getProfileByEmail(getInstance().getEmail()));
             return "/pages/reset?faces-redirect=true&profileId=" + getInstance().getId();
