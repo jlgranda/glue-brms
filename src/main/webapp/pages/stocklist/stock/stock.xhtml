@@ -15,7 +15,8 @@
         <f:metadata>
             <f:viewParam name="warehouseId" value="#{stockHome.warehouseId}" />  
             <f:viewParam name="stockId" value="#{stockHome.stockId}"/>
-            <f:viewParam name="itemId" value="#{itemHome.itemId}"/>
+            <f:viewParam name="itemId" value="#{stockHome.itemId}"/>
+            <f:event listener="#{stockHome.addItem()}" type="preRenderView"/>
             
         </f:metadata>
 

@@ -31,6 +31,7 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.stocklist.Item;
 import org.eqaula.glue.model.stocklist.Stock;
 import org.eqaula.glue.model.stocklist.Warehouse;
+import org.eqaula.glue.service.ItemService;
 import org.eqaula.glue.service.StockService;
 import org.eqaula.glue.service.WarehouseService;
 import org.eqaula.glue.util.Dates;
@@ -60,11 +61,13 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
     private StockService stockService;
     @Inject
     private WarehouseService warehouseService;
+    @Inject
+    private ItemService itemService;
     private Stock stockSelected;
     private String backview;
     private Long parentId;
     private Long warehouseId;
-    
+    private Long itemId;
 
     public Long getStockId() {
         return (Long) getId();
@@ -90,6 +93,14 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
         this.warehouseId = warehouseId;
     }
 
+    public Long getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
+    }
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -103,6 +114,7 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
         setEntityManager(em);
         stockService.setEntityManager(em);
         warehouseService.setEntityManager(em);
+        itemService.setEntityManager(em);
 
 
     }
@@ -132,7 +144,7 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
         getInstance().setLastUpdate(now);
         String outcome = null;
         if (getInstance().isPersistent()) {
-            warehouseId =getInstance().getWarehouse().getId();
+            warehouseId = getInstance().getWarehouse().getId();
             save(getInstance());
             outcome = "/pages/stocklist/warehouse/view?faces-redirect=true&warehouseId=" + getWarehouseId();
         } else {
@@ -171,6 +183,13 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", e.toString()));
         }
         return "/pages/stocklist/warehouse/view?faces-redirect=true&warehouseId=" + getWarehouseId();
+    }
+
+    public String addItem() {
+        if (getItemId() != null) {
+            getInstance().setItem(itemService.getItemById(getItemId()));
+        }
+        return "/pages/stocklist/stock/stock";
     }
 
     public boolean isWired() {

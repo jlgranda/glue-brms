@@ -223,9 +223,12 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
 
         try {
             setInstance(ps.getProfileByEmail(getInstance().getEmail()));
+            commandButton.setStyleClass("btn primary");
             commandButton.setDisabled(false);
+
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "La dirección de correo electrónico introducida no está asociada a ningún usuario. ", ""));
+            commandButton.setStyleClass("btn");
             commandButton.setDisabled(true);
         }
 
