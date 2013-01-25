@@ -26,6 +26,7 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -36,6 +37,8 @@ import org.eqaula.glue.model.stocklist.Warehouse;
 import org.eqaula.glue.service.ItemService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
+import org.primefaces.component.commandbutton.CommandButton;
+import org.primefaces.component.selectonemenu.SelectOneMenu;
 
 /**
  *
@@ -44,7 +47,7 @@ import org.jboss.seam.transaction.Transactional;
 @Named(value = "itemHome")
 @ViewScoped
 public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
-
+    
     private static final long serialVersionUID = 4819808125494695197L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ItemHome.class);
     @Inject
@@ -56,50 +59,50 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
     private Long parentId;
     private Long warehouseId;
     private Long stockId;
-
+    
     public ItemHome() {
     }
-
+    
     public Long getItemId() {
         return (Long) getId();
     }
-
+    
     public void setItemId(Long itemId) {
         setId(itemId);
     }
-
+    
     public Long getParentId() {
         return parentId;
     }
-
+    
     public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
-
+    
     public Item getItemSelected() {
         return itemSelected;
     }
-
+    
     public void setItemSelected(Item itemSelected) {
         this.itemSelected = itemSelected;
     }
-
+    
     public Long getWarehouseId() {
         return warehouseId;
     }
-
+    
     public void setWarehouseId(Long warehouseId) {
         this.warehouseId = warehouseId;
     }
-
+    
     public Long getStockId() {
         return stockId;
     }
-
+    
     public void setStockId(Long stockId) {
         this.stockId = stockId;
     }
-
+    
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -107,20 +110,20 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
         }
         log.info("eqaula --> Loaded instance " + getInstance());
     }
-
+    
     @PostConstruct
     public void init() {
         setEntityManager(em);
         itemService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
-
+        
     }
-
+    
     @TransactionAttribute
     public void wire() {
         getInstance();
     }
-
+    
     @Override
     protected Item createInstance() {
         log.info("eqaula --> ItemHome create instance");
@@ -132,7 +135,7 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
         item.setExpirationTime(Dates.addDays(now, 364));
         return item;
     }
-
+    
     @TransactionAttribute
     public String saveItem() {
         log.info("eqaula --> ItemHome save instance: " + getInstance().getId());
@@ -140,12 +143,12 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
         getInstance().setLastUpdate(now);
         String outcome = null;
         if (getInstance().isPersistent()) {
-
+            
             if (getWarehouseId() != null && getStockId() != null) {
                 save(getInstance());
                 outcome = "/pages/stocklist/stock/stock?faces-redirect=true&warehouseId=" + getWarehouseId() + "&stockId=" + getStockId();
             } else {
-
+                
                 if (getWarehouseId() != null) {
                     save(getInstance());
                     outcome = "/pages/stocklist/stock/stock?faces-redirect=true&warehouseId=" + getWarehouseId();
@@ -154,30 +157,36 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
                     outcome = "/pages/stocklist/item/list";
                 }
             }
-
+            
         } else {
             if (getWarehouseId() != null && getStockId() != null) {
                 save(getInstance());
                 outcome = "/pages/stocklist/stock/stock?faces-redirect=true&warehouseId=" + getWarehouseId() + getWarehouseId() + "&stockId=" + getStockId();
             } else {
                 if (getWarehouseId() != null) {
-                    create(getInstance());
-                    outcome = "/pages/stocklist/stock/stock?faces-redirect=true&warehouseId=" + getWarehouseId()+"&itemId=" + getInstance().getId();
+                   
+//                    FacesContext fc = FacesContext.getCurrentInstance();
+//                    UIViewRoot uiViewRoot = fc.getViewRoot();
+//                    SelectOneMenu selectOneMenu = (SelectOneMenu) uiViewRoot.findComponent("form:itemtype_");
+//                    selectOneMenu.setSubmittedValue(getInstance());
+//                    selectOneMenu.setDisabled(true);
+                     create(getInstance());
+                    outcome = "/pages/stocklist/stock/stock?faces-redirect=true&warehouseId=" + getWarehouseId() + "&itemId=" + getInstance().getId();
                 } else {
                     create(getInstance());
                     outcome = "/pages/stocklist/item/list";
                 }
             }
-
+            
         }
         return outcome;
     }
-
+    
     @Transactional
     public String deleteItem() {
         log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());
-
-
+        
+        
         try {
             if (getInstance() == null) {
                 throw new NullPointerException("Item is null");
@@ -193,7 +202,7 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
                 //remover de la lista, si aún no esta persistido
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un Producto para ser borrado!", ""));
             }
-
+            
         } catch (Exception e) {
             //System.out.println("deleteBussinessEntity ERROR = " + e.getMessage());
             e.printStackTrace();
@@ -201,25 +210,25 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
         }
         return "/pages/stocklist/item/list";
     }
-
+    
     public boolean isWired() {
         return true;
     }
-
+    
     public Item getDefinedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
-
+    
     @Override
     public Class<Item> getEntityClass() {
         return Item.class;
     }
-
+    
     public List<Item> getItems() {
         List list = itemService.getItems();
         return list;
     }
-
+    
     public boolean isAssociatedToItem() {
         if (getInstance().getStocks().size() > 0) {
             return true;

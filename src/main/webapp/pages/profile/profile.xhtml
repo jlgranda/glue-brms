@@ -50,9 +50,7 @@
 
                 <glue:input id="bio" name="bio" type="textarea" label="#{messages['common.bio']}" value="#{profileHome.instance.bio}" required="false" inlinehelp="#{messages['common.bio.inlinehelp']}" execute="@this save"/>
 
-                <glue:input id="eml" name="text" type="email" label="#{messages['common.email']}" value="#{profileHome.instance.email}" required="true" validator="emailValidator" inlinehelp="#{messages['common.email.inlinehelp']}" execute="@this save" rendered="#{profileHome.instance.persistent}"/>
-
-                <h:panelGroup id="eml" layout="block" class="clearfix" rendered="#{not profileHome.instance.persistent}">
+                 <h:panelGroup id="eml" layout="block" class="clearfix">
                     <label for="email">#{messages['common.email']}</label>
                     <div class="input">
                         <h:inputText id="email" value="#{profileHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
@@ -65,6 +63,7 @@
                         <span class="help-inline"><br/>Prometemos <b>nunca</b> compartir su dirección de correo. <ocp:message forId="email" /></span>
                     </div>
                 </h:panelGroup>
+               
 
                 <glue:input id="showBootcamp" name="showBootcamp" type="checkbox" value="#{profileHome.instance.showBootcamp}" required="true" inlinehelp="#{messages['common.bootcamp.inlinehelp']}" execute="@this save"/>
 
