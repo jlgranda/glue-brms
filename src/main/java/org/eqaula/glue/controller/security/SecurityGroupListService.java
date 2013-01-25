@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -30,9 +29,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
-import org.eqaula.glue.model.accounting.Account;
-import org.eqaula.glue.model.accounting.Account_;
-import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.eqaula.glue.util.UI;
 import org.jboss.seam.security.management.picketlink.IdentitySessionProducer;
@@ -41,7 +37,6 @@ import org.picketlink.idm.api.Group;
 import org.picketlink.idm.api.IdentitySessionFactory;
 import org.picketlink.idm.api.UnsupportedCriterium;
 import org.picketlink.idm.common.exception.IdentityException;
-import org.picketlink.idm.impl.api.model.SimpleGroup;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -98,7 +93,6 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
     }
 
     public void setFirstResult(int firstResult) {
-        log.info("set first result" + firstResult);
         this.firstResult = firstResult;
     }
 
@@ -128,7 +122,6 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
 
     @Transactional
     public void deleteGroup() {
-        log.info("Eqaula-->  Ingreso a borrar grupo seleccionado " + getSelectedGroup());
         if (this.getSelectedGroup() != null) {            
             try {                 
                 if (securityGroupService.isAssociatedUser(selectedGroup)) {
@@ -194,7 +187,6 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
 
     @Override
     public List<Group> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
-        log.info("Loading groups from security");
         List<Group> result = new ArrayList<Group>();
         try {
             int end = first + pageSize;

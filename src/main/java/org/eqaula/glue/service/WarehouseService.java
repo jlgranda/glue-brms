@@ -20,8 +20,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import org.eqaula.glue.model.management.Organization;
-import org.eqaula.glue.model.management.Organization_;
 import org.eqaula.glue.model.stocklist.Warehouse;
 import org.eqaula.glue.model.stocklist.Warehouse_;
 import org.eqaula.glue.util.PersistenceUtil;
@@ -33,6 +31,7 @@ import org.eqaula.glue.util.PersistenceUtil;
 public class WarehouseService extends PersistenceUtil<Warehouse> {
 
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityService.class);
+    private static final long serialVersionUID = 8624287602483436013L;
 
     public WarehouseService() {
         super(Warehouse.class);
