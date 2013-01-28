@@ -45,7 +45,7 @@
                         </h:inputText>
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.email != null}"
                                         styleClass="validation-status" />
-                        <span class="help-inline"><br/>Prometemos <b>nunca</b> compartir su dirección de correo. <ocp:message forId="email" /></span>
+                        <span class="help-inline"><br/> #{messages['common.email.inlinehelp']} <ocp:message forId="email" /></span>
                     </div>
                 </h:panelGroup>
 
