@@ -31,7 +31,6 @@
  */
 package org.eqaula.glue.model.config;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import org.eqaula.glue.model.PersistentObject;

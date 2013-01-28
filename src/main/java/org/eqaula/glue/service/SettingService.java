@@ -24,9 +24,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.config.Setting;
 import org.eqaula.glue.model.config.Setting_;
-import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.model.stocklist.Stock;
-import org.eqaula.glue.model.stocklist.Stock_;
 import org.eqaula.glue.util.PersistenceUtil;
 
 /**
@@ -36,6 +33,7 @@ import org.eqaula.glue.util.PersistenceUtil;
 public class SettingService extends PersistenceUtil<Setting> {
 
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityService.class);
+    private static final long serialVersionUID = -2654253198159918622L;
 
     public SettingService() {
         super(Setting.class);
