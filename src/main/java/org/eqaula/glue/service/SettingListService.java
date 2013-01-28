@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,7 +44,7 @@ import org.primefaces.model.SortOrder;
  * @author lucho
  */
 @Named(value = "settingListService")
-@RequestScoped
+@ViewScoped
 public class SettingListService extends LazyDataModel<Setting> implements Serializable {
 
     private static final long serialVersionUID = 4819808125494695197L;

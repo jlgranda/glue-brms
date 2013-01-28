@@ -17,7 +17,9 @@ package org.eqaula.glue;
 
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.ConversationScoped;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -30,8 +32,9 @@ import org.eqaula.glue.service.SettingService;
  * @author jlgranda
  */
 @Named 
-@RequestScoped
+@ViewScoped
 public class Glue implements Serializable {
+    private static final long serialVersionUID = 7673935874688660972L;
     
     @Inject
     @Web
