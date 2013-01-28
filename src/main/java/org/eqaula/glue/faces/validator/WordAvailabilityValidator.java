@@ -24,7 +24,10 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import org.eqaula.glue.cdi.Current;
+import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.config.SettingHome;
+import org.eqaula.glue.model.config.Setting;
 import org.eqaula.glue.service.SettingService;
 import org.eqaula.glue.util.UI;
 
@@ -42,13 +45,25 @@ public class WordAvailabilityValidator implements Validator {
     private SettingService settingService;
     
     @Inject
+//    @Web
     private SettingHome settingHome;
 
     @Override
     public void validate(FacesContext fc, UIComponent uic, Object value)
             throws ValidatorException {
-        if (value instanceof String && !value.equals(settingHome.getInstance().getName())) {
-            settingService.setEntityManager(em);
+        //settingHome.init();
+        settingService.setEntityManager(em);
+        System.out.println("palabra "+settingHome.getInstance().getName());        
+        String s =  settingHome.getInstance().getName();
+        if(settingHome.getInstance().getId() != null){            
+            s = settingService.getSettingByName(s).getName();
+            System.out.println("palabra asignada "+s);
+        }else{
+            System.out.println("palabra asignada vacia");            
+        }
+                       
+        if (value instanceof String && !value.equals(s)) {            
+            
             if (!settingService.isWordAvailable((String) value)) {
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("El nombre indicado para esta propiedad ya está en uso"), null));
             }

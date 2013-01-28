@@ -36,26 +36,24 @@ import org.eqaula.glue.util.UI;
  */
 @RequestScoped
 @FacesValidator("ciAvailabilityValidator")
-public class CIAvailabilityValidator implements Validator{
-    
+public class CIAvailabilityValidator implements Validator {
+
     @Inject
-   private EntityManager em;
+    private EntityManager em;
+    @Inject
+    private ProfileService ps;
+    @Inject
+    @Current
+    private Profile profile;
 
-   @Inject
-   private ProfileService ps;
-
-   @Inject
-   @Current
-   private Profile profile;
-    
     @Override
-    public void validate(FacesContext fc, UIComponent uic, Object value) 
+    public void validate(FacesContext fc, UIComponent uic, Object value)
             throws ValidatorException {
         if (value instanceof String && !value.equals(profile.getCode())) {
-         ps.setEntityManager(em);
-         if (!ps.isDniAviable((String) value))
-            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("validator.dni"), null));
-      }
+            ps.setEntityManager(em);
+            if (!ps.isDniAviable((String) value)) {
+                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("validator.dni"), null));
+            }
+        }
     }
-    
 }

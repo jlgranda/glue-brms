@@ -73,8 +73,10 @@ public class SettingService extends PersistenceUtil<Setting> {
         try {
            Setting b = getSettingByName(name);
             if(b != null){
+                System.out.println("instancia "+b.getName());
                 return false;
             }else{
+                System.out.println("instancia vacia");
                 return true;
             }
         } catch (NoResultException e) {
