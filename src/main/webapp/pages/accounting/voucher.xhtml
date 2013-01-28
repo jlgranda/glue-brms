@@ -114,14 +114,11 @@ limitations under the License.
                     #{messages['module.accounting.posting']}
                 </f:facet>  
 
-               <!-- <p:ajax event="rowEdit" listener="#{tableBean.onEdit}" update=":form:messages" />  
-                <p:ajax event="rowEditCancel" listener="#{tableBean.onCancel}" update=":form:messages" /> -->
-
-                <p:column headerText="Id">
+               <p:column headerText="Id">
                     <h:outputText value="#{entry.account.id}" />
                 </p:column>
 
-                <p:column headerText="Nombre" sortBy="">
+                <p:column headerText="#{messages['common.name']}" sortBy="">
 
                     <p:cellEditor>  
                         <f:facet name="output">  
@@ -171,7 +168,7 @@ limitations under the License.
                     <p:selectBooleanCheckbox value="#"/>
                 </p:column>   
 
-                <p:column headerText="Options" style="width:50px">  
+                <p:column headerText="#{messages['common.options']}" style="width:50px">  
                     <p:rowEditor />  
                 </p:column> 
 
