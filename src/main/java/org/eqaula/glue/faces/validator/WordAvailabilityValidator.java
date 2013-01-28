@@ -50,7 +50,7 @@ public class WordAvailabilityValidator implements Validator {
         if (value instanceof String && !value.equals(settingHome.getInstance().getName())) {
             settingService.setEntityManager(em);
             if (!settingService.isWordAvailable((String) value)) {
-                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("El nombre indicado para esta propiedad ya está en uso"), null));
+                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("El nombre indicado para esta propiedad ya está en us"), null));
             }
         }
     }
