@@ -24,9 +24,7 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import org.eqaula.glue.cdi.Current;
-import org.eqaula.glue.config.SettingHome;
-import org.eqaula.glue.model.config.Setting;
+import org.eqaula.glue.controller.config.SettingHome;
 import org.eqaula.glue.service.SettingService;
 import org.eqaula.glue.util.UI;
 
