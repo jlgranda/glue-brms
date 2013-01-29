@@ -26,6 +26,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.config.Setting;
@@ -78,12 +79,14 @@ public class SettingHome extends BussinesEntityHome<Setting> implements Serializ
         this.parentId = parentId;
     }
 
+    
+    @Current
     @TransactionAttribute
-    public void load() {
+    public Setting load() {
         if (isIdDefined()) {
             wire();
-        }
-        log.info("eqaula --> Loaded instance " + getInstance());
+        } 
+        return getInstance();
     }
 
     @PostConstruct
