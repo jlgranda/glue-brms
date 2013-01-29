@@ -20,12 +20,14 @@ import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
+import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.config.Setting;
@@ -78,12 +80,16 @@ public class SettingHome extends BussinesEntityHome<Setting> implements Serializ
         this.parentId = parentId;
     }
 
+    @Produces
+//    @Named("setting")
+    @Current
     @TransactionAttribute
-    public void load() {
+    public Setting load() {
         if (isIdDefined()) {
             wire();
         }
-        log.info("eqaula --> Loaded instance " + getInstance());
+        log.info("eqaula --> Loaded instance " + getInstance().getName());
+        return getInstance();
     }
 
     @PostConstruct
