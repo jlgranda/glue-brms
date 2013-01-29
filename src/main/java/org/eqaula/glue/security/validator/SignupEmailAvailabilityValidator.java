@@ -46,6 +46,7 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.LoggedIn;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.profile.ProfileService;
+import org.eqaula.glue.util.UI;
 
 
 
@@ -69,9 +70,10 @@ public class SignupEmailAvailabilityValidator implements Validator
    {
       if (value instanceof String && !value.equals(profile.getUsername())) {
          ps.setEntityManager(em);
-         if (!ps.isEmailAddressAvailable((String) value) && !(value.equals(profile.getEmail())))
-            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "La dirección de correo ya esta en uso",
-                     null));
+         if (!ps.isEmailAddressAvailable((String) value) && !(value.equals(profile.getEmail()))) {
+              throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, UI.getMessages("common.email.noavailable"),
+                       null));
+          }
       }
    }
 }

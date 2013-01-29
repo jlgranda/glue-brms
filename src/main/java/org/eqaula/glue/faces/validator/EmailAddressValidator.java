@@ -39,6 +39,7 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import org.eqaula.glue.util.StringValidations;
+import org.eqaula.glue.util.UI;
 
 @RequestScoped
 @FacesValidator("emailValidator")
@@ -49,10 +50,8 @@ public class EmailAddressValidator implements Validator {
             throws ValidatorException {
         String address = value.toString();
         if (!StringValidations.isEmailAddress(address)) {
-            FacesMessage message = new FacesMessage();
-            message.setSummary("email no valido");
-            message.setSeverity(FacesMessage.SEVERITY_ERROR);
-            throw new ValidatorException(message);
+             throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, UI.getMessages("common.email.novalid"),
+                       null));
         }
     }
 }

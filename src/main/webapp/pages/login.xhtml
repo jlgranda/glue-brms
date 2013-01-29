@@ -1,84 +1,89 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
-<ui:composition template="/WEB-INF/view/templates/glue.xhtml">
-	<ui:param name="title" value="Sign up" />
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <ui:param name="title" value="Sign up" />
 
-	<ui:define name="header">
-		<h1>#{messages['common.join']}</h1>
-	</ui:define>
+        <ui:define name="header">
+            <h1>#{messages['common.join']}</h1>
+        </ui:define>
 
-	<ui:define name="header-right">
-		<h:button value="#{messages['common.noaccount']}" outcome="/pages/signup" class="btn"/>
-	</ui:define>
+        <ui:define name="header-right">
+            <h:button value="#{messages['common.noaccount']}" outcome="/pages/signup" class="btn"/>
+        </ui:define>
 
-	<ui:define name="content">
-		<style type="text/css">
-			.openId {
-				margin: 25px;
-			}
-		</style>
+        <ui:define name="content">
+            <style type="text/css">
+                .openId {
+                    margin: 25px;
+                }
+            </style>
 
-		<div class="row">
-			<div class="span9 columns" style="margin-left: 220px;">
-				<br/>
-	
-                                <p:panel rendered="false">
-				<center><h4>Sign in with your account at:</h4></center>
-				
-				<div style="margin-left: 100px;">
-					<ui:include src="/WEB-INF/view/elements/openIdForm.xhtml" />
-				</div>
-				</p:panel>
-				<center><h4>Inicie con su nombre de usuario y contraseña</h4></center>
-				<br/>
-				<h:form id="signin">
-					
-					<script type="text/javascript">
-						$(document).ready(function() {
-							$('#signin\\:username').attr("placeholder", "¿Quién eres tú?").focus();
-						});
-					</script>
-					
-					<style type="text/css">
-						#signup input[type=text], #signup input[type=password] {
-							width: 240px;
-						}
-					</style>
+            <div class="row">
+                <div class="span9 columns" style="margin-left: 220px;">
+                    <br/>
 
-					<div class="clearfix">
-						<label for="name">#{messages['common.username']}</label>
-						<div class="input">
-							<h:inputText id="username" value="#{credentials.username}"
-								styleClass="xLarge" required="true"/>
-							<br/><span class="help-inline"></span>
-						</div>
-					</div>
+                    <p:panel rendered="false">
+                        <center><h4>Sign in with your account at:</h4></center>
+                        <div style="margin-left: 100px;">
+                            <ui:include src="/WEB-INF/view/elements/openIdForm.xhtml" />
+                        </div>
+                    </p:panel>
+                    
+                    
+                    
+                    <center><h4>#{messages['common.login.title']}</h4></center>
+                    <br/>
+                    
+                    
+                    
+                    <h:form id="signin">
 
-					<div class="clearfix">
-						<label for="password">#{messages['common.password']}</label>
-						<div class="input">
-							<h:inputSecret id="password" value="#{credentials.password}"
-								styleClass="xLarge" style="text-transform: uppercase;"  required="true">
-							</h:inputSecret>
-							<br/><span class="help-inline"></span>
-						</div>
-					</div>
+                        <script type="text/javascript">
+                            $(document).ready(function() {
+                                $('#signin\\:username').attr("placeholder", "¿Quién eres tú?").focus();
+                            });
+                        </script>
 
-					<div class="actions">
-						<h:commandButton action="#{authentication.login}" value="#{messages['common.login']}"
-							styleClass="btn primary" />
-					</div>
-					<center><h:link outcome="/pages/recover" value="#{messages['common.forgotpassword']}" /></center>
-				</h:form>
-			</div>
-		</div>
+                        <style type="text/css">
+                            #signup input[type=text], #signup input[type=password] {
+                                width: 240px;
+                            }
+                        </style>
 
-	</ui:define>
+                        <div class="clearfix">
+                            <label for="name">#{messages['common.username']}</label>
+                            <div class="input">
+                                <h:inputText id="username" value="#{credentials.username}"
+                                             styleClass="xLarge" required="true"/>
+                                <br/><span class="help-inline"></span>
+                            </div>
+                        </div>
 
-</ui:composition>
+                        <div class="clearfix">
+                            <label for="password">#{messages['common.password']}</label>
+                            <div class="input">
+                                <h:inputSecret id="password" value="#{credentials.password}"
+                                               styleClass="xLarge" style="text-transform: uppercase;"  required="true">
+                                </h:inputSecret>
+                                <br/><span class="help-inline"></span>
+                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <h:commandButton action="#{authentication.login}" value="#{messages['common.login']}"
+                                             styleClass="btn primary" />
+                        </div>
+                        <center><h:link outcome="/pages/recover" value="#{messages['common.forgotpassword']}" /></center>
+                    </h:form>
+                </div>
+            </div>
+
+        </ui:define>
+
+    </ui:composition>
 </html>

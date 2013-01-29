@@ -17,6 +17,8 @@ package org.eqaula.glue.service;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -57,5 +59,28 @@ public class SettingService extends PersistenceUtil<Setting> {
         Root<Setting> bussinesEntityType = query.from(Setting.class);
         query.where(builder.equal(bussinesEntityType.get(Setting_.name), name));
         return getSingleResult(query);
+    }
+
+    
+     public Setting getSettingByName(final String name) throws NoResultException {
+        TypedQuery<Setting> query = em.createQuery("SELECT p FROM Setting p WHERE p.name = :name", Setting.class);
+        query.setParameter("name", name);
+        Setting result = query.getSingleResult();
+        return result;
+    }
+    
+    public boolean isWordAvailable(String name) {
+        try {
+           Setting b = getSettingByName(name);
+            if(b != null){
+                System.out.println("instancia "+b.getName());
+                return false;
+            }else{
+                System.out.println("instancia vacia");
+                return true;
+            }
+        } catch (NoResultException e) {
+            return true;
+        }
     }
 }
