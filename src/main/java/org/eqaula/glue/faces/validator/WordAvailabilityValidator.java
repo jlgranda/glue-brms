@@ -45,17 +45,17 @@ public class WordAvailabilityValidator implements Validator {
     private SettingService settingService;
     
     @Inject
-    @Current
-    Setting setting;
+//    @Web
+    private SettingHome settingHome;
 
     @Override
     public void validate(FacesContext fc, UIComponent uic, Object value)
             throws ValidatorException {
         //settingHome.init();
         settingService.setEntityManager(em);
-        System.out.println("palabra "+setting.getName());        
-        String s =  setting.getName();
-        if(setting.getId() != null){            
+        System.out.println("palabra "+settingHome.getInstance().getName());        
+        String s =  settingHome.getInstance().getName();
+        if(settingHome.getInstance().getId() != null){            
             s = settingService.getSettingByName(s).getName();
             System.out.println("palabra asignada "+s);
         }else{
