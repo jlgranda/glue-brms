@@ -37,36 +37,31 @@ import org.eqaula.glue.util.UI;
  */
 @RequestScoped
 @FacesValidator("wordAvailabilityValidator")
-public class WordAvailabilityValidator implements Validator {
+public class SettingNameAvailabilityValidator implements Validator {
 
     @Inject
     private EntityManager em;
     @Inject
     private SettingService settingService;
-    
     @Inject
-//    @Web
-    private SettingHome settingHome;
+    @Current
+    private Setting setting;
 
     @Override
     public void validate(FacesContext fc, UIComponent uic, Object value)
-            throws ValidatorException {
-        //settingHome.init();
+            throws ValidatorException {        
         settingService.setEntityManager(em);
-        System.out.println("palabra "+settingHome.getInstance().getName());        
-        String s =  settingHome.getInstance().getName();
-        if(settingHome.getInstance().getId() != null){            
-            s = settingService.getSettingByName(s).getName();
-            System.out.println("palabra asignada "+s);
-        }else{
-            System.out.println("palabra asignada vacia");            
+        String currentName = "";
+        if (setting.isPersistent()) {  //controla objeto en edicion            
+            currentName = settingService.find(setting.getId()).getName();
         }
-                       
-        if (value instanceof String && !value.equals(s)) {            
-            
-            if (!settingService.isWordAvailable((String) value)) {
-                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("El nombre indicado para esta propiedad ya está en us"), null));
+
+        if (!currentName.equals(value)) {
+            if (value instanceof String ) {
+                if (!settingService.isNameAvailable((String) value)) {
+                    throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("El nombre indicado para esta propiedad ya está en us"), null));
+                }
             }
-        }
+        } 
     }
 }

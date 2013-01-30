@@ -49,11 +49,19 @@ public class CIAvailabilityValidator implements Validator {
     @Override
     public void validate(FacesContext fc, UIComponent uic, Object value)
             throws ValidatorException {
-        if (value instanceof String && !value.equals(profile.getCode())) {
-            ps.setEntityManager(em);
-            if (!ps.isDniAviable((String) value)) {
-                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("validator.dni"), null));
+        ps.setEntityManager(em);
+        String currentDni = "";
+        if (profile.isPersistent()) {
+            currentDni = ps.find(profile.getId()).getCode();
+        }
+        if (!currentDni.equals(value)) {
+            if (value instanceof String ) {
+                ps.setEntityManager(em);
+                if (!ps.isDniAviable((String) value)) {
+                    throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("validator.dni"), null));
+                }
             }
         }
+
     }
 }

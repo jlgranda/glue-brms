@@ -107,7 +107,7 @@ public class SecurityRules {
      return bussinesEntity.getAuthor().getIdentityKeys().contains(identity.getUser().getKey());
      }
      }*/
-    private String getUsername(Identity identity) {
+    public static String getUsername(Identity identity) {
         String user = "";
         if (identity != null && identity.getUser() != null) {
             user = identity.getUser().getKey();
