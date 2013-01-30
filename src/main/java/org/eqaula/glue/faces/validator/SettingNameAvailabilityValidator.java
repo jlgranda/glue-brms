@@ -52,7 +52,7 @@ public class SettingNameAvailabilityValidator implements Validator {
             throws ValidatorException {        
         settingService.setEntityManager(em);
         String currentName = "";
-        if (setting.isPersistent()) {            
+        if (setting.isPersistent()) {  //controla objeto en edicion            
             currentName = settingService.find(setting.getId()).getName();
         }
 
