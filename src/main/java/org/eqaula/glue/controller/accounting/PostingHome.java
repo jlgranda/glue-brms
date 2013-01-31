@@ -15,28 +15,35 @@
  */
 package org.eqaula.glue.controller.accounting;
 
+import org.eqaula.glue.service.PostingService;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import org.eqaula.glue.accounting.AccountHome;
 import org.eqaula.glue.accounting.AccountService;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.model.accounting.Entry;
+import org.eqaula.glue.model.accounting.Ledger;
 import org.eqaula.glue.model.accounting.Posting;
+import org.eqaula.glue.profile.ProfileService;
 import org.eqaula.glue.util.Dates;
-import org.jboss.seam.transaction.Transactional;
+import org.eqaula.glue.util.UI;
 
 /**
  *
@@ -45,7 +52,7 @@ import org.jboss.seam.transaction.Transactional;
 @Named
 @ViewScoped
 public class PostingHome extends BussinesEntityHome<Posting> implements Serializable {
-
+    
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(PostingHome.class);
     @Inject
     @Web
@@ -54,26 +61,28 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
     private PostingService postingService;
     @Inject
     private AccountService accountService;
+    @Inject
+    private ProfileService profileService;
     private Long parentId;
     private Posting postingSelected;
     private String backview;
-
+    
     public Long getPostingId() {
         return (Long) getId();
     }
-
+    
     public void setPostingId(Long accountId) {
         setId(accountId);
     }
-
+    
     public Long getParentId() {
         return parentId;
     }
-
+    
     public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
-
+    
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -81,20 +90,21 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
         }
         log.info("eqaula --> Loaded instance " + getInstance());
     }
-
+    
     @PostConstruct
     public void init() {
         setEntityManager(em);
         postingService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
         accountService.setEntityManager(em);
+        profileService.setEntityManager(em);
     }
-
+    
     @TransactionAttribute
     public void wire() {
         getInstance();
     }
-
+    
     @Override
     protected Posting createInstance() {
         log.info("eqaula --> PostingHome create instance");
@@ -104,27 +114,29 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
         posting.setLastUpdate(now);
         posting.setActivationTime(now);
         posting.setExpirationTime(Dates.addDays(now, 364));
+        
+//        Ledger ledger = new Ledger();
+//        ledger.setName("Libro diario");
+//        ledger.setDescription("esta es una descripción de prueba para ledger");
+//        ledger.setCreatedOn(now);
+//        ledger.setLastUpdate(now);        
+//        posting.setLedger(ledger);
         //AGregar entries manualmente
 
-
-        Account a = accountService.getAccountById(Long.parseLong("116"));
+       
+        
+        Account a = accountService.getAccountById(Long.parseLong("757"));
         posting.addEntry(a, 40);
         //account.setAuthor(accountSecurity.getLoggedIn());
         //account.buildAttributes(bussinesEntityService); //Sólo si se definen tipo personalizados para este tipo de objeto
         return posting;
     }
-
+    
     public String addEntry(ActionEvent e) {
-        // Date now = Calendar.getInstance().getTime();
-      //  Entry entry = new Entry();
-//        entry.setCreatedOn(now);
-//        entry.setLastUpdate(now);
-//        entry.setActivationTime(now);
-//        entry.setExpirationTime(Dates.addDays(now, 364));
         getInstance().addEntry(new Entry());
         return null;
     }
-
+    
     @TransactionAttribute
     public String savePosting() {
         log.info("eqaula --> PostingHome save instance: " + getInstance().getId());
@@ -133,20 +145,15 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
         String outcome = null;
         if (getInstance().isPersistent()) {
             save(getInstance());
-            outcome = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getPostingId();
+            outcome = "/pages/home.xhtml";
         } else {
-            if (getParentId() == null) { //Cuenta raíz
-                create(getInstance());
-                outcome = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + this.getInstance().getId();
-            } else {
-                //getInstance().setParent(findParent(getParentId()));
-                create(getInstance()); //
-                outcome = "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId();
-            }
+            create(getInstance()); //
+            outcome = "/pages/home.xhtml";
         }
+        
         return outcome;
     }
-
+    
     public String deletePosting() {
         log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());
         String outcome = null;
@@ -165,7 +172,7 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
                 //remover de la lista, si aún no esta persistido
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un Asiento Contable para ser borrado!", ""));
             }
-
+            
         } catch (Exception e) {
             //System.out.println("deleteBussinessEntity ERROR = " + e.getMessage());
             e.printStackTrace();
@@ -173,15 +180,15 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
         }
         return outcome;
     }
-
+    
     public boolean isWired() {
         return true;
     }
-
+    
     public Posting getDefinedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
-
+    
     @Override
     public Class<Posting> getEntityClass() {
         return Posting.class;
@@ -197,12 +204,46 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
             return null;
         }
     }
-
+    
     public Posting getPostingSelected() {
         return postingSelected;
     }
-
+    
     public void setPostingSelected(Posting postingSelected) {
         this.postingSelected = postingSelected;
     }
+    
+    public List<Posting.Type> getPostingTypes() {
+        wire();
+        List<Posting.Type> list = Arrays.asList(getInstance().getPostingType().values());
+        log.info("eqaula --> PostingHome Posting Type: " + list.toString());
+        return list;
+    }
+    
+    public SelectItem[] getAccounts() {
+        return UI.getSelectItems(accountService.getAccounts(), false);
+    }
+    
+    public SelectItem[] getProfiles() {
+        return UI.getSelectItems(profileService.getProfiles(), false);
+    }
+//    public List<Account> getAccounts() {
+//
+//        List list = accountService.getAccounts();
+//        for (Account a : list) {
+//        log.info("Cuenta: " + a.getName());
+//            
+//        }
+//        
+//        
+//        return list;
+////        try {
+////            return new ArrayList<Account>(accountService.getAccounts());
+////        } catch (NullPointerException ex) {
+////            //java.util.logging.Logger.getLogger(PostingHome.class.getName()).log(Level.SEVERE, null, ex);
+////        }
+////        return new ArrayList<Account>();
+//
+//
+//    }
 }

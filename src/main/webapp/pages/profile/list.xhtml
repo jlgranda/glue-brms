@@ -35,7 +35,11 @@ limitations under the License.
                         <br/>
                         <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
                                 outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn secondary">                                
-                        </h:link>                            
+                        </h:link>  
+                        <br/>
+                        <br/>                        
+
+
                     </h:form>
                 </div>
             </div> 
@@ -82,7 +86,7 @@ limitations under the License.
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
                          rowsPerPageTemplate="5,10,15"
-                         id="bussinesEntityTable" lazy="true"
+                         id="profileDT" lazy="true"
                          selection="#{profileListService.selectedProfile}"
                          rendered="true"
                          selectionMode="single">
@@ -91,23 +95,53 @@ limitations under the License.
                         update=":form:button-edit :form:messages :form:button-view :form:button-authorize"/>                 
                 <p:ajax event="rowUnselect" listener="#{profileListService.onRowUnselect}" update=":form:button-edit :form:messages :form:button-view :form:button-authorize"/>
 
-                <p:column headerText="#{messages['common.username']}" sortBy="#{profile_.username}">
+                <p:column sortBy="#{profile_.username}">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['common.username']}" />  
+                    </f:facet> 
                     <h:outputText value="#{profile_.username}" />
                 </p:column>
-                <p:column headerText="#{messages['common.firstname']}" sortBy="#{profile_.firstname}">
+                <p:column sortBy="#{profile_.firstname}">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['common.firstname']}" />  
+                    </f:facet> 
                     <h:outputText value="#{profile_.firstname}" />
                 </p:column>
-                <p:column headerText="#{messages['profile.surname']}" sortBy="#{profile_.surname}">
+                <p:column sortBy="#{profile_.surname}">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['profile.surname']}" />  
+                    </f:facet> 
                     <h:outputText value="#{profile_.surname}" />
                 </p:column>
-                <p:column headerText="#{messages['profile.dni']}" sortBy="#{profile_.code}">
+                <p:column sortBy="#{profile_.code}">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['profile.dni']}" />  
+                    </f:facet> 
                     <h:outputText value="#{profile_.code}" />
                 </p:column>
-                <p:column headerText="#{messages['common.email']}" sortBy="#{profile_.email}">
+                <p:column sortBy="#{profile_.email}">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['common.email']}" />  
+                    </f:facet> 
                     <h:outputText value="#{profile_.email}" />
                 </p:column>
-            </p:dataTable>
-        </h:form>
+            </p:dataTable>          
 
+            <h:panelGrid id="cod" class="columns" >
+                <p:panel>
+                    <h:outputText value="Exportar Datos" />  
+                    <br/>
+                    <h:commandLink >  
+                        <p:graphicImage value="/resources/images/pdf.png" />  
+                        <p:dataExporter type="pdf" target="profileDT" fileName="profiles" class="stext"/>  
+                    </h:commandLink>
+                    #{''}
+                    <h:commandLink >  
+                        <p:graphicImage value="/resources/images/xls1.png" />  
+                        <p:dataExporter type="xls" target="profileDT" fileName="profiles"/>  
+                    </h:commandLink>
+                </p:panel>
+            </h:panelGrid>
+        </h:form>
     </ui:define>
 </ui:composition>

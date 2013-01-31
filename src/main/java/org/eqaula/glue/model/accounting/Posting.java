@@ -40,6 +40,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -50,6 +52,7 @@ import javax.validation.constraints.NotNull;
 import org.eqaula.glue.model.BussinesEntity;
 
 import org.eqaula.glue.model.PersistentObject;
+import org.eqaula.glue.model.profile.Profile;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -68,7 +71,30 @@ public class Posting extends BussinesEntity {
      *
      */
     private static final long serialVersionUID = -4147260077491075807L;
-    @NotNull
+
+    public enum Type {
+
+        PAYMENT(-1),
+        DEPOSIT(1);
+        private int normalBalanceSign;
+
+        private Type(int normalBalanceSign) {
+            this.normalBalanceSign = normalBalanceSign;
+        }
+
+        /**
+         * Returns the usual sign for this type of account. Normally debit
+         * accounts (like Assets and Expenses) are negative (-1), normally
+         * credit accounts are positive (1).
+         *
+         * @return -1 or 1
+         */
+        public int getNormalBalanceSign() {
+            return normalBalanceSign;
+        }
+    }
+   
+    //@NotNull
     @ManyToOne(optional = false)
     private Ledger ledger;
     @NotNull
@@ -80,6 +106,15 @@ public class Posting extends BussinesEntity {
     @OneToMany(mappedBy = "posting", cascade = {CascadeType.REMOVE,
         CascadeType.REFRESH})
     private List<Entry> entries;
+    private BigDecimal amount;
+    private String amountInLetters;
+    @ManyToOne
+    private Profile consigne;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date paymentDate;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Posting.Type postingType;
 
     public Posting() {
         super();
@@ -115,6 +150,56 @@ public class Posting extends BussinesEntity {
         this.postingDate = postingDate;
     }
 
+    public Ledger getLedger() {
+        return ledger;
+    }
+
+    public void setLedger(Ledger ledger) {
+        this.ledger = ledger;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public String getAmountInLetters() {
+        return amountInLetters;
+    }
+
+    public void setAmountInLetters(String amountInLetters) {
+        this.amountInLetters = amountInLetters;
+    }
+
+    public Profile getConsigne() {
+        return consigne;
+    }
+
+    public void setConsigne(Profile consigne) {
+        this.consigne = consigne;
+    }
+
+    public Date getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(Date paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
+    public Type getPostingType() {
+        return postingType;
+    }
+
+    public void setPostingType(Type postingType) {
+        this.postingType = postingType;
+    }
+    
+    
+
     public Entry addEntry(Account a, BigDecimal amount) {
         Entry e = new Entry();
         e.setPosting(this);
@@ -141,12 +226,11 @@ public class Posting extends BussinesEntity {
         entries.add(e);
         return e;
     }
-    
-    
+
     public void addEntry(Entry e) {
-       
+
         if (!entries.contains(e)) {
-             System.out.println("metodo addEntryde Posting");
+            System.out.println("metodo addEntryde Posting");
             entries.add(e);
             e.setPosting(this);
         }

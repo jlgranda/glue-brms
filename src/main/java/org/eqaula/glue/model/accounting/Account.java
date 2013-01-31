@@ -230,20 +230,23 @@ public class Account extends BussinesEntity implements Serializable, Comparable<
         BigDecimal balance = getTrialBalance();
         return balance.floatValue();
     }
-    
+
     @Override
     public String toString() {
         return "org.eqaula.glue.model.Accounting.Account[ "
                 + "id=" + this.getId() + ","
                 + "name=" + this.getName() + ","
                 + "code=" + this.getCode() + ","
-                + "description=" + this.getDescription() + ","                
+                + "description=" + this.getDescription() + ","
                 + " ]";
     }
     //+ "parent=" + (this.getParent() == null ? "null" : this.getParent()) + ","
-    
+
     @Override
     public int compareTo(Account o) {
+        if(getCode()==null || o.getCode()== null){
+            return -1;
+        }
         return this.getCode().compareTo(o.getCode());
     }
 }

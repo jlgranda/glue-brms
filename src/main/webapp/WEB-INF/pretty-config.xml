@@ -108,6 +108,13 @@
       <query-param name="parentId" decode="false">#{accountHome.parentId}</query-param>
    </url-mapping>
    
+   
+    <url-mapping id="voucher">
+      <pattern value="/voucher"></pattern>
+      <view-id value="/pages/accounting/voucher.xhtml"></view-id>
+    </url-mapping>
+   
+   
    <!--Security-->
    <url-mapping id="securityGroup">
       <pattern value="/admin/security/group"></pattern>

@@ -274,6 +274,33 @@
             <artifactId>seam-transaction</artifactId>
         </dependency>
             
+        <!--Seam 3 Reports-->
+        <dependency>
+            <groupId>org.jboss.seam.reports</groupId>
+            <artifactId>seam-reports-api</artifactId>
+            <version>3.1.0.Final</version>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
+        <!-- If you are using Jasper Reports, add the following dependency -->        
+        <dependency>
+            <groupId>org.jboss.seam.reports</groupId>
+            <artifactId>seam-reports-jasper</artifactId>
+            <version>3.1.0.Final</version>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
+        <!--<dependency>
+            <groupId>org.jboss.seam.reports</groupId>
+            <artifactId>seam-reports-pentaho</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.seam.reports</groupId>
+            <artifactId>seam-reports-xdocreport</artifactId>
+            <scope>runtime</scope>
+        </dependency>-->
+            
         <dependency>
             <groupId>org.ocpsoft.prettytime</groupId>
             <artifactId>prettytime</artifactId>

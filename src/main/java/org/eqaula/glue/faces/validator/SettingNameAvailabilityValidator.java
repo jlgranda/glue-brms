@@ -41,7 +41,7 @@ public class SettingNameAvailabilityValidator implements Validator {
 
     @Inject
     private EntityManager em;
-    @Inject
+    @Inject 
     private SettingService settingService;
     @Inject
     @Current

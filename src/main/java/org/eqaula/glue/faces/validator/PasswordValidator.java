@@ -42,6 +42,7 @@ import javax.faces.validator.ValidatorException;
 import javax.enterprise.context.RequestScoped;
 
 import org.eqaula.glue.util.StringValidations;
+import org.eqaula.glue.util.UI;
 
 @FacesValidator("passwordValidator")
 @RequestScoped
@@ -55,8 +56,7 @@ public class PasswordValidator implements Validator
       String field = value.toString();
       if (value instanceof String && ((String) value).length() > 0 && !StringValidations.isPassword(field))
       {
-         FacesMessage msg = new FacesMessage(
-                  "Contraseña muy corta  (ingrese mínimo 8 caracteres) - se permiten letras, numeros y otros caracteres especiales.");
+         FacesMessage msg = new FacesMessage(UI.getMessages("common.password.validator"));
          throw new ValidatorException(msg);
       }
       

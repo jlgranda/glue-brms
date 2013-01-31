@@ -13,10 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eqaula.glue.controller.accounting;
+package org.eqaula.glue.service;
 
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.accounting.Posting;
+import org.eqaula.glue.model.accounting.Posting_;
+import org.eqaula.glue.model.config.Setting;
+import org.eqaula.glue.model.config.Setting_;
 import org.eqaula.glue.util.PersistenceUtil;
 
 /**
@@ -24,6 +31,11 @@ import org.eqaula.glue.util.PersistenceUtil;
  * @author Luis Flores
  */
 public class PostingService extends PersistenceUtil<Posting>{
+    
+    
+    
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityService.class);
+    private static final long serialVersionUID = -2654253198159918622L;
 
     public PostingService() {
         super(Posting.class);
@@ -39,5 +51,20 @@ public class PostingService extends PersistenceUtil<Posting>{
     public Posting getPostingById(final Long id) {
         return (Posting) findById(Posting.class, id);
     }
+    
+     public List<Posting> getPostings(final int limit, final int offset) {
+        return findAll(Posting.class);
+    }
+     
+     
+     public Posting findByName(final String name) {
+        log.info("find Profile with name " + name);
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Posting> query = builder.createQuery(Posting.class);
+        Root<Posting> bussinesEntityType = query.from(Posting.class);
+        query.where(builder.equal(bussinesEntityType.get(Posting_.name), name));
+        return getSingleResult(query);
+    }
+
     
 }
