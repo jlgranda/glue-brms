@@ -199,4 +199,8 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
 
         return getSingleResult(query);
     }
+    
+    public List<Profile> findAll(){
+        return findAll(Profile.class);
+    }
 }

@@ -19,57 +19,71 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Resource;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ViewScoped;
+
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.eqaula.glue.cdi.Current;
+import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.model.profile.Profile;
+import org.eqaula.glue.profile.ProfileService;
 import org.jboss.seam.reports.Report;
 import org.jboss.seam.reports.ReportCompiler;
 import org.jboss.seam.reports.ReportDefinition;
 import org.jboss.seam.reports.ReportRenderer;
-//import org.jboss.seam.reports.jasper.annotations.Jasper; 
+import org.jboss.seam.reports.jasper.annotations.Jasper;
 import org.jboss.seam.reports.output.PDF;
+import org.jboss.solder.resourceLoader.Resource;
 
 /**
  *
  * @author cesar
  */
 @Named(value="profileReport")
-public class ProfileReport {
+@RequestScoped
+public class ProfileReport implements Serializable{
     
     @Inject
-    @Resource()
+    @Resource("/src/main/resources/ProfileJasperReport.jrxml")     //resources/ProfileJasperReport.jrxml
     private InputStream sourceReport;
     
     @Inject
-    //@Jasper
+    @Web
+    private EntityManager em;
+    
+    @Inject
+    @Jasper
     private ReportCompiler compiler;
     
-    //@Jasper
-    //private JRDataSource 
+    @Jasper
+    private JRDataSource jasperDataSource;
     
     @Inject  
-//    @Jasper  
+    @Jasper  
     @PDF  
     private ReportRenderer pdfRenderer; 
     
-    @Inject
-    @Current
-    private Profile profile;
+    @Inject    
+    private ProfileService ps;
     
     public ByteArrayOutputStream generateProfileReport() throws IOException{
+        ps.setEntityManager(em);
         ReportDefinition report = compiler.compile(sourceReport);
         Map<String, Object> paramt = new HashMap<String, Object>();
         paramt.put("ReportTitle", "Profile Report");
         
         /* TODO---  faltan librerias de 'seam-reports-jasper' [null = new JRBeanCollectionDataSource()]*/
-        Report reporInstance = report.fill(null, paramt);
+        Report reporInstance = report.fill(new JRBeanCollectionDataSource(ps.findAll()), paramt);
         
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         pdfRenderer.render(reporInstance, os);
