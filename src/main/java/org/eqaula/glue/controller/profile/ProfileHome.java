@@ -41,6 +41,7 @@ import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.profile.ProfileService;
 import org.eqaula.glue.security.authentication.Authentication;
+import org.eqaula.glue.security.authorization.SecurityRules;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.web.ParamsBean;
 import org.jboss.seam.international.status.Messages;
@@ -143,11 +144,14 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     public Profile load() {
         if (isIdDefined()) {
             wire();
-        } else {
-            if (identity.isLoggedIn()) {
+        } else if(this.instance == null){
+            
+            if (identity.isLoggedIn() && !(identity.inGroup(SecurityRules.ADMIN, "GROUP") || "admin".contains(SecurityRules.getUsername(identity)))) {                
                 setInstance(ps.getProfileByUsername(identity.getUser().getKey()));
-            } else {
-                setInstance(new Profile());
+                log.info("eqaula--> Perfil cargado con id user");
+            } else if (identity.isLoggedIn() && (identity.inGroup(SecurityRules.ADMIN, "GROUP") || "admin".contains(SecurityRules.getUsername(identity)))){
+                setInstance(createInstance());
+                log.info("eqaula--> Ingreso a crear Perfil");
             }
         }
         return getInstance();

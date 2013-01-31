@@ -24,7 +24,10 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import org.eqaula.glue.cdi.Current;
+import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.config.SettingHome;
+import org.eqaula.glue.model.config.Setting;
 import org.eqaula.glue.service.SettingService;
 import org.eqaula.glue.util.UI;
 
@@ -34,24 +37,31 @@ import org.eqaula.glue.util.UI;
  */
 @RequestScoped
 @FacesValidator("wordAvailabilityValidator")
-public class WordAvailabilityValidator implements Validator {
+public class SettingNameAvailabilityValidator implements Validator {
 
     @Inject
     private EntityManager em;
     @Inject
     private SettingService settingService;
-    
     @Inject
-    private SettingHome settingHome;
+    @Current
+    private Setting setting;
 
     @Override
     public void validate(FacesContext fc, UIComponent uic, Object value)
-            throws ValidatorException {
-        if (value instanceof String && !value.equals(settingHome.getInstance().getName())) {
-            settingService.setEntityManager(em);
-            if (!settingService.isWordAvailable((String) value)) {
-                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("El nombre indicado para esta propiedad ya está en us"), null));
-            }
+            throws ValidatorException {        
+        settingService.setEntityManager(em);
+        String currentName = "";
+        if (setting.isPersistent()) {  //controla objeto en edicion            
+            currentName = settingService.find(setting.getId()).getName();
         }
+
+        if (!currentName.equals(value)) {
+            if (value instanceof String ) {
+                if (!settingService.isNameAvailable((String) value)) {
+                    throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("El nombre indicado para esta propiedad ya está en us"), null));
+                }
+            }
+        } 
     }
 }

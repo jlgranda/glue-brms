@@ -69,12 +69,12 @@ public class SettingService extends PersistenceUtil<Setting> {
         return result;
     }
     
-    public boolean isWordAvailable(String name) {
+    public boolean isNameAvailable(String name) {
         try {
            Setting b = getSettingByName(name);
-            if(b != null){
+            if(b != null){                
                 return false;
-            }else{
+            }else{                
                 return true;
             }
         } catch (NoResultException e) {
