@@ -34,7 +34,6 @@
 package org.eqaula.glue.model.accounting;
 
 import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -43,7 +42,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import org.eqaula.glue.model.BussinesEntity;
-import org.eqaula.glue.model.PersistentObject;
 
 
 /**

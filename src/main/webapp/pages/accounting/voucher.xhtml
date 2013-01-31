@@ -47,40 +47,75 @@ limitations under the License.
 
         <h:form id="form">
             <h:panelGroup layout="block" class="clearfix" rendered="true">
-                <h:outputLabel value="POR:" />
-                <h:outputText value="$5" styleClass="xLarge span4" />
 
-                <br/>
-                <br/>
-                <br/>
-                <h:outputLabel value="Fecha de Pago:" />
-                <!-- <div class="input">
-                     <p:calendar value="#" navigator="true" label="#"
-                                 rendered="#">
-                         <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
-                     </p:calendar>
-                 </div> -->
 
+
+                <label for="postingtype_" class="">#{messages['module.account.posting.type']}</label>
                 <div class="input">
-                    <p:inputText  value="1/03/2013" styleClass="xLarge span4" required="true" label="#" 
-                                  rendered="true" >
-                    </p:inputText>
+                    <p:selectOneMenu id="postingtype_" value="#{postingHome.instance.postingType}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
+                                     rendered="true" label="#{messages['module.account.posting.type']}">
+                        <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                        <f:selectItems value="#{postingHome.postingTypes}" var="accountType1" itemLabel="#{accountType1}" itemValue="#{accountType1}"/>                          
+                        <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                    </p:selectOneMenu>                        
                 </div>
 
-                <h:outputLabel value="Pago a favor de:" />
+                <br />
+                <br />
+
+                <glue:input id="amount" name="amount" type="decimal" 
+                            label="#{messages['module.accounting.amount']}" 
+                            value="#{postingHome.instance.amount}" required="true" 
+                            execute="@this save" render="amount" />
+
+                <label for="paymentDate"> #{messages['module.accounting.posting.paymentdate']}*</label>
                 <div class="input">
-                    <p:inputText  value="José Luis Granda" styleClass="xLarge span4" required="true" label="#" 
-                                  rendered="true" >
-                    </p:inputText>
+                    <p:calendar id="paymentDate" value="#{postingHome.instance.paymentDate}" 
+                                label="#{messages['module.accounting.posting.paymentdate']}"
+                                navigator="true" 
+                                showOn="button"
+                                required="true"
+                                rendered="true">
+                        <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
+                    </p:calendar>
                 </div>
 
-                <h:outputLabel value="Son:" />
+                <br />
+                <br />
+
+                <glue:input id="amountInLetters" name="amountInLetters" type="text" 
+                            label="#{messages['module.accounting.posting.amountinletters']}"
+                            value="#{postingHome.instance.amountInLetters}"  required="true"
+                            execute="@this save" render="amountInLetters" />
+
+
+
+                <!-- <glue:input id="consigne" name="consigne" type="text" 
+                             label="Pago a favor de: "
+                             value="#{postingHome.instance.consigne}"  
+                             execute="@this save" render="consigne" /> -->
+
+
+
+                <label for="consigne"> Pago a favor de: *</label>
                 <div class="input">
-                    <p:inputText  value="5 Dólares" styleClass="xLarge span4" required="true" label="#" 
-                                  rendered="true" >
-                    </p:inputText>
+                    <p:selectOneMenu id="consigne" value="#{postingHome.instance.consigne}" effect="fade"  
+                                     required="true" requiredMessage="false"
+                                     rendered="true"
+                                     converter="org.eqaula.glue.faces.converter.GenericConverter">
+
+                        <f:selectItem  itemLabel = "#{messages['common.choice']}" />  
+                        <f:selectItems value="#{postingHome.profiles}" var="account" itemLabel="#{account.name}" itemValue="#{account.name}"/>                          
+
+                        <f:converter converterId="org.eqaula.glue.faces.converter.GenericConverter"/>
+                    </p:selectOneMenu>
+
+
                 </div>
 
+                <br />
+                <br />
+<!--
                 <h:outputLabel value="Docuemento de respaldo:" />
                 <div class="input">
                     <p:inputText  value="Factura" styleClass="xLarge span4" required="true" label="#" 
@@ -88,14 +123,15 @@ limitations under the License.
                     </p:inputText>
                 </div>
 
+-->
 
 
             </h:panelGroup>
 
 
             <div class="admin-actions">
-                <p:commandButton id="save" value="#{messages['common.add']}" rendered="true"
-                                 action="#{postingHome.addEntry()}" 
+                <p:commandButton id="save" value="#{messages['common.save']}" rendered="true"
+                                 action="#{postingHome.savePosting()}" 
                                  update="entries"
                                  ajax="true" 
                                  process="@this" styleClass="btn primary"
@@ -114,9 +150,10 @@ limitations under the License.
                     #{messages['module.accounting.posting']}
                 </f:facet>  
 
-               <p:column headerText="Id">
+                <p:column headerText="Id">
                     <h:outputText value="#{entry.account.id}" />
                 </p:column>
+
 
                 <p:column headerText="#{messages['common.name']}" sortBy="">
 
@@ -126,17 +163,27 @@ limitations under the License.
                         </f:facet>  
 
                         <f:facet name="input">  
-                            <p:selectOneMenu id="parent_" value="#{entry.account}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="false" 
-                                             rendered="true" label="#{messages['Account']}">
-                                <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
-                                <f:selectItems value="#{accountHome.accounts}" var="parentItem" itemLabel="#{parentItem.name}" itemValue="#{parentItem}"/>                          
-                                <f:converter converterId="org.eqaula.glue.faces.converter.AccountConverter"/>
-                                <!-- <p:ajax event="change" update="@parent " partialSubmit="true"/>-->
-                            </p:selectOneMenu>
 
+                            <div class="input">
+                                <p:selectOneMenu id="parent_" value="#{entry.account}" effect="fade"  
+                                                 required="true" requiredMessage="false"
+                                                 rendered="true" label="#{messages['Account']}"
+                                                 converter="org.eqaula.glue.faces.converter.GenericConverter">
+
+                                    <f:selectItem  itemLabel = "#{messages['common.choice']}" />  
+                                    <f:selectItems value="#{postingHome.accounts}" var="account" itemLabel="#{account.name}" itemValue="#{account.name}"/>                          
+
+                                    <f:converter converterId="org.eqaula.glue.faces.converter.GenericConverter"/>
+
+
+                                </p:selectOneMenu>
+
+                            </div>
                         </f:facet>  
                     </p:cellEditor>  
                 </p:column>               
+
+
 
                 <p:column headerText="Debe">
                     <p:cellEditor>  
