@@ -44,25 +44,20 @@ limitations under the License.
     </ui:define>
 
     <ui:define name="content">          
-
         <h:form id="form">
             <h:panelGroup layout="block" class="clearfix" rendered="true">
-
-
-
                 <label for="postingtype_" class="">#{messages['module.account.posting.type']}</label>
                 <div class="input">
-                    <p:selectOneMenu id="postingtype_" value="#{postingHome.instance.postingType}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
+                    <p:selectOneMenu id="postingtype_" value="#{postingHome.instance.postingType}" effect="fade"  
+                                     converter="omnifaces.GenericEnumConverter" required="true" requiredMessage="false" 
                                      rendered="true" label="#{messages['module.account.posting.type']}">
                         <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
-                        <f:selectItems value="#{postingHome.postingTypes}" var="accountType1" itemLabel="#{accountType1}" itemValue="#{accountType1}"/>                          
+                        <f:selectItems value="#{postingHome.postingTypes}" var="postingType" itemLabel="#{postingType}" itemValue="#{postingType}"/>                          
                         <p:ajax event="change" update="@parent " partialSubmit="true"/>
                     </p:selectOneMenu>                        
                 </div>
-
                 <br />
                 <br />
-
                 <glue:input id="amount" name="amount" type="decimal" 
                             label="#{messages['module.accounting.amount']}" 
                             value="#{postingHome.instance.amount}" required="true" 

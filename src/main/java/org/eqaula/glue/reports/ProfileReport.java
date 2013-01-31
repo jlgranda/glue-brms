@@ -82,6 +82,7 @@ public class ProfileReport {
         Map<String, Object> params = new HashMap<String, Object> ();
         params.put("ReportTitle", "Profile Report");
 
+        //TODO cargar el reporte desde una consulta SQL
         Report reportInstance = report.fill(
                 new JRBeanCollectionDataSource(profileListService.getResultList()), params);
 

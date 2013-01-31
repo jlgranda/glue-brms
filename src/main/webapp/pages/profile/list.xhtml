@@ -80,13 +80,13 @@ limitations under the License.
                 <h:commandLink id="button-print" value="#{messages['common.print']}" actionListener="#{profileReport.createPdf()}" styleClass="btn"> 
                 </h:commandLink>
             </div>
-            <p:dataTable var="profile_" value="#{profileListService}"
+            <p:dataTable id="profileDataTable"  var="profile_" value="#{profileListService}"
                          paginator="true" rows="10"
                          paginatorAlwaysVisible="false"
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
                          rowsPerPageTemplate="5,10,15"
-                         id="profileDT" lazy="true"
+                         lazy="true"
                          selection="#{profileListService.selectedProfile}"
                          rendered="true"
                          selectionMode="single">
@@ -127,18 +127,18 @@ limitations under the License.
                 </p:column>
             </p:dataTable>          
 
-            <h:panelGrid id="cod" class="columns" >
+            <h:panelGrid id="export" class="columns" >
                 <p:panel>
                     <h:outputText value="Exportar Datos" />  
                     <br/>
                     <h:commandLink >  
                         <p:graphicImage value="/resources/images/pdf.png" />  
-                        <p:dataExporter type="pdf" target="profileDT" fileName="profiles" class="stext"/>  
+                        <p:dataExporter type="pdf" target="profileDataTable" fileName="profiles" class="stext"/>  
                     </h:commandLink>
                     #{''}
                     <h:commandLink >  
                         <p:graphicImage value="/resources/images/xls1.png" />  
-                        <p:dataExporter type="xls" target="profileDT" fileName="profiles"/>  
+                        <p:dataExporter type="xls" target="profileDataTable" fileName="profiles"/>  
                     </h:commandLink>
                 </p:panel>
             </h:panelGrid>

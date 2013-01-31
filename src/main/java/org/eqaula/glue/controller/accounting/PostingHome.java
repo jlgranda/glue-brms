@@ -54,6 +54,7 @@ import org.eqaula.glue.util.UI;
 public class PostingHome extends BussinesEntityHome<Posting> implements Serializable {
     
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(PostingHome.class);
+    private static final long serialVersionUID = -4464974576034303670L;
     @Inject
     @Web
     private EntityManager em;
@@ -107,29 +108,14 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
     
     @Override
     protected Posting createInstance() {
-        log.info("eqaula --> PostingHome create instance");
         Date now = Calendar.getInstance().getTime();
         Posting posting = new Posting();
         posting.setCreatedOn(now);
         posting.setLastUpdate(now);
         posting.setActivationTime(now);
         posting.setExpirationTime(Dates.addDays(now, 364));
-        
-//        Ledger ledger = new Ledger();
-//        ledger.setName("Libro diario");
-//        ledger.setDescription("esta es una descripción de prueba para ledger");
-//        ledger.setCreatedOn(now);
-//        ledger.setLastUpdate(now);        
-//        posting.setLedger(ledger);
-        //AGregar entries manualmente
-
-       
-        
-        Account a = accountService.getAccountById(Long.parseLong("757"));
-        posting.addEntry(a, 40);
-        //account.setAuthor(accountSecurity.getLoggedIn());
-        //account.buildAttributes(bussinesEntityService); //Sólo si se definen tipo personalizados para este tipo de objeto
-        return posting;
+        posting.setPaymentDate(now);
+       return posting;
     }
     
     public String addEntry(ActionEvent e) {

@@ -35,7 +35,6 @@ import javax.persistence.criteria.Root;
 import org.eqaula.glue.controller.Expressions.ValueExpression;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
-import org.jboss.seam.transaction.Transactional;
 
 /**
  * Seam 2 Home Class Clone
