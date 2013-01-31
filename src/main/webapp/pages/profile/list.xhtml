@@ -72,6 +72,9 @@ limitations under the License.
                     <f:param name="username" value="#{profileListService.selectedProfile.username}"></f:param>
                     <f:param name="backView" value="list"></f:param>
                 </h:link>
+                #{' '}
+                <h:commandLink id="button-print" value="#{messages['common.print']}" actionListener="#{profileReport.createPdf()}" styleClass="btn"> 
+                </h:commandLink>
             </div>
             <p:dataTable var="profile_" value="#{profileListService}"
                          paginator="true" rows="10"

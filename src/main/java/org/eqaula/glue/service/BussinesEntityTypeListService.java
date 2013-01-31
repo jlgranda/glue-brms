@@ -61,15 +61,11 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
     public BussinesEntityTypeListService() {
         setPageSize(MAX_RESULTS);
         resultList = new ArrayList<BussinesEntityType>();
-        log.info("Service initialized!");
     }
 
     public List<BussinesEntityType> getResultList() {
-        log.info("load BussinesEntityType");
         if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-            //resultList = bussinesEntityService.find(this.getPageSize(), firstResult, getSelectedBussinesEntityType());
             resultList = bussinesEntityTypeService.find(this.getPageSize(), firstResult);
-            log.info("eqaula --> resultlist " + resultList);
         }
 
         return resultList;
@@ -151,11 +147,7 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
     public void setSelectedBussinesEntityType(BussinesEntityType selectedBussinesEntityType) {
         this.selectedBussinesEntityType = selectedBussinesEntityType;
     }
-//    @Override
-//    public List<BussinesEntityType> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-    
+
     @Override
     public List<BussinesEntityType> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
 

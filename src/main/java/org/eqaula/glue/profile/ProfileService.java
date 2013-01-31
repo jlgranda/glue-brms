@@ -34,23 +34,20 @@ package org.eqaula.glue.profile;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
-
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.BussinesEntity;
-import org.eqaula.glue.util.PersistenceUtil;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.model.profile.Profile_;
 import org.eqaula.glue.service.BussinesEntityService;
-
+import org.eqaula.glue.util.PersistenceUtil;
 import org.eqaula.glue.util.Strings;
 
 /**

@@ -25,9 +25,6 @@ import javax.ejb.TransactionAttribute;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -40,14 +37,12 @@ import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.profile.ProfileService;
-import org.eqaula.glue.security.authentication.Authentication;
 import org.eqaula.glue.security.authorization.SecurityRules;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.web.ParamsBean;
 import org.jboss.seam.international.status.Messages;
 import org.jboss.seam.security.Authenticator;
 import org.jboss.seam.security.Credentials;
-import org.jboss.seam.security.CredentialsImpl;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.security.external.openid.OpenIdAuthenticator;
 import org.jboss.seam.security.management.IdmAuthenticator;
@@ -148,10 +143,8 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
             
             if (identity.isLoggedIn() && !(identity.inGroup(SecurityRules.ADMIN, "GROUP") || "admin".contains(SecurityRules.getUsername(identity)))) {                
                 setInstance(ps.getProfileByUsername(identity.getUser().getKey()));
-                log.info("eqaula--> Perfil cargado con id user");
             } else if (identity.isLoggedIn() && (identity.inGroup(SecurityRules.ADMIN, "GROUP") || "admin".contains(SecurityRules.getUsername(identity)))){
                 setInstance(createInstance());
-                log.info("eqaula--> Ingreso a crear Perfil");
             }
         }
         return getInstance();

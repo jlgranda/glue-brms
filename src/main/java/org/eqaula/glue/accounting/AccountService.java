@@ -23,11 +23,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import org.drools.rule.Collect;
-import org.eqaula.glue.model.accounting.Account_;
 import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.PersistenceUtil;
@@ -38,6 +33,7 @@ import org.eqaula.glue.util.Strings;
  * @author jlgranda
  */
 public class AccountService extends PersistenceUtil<Account> {
+    private static final long serialVersionUID = -1257741935861354291L;
 
     public AccountService() {
         super(Account.class);

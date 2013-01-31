@@ -16,77 +16,100 @@
 package org.eqaula.glue.reports;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Resource;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
-import org.eqaula.glue.cdi.Current;
-import org.eqaula.glue.model.profile.Profile;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.eqaula.glue.cdi.Web;
+import org.eqaula.glue.controller.config.SettingHome;
+import org.eqaula.glue.service.ProfileListService;
 import org.jboss.seam.reports.Report;
 import org.jboss.seam.reports.ReportCompiler;
 import org.jboss.seam.reports.ReportDefinition;
 import org.jboss.seam.reports.ReportRenderer;
-//import org.jboss.seam.reports.jasper.annotations.Jasper; 
+import org.jboss.seam.reports.jasper.annotations.Jasper;
 import org.jboss.seam.reports.output.PDF;
+import org.jboss.solder.resourceLoader.Resource;
 
 /**
  *
  * @author cesar
  */
-@Named(value="profileReport")
+@Named(value = "profileReport")
+@RequestScoped
 public class ProfileReport {
     
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ProfileReport.class);
     @Inject
-    @Resource()
-    private InputStream sourceReport;
-    
+    @Web
+    private EntityManager em;
+
     @Inject
-    //@Jasper
-    private ReportCompiler compiler;
-    
-    //@Jasper
-    //private JRDataSource 
-    
-    @Inject  
-//    @Jasper  
-    @PDF  
-    private ReportRenderer pdfRenderer; 
-    
+    @Resource("profilesReport.jrxml")
+    InputStream sourceReport;
     @Inject
-    @Current
-    private Profile profile;
+    @Jasper
+    ReportCompiler compiler;
+    @Jasper
+    JRDataSource jasperDataSource;
+    @Inject
+    @Jasper
+    @PDF
+    ReportRenderer pdfRenderer;
+    @Inject
+    ProfileListService profileListService;
     
-    public ByteArrayOutputStream generateProfileReport() throws IOException{
-        ReportDefinition report = compiler.compile(sourceReport);
-        Map<String, Object> paramt = new HashMap<String, Object>();
-        paramt.put("ReportTitle", "Profile Report");
-        
-        /* TODO---  faltan librerias de 'seam-reports-jasper' [null = new JRBeanCollectionDataSource()]*/
-        Report reporInstance = report.fill(null, paramt);
-        
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        pdfRenderer.render(reporInstance, os);
-        return os;
-        
+    @PostConstruct
+    public void init() {
+       log.info("eqaula ----> started report profile!");
     }
-    
-    public void CreatePDF() throws IOException{
+
+    public ByteArrayOutputStream generateProfileReport() throws Exception {
+
+        ReportDefinition report = compiler.compile(sourceReport);
+
+        Map<String, Object> params = new HashMap<String, Object> ();
+        params.put("ReportTitle", "Profile Report");
+
+        Report reportInstance = report.fill(
+                new JRBeanCollectionDataSource(profileListService.getResultList()), params);
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+        pdfRenderer.render(reportInstance, os);
+
+        return os;
+
+    }
+
+    public void createPdf() throws Exception {
+
+        log.info("eqaula ----> print to pdf");
         byte[] pdfData = generateProfileReport().toByteArray();
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ExternalContext externalContext = facesContext.getExternalContext();
-        
-        HttpServletResponse response = (HttpServletResponse)externalContext.getResponse();
+        HttpServletResponse response =
+                (HttpServletResponse) externalContext.getResponse();
+
         response.reset();
-        response.setContentType("profile/pdf");
-        response.setHeader("Content-disposition", "attachment; filename=\"profileReport.pdf\"");
-        
+        response.setContentType("application/pdf");
+        response.setHeader("Content-disposition",
+                "attachment; filename=\"profileReport.pdf\"");
+
         OutputStream output = response.getOutputStream();
+        output.write(pdfData);
+        output.close();
+
+        facesContext.responseComplete();
     }
 }

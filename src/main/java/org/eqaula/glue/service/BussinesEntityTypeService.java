@@ -16,13 +16,11 @@
 package org.eqaula.glue.service;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.BussinesEntityType_;
 import org.eqaula.glue.model.Structure;
@@ -49,8 +47,6 @@ public class BussinesEntityTypeService extends PersistenceUtil<BussinesEntityTyp
     //metodo buscar por nombre
     public BussinesEntityType findByName(final String name) {
 
-        log.info("find BussinesEntityType with name " + name);
-
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<BussinesEntityType> query = builder.createQuery(BussinesEntityType.class);
 
@@ -63,7 +59,6 @@ public class BussinesEntityTypeService extends PersistenceUtil<BussinesEntityTyp
 
     //metodo buscar  lista de BussinesEntityType
     public List<BussinesEntityType> find(int maxresults, int firstresult) {
-        log.info("find BussinesEntityType, max results " + maxresults + " next result " + firstresult);
 
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<BussinesEntityType> query = builder.createQuery(BussinesEntityType.class);
@@ -88,7 +83,6 @@ public class BussinesEntityTypeService extends PersistenceUtil<BussinesEntityTyp
     }
 
     public Structure getStructure(Long id) {
-        log.info("eqaula--> find Strucure with name " + id);
         Query c = em.createNamedQuery("Structure.findForId");
         Structure e = new Structure();
         c.setParameter("id", id);

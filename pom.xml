@@ -39,7 +39,7 @@
         <primefaces.version>3.4.2</primefaces.version>
         <prettyfaces-jsf2.version>3.3.2</prettyfaces-jsf2.version>
         <seam.mail.version>3.1.1.Final</seam.mail.version>
-        
+        <seam-reports-version>3.1.0.Final</seam-reports-version>  
     </properties>
 
 
@@ -279,7 +279,7 @@
             <artifactId>prettytime</artifactId>
             <version>${prettytime.version}</version>
         </dependency>
-            
+          
         <!-- OCPSoft dependencies -->
         <dependency>
             <groupId>org.ocpsoft.rewrite</groupId>
@@ -418,10 +418,52 @@
             <scope>compile</scope>
             <version>${seam.mail.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+        </dependency>
         
+        <dependency>
+            <groupId>org.jboss.seam.reports</groupId>
+            <artifactId>seam-reports-api</artifactId>
+            <version>${seam-reports-version}</version>
+            <scope>compile</scope>
+        </dependency>
         
+        <dependency>
+            <groupId>org.jboss.seam.reports</groupId>
+            <artifactId>seam-reports-jasper</artifactId>  
+            <version>${seam-reports-version}</version>  
+            <scope>compile</scope>
+            <exclusions>  
+                <exclusion>  
+                    <groupId>dom4j</groupId>  
+                    <artifactId>dom4j</artifactId>  
+                </exclusion>  
+            </exclusions>  
+        </dependency>
         
-        
+        <dependency>
+        <groupId>net.sf.jasperreports</groupId>
+        <artifactId>jasperreports</artifactId>
+        <version>4.1.2</version>
+        <scope>compile</scope>
+        <exclusions>
+            <exclusion>
+                <artifactId>dom4j</artifactId>
+                <groupId>dom4j</groupId>
+            </exclusion>
+            <exclusion>
+                <artifactId>bcmail-jdk14</artifactId>
+                <groupId>bouncycastle</groupId>
+            </exclusion>
+            <exclusion>
+                <artifactId>bcprov-jdk14</artifactId>
+                <groupId>bouncycastle</groupId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+
     </dependencies>
 
     <build>

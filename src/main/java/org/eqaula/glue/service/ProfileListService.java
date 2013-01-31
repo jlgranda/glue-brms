@@ -61,13 +61,11 @@ public class ProfileListService extends LazyDataModel<Profile> {
     
     public ProfileListService() {
         setPageSize(MAX_RESULTS);
-        log.info("Service initialized profile!");
         resultList = new ArrayList<Profile>();
     }
 
     @PostConstruct
     public void init() {
-        log.info("Setup entityManager into bussinesEntityTypeService...");
         profileService.setEntityManager(entityManager);
     }
 
@@ -101,13 +99,9 @@ public class ProfileListService extends LazyDataModel<Profile> {
     }
 
     public List<Profile> getResultList() {
-        log.info("load BussinesEntityType");
         if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-            //resultList = bussinesEntityService.find(this.getPageSize(), firstResult, getSelectedBussinesEntityType());
             resultList = profileService.getProfiles(this.getPageSize(), firstResult);
-            log.info("eqaula --> resultlist " + resultList);
         }
-
         return resultList;
     }
 
@@ -128,7 +122,6 @@ public class ProfileListService extends LazyDataModel<Profile> {
     }
 
     public void setFirstResult(int firstResult) {         
-        log.info("set first result + firstResult");
         this.firstResult = firstResult;
         this.resultList = null;
     }
