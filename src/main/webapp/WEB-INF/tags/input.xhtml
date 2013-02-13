@@ -36,20 +36,23 @@ limitations under the License.
     <c:set var="validator" value="#{not empty validator ? validator : 'safeTextUTF8Validator'}" />
     <c:set var="converter" value="#{not empty converter ? converter : omnifaces.SelectItemsConverter}" />    
     <c:set var="disabled" value="#{not empty disabled ? disabled : 'false'}" />    
+    <c:set var="size" value="#{not empty size ? size: '26'}" />    
     <!-- TODO habilitar o deshabilitar ajax validation -->
     <h:panelGroup id="panel-group-#{id}" layout="block" class="clearfix">
         <label for="#{name}" class="#{(not empty required and required) ? 'required' : ''}">#{label}#{(not empty required and required) ? '*&#160;' : ''}</label>
         <div class="input">
             <c:choose>
                 <c:when test="#{type == 'java.lang.String' or type == 'text'}">
-                    <p:inputText value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}" disabled="#{disabled}">
+                    <p:inputText value="#{value}" id="#{name}" styleClass="xLarge span4" 
+                                 required="#{required}" label="#{label}" disabled="#{disabled}"
+                                 size="#{size}">
                         <f:validator validatorId="#{validator}"/>
                         <p:ajax event="blur" update="#{render}" partialSubmit="true"/>
                     </p:inputText>
                 </c:when>
                 <c:when test="#{type == 'java.util.Date' or type == 'calendar'}">
-                    <p:calendar value="#{a.value}" id="#{name}" navigator="true" label="#{label}">
-                        <p:ajax event="dateSelect" listener="#{listener}" update="#{render}" />
+                    <p:calendar value="#{value}" id="#{name}" navigator="true" label="#{label}" disabled="false">
+                        <p:ajax event="dateSelect" update="#{render}" partialSubmit="true"/>
                     </p:calendar>  
                 </c:when>
                 <c:when test="#{type == 'java.lang.Boolean' or type == 'checkbox'}">
@@ -59,9 +62,10 @@ limitations under the License.
                     <span>#{inlinehelp}</span>
                 </c:when>
                 <c:when test="#{type == 'java.lang.MultiLineString' or type == 'textarea'}">
-                    <h:inputTextarea value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}" style="width: 400px; height: 100px;" >
-                        <f:ajax execute="#{execute}" render="#{render}"  />
-                    </h:inputTextarea>
+                    <p:inputTextarea value="#{value}" id="#{name}" styleClass="xLarge span4" 
+                                     required="#{required}" label="#{label}" style="width: 250px; height: 100px;">
+                        <p:ajax update="#{render}" partialSubmit="true"/>
+                    </p:inputTextarea>
                 </c:when>
                 <c:when test="#{type == 'java.lang.String[]' or type == 'select'}">
                     <p:selectOneMenu value="#{value}" effect="fade"  converter="#{converter}" required="#{required}" requiredMessage="#{requiredMessage}">  

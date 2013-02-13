@@ -387,4 +387,5 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         List<BussinesEntityAttribute> temp = getBussinessEntityAttributes(names.split(","));
         return temp;
     }
+    
 }

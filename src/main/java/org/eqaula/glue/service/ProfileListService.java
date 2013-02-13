@@ -100,8 +100,8 @@ public class ProfileListService extends LazyDataModel<Profile> {
     }
 
     public List<Profile> getResultList() {
-        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-            resultList = profileService.getProfiles(this.getPageSize(), firstResult);
+        if (resultList.isEmpty()) {
+            resultList = profileService.getProfiles();
         }
         return resultList;
     }

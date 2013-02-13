@@ -37,9 +37,9 @@ public class GenericConverter implements Serializable, Converter {
     private EntityManager em;
 
     public GenericConverter() {
+        System.out.println("GenericConverter started up");
         try {
             Properties p = System.getProperties();
-            System.out.println("POLICY ADDED");
             final Context ctx = new InitialContext(p);
             em = (EntityManager) //buscamos el contexto devuelve el objeto y lo convierte al em
                     //java:comp/evn es obligatorio
@@ -53,6 +53,8 @@ public class GenericConverter implements Serializable, Converter {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
+         System.out.println("GenericConverter as object " + string);
+        
         if (string.trim().equals("")) {
             return null;
         } else {
@@ -69,7 +71,7 @@ public class GenericConverter implements Serializable, Converter {
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object o) {
         if (o == null || o.equals("")) {
-            return "";
+            return null;
         } else {
             try {
                 return String.valueOf(getId(o));

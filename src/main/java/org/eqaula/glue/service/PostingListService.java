@@ -64,10 +64,8 @@ public class PostingListService extends LazyDataModel<Posting> {
     }
 
     public List<Posting> getResultList() {
-        log.info("load BussinesEntityType");
-        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-            resultList = postingService.getPostings(this.getPageSize(), firstResult);
-            log.info("eqaula --> resultlist " + resultList);
+        if (resultList.isEmpty()) {
+            resultList = postingService.findAll();
         }
         return resultList;
     }
@@ -121,7 +119,6 @@ public class PostingListService extends LazyDataModel<Posting> {
 
     @PostConstruct
     public void init() {
-        log.info("Setup entityManager into WareHouseService...");
         postingService.setEntityManager(entityManager);
     }
 

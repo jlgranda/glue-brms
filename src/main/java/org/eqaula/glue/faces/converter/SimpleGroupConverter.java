@@ -22,15 +22,16 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import org.eqaula.glue.cdi.Web;
-import org.eqaula.glue.model.profile.Profile;
 import org.omnifaces.converter.SelectItemsConverter;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.common.exception.IdentityException;
+import org.picketlink.idm.impl.api.model.GroupKey;
 import org.picketlink.idm.impl.api.model.SimpleGroup;
 
 /**
@@ -40,7 +41,7 @@ import org.picketlink.idm.impl.api.model.SimpleGroup;
 
 @RequestScoped
 @FacesConverter("org.eqaula.glue.faces.converter.SimpleGroupConverter")
-public class SimpleGroupConverter extends SelectItemsConverter {
+public class SimpleGroupConverter implements Converter {
 
     
     @Inject
@@ -71,7 +72,7 @@ public class SimpleGroupConverter extends SelectItemsConverter {
                     Logger.getLogger(SimpleGroupConverter.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } catch (NoResultException e) {
-                return new Profile();
+                return new SimpleGroup(new GroupKey("none"));
             }
 
         }

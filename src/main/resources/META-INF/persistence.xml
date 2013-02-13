@@ -7,6 +7,7 @@
     <class>org.eqaula.glue.model.management.Owner</class>
     <class>org.eqaula.glue.model.management.Perspective</class>
     <class>org.eqaula.glue.service.StockService</class>
+    <class>org.eqaula.glue.service.LedgerService</class>
     <properties>
       <!-- Properties for Hibernate -->
       <property name="hibernate.hbm2ddl.auto" value="update"/>

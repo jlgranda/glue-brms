@@ -41,6 +41,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import org.eqaula.glue.model.BussinesEntity;
 
 
@@ -68,6 +69,12 @@ public class Entry extends BussinesEntity {
     private Account account;
     @Column(nullable = false)
     private BigDecimal amount;
+    
+    @Transient
+    private BigDecimal credit;
+    
+    @Transient
+    private BigDecimal debit;
 
     public Account getAccount() {
         return account;
@@ -91,5 +98,21 @@ public class Entry extends BussinesEntity {
 
     public void setPosting(Posting posting) {
         this.posting = posting;
+    }
+
+    public BigDecimal getCredit() {
+        return credit;
+    }
+
+    public void setCredit(BigDecimal credit) {
+        this.credit = credit;
+    }
+
+    public BigDecimal getDebit() {
+        return debit;
+    }
+
+    public void setDebit(BigDecimal debit) {
+        this.debit = debit;
     }
 }

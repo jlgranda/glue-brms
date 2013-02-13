@@ -36,7 +36,7 @@
         <drools.version>5.5.0.Beta1</drools.version>
         <javaee6.web.spec.version>3.0.1.Final</javaee6.web.spec.version>
         <jboss-javaee-6.0.version>2.0.0.Final</jboss-javaee-6.0.version>
-        <primefaces.version>3.4.2</primefaces.version>
+        <primefaces.version>3.5</primefaces.version>
         <prettyfaces-jsf2.version>3.3.2</prettyfaces-jsf2.version>
         <seam.mail.version>3.1.1.Final</seam.mail.version>
         <seam-reports-version>3.1.0.Final</seam-reports-version>  

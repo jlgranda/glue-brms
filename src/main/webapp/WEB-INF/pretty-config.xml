@@ -111,7 +111,17 @@
    
     <url-mapping id="voucher">
       <pattern value="/voucher"></pattern>
-      <view-id value="/pages/accounting/voucher.xhtml"></view-id>
+      <view-id value="/pages/accounting/ledger/voucher.xhtml"></view-id>
+    </url-mapping>
+    
+    <url-mapping id="ledger">
+      <pattern value="/ledger"></pattern>
+      <view-id value="/pages/accounting/ledger/ledger.xhtml"></view-id>
+    </url-mapping>
+    
+    <url-mapping id="ledger-list">
+      <pattern value="/ledgers"></pattern>
+      <view-id value="/pages/accounting/ledger/list.xhtml"></view-id>
     </url-mapping>
    
    

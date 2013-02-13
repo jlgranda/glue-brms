@@ -31,17 +31,18 @@
  */
 package org.eqaula.glue.model.accounting;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -50,9 +51,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import org.eqaula.glue.model.BussinesEntity;
-
-import org.eqaula.glue.model.PersistentObject;
 import org.eqaula.glue.model.profile.Profile;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -65,12 +65,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Table(name = "Posting")
 @DiscriminatorValue(value = "PO")
 @PrimaryKeyJoinColumn(name = "id")
-public class Posting extends BussinesEntity {
+public class Posting extends BussinesEntity implements Serializable {
+    private static final long serialVersionUID = -1338446436740072242L;
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = -4147260077491075807L;
 
     public enum Type {
 
@@ -103,12 +100,11 @@ public class Posting extends BussinesEntity {
     @NotEmpty
     @Column(nullable = false)
     private String memo;
-    @OneToMany(mappedBy = "posting", cascade = {CascadeType.REMOVE,
-        CascadeType.REFRESH})
+    @OneToMany(mappedBy = "posting", cascade = {CascadeType.ALL})
     private List<Entry> entries;
     private BigDecimal amount;
     private String amountInLetters;
-    @ManyToOne
+    @ManyToOne(optional = true, cascade= CascadeType.ALL, fetch= FetchType.LAZY)
     private Profile consigne;
     @Temporal(TemporalType.TIMESTAMP)
     private Date paymentDate;
@@ -230,7 +226,6 @@ public class Posting extends BussinesEntity {
     public void addEntry(Entry e) {
 
         if (!entries.contains(e)) {
-            System.out.println("metodo addEntryde Posting");
             entries.add(e);
             e.setPosting(this);
         }

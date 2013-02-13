@@ -32,6 +32,7 @@
 package org.eqaula.glue.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -55,6 +56,7 @@ import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.Property;
 
 import org.eqaula.glue.model.accounting.Account;
+import org.eqaula.glue.model.accounting.Posting;
 import org.eqaula.glue.service.BussinesEntityService;
 
 @Named("ui")
@@ -148,9 +150,23 @@ public class UI {
     public List<SelectItem> getAccountTypesAsSelectItem() {
         List<SelectItem> items = new ArrayList<SelectItem>();
         SelectItem item = null;
-        item = new SelectItem(null, getMessages("all"));
         items.add(item);
-        for (Account.Type t : Account.Type.values()) {
+        for (Account.Type t : getAccountTypes()) {
+            item = new SelectItem(t, getMessages(t.name()));
+            items.add(item);
+        }
+
+        return items;
+    }
+    
+    public Posting.Type[] getPostingTypes() {
+        return Posting.Type.values();
+    }
+    
+    public List<SelectItem> getPostingTypesAsSelectItem() {
+        List<SelectItem> items = new ArrayList<SelectItem>();
+        SelectItem item = null;
+        for (Posting.Type t : getPostingTypes()) {
             item = new SelectItem(t, getMessages(t.name()));
             items.add(item);
         }

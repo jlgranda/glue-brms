@@ -54,7 +54,7 @@ public class CIAvailabilityValidator implements Validator {
         if (profile.isPersistent()) {
             currentDni = ps.find(profile.getId()).getCode();
         }
-        if (!currentDni.equals(value)) {
+        if (value != null && !value.equals(currentDni)) {
             if (value instanceof String ) {
                 ps.setEntityManager(em);
                 if (!ps.isDniAviable((String) value)) {

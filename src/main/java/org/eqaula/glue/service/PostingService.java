@@ -15,6 +15,8 @@
  */
 package org.eqaula.glue.service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -24,40 +26,32 @@ import org.eqaula.glue.model.accounting.Posting;
 import org.eqaula.glue.model.accounting.Posting_;
 import org.eqaula.glue.model.config.Setting;
 import org.eqaula.glue.model.config.Setting_;
+import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.PersistenceUtil;
 
 /**
  *
  * @author Luis Flores
  */
-public class PostingService extends PersistenceUtil<Posting>{
-    
-    
-    
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityService.class);
+public class PostingService extends PersistenceUtil<Posting> {
+
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(PostingService.class);
     private static final long serialVersionUID = -2654253198159918622L;
 
     public PostingService() {
         super(Posting.class);
     }
-    
+
     @Override
     public void setEntityManager(EntityManager em) {
         this.em = em;
     }
-    
-    
-    
+
     public Posting getPostingById(final Long id) {
         return (Posting) findById(Posting.class, id);
     }
     
-     public List<Posting> getPostings(final int limit, final int offset) {
-        return findAll(Posting.class);
-    }
-     
-     
-     public Posting findByName(final String name) {
+    public Posting findByName(final String name) {
         log.info("find Profile with name " + name);
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Posting> query = builder.createQuery(Posting.class);
@@ -65,6 +59,8 @@ public class PostingService extends PersistenceUtil<Posting>{
         query.where(builder.equal(bussinesEntityType.get(Posting_.name), name));
         return getSingleResult(query);
     }
-
     
+    public List<Posting> findAll(){
+        return super.findAll(Posting.class);
+    }
 }

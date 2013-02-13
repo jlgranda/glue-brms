@@ -192,4 +192,10 @@ public abstract class PersistentObject<E extends PersistentObject<E>> implements
     public void setCode(String code) {
         this.code = code;
     }
+    
+        
+    @Override
+    public String toString(){
+        return String.valueOf(getId());
+    }
 }
