@@ -26,10 +26,12 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Organization;
+import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
@@ -50,6 +52,10 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     private EntityManager em;
     @Inject
     private BussinesEntityService bussinesEntityService;
+    
+    @Current
+    @Inject
+    private Profile profile;
 
     public OrganizationHome() {
     }
@@ -71,7 +77,6 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         if (isIdDefined()) {
             wire();
         }
-        log.info("eqaula --> Loaded instance " + getInstance());
     }
 
     @PostConstruct
@@ -87,7 +92,6 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
 
     @Override
     protected Organization createInstance() {
-        log.info("eqaula --> OrganizationHome create instance");
         BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Organization.class.getName());
         Date now = Calendar.getInstance().getTime();
         Organization organization = new Organization();        
@@ -105,10 +109,9 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         if (getInstance().isPersistent()){
-            log.info("eqaula --> OrganizationHome save instance: "+getInstance().getId());            
-            getInstance().setLastUpdate(now);             
             save(getInstance());
         } else {                        
+            getInstance().setAuthor(this.profile);
             save(getInstance());
         }
         return "/pages/management/organization/list";
@@ -134,7 +137,6 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                 throw new NullPointerException("Organization is null");
             } 
             if (getInstance().isPersistent()) {
-                log.info("eqaula --> ingreso a eliminar: " + getInstance().getId());                
                 delete(getInstance());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
                 RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente

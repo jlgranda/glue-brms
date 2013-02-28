@@ -60,7 +60,7 @@
                                     </h:link>
                                 </li>
                                 <li>
-                                    <h:link outcome="/pages/profile/home" title="#{messages['module.personal']}" value="${messages['module.personal']}">
+                                    <h:link outcome="/pages/management/organization/list" title="#{messages['module.personal']}" value="${messages['module.personal']}">
                                     </h:link>
                                 </li>
                                 <li>
@@ -71,6 +71,60 @@
                         </div>
                     </div>
                 </div>
+            </h:panelGroup>
+        </ui:define>
+
+        <ui:define name="content-pre">
+            <h:panelGroup id="bootcamp" rendered="#{identity.loggedIn}">
+                <h:form rendered="#{userProfile.showBootcamp}">
+                    <div style="margin-bottom: 15px;">
+                        <h1 class="header">#{messages['common.bootglue']} <span>#{messages['common.bootcamp.info']}</span>
+                            <h:commandLink id="close" class="fr" action="#{account.dismissBootcampAjax()}" 
+                                           style="color: white; padding:2px; position: relative; top:-2px; right: -2px;" value="×">
+                                <f:ajax execute="@this" render=":bootcamp"/>
+                            </h:commandLink>
+                        </h1>
+                        <ocp:tooltip forId="bootcamp:close" title="#{messages['']}" placement="left" trigger="hover" />
+                        <div class="body">
+                            <div class="row">
+                                <c:forEach items="#{ui.getProperties(userProfile)}" var="p" >
+                                    <c:choose>
+                                        <c:when test="#{p.type == 'org.eqaula.glue.model.Structure'}">
+                                            <h:link outcome="#{p.customForm != null ? p.customForm : '/pages/profile/data/structure'}">
+                                                <div class="span7 columns" style="margin-left: 48px;">
+                                                    <div class="well" style="height: 225px; width:370px; margin-bottom: 0px;">
+                                                        <p:meterGaugeChart value="#{statistics.buildMeterGaugeModel(statistics.calculeAttributesCompletedPercent(userProfile.id, p.name) * 100)}" 
+                                                                           style="width:370px;height:225px" title="#{p.label}"
+                                                                           seriesColors="d48891,d48891,e4af83,e4af83,82bc82"
+                                                                           showTickLabels="true" labelHeightAdjust="25" intervalOuterRadius="80"
+                                                                           />  
+                                                    </div>
+                                                </div>
+                                                <f:param name="profileId" value="#{userProfile.id}"/>
+                                                <f:param name="structureName" value="#{p.name}"/>
+                                            </h:link>
+                                        </c:when>
+                                        <c:when test="#{p.type == 'org.eqaula.glue.model.Group'}">
+                                            <h:link outcome="/pages/profile/data/group">
+                                                <div class="span7 columns" style="margin-left: 48px;">
+                                                    <div class="well" style="height: 225px; width:370px; margin-bottom: 0px;">
+                                                        <p:meterGaugeChart value="#{statistics.buildMeterGaugeModel(statistics.calculeMembersCompletedPercent(p.minimumMembers, ui.getGroup(userProfile, p).findOtherMembers(userProfile).size()) * 100)}" 
+                                                                           style="width:370px;height:225px" title="#{p.label}"
+                                                                           seriesColors="d48891,d48891,e4af83,e4af83,82bc82"
+                                                                           showTickLabels="true" labelHeightAdjust="25" intervalOuterRadius="80"
+                                                                           />  
+                                                    </div>
+                                                </div>
+                                                <f:param name="groupId" value="#{ui.getGroup(userProfile, p).getId()}"/>
+                                                <f:param name="profileId" value="#{userProfile.id}"/>
+                                            </h:link>
+                                        </c:when>
+                                    </c:choose>
+                                </c:forEach>
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
             </h:panelGroup>
         </ui:define>
 
@@ -123,7 +177,7 @@
                                     </li>
                                 </ui:repeat>
 
-                                <h:panelGroup layout="block" rendered="${projects.count == 0}" styleClass="box">
+                                <h:panelGroup layout="block" rendered="${organizations.count == 0}" styleClass="box">
                                     Looks like you aren't working on anything right now. You can <h:link outcome="/pages/project/create" value="start a new project" /> to get going.
                                 </h:panelGroup>
                             </ul>

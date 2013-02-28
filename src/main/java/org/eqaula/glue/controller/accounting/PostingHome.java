@@ -146,11 +146,11 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
         if (getInstance().isPersistent()) {
             log.info("eqaula --> Saving instance");
             save(getInstance());
-            outcome = "/pages/accounting/ledger/list.xhtml";
+            outcome = "/pages/accounting/ledger/list.xhtml?faces-redirect=true";
         } else {
             log.info("eqaula --> Creating instance");
             save(getInstance());
-            outcome = "/pages/accounting/ledger/list.xhtml";
+            outcome = "/pages/accounting/ledger/list.xhtml?faces-redirect=true";
         }
 
         return outcome;

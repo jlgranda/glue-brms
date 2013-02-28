@@ -51,6 +51,10 @@ public class OrganizationService extends PersistenceUtil<Organization> implement
         return count(Organization.class);
     }
 
+    public List<Organization> getOrganizations() {
+        return findAll(Organization.class);
+    }
+    
     public List<Organization> getOrganizations(final int limit, final int offset) {
         return findAll(Organization.class);
     }

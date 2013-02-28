@@ -94,28 +94,19 @@
                         <f:param name="profileId" value="#{userProfile.id}"/>
                     </h:link>
                 </li>
-                <li>
+                <li class="dropdown">
                     <h:link outcome="/pages/profile/profile" value="#{userProfile.username}">
                         <f:param name="profileId" value="#{userProfile.id}"/>
                     </h:link>
-                    <!--
-
-    <ul class="menu-dropdown">
-        <li>
-            <h:link outcome="/pages/profile/profile" value="#{messages['common.setting']}">
-                <f:param name="profileId" value="#{userProfile.id}"/>
-            </h:link>
-        </li>
-        <li class="divider"></li>
-        <li><h:outputLink value="${request.contextPath}/logout">#{messages['common.logout']}</h:outputLink></li>
-    </ul>
-                    -->
-
-                </li>
-                <li>
-                    <h:outputLink value="${request.contextPath}/logout">#{messages['common.logout']}
-                        <span class="mini-icon mini-icon-logout"></span>
-                    </h:outputLink>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <h:link outcome="/pages/profile/profile" value="#{messages['common.setting']}">
+                                <f:param name="profileId" value="#{userProfile.id}"/>
+                            </h:link>
+                        </li>
+                        <li class="divider"></li>
+                        <li><h:outputLink value="${request.contextPath}/logout">#{messages['common.logout']}</h:outputLink></li>
+                    </ul>
                 </li>
             </h:panelGroup>
         </ui:define>

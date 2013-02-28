@@ -66,10 +66,8 @@ public class OrganizationListService extends LazyDataModel<Organization> {
     }
 
     public List<Organization> getResultList() {
-        log.info("load BussinesEntityType");
-        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-            resultList = organizationService.getOrganizations(this.getPageSize(), firstResult);
-            log.info("eqaula --> resultlist " + resultList);
+        if (resultList.isEmpty()) {
+            resultList = organizationService.getOrganizations();
         }
         return resultList;
     }
@@ -83,7 +81,6 @@ public class OrganizationListService extends LazyDataModel<Organization> {
     }
 
     public void setFirstResult(int firstResult) {
-        log.info("set first result + firstResult");
         this.firstResult = firstResult;
         this.resultList = null;
     }
@@ -123,7 +120,6 @@ public class OrganizationListService extends LazyDataModel<Organization> {
 
     @PostConstruct
     public void init() {
-        log.info("Setup entityManager into OrganizationService...");
         organizationService.setEntityManager(entityManager);
     }
 
