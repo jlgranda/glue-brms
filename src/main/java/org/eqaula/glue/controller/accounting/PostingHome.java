@@ -61,6 +61,11 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
     @Inject
     private LedgerService ledgerService;
 
+    @Override
+    public Class<Posting> getEntityClass() {
+        return Posting.class;
+    }
+
     public Long getPostingId() {
         return (Long) getId();
     }
@@ -187,86 +192,54 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
     }
 
     public BigDecimal totalDebit(Long id) {
-
+        BigDecimal total = new BigDecimal(0);
         try {
             Posting p = postingService.find(id);
-            BigDecimal total = new BigDecimal(0);
             for (Entry e : p.getEntries()) {
-                total = total.add(e.getDebit());
-                log.info("el total es: " + total);
-                log.info("el total es: " + total);
-                log.info("el total es: " + total);
-                log.info("el total es: " + total);
+                if (e.getDebit() != null) {
 
+                    total = total.add(e.getDebit());
+                }
             }
-            log.info("el total es: " + total);
-            log.info("el total es: " + total);
-
-            return total;
         } catch (Exception e) {
-            return new BigDecimal(0);
+            log.info("se ejecutó una excepción");
+            log.info("se ejecutó una excepción");
         }
+        return total;
     }
 
     public BigDecimal totalCredit(Long id) {
-
+        BigDecimal total = new BigDecimal(0);
         try {
             Posting p = postingService.find(id);
-            BigDecimal total = new BigDecimal(0);
             for (Entry e : p.getEntries()) {
-                total = total.add(e.getCredit());
-
-                log.info("el total es: " + total);
-                log.info("el total es: " + total);
-                log.info("el total es: " + total);
-
-
+                if (e.getCredit() != null) {
+                    total = total.add(e.getCredit());
+                }
             }
-            log.info("el total es: " + total);
-            log.info("el total es: " + total);
-
-
-            return total;
         } catch (Exception e) {
-            return new BigDecimal(0);
         }
-    }
-
-    @Override
-    public Class<Posting> getEntityClass() {
-        return Posting.class;
+        return total;
     }
 
     public BigDecimal total(Long id, String amount) {
+        BigDecimal total = new BigDecimal(0);
         try {
             Posting p = postingService.find(id);
-
-
-            BigDecimal total = new BigDecimal(0);
-
-
             for (Entry e : p.getEntries()) {
-                if (amount.equals("debit")) {
-                    total = total.add(e.getDebit());
-                    log.info("el total es: " + total);
-                    log.info("el total es: " + total);
-                    log.info("el total es: " + total);
-                    log.info("el total es: " + total);
-                } else {
-                    total = total.add(e.getCredit());
-                    log.info("el total es: " + total);
-                    log.info("el total es: " + total);
-                    log.info("el total es: " + total);
-                    log.info("el total es: " + total);
+                if (amount.equals("credit")) {
+                    if (e.getCredit() != null) {
+                        total = total.add(e.getCredit());
+                    }
                 }
-
+                if (amount.equals("debit")) {
+                    if (e.getDebit() != null) {
+                        total = total.add(e.getDebit());
+                    }
+                }
             }
-            log.info("el total es: " + total);
-            log.info("el total es: " + total);
-            return total;
-
         } catch (Exception e) {
-            return new BigDecimal(0);
         }
+        return total;
     }
 }

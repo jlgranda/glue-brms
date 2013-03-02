@@ -97,8 +97,8 @@
                     <p:columnGroup type="footer">  
                         <p:row>  
                             <p:column footerText="Total: " style="text-align:right"/>  
-                            <p:column footerText="#{postingHome.totalDebit(_posting.id)}" /> 
-                            <p:column footerText="#{postingHome.totalCredit(_posting.id)}" />  
+                            <p:column footerText="#{postingHome.total(_posting.id, 'debit')}" /> 
+                            <p:column footerText="#{postingHome.total(_posting.id, 'credit')}" />  
                         </p:row> 
                         <p:row>  
                             <p:column footerText="#{_posting.memo}" colspan="3"/>  

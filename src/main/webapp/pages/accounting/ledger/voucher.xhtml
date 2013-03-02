@@ -140,21 +140,23 @@ limitations under the License.
                                                 <p:ajax event="change" update="@form" partialSubmit="true"/>
                                             </p:selectOneMenu>
                                         </td>
+
+                                        <td role="gridcell">
+                                            <pe:inputNumber id="debit" value="#{entry.debit}" 
+                                                            required="#{entry.account.accountType.normalBalanceSign == -1}" 
+                                                            label="#{messages['module.accounting.amount']} #{entry.account.name}"
+                                                            disabled="#{not empty entry.credit and entry.credit > 0 ?true:false}">  
+                                                <p:ajax event="blur" update="@form" partialSubmit="true"/>
+
+                                            </pe:inputNumber>  
+                                        </td>
+
                                         <td role="gridcell">
                                             #{entry.account.accountType.normalBalanceSign}
                                             <pe:inputNumber  id="credit" value="#{entry.credit}"
                                                              required="#{entry.account.accountType.normalBalanceSign == 1}" 
                                                              label="#{messages['module.accounting.amount']} #{entry.account.name}"
                                                              disabled="#{not empty entry.debit and entry.debit > 0 ?true:false}">  
-                                                <p:ajax event="blur" update="@form" partialSubmit="true"/>
-
-                                            </pe:inputNumber>  
-                                        </td>
-                                        <td role="gridcell">
-                                            <pe:inputNumber id="debit" value="#{entry.debit}" 
-                                                            required="#{entry.account.accountType.normalBalanceSign == -1}" 
-                                                            label="#{messages['module.accounting.amount']} #{entry.account.name}"
-                                                            disabled="#{not empty entry.credit and entry.credit > 0 ?true:false}">  
                                                 <p:ajax event="blur" update="@form" partialSubmit="true"/>
 
                                             </pe:inputNumber>  
