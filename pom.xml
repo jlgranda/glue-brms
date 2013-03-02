@@ -39,7 +39,8 @@
         <primefaces.version>3.5</primefaces.version>
         <prettyfaces-jsf2.version>3.3.2</prettyfaces-jsf2.version>
         <seam.mail.version>3.1.1.Final</seam.mail.version>
-        <seam-reports-version>3.1.0.Final</seam-reports-version>  
+        <seam-reports-version>3.1.0.Final</seam-reports-version>
+        <netbeans.hint.deploy.server>JBoss4</netbeans.hint.deploy.server>
     </properties>
 
 

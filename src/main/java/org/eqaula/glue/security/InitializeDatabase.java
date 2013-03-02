@@ -85,14 +85,14 @@ import org.picketlink.idm.common.exception.IdentityException;
  */
 @Transactional(TransactionPropagation.REQUIRED)
 public class InitializeDatabase {
-    
+
     @PersistenceContext(type = PersistenceContextType.EXTENDED)
     private EntityManager entityManager;
     @Inject
     private IdentitySessionFactory identitySessionFactory;
     @Inject
     protected BussinesEntityService bussinesEntityService;
-    
+
     @Transactional
     public void validate(@Observes @Initialized final WebApplication webapp) throws IdentityException {
         bussinesEntityService.setEntityManager(entityManager);
@@ -100,9 +100,9 @@ public class InitializeDatabase {
         validateStructure();
         validateIdentityObjectTypes();
         validateSecurity();
-        
+
     }
-    
+
     private void validateDB() {
         Setting singleResult = null;
         try {
@@ -117,46 +117,46 @@ public class InitializeDatabase {
             entityManager.persist(singleResult);
             entityManager.flush();
         }
-        
+
         System.out.println("Current database schema version is [" + singleResult.getValue() + "]");
-        
+
     }
-    
+
     private void validateIdentityObjectTypes() {
         if (entityManager.createQuery("select t from IdentityObjectType t where t.name = :name")
                 .setParameter("name", "USER")
                 .getResultList().size() == 0) {
-            
+
             IdentityObjectType user = new IdentityObjectType();
             user.setName("USER");
             entityManager.persist(user);
         }
-        
+
         if (entityManager.createQuery("select t from IdentityObjectType t where t.name = :name")
                 .setParameter("name", "GROUP")
                 .getResultList().size() == 0) {
-            
+
             IdentityObjectType group = new IdentityObjectType();
             group.setName("GROUP");
             entityManager.persist(group);
         }
     }
-    
+
     private void validateSecurity() throws IdentityException {
         // Validate credential types
         if (entityManager.createQuery("select t from IdentityObjectCredentialType t where t.name = :name")
                 .setParameter("name", "PASSWORD")
                 .getResultList().size() == 0) {
-            
+
             IdentityObjectCredentialType PASSWORD = new IdentityObjectCredentialType();
             PASSWORD.setName("PASSWORD");
             entityManager.persist(PASSWORD);
         }
-        
+
         Map<String, Object> sessionOptions = new HashMap<String, Object>();
         sessionOptions.put(IdentitySessionProducer.SESSION_OPTION_ENTITY_MANAGER, entityManager);
-        
-        
+
+
         IdentitySession session = identitySessionFactory.createIdentitySession("default", sessionOptions);
         /*
          * Create our test user (me!)
@@ -173,7 +173,7 @@ public class InitializeDatabase {
         if (g == null) {
             g = session.getPersistenceManager().createGroup("Admin", "GROUP");
         }
-        
+
         bussinesEntityType = query.getSingleResult();
         if (session.getPersistenceManager().findUser("admin") == null) {
             User u = session.getPersistenceManager().createUser("admin");
@@ -190,7 +190,7 @@ public class InitializeDatabase {
             p.getIdentityKeys().add(u.getKey());
             p.setUsernameConfirmed(true);
             p.setShowBootcamp(true);
-            
+
             p.setName("Administrador");
             p.setFirstname("Glue");
             p.setSurname("Adhesive Software");
@@ -204,14 +204,14 @@ public class InitializeDatabase {
             entityManager.persist(p);
             entityManager.flush();
             admin = p;
-            
+
         }
-        
+
         if (session.getPersistenceManager().findUser("jlgranda") == null) {
             User u = session.getPersistenceManager().createUser("jlgranda");
             session.getAttributesManager().updatePassword(u, "password");
             session.getAttributesManager().addAttribute(u, "email", "jlgranda81@gmail.com");
-            
+
             p = new Profile();
             p.setEmail("jlgranda81@gmail.com");
             p.setUsername("jlgranda");
@@ -219,7 +219,7 @@ public class InitializeDatabase {
             p.getIdentityKeys().add(u.getKey());
             p.setUsernameConfirmed(true);
             p.setShowBootcamp(true);
-            
+
             p.setName("José Luis");
             p.setFirstname("José Luis");
             p.setSurname("Granda");
@@ -232,14 +232,14 @@ public class InitializeDatabase {
             p.buildAttributes(bussinesEntityService); //Crear la estructura de datos glue
             entityManager.persist(p);
             entityManager.flush();
-            
+
         }
-        
+
         if (session.getPersistenceManager().findUser("lflores") == null) {
             User u = session.getPersistenceManager().createUser("lflores");
             session.getAttributesManager().updatePassword(u, "password");
             session.getAttributesManager().addAttribute(u, "email", "luchitoflores84@gmail.com");
-            
+
             p = new Profile();
             p.setEmail("luchitoflores84@gmail.com");
             p.setUsername("lflores");
@@ -247,7 +247,7 @@ public class InitializeDatabase {
             p.getIdentityKeys().add(u.getKey());
             p.setUsernameConfirmed(true);
             p.setShowBootcamp(true);
-            
+
             p.setName("Luis Alberto");
             p.setFirstname("Luis Alberto");
             p.setSurname("Flores");
@@ -261,9 +261,9 @@ public class InitializeDatabase {
             entityManager.persist(p);
             entityManager.flush();
         }
-        
+
     }
-    
+
     private void validateStructure() {
         validateStructureForProfile();
         validateStructureForPersonalData();
@@ -281,10 +281,10 @@ public class InitializeDatabase {
         validateStructureForWareHouse();
         validateStructureForPosting();
     }
-    
+
     private void validateStructureForProfile() {
         BussinesEntityType bussinesEntityType = null;
-        
+
         try {
             TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
                     BussinesEntityType.class);
@@ -306,7 +306,7 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-            
+
             attributes.add(buildStructureTypeProperty("PersonalData", "Datos personales", "Información personal relevante", "/pages/profile/data/personal", 1L));
             attributes.add(buildGroupTypeProperty("Spouse", "Esposa/o", false, null, 1L, 1L, "Datos de su conyugue", 2L));
             attributes.add(buildGroupTypeProperty("Childrens", "Hijos", false, null, 1L, 0L, "Datos de sus hijos", 3L));
@@ -320,16 +320,16 @@ public class InitializeDatabase {
 
             //Agregar atributos
             structure.setProperties(attributes);
-            
+
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
-        
+
         System.out.println("Structure for Profile [" + bussinesEntityType + "]");
     }
-    
+
     private void validateStructureForOrganization() {
         BussinesEntityType bussinesEntityType = null;
         try {
@@ -355,43 +355,43 @@ public class InitializeDatabase {
             List<Property> attributes = new ArrayList<Property>();
             attributes.add(buildProperty("mision", "java.lang.MultiLineString", null, false, "Misión", "Ingrese la misión de la Organización", true, 0L));
             attributes.add(buildProperty("vision", "java.lang.MultiLineString", null, false, "Visión", "Ingrese la vision de la Organización", true, 1L));
-            
+
             structure.setProperties(attributes);
             bussinesEntityType.addStructure(structure);
-            
-            entityManager.persist(bussinesEntityType);
-            
-            /*Organization org = new Organization();
-            org.setCreatedOn(now);
-            org.setLastUpdate(now);
-            org.setName("UNL");
-            org.setCode("001");
-            org.setType(bussinesEntityType);
-            //org.buildAttributes(bussinesEntityService);
 
-            Theme t = new Theme();
-            t.setCreatedOn(now);
-            t.setLastUpdate(now);
-            t.setName("tema 1");
-            t.setCode("t01");
+            entityManager.persist(bussinesEntityType);
+
+            /*Organization org = new Organization();
+             org.setCreatedOn(now);
+             org.setLastUpdate(now);
+             org.setName("UNL");
+             org.setCode("001");
+             org.setType(bussinesEntityType);
+             //org.buildAttributes(bussinesEntityService);
+
+             Theme t = new Theme();
+             t.setCreatedOn(now);
+             t.setLastUpdate(now);
+             t.setName("tema 1");
+             t.setCode("t01");
             
-            Owner o = new Owner();
-            o.setCreatedOn(now);
-            o.setLastUpdate(now);
-            o.setName("Administrador 1");
-            o.setCode("Admin01");
-            o.addTheme(t);
+             Owner o = new Owner();
+             o.setCreatedOn(now);
+             o.setLastUpdate(now);
+             o.setName("Administrador 1");
+             o.setCode("Admin01");
+             o.addTheme(t);
             
-            org.addOwner(o);
-            org.setDescription("Universiad");
+             org.addOwner(o);
+             org.setDescription("Universiad");
             
-            entityManager.persist(t);
-            entityManager.persist(o);
-            entityManager.persist(org);*/
+             entityManager.persist(t);
+             entityManager.persist(o);
+             entityManager.persist(org);*/
             entityManager.flush();
         }
     }
-    
+
     private void validateStructureForOwner() {
         BussinesEntityType bussinesEntityType = null;
         try {
@@ -417,15 +417,15 @@ public class InitializeDatabase {
             List<Property> attributes = new ArrayList<Property>();
             attributes.add(buildProperty("address", String.class.getName(), null, false, "Dirección", "Calles y número de casa", true, 1L));
             attributes.add(buildProperty("phone", String.class.getName(), null, false, "Teléfono", "Telefóno de contacto", true, 2L));
-            
+
             structure.setProperties(attributes);
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
     }
-    
+
     private void validateDataForAccont() {
         BussinesEntityType bussinesEntityType = null;
         try {
@@ -436,7 +436,7 @@ public class InitializeDatabase {
         } catch (NoResultException e) {
             bussinesEntityType = new BussinesEntityType();
             bussinesEntityType.setName(Account.class.getName());
-            
+
             Date now = Calendar.getInstance().getTime();
             Calendar ago = Calendar.getInstance();
             ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
@@ -445,7 +445,7 @@ public class InitializeDatabase {
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
 
@@ -459,7 +459,7 @@ public class InitializeDatabase {
             parent.setAccountType(Account.Type.SCHEMA);
             parent.setLastUpdate(now);
             parent.setDescription(DATA[0][3]);
-            
+
             entityManager.persist(parent);
             for (int i = 1; i < DATA.length; i++) {
                 Account account = new Account();
@@ -473,9 +473,9 @@ public class InitializeDatabase {
                 entityManager.persist(account);
             }
         }
-        
+
     }
-    
+
     private void validateStructureForPersonalData() {
         BussinesEntityType bussinesEntityType = null;
         String name = "PersonalData";
@@ -516,7 +516,7 @@ public class InitializeDatabase {
              * AFROECUATORIANO/AFRODESCENDIENTE - BLANCO - INDIGENA - MESTIZO - MONTUBIO - MULATO - NEGRO - OTRA	
              * EN CASO DE SELECCIONAR INDIGENA:   ACHUAR - ANDOA - AWA - CHACHI - COFAN - EPERA - KICHWA - SECOYA - SHIWIAR - SHUAR - SIONA - TSACHILA - WAORANI - ZAPARA
              */
-            
+
             attributes.add(buildProperty("Personal", "birthday", Date.class.getName(), ago.getTime(), false, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños", false, 1L));
             attributes.add(buildProperty("Personal", "birthplace", String.class.getName(), "Loja", false, "Lugar de nacimiento", "Dónde nacio?", false, 2L));
             attributes.add(buildProperty("Personal", "gender", "java.lang.String[]", "Másculino,Femenino", false, "Género", "", false, 3L));
@@ -532,15 +532,15 @@ public class InitializeDatabase {
 
             //Agregar atributos
             structure.setProperties(attributes);
-            
+
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
-        
+
     }
-    
+
     private void validateStructureForSpouse() {
         BussinesEntityType bussinesEntityType = null;
         String name = "Spouse";
@@ -576,15 +576,15 @@ public class InitializeDatabase {
 
             //Agregar atributos
             structure.setProperties(attributes);
-            
+
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
-        
+
     }
-    
+
     private void validateStructureForChildrens() {
         BussinesEntityType bussinesEntityType = null;
         String name = "Childrens";
@@ -609,7 +609,7 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-            
+
             attributes.add(buildProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos", true, 1L));
             attributes.add(buildProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre", true, 2L));
             attributes.add(buildProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones", true, "ciValidator", 3L));
@@ -618,15 +618,15 @@ public class InitializeDatabase {
 
             //Agregar atributos
             structure.setProperties(attributes);
-            
+
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
-        
+
     }
-    
+
     private void validateStructureForEducation() {
         BussinesEntityType bussinesEntityType = null;
         String name = "Education";
@@ -651,7 +651,7 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-            
+
             attributes.add(buildProperty("title", String.class.getName(), "", true, "Titulo", "¿Qué titulación obtuviste?", true, 1L));
             attributes.add(buildProperty("country", String.class.getName(), "", true, "País", "¿En que país obtuvo este título?", true, 2L));
             attributes.add(buildProperty("institution", String.class.getName(), "", true, "Institución", "¿En que centro de estudios?", true, 3L));
@@ -661,14 +661,14 @@ public class InitializeDatabase {
 
             //Agregar atributos
             structure.setProperties(attributes);
-            
+
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
     }
-    
+
     private void validateStructureForRole() {
         BussinesEntityType bussinesEntityType = null;
         String name = "Role";
@@ -693,7 +693,7 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-            
+
             attributes.add(buildProperty("role", String.class.getName(), "", true, "Cargo actual", "El cargo actual que desempeña", 1L));
             attributes.add(buildProperty("remuneracion", Double.class.getName(), 0.0, true, "Remuneración unificada", "Monto de remuneración unificada del cargo", 2L));
             attributes.add(buildProperty("jefe", String.class.getName(), "", true, "Jefe inmediato", "El nombre de su jefe inmediato", 3L));
@@ -709,14 +709,14 @@ public class InitializeDatabase {
 
             //Agregar atributos
             structure.setProperties(attributes);
-            
+
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
     }
-    
+
     private void validateStructureForStrategic() {
         BussinesEntityType bussinesEntityType = null;
         String name = "Strategic";
@@ -741,7 +741,7 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-            
+
             attributes.add(buildPropertyAsSurvey("mision", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser la misión de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 1L));
             attributes.add(buildPropertyAsSurvey("vision", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser la visión de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 2L));
             attributes.add(buildPropertyAsSurvey("objetivos", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser los objetivos estratégicos de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 3L));
@@ -756,16 +756,16 @@ public class InitializeDatabase {
             attributes.add(buildPropertyAsSurvey("aporte", "java.lang.MultiLineString", null, true, "Cómo aportaría ud para la construcción de la nueva empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 12L));
             attributes.add(buildPropertyAsSurvey("compromiso", "java.lang.MultiLineString", null, true, "Cuál sería su comprimiso personal para con la nueva empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 13L));
             attributes.add(buildPropertyAsSurvey("valoracionservicio", "java.lang.MultiLineString", null, true, "Cómo cree ud que los usuarios valoran el servicio de la UMAPAL?", "Analise la pregunta y conteste en el espacio correspondiente", 14L));
-            
+
             structure.setProperties(attributes);
-            
+
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
     }
-    
+
     private void validateStructureForTasks() {
         BussinesEntityType bussinesEntityType = null;
         String name = "Tasks";
@@ -790,7 +790,7 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> properties = new ArrayList<Property>();
-            
+
             properties.add(buildProperty("taskName", String.class.getName(), null, true, "Tarea", "Resuma la tarea que realiza, use un verbo de acción. Ej.: Elaborar, Controlar, Notificar, etc", true, 1L));
             properties.add(buildProperty("taskSummary", String.class.getName(), null, true, "Descripción", "Describa en detalle la tarea que realiza, sea generoso.", true, 2L));
             properties.add(buildProperty("taskTime", Float.class.getName(), null, true, "Tiempo", "Tiempo promedio que le toma la tarea", true, 3L));
@@ -799,14 +799,14 @@ public class InitializeDatabase {
 
             //Agregar atributos
             structure.setProperties(properties);
-            
+
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
     }
-    
+
     private void validateStructureForCapacitacion() {
         BussinesEntityType bussinesEntityType = null;
         String name = "Capacitacion";
@@ -843,14 +843,14 @@ public class InitializeDatabase {
 
             //Agregar atributos
             structure.setProperties(attributes);
-            
+
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
     }
-    
+
     private void validateStructureForTrayectoriaLaboral() {
         BussinesEntityType bussinesEntityType = null;
         String name = "TrayectoriaLaboral";
@@ -886,16 +886,16 @@ public class InitializeDatabase {
 
             //Agregar atributos
             structure.setProperties(attributes);
-            
+
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
     }
-    
+
     private void validateStructureForWareHouse() {
-        
+
         BussinesEntityType bussinesEntityType = null;
         try {
             TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
@@ -905,7 +905,7 @@ public class InitializeDatabase {
         } catch (NoResultException e) {
             bussinesEntityType = new BussinesEntityType();
             bussinesEntityType.setName(Warehouse.class.getName());
-            
+
             Date now = Calendar.getInstance().getTime();
             Calendar ago = Calendar.getInstance();
             ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
@@ -915,39 +915,39 @@ public class InitializeDatabase {
             structure.setLastUpdate(now);
             bussinesEntityType.addStructure(structure);
             entityManager.persist(bussinesEntityType);
-            
-            
+
+
             Warehouse warehouse = new Warehouse();
             warehouse.setCode("001");
             warehouse.setName("Bodega Los Ciprés");
             warehouse.setDescription("Bodega de productos ubicada en la ciudadela los cipres");
             warehouse.setAuthor(null);
             warehouse.setLastUpdate(now);
-            
+
             Item item = new Item();
             item.setName("Camisa");
             item.setLastUpdate(now);
             warehouse.setLastUpdate(now);
-            
+
             Stock stock = new Stock();
             stock.setItem(item);
             stock.setUnit("docenas");
             stock.setAmount(10F);
             stock.setWarehouse(warehouse);
             stock.setLastUpdate(now);
-            
-            
+
+
             entityManager.persist(warehouse);
             entityManager.persist(item);
             entityManager.persist(stock);
             entityManager.flush();
-            
+
         }
-        
+
     }
-    
+
     private void validateStructureForPosting() {
-        
+
         BussinesEntityType bussinesEntityType = null;
         try {
             TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
@@ -957,7 +957,7 @@ public class InitializeDatabase {
         } catch (NoResultException e) {
             bussinesEntityType = new BussinesEntityType();
             bussinesEntityType.setName(Posting.class.getName());
-            
+
             Date now = Calendar.getInstance().getTime();
             Calendar ago = Calendar.getInstance();
             ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
@@ -966,16 +966,16 @@ public class InitializeDatabase {
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
-            
-            
+
+
             Ledger ledger = new Ledger();
             ledger.setName("Libro Contable");
             ledger.setCreatedOn(now);
             ledger.setLastUpdate(now);
-            
-            
+
+
             Posting posting = new Posting();
             posting.setCode("001");
             posting.setName("Registro Contable");
@@ -987,45 +987,79 @@ public class InitializeDatabase {
             posting.setCreatedOn(now);
             posting.setPostingType(Posting.Type.PAYMENT);
             posting.setLastUpdate(now);
-            posting.setMemo("Soy un memo");
+            posting.setMemo("PR.");
             posting.setLedger(ledger);
-            //posting.
-            
-            
-            
-            
-            Account account = new Account();
-            account.setAccountType(Account.Type.ACCOUNT);
-            account.setCode("0003");
-            account.setName("Cuenta de prueba");
-            account.setDescription("esta es una descripción de una cuenta de prueba");
-            account.setCreatedOn(now);
-            account.setLastUpdate(now);
-            
-            
-            Entry entry = new Entry();
-            entry.setName("Este es un entry");
-            entry.setPosting(posting);
-            entry.setAccount(account);
-            entry.setAmount(BigDecimal.ZERO);
-            entry.setCreatedOn(now);
-            entry.setLastUpdate(now);
-            
-           posting.addEntry(entry);
-            
-            
+
+
+
+
+            Account account1 = new Account();
+            account1.setAccountType(Account.Type.INCOME);
+            account1.setCode("0003");
+            account1.setName("CUENTAS CONTINGENTES");
+            account1.setDescription("esta es una descripción de una cuenta de prueba");
+            account1.setCreatedOn(now);
+            account1.setLastUpdate(now);
+
+            Account account2 = new Account();
+            account2.setAccountType(Account.Type.EXPENSE);
+            account2.setCode("0004");
+            account2.setName("CUENTAS DE ORDEN");
+            account2.setDescription("esta es una descripción de una cuenta de prueba");
+            account2.setCreatedOn(now);
+            account2.setLastUpdate(now);
+
+
+
+            Entry entry1 = new Entry();
+            entry1.setName("Este es un entry");
+            entry1.setPosting(posting);
+            entry1.setAccount(account2);
+            entry1.setAmount(new BigDecimal("1500"));
+            entry1.setCreatedOn(now);
+            entry1.setLastUpdate(now);
+            entry1.setDebit(new BigDecimal(30));
+
+            Entry entry2 = new Entry();
+            entry2.setName("Este es un entry");
+            entry2.setPosting(posting);
+            entry2.setAccount(account2);
+            entry2.setAmount(new BigDecimal("3500"));
+            entry2.setCreatedOn(now);
+            entry2.setLastUpdate(now);
+            entry1.setDebit(new BigDecimal(20));
+
+
+            Entry entry3 = new Entry();
+            entry3.setName("Este es un entry");
+            entry3.setPosting(posting);
+            entry3.setAccount(account2);
+            entry3.setAmount(new BigDecimal("3500"));
+            entry3.setCreatedOn(now);
+            entry3.setLastUpdate(now);
+            entry3.setCredit(new BigDecimal(80));
+
+
+            posting.addEntry(entry1);
+            posting.addEntry(entry2);
+            posting.addEntry(entry3);
+
+
             entityManager.persist(ledger);
             entityManager.persist(posting);
-            entityManager.persist(account);
-            entityManager.persist(entry);
+            entityManager.persist(account1);
+            entityManager.persist(account2);
+            entityManager.persist(entry1);
+            entityManager.persist(entry2);
+            entityManager.persist(entry3);
             entityManager.flush();
-            
+
         }
-        
-        
-        
+
+
+
     }
-    
+
     private Property buildGroupTypeProperty(String name, String label, boolean showDefaultBussinesEntityProperties, String generatorName, Long minimumMembers, Long maximumMembers, String helpinline, Long sequence) {
         Property property = new Property();
         property.setName(name);
@@ -1041,7 +1075,7 @@ public class InitializeDatabase {
         property.setSequence(sequence);
         return property;
     }
-    
+
     private Property buildStructureTypeProperty(String name, String label, String helpinline, String customForm, Long sequence) {
         Property property = new Property();
         property.setName(name);
@@ -1057,7 +1091,7 @@ public class InitializeDatabase {
         property.setSequence(sequence);
         return property;
     }
-    
+
     private Property buildProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, Long sequence) {
         Property property = new Property();
         property.setName(name);
@@ -1070,7 +1104,7 @@ public class InitializeDatabase {
         property.setSequence(sequence);
         return property;
     }
-    
+
     private Property buildProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, boolean showInColumns, Long sequence) {
         Property property = new Property();
         property.setName(name);
@@ -1085,7 +1119,7 @@ public class InitializeDatabase {
         property.setSequence(sequence);
         return property;
     }
-    
+
     private Property buildProperty(String name, String type, Serializable value, boolean required, String label, String helpinline, boolean showInColumns, String validator, Long sequence) {
         Property property = new Property();
         property.setName(name);
@@ -1101,7 +1135,7 @@ public class InitializeDatabase {
         property.setSequence(sequence);
         return property;
     }
-    
+
     private Property buildProperty(String groupName, String name, String type, Serializable value, boolean required, String label, String helpinline, boolean showInColumns, Long sequence) {
         Property property = new Property();
         property.setGeneratorName(null);
@@ -1118,7 +1152,7 @@ public class InitializeDatabase {
         property.setSequence(sequence);
         return property;
     }
-    
+
     private Property buildPropertyAsSurvey(String name, String type, Serializable value, boolean required, String label, String helpinline, Long sequence) {
         Property property = new Property();
         property.setName(name);
@@ -1142,9 +1176,9 @@ public class InitializeDatabase {
         {"1010201", "ACTIVOS FINANCIEROS A VALOR RAZONABLE CON CAMBIOS EN RESULTADOS", "ACCOUNT", "Son los activos financieros adquiridos para negociar activamente, con el objetivo de generar ganancia. <br/>Medición Inicial y Posterior:<br/>A valor razonable<br/>La variación se reconoce resultado del ejercicio"},
         {"2", "PASIVO", "GENDER", "Conforman el estado de situación financiera, de flujo de efectivo y de evolución patrimonio"},
         {"3", "PATRIMONIO", "GENDER", "Conforman el estado de situación financiera, de flujo de efectivo y de evolución patrimonio"},
-        {"4", "CUENTAS DE RESULTADO ACREEDORAS", "GENDER", "Cuentas de gestión de partidas de resultados acreedoras y deudoras, indispensable para la elaboración del balance de perdidas y ganancias"},
-        {"5", "CUENTAS DE RESULTADO DEUDORAS", "GENDER", "Cuentas de gestión de partidas de resultados acreedoras y deudoras, indispensable para la elaboración del balance de perdidas y ganancias"},
-        {"6", "CUENTAS CONTINGENTES", "GENDER", "Agrupan las obligaciones eventuales"},
-        {"7", "CUENTAS DE ORDEN", "GENDER", "Cuentas de orden y de control, indispensables para la buena administración"}
+        {"4", "CUENTAS DE RESULTADO ACREEDORAS", "ASSET", "Cuentas de gestión de partidas de resultados acreedoras y deudoras, indispensable para la elaboración del balance de perdidas y ganancias"},
+        {"5", "CUENTAS DE RESULTADO DEUDORAS", "LIABILITY", "Cuentas de gestión de partidas de resultados acreedoras y deudoras, indispensable para la elaboración del balance de perdidas y ganancias"},
+        {"6", "CUENTAS CONTINGENTES", "INCOME", "Agrupan las obligaciones eventuales"},
+        {"7", "CUENTAS DE ORDEN", "EXPENSE", "Cuentas de orden y de control, indispensables para la buena administración"}
     };
 }

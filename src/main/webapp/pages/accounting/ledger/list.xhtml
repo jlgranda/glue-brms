@@ -26,6 +26,8 @@
             </div> 
         </div>             
     </ui:define>
+    
+    
     <ui:define name="content"> 
         <f:metadata>
             <f:viewParam name="result" value="#{ledgerListService.firstResult}" />
@@ -36,6 +38,11 @@
                 <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="voucher" styleClass="btn primary">
                     <f:param name="ledgerId"></f:param>
                 </h:link>
+                
+                <h:link value="#{messages['common.admin']}" rendered="#{true}" outcome="listvoucher" styleClass="btn primary">
+                    <f:param name="ledgerId"></f:param>
+                </h:link>
+                
             </div>
             <p:dataTable var="_ledger" value="#{ledgerListService}"
                          paginator="true" rows="10"

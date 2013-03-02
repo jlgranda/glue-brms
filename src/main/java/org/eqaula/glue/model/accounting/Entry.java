@@ -70,10 +70,10 @@ public class Entry extends BussinesEntity {
     @Column(nullable = false)
     private BigDecimal amount;
     
-    @Transient
+    
     private BigDecimal credit;
     
-    @Transient
+    
     private BigDecimal debit;
 
     public Account getAccount() {

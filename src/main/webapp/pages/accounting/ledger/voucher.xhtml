@@ -45,8 +45,14 @@ limitations under the License.
         </div>         
     </ui:define>
 
-    <ui:define name="content">          
+    <ui:define name="content">
+
+
         <h:form id="form">
+
+
+
+
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
             <h:panelGroup id="postingtype" layout="block" class="clearfix" rendered="true">
                 <label for="postingtype_" class="">#{messages['module.account.posting.type']}</label>
@@ -63,10 +69,10 @@ limitations under the License.
                     <span class="help-inline"><br/>#{messages['posting.type.inlinehelp']}<ocp:message forId="postingtype_" /></span>
                 </div>
             </h:panelGroup>
-            <glue:input id="amount" name="amount" type="decimal" 
-                        label="#{messages['module.accounting.amount']}" 
-                        value="#{postingHome.instance.amount}" required="true" 
-                        execute="@this save" render="amount" />
+            <glue:input  id="amount"  name="amount" type="decimal" 
+                         label="#{messages['module.accounting.amount']}" 
+                         value="#{postingHome.instance.amount}" required="true" 
+                         execute="@this save" render="amount" />
             <glue:input id="paymentDate" name="paymentDate" 
                         type="calendar" value="#{postingHome.instance.paymentDate}"
                         label="#{messages['module.accounting.posting.paymentdate']}"
@@ -136,13 +142,21 @@ limitations under the License.
                                         </td>
                                         <td role="gridcell">
                                             #{entry.account.accountType.normalBalanceSign}
-                                            <pe:inputNumber value="#{entry.credit}" required="#{entry.account.accountType.normalBalanceSign == 1}" label="#{messages['module.accounting.amount']} #{entry.account.name}">  
-                                                <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                            <pe:inputNumber  id="credit" value="#{entry.credit}"
+                                                             required="#{entry.account.accountType.normalBalanceSign == 1}" 
+                                                             label="#{messages['module.accounting.amount']} #{entry.account.name}"
+                                                             disabled="#{not empty entry.debit and entry.debit > 0 ?true:false}">  
+                                                <p:ajax event="blur" update="@form" partialSubmit="true"/>
+
                                             </pe:inputNumber>  
                                         </td>
                                         <td role="gridcell">
-                                            <pe:inputNumber value="#{entry.debit}" required="#{entry.account.accountType.normalBalanceSign == -1}" label="#{messages['module.accounting.amount']} #{entry.account.name}">  
-                                                <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                            <pe:inputNumber id="debit" value="#{entry.debit}" 
+                                                            required="#{entry.account.accountType.normalBalanceSign == -1}" 
+                                                            label="#{messages['module.accounting.amount']} #{entry.account.name}"
+                                                            disabled="#{not empty entry.credit and entry.credit > 0 ?true:false}">  
+                                                <p:ajax event="blur" update="@form" partialSubmit="true"/>
+
                                             </pe:inputNumber>  
                                         </td>
                                     </tr>
@@ -162,7 +176,9 @@ limitations under the License.
 
                 </p:commandButton>
             </div> 
-
         </h:form>
+
+
+
     </ui:define>    
 </ui:composition>
