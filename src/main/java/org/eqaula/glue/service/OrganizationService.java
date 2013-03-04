@@ -18,14 +18,12 @@ package org.eqaula.glue.service;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import org.eqaula.glue.model.BussinesEntity;
-import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Organization_;
+import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.PersistenceUtil;
 
 /**
@@ -58,16 +56,42 @@ public class OrganizationService extends PersistenceUtil<Organization> implement
     public List<Organization> getOrganizations(final int limit, final int offset) {
         return findAll(Organization.class);
     }
-
+    
     public Organization getOrganizationById(final Long id) {
         return (Organization) findById(Organization.class, id);
     }
+    
     public Organization findByName(final String name) {
-        log.info("find Profile with name " + name);
+        log.info("find Organization with name " + name);
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Organization> query = builder.createQuery(Organization.class);
         Root<Organization> bussinesEntityType = query.from(Organization.class);
         query.where(builder.equal(bussinesEntityType.get(Organization_.name), name));
         return getSingleResult(query);
+    }
+
+    public List<Organization> findByProfile(Profile profile) {
+        log.info("find Organization with profile " + profile );
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Organization> query = builder.createQuery(Organization.class);
+        Root<Organization> bussinesEntityType = query.from(Organization.class);
+        query.where(builder.equal(bussinesEntityType.get(Organization_.author), profile));
+        //TODO agregar busqueda por organizationCode
+        return getResultList(query);
+    }
+    
+    public Organization findByProfileAndCode(Profile profile, String organizationCode) {
+        log.info("find Organization with profile " + profile + " organization code " + organizationCode);
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Organization> query = builder.createQuery(Organization.class);
+        Root<Organization> bussinesEntityType = query.from(Organization.class);
+        query.where(builder.equal(bussinesEntityType.get(Organization_.author), profile));
+        //TODO agregar busqueda por organizationCode
+        return getSingleResult(query);
+    }
+
+    public void create(Profile loggedIn, Organization current) {
+        current.setAuthor(loggedIn);
+        create(current);
     }
 }

@@ -36,8 +36,28 @@ import org.eqaula.glue.model.BussinesEntity;
 public class Organization extends BussinesEntity implements Serializable {
     private static final long serialVersionUID = 3095488521256724258L;
     
+    private String ruc;
+    
+    private String initials;
+    
     @OneToMany(mappedBy = "organization")
     private List<Owner> owners = new ArrayList<Owner>();
+
+    public String getRuc() {
+        return ruc;
+    }
+
+    public void setRuc(String ruc) {
+        this.ruc = ruc;
+    }
+
+    public String getInitials() {
+        return initials;
+    }
+
+    public void setInitials(String initials) {
+        this.initials = initials;
+    }
 
     public List<Owner> getOwners() {
         return owners;

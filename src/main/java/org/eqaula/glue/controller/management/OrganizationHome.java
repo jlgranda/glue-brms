@@ -18,6 +18,7 @@ package org.eqaula.glue.controller.management;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
@@ -94,7 +95,8 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     protected Organization createInstance() {
         BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Organization.class.getName());
         Date now = Calendar.getInstance().getTime();
-        Organization organization = new Organization();        
+        Organization organization = new Organization();    
+        organization.setCode(UUID.randomUUID().toString());
         organization.setCreatedOn(now);
         organization.setLastUpdate(now);
         organization.setActivationTime(now);

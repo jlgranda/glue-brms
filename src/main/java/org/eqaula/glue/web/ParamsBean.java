@@ -46,6 +46,7 @@ public class ParamsBean
 {
    private int featureNumber;
    private int iterationNumber;
+   private String organizationCode;
    private String projectSlug;
    private String profileUsername;
    private int storyNumber;
@@ -99,4 +100,13 @@ public class ParamsBean
    {
       this.featureNumber = featureNumber;
    }
+
+    public String getOrganizationCode() {
+        return organizationCode;
+    }
+
+    public void setOrganizationCode(String organizationCode) {
+        this.organizationCode = organizationCode;
+    }
+   
 }

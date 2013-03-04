@@ -53,7 +53,7 @@
                     <f:param name="backView" value="list"></f:param>
                 </h:link>
             </div>
-            <p:dataTable var="organization" value="#{organizationListService}"
+            <p:dataTable var="_organization" value="#{organizationListService}"
                          paginator="true" rows="10"
                          paginatorAlwaysVisible="false"
                          paginatorPosition="top"
@@ -68,11 +68,11 @@
                         update=":form:button-edit: :form:button-view :form:messages"/>                 
                 <p:ajax event="rowUnselect" listener="#{organizationListService.onRowUnselect}" update=":form:button-edit :form:button-view :form:messages"/>
 
-                <p:column headerText="#{messages['common.name']}" sortBy="#{organization.name}">
-                    <h:outputText value="#{organization.name}" />
+                <p:column headerText="#{messages['common.name']}" sortBy="#{_organization.name}">
+                    <h:outputText value="#{_organization.name}" />
                 </p:column>
-                <p:column headerText="#{messages['common.code']}" sortBy="#{organization.code}">
-                    <h:outputText value="#{organization.code}" />
+                <p:column headerText="#{messages['common.ruc']}" sortBy="#{_organization.ruc}">
+                    <h:outputText value="#{_organization.ruc}" />
                 </p:column>                
             </p:dataTable>
         </h:form>
