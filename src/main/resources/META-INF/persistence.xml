@@ -3,6 +3,7 @@
   <persistence-unit name="glue">
     <!-- If you are running in a production environment, add a managed
          data source, the example data source is just for proofs of concept! -->
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <jta-data-source>java:/datasources/glue-ds</jta-data-source>
     <class>org.eqaula.glue.model.management.Owner</class>
     <class>org.eqaula.glue.model.management.Perspective</class>
@@ -10,7 +11,7 @@
     <class>org.eqaula.glue.service.LedgerService</class>
     <properties>
       <!-- Properties for Hibernate -->
-      <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
       <property name="hibernate.show_sql" value="true"/>
     </properties>
   </persistence-unit>
