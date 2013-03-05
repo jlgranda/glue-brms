@@ -29,7 +29,6 @@ import org.eqaula.glue.model.BussinesEntity;
  *
  * @author jlgranda
  */
-
 @Entity
 @Table(name = "Organization")
 @DiscriminatorValue(value = "ORG")
