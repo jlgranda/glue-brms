@@ -448,3 +448,11 @@ h1.header span {
 PRE.prettyprint {
     overflow: hidden;
 }
+
+/* Customs for bootstrpas 2.3.1
+-------------------------------------------------- */
+.help-block {
+    font-size: 12px;
+    color: #bfbfbf;
+    display: inline;
+    }

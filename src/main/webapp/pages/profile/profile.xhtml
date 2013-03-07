@@ -24,7 +24,8 @@
                 </div>
             </div>             
         </ui:define>
-        <ui:define name="content">            
+        <ui:define name="content">    
+            
             <h:form id="profile" class="form-horizontal">
 
                 <!-- Attributos para usuario -->
@@ -120,7 +121,7 @@
 
 
                 <div class="actions">
-                    <h:commandButton id="save" action="#{profileHome.saveProfile()}" value="#{messages['common.save']}" styleClass="btn primary"/>
+                    <h:commandButton id="save" action="#{profileHome.saveProfile()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     &nbsp;
                     <h:commandButton action="/pages/profile/list.xhtml?faces-redirect=true"
                                      value="#{messages['common.cancel']}" styleClass="btn" immediate="true" rendered="#{not empty backView}"/>

@@ -30,7 +30,7 @@
             </div>             
         </ui:define>
         <ui:define name="content">
-            <h:form id="form" acceptcharset="UTF-8">
+            <h:form id="form" acceptcharset="UTF-8" class="form-horizontal">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{itemHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{itemHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" execute="@this save" render="description"/>
@@ -38,12 +38,12 @@
 
 
                 <div class="actions">
-                    <p:commandButton id="save" action="#{itemHome.saveItem()}" value="#{messages['common.save']}" styleClass="btn primary"/>
-                    &nbsp;
+                    <p:commandButton id="save" action="#{itemHome.saveItem()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
+
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" 
                                      onclick="#{itemHome.isAssociatedToItem()?'alertDlg.show();':'deletedDlg.show();'}" immediate="true"
                                      update="form-dialog-confirm-delete" rendered="#{itemHome.instance.id != null}"/>
-                    &nbsp;
+
                     <h:link outcome="#{empty itemHome.warehouseId ? '/pages/stocklist/item/list.xhtml?faces-redirect=true':'/pages/stocklist/stock/stock.xhtml?faces-redirect=true'}" 
                             onclick="editDlg.hide();"
                             value="#{messages['common.cancel']}" 
@@ -58,17 +58,22 @@
             </h:form>
 
             <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
-                <h:form id="form-dialog-confirm-delete">
-                    <h:panelGroup layout="block" style="padding:5px;">  
+                <h:form id="form-dialog-confirm-delete" class="form-horizontal">
+                    <h:panelGroup layout="block" style="padding:5px;" class="control-group">  
                         <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
-                    </h:panelGroup>  
-                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
-                                     action="#{itemHome.deleteItem()}"                                          
-                                     ajax="true" process="@this"  
-                                     style="margin-top:10px;">  
-                    </p:commandButton>  
-                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
-                                     style="margin-top:10px;"/>  
+                    </h:panelGroup>
+
+                    <div class="actions">
+
+                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                         action="#{itemHome.deleteItem()}"                                          
+                                         ajax="true" process="@this"  
+                                         style="margin-top:10px;">  
+                        </p:commandButton>  
+                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                         style="margin-top:10px;"/>  
+
+                    </div>
                 </h:form>
             </p:dialog> 
 
