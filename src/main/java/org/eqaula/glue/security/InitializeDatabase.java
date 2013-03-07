@@ -261,33 +261,6 @@ public class InitializeDatabase {
             entityManager.persist(p);
             entityManager.flush();
         }
-        
-        if (session.getPersistenceManager().findUser("dianamor8") == null) {
-            User u = session.getPersistenceManager().createUser("dianamor8");
-            session.getAttributesManager().updatePassword(u, "dianamor8");
-            session.getAttributesManager().addAttribute(u, "email", "mp.dianalexa@gmail.com");
-
-            p = new Profile();
-            p.setEmail("mp.dianalexa@gmail.com");
-            p.setUsername("dianamor8");
-            p.setPassword("dianamor8");
-            p.getIdentityKeys().add(u.getKey());
-            p.setUsernameConfirmed(true);
-            p.setShowBootcamp(true);
-
-            p.setName("Diana Alexandra");
-            p.setFirstname("Diana");
-            p.setSurname("Morocho");
-            p.setCreatedOn(now);
-            p.setLastUpdate(now);
-            p.setActivationTime(now);
-            p.setExpirationTime(Dates.addDays(now, 364));
-            p.setAuthor(admin); //Establecer al usuario actual
-            p.setType(bussinesEntityType); //Relacionar con un tipo de entidad de negocio y su estructura
-            p.buildAttributes(bussinesEntityService); //Crear la estructura de datos glue
-            entityManager.persist(p);
-            entityManager.flush();
-        }
 
     }
 

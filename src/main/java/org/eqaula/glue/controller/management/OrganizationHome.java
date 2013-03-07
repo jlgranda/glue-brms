@@ -114,7 +114,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             save(getInstance());
         } else {                        
             getInstance().setAuthor(this.profile);
-            save(getInstance());
+            create(getInstance());
         }
         return "/pages/management/organization/list";
     }
