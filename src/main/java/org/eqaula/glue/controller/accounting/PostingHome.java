@@ -58,6 +58,9 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
     private Posting postingSelected;
     private String backview;
     private Ledger ledger;
+    private Long ledgerId;
+    
+    
     @Inject
     private LedgerService ledgerService;
 
@@ -74,13 +77,27 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
         setId(accountId);
     }
 
+    public Long getLedgerId() {
+        return ledgerId;
+    }
+
+    public void setLedgerId(Long ledgerId) {
+        this.ledgerId = ledgerId;
+    }
+
+    
+    
     @Transactional
     public Ledger getLedger() {
         if (ledger == null) {
+            if (getLedgerId() == null){
             //TODO check for a better code format
             Date now = Calendar.getInstance().getTime();
             String code = DateUtils.formatDate(now, "dd.MM.yyyy");
-            ledger = ledgerService.retrivePosting(code);
+            ledger = ledgerService.retrivePosting(code);}
+            else {
+                ledger = ledgerService.find(getLedgerId());
+            }
         }
         return ledger;
     }
@@ -151,11 +168,11 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
         if (getInstance().isPersistent()) {
             log.info("eqaula --> Saving instance");
             save(getInstance());
-            outcome = "/pages/accounting/ledger/list.xhtml?faces-redirect=true";
+            outcome = "/pages/accounting/ledger/ledger.xhtml?faces-redirect=true";
         } else {
             log.info("eqaula --> Creating instance");
             save(getInstance());
-            outcome = "/pages/accounting/ledger/list.xhtml?faces-redirect=true";
+            outcome = "/pages/accounting/ledger/ledger.xhtml?faces-redirect=true";
         }
 
         return outcome;

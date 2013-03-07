@@ -51,6 +51,7 @@ public class LedgerService extends PersistenceUtil<Ledger> implements Serializab
         CriteriaQuery<Ledger> query = builder.createQuery(Ledger.class);
         Root<Ledger> bussinesEntityType = query.from(Ledger.class);
         query.where(builder.equal(bussinesEntityType.get(Ledger_.code), code));
+        System.out.println("Estoy en find code");
         return getSingleResult(query);
     }
     

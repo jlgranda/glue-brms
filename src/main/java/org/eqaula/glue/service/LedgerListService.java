@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -46,7 +47,7 @@ public class LedgerListService extends LazyDataModel<Ledger> {
 
    private static final long serialVersionUID = 4819808125494695197L;
     private static final int MAX_RESULTS = 5;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(PostingListService.class);
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(LedgerListService.class);
     @Inject
     @Web
     private EntityManager entityManager;
@@ -121,12 +122,15 @@ public class LedgerListService extends LazyDataModel<Ledger> {
     }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.account.ledger") + " " + UI.getMessages("common.selected"), ((Ledger) event.getObject()).getName());
+         System.out.println("Entrando al metodo getRowSelect");
+        System.out.println("Entrando al metodo getRowSelect");
+        System.out.println("Entrando al metodo getRowSelect");
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.accounting.ledger") + " " + UI.getMessages("common.selected"), ((Ledger) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.account.ledger") + " " + UI.getMessages("common.unselected"), ((Ledger) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.accounting.ledger") + " " + UI.getMessages("common.unselected"), ((Ledger) event.getObject()).getName());
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setSelectedLedger(null);
@@ -134,13 +138,19 @@ public class LedgerListService extends LazyDataModel<Ledger> {
 
     @Override
     public Ledger getRowData(String rowKey) {
-
+        System.out.println("Entrando al metodo getRowData" + rowKey);
+        System.out.println("Entrando al metodo getRowData" + rowKey);
+        System.out.println("Entrando al metodo getRowData");
+        
         return ledgerService.findByCode(rowKey);
     }
 
     @Override
     public Object getRowKey(Ledger entity) {
-        return entity.getName();
+        System.out.println("Entrando al metodo getRowKey" + entity);
+        System.out.println("Entrando al metodo getRowKey");
+        System.out.println("Entrando al metodo getRowKey");
+        return entity.getCode();
     }
     
 }

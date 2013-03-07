@@ -16,6 +16,7 @@
 package org.eqaula.glue.service;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -52,15 +53,15 @@ public class OrganizationService extends PersistenceUtil<Organization> implement
     public List<Organization> getOrganizations() {
         return findAll(Organization.class);
     }
-    
+
     public List<Organization> getOrganizations(final int limit, final int offset) {
         return findAll(Organization.class);
     }
-    
+
     public Organization getOrganizationById(final Long id) {
         return (Organization) findById(Organization.class, id);
     }
-    
+
     public Organization findByName(final String name) {
         log.info("find Organization with name " + name);
         CriteriaBuilder builder = getCriteriaBuilder();
@@ -71,7 +72,9 @@ public class OrganizationService extends PersistenceUtil<Organization> implement
     }
 
     public List<Organization> findByProfile(Profile profile) {
-        log.info("find Organization with profile " + profile );
+        log.info("find Organization with profile " + profile);
+        if (profile == null) return new ArrayList<Organization>(0);
+
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Organization> query = builder.createQuery(Organization.class);
         Root<Organization> bussinesEntityType = query.from(Organization.class);
@@ -79,7 +82,7 @@ public class OrganizationService extends PersistenceUtil<Organization> implement
         //TODO agregar busqueda por organizationCode
         return getResultList(query);
     }
-    
+
     public Organization findByProfileAndCode(Profile profile, String organizationCode) {
         log.info("find Organization with profile " + profile + " organization code " + organizationCode);
         CriteriaBuilder builder = getCriteriaBuilder();
