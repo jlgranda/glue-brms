@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 cesar.
+ * Copyright 2013 dianita.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,14 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
+import java.util.logging.Level;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.facelets.FaceletContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -31,53 +34,62 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.management.Organization;
+import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
+import org.jboss.solder.logging.Logger;
 import org.primefaces.context.RequestContext;
 
 /**
  *
- * @author cesar
+ * @author dianita
  */
+
 @Named
 @ViewScoped
-public class OrganizationHome extends BussinesEntityHome<Organization> implements Serializable {
-
-    private static final long serialVersionUID = 7632987414391869389L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(OrganizationHome.class);
+public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serializable{
+    
+    private static final long serialVersionUID = -4224903764118210792L;
+    private static Logger log = Logger.getLogger(ObjetiveHome.class);
+       
     @Inject
     @Web
     private EntityManager em;
     @Inject
     private BussinesEntityService bussinesEntityService;
-    
     @Current
     @Inject
     private Profile profile;
+    @Resource
+    private javax.transaction.UserTransaction utx;
 
-    public OrganizationHome() {
+    public ObjetiveHome() {
     }
 
-    public Long getOrganizationId() {
+    public Long getObjetiveId() {
         return (Long) getId();
     }
 
-    public void setOrganizationId(Long organizationId) {
-        setId(organizationId);
+    public void setObjetiveId(Long objetiveId) {
+        setId(objetiveId);
     }
-    
-    public String getStructureName(){
+
+    public String getStructureName() {
         return getInstance().getName();
     }
-    
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
             wire();
         }
+    }
+
+    @TransactionAttribute
+    public void wire() {
+        getInstance();
     }
 
     @PostConstruct
@@ -86,74 +98,80 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         bussinesEntityService.setEntityManager(em);
     }
 
-    @TransactionAttribute
-    public void wire() {
-        getInstance();
-    }
-
     @Override
-    protected Organization createInstance() {
-        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Organization.class.getName());
+    protected Objetive createInstance() {
+        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Objetive.class.getName());
         Date now = Calendar.getInstance().getTime();
-        Organization organization = new Organization();    
-        organization.setCode(UUID.randomUUID().toString());
-        organization.setCreatedOn(now);
-        organization.setLastUpdate(now);
-        organization.setActivationTime(now);
-        organization.setExpirationTime(Dates.addDays(now, 364)); 
-        organization.setType(_type);
-        organization.buildAttributes(bussinesEntityService);
-        return organization;
+        Objetive objetive = new Objetive();
+        objetive.setCode(UUID.randomUUID().toString());
+        objetive.setCreatedOn(now);
+        objetive.setLastUpdate(now);
+        objetive.setActivationTime(now);
+        objetive.setExpirationTime(Dates.addDays(now, 364));
+        objetive.setType(_type);
+        objetive.buildAttributes(bussinesEntityService);
+        return objetive;
     }
 
     @TransactionAttribute
-    public String saveOrganization() {
+    public String saveObjetive() {
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
-        if (getInstance().isPersistent()){
+        if (getInstance().isPersistent()) {
             save(getInstance());
-        } else {                        
+        } else {
             getInstance().setAuthor(this.profile);
             create(getInstance());
         }
-        return "/pages/management/organization/list";
+        return "/pages/management/organization/organization";
     }
-    
+
     public boolean isWired() {
         return true;
     }
 
-    public Organization getDefinedInstance() {
+    public Objetive getDefiniedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
 
     @Override
-    public Class<Organization> getEntityClass() {
-        return Organization.class;
+    public Class<Objetive> getEntityClass() {
+        return Objetive.class;
     }
-    
+
     @Transactional
-    public String deleteOrganization() {
+    public String deleteObjetive() {
         try {
             if (getInstance() == null) {
-                throw new NullPointerException("Organization is null");
-            } 
+                throw new NullPointerException("Objetive is Null");
+            }
             if (getInstance().isPersistent()) {
                 delete(getInstance());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
-                RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
-                
+                RequestContext.getCurrentInstance().execute("editDlg.hide()");
             } else {
-                //remover de la lista, si aún no esta persistido
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una organización para ser borrada!", ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un objetivo para ser borrado!", ""));
             }
-
         } catch (Exception e) {
-            //System.out.println("deleteBussinessEntity ERROR = " + e.getMessage());
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
         return "/pages/management/organization/list.xhtml?faces-redirect=true";
     }
-        
+
+    protected void persist(Object object) {
+        try {
+            utx.begin();
+            em.joinTransaction();
+            em.persist(object);
+            utx.commit();
+        } catch (Exception e) {
+            java.util.logging.Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+            throw new RuntimeException(e);
+        }
+    }
+    
+    
+    
+    
 }
