@@ -28,18 +28,21 @@
             </div>             
         </ui:define>
         <ui:define name="content">
-            <h:form id="form" acceptcharset="UTF-8">
+
+
+
+            <h:form id="form" class="form-horizontal" acceptcharset="UTF-8">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
                 <glue:input id="initials" name="initials" type="text" label="#{messages['common.initials']}" value="#{organizationHome.instance.initials}" required="true" inlinehelp="#{messages['common.initials.inlinehelp']}" execute="@this save"/> 
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{organizationHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="ruc" name="ruc" type="text" label="#{messages['common.ruc']}" value="#{organizationHome.instance.ruc}" required="true" inlinehelp="#{messages['common.ruc.inlinehelp']}" execute="@this save"/> 
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{organizationHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
                 <!-- Attributos personalizados -->
-                <h:panelGroup id="attributes" layout="block" class="clearfix">                                         
+                <h:panelGroup id="attributes" layout="block" class="control-group">                                         
                     <ui:repeat value="#{organizationHome.instance.findBussinesEntityAttribute('org.eqaula.glue.model.management.Organization')}" var="a" varStatus="status">
-                        <h:panelGroup layout="block" class="clearfix">                    
+                        <h:panelGroup layout="block" class="control-group">                    
                             <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
-                            <div class="input">
+                            <div class="controls">
                                 <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" 
                                               rendered="#{a.property.type eq 'java.lang.String'}">
                                     <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
@@ -71,23 +74,27 @@
                                 -->
                                 <h:graphicImage value="#{resource['success.gif']}" rendered="#{a.value != null}"
                                                 styleClass="validation-status" />
-                                <span class="help-inline"><br/>#{a.property.helpInline} <ocp:message forId="#{a.name}" /></span>
+                                <span class="help-block"><br/>#{a.property.helpInline} <ocp:message forId="#{a.name}" /></span>
                             </div>                                                                
                         </h:panelGroup>  
                     </ui:repeat>                                   
                 </h:panelGroup>
                 <div class="actions">
-                    <p:commandButton id="save" action="#{organizationHome.saveOrganization()}" value="#{messages['common.save']}" styleClass="btn primary"/>
-                    &nbsp;
+                    <p:commandButton id="save" action="#{organizationHome.saveOrganization()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
+                   
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
                                      update=":cancel-dialog" rendered="#{organizationHome.organizationId != null}">                        
                     </p:commandButton>
-                    &nbsp;
+                  
                     <h:link outcome="/pages/management/organization/list.xhtml?faces-redirect=true"
                             value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
                     </h:link>
-                </div>                
+                </div>           
+                
+                
             </h:form> 
+            
+            
             <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">   
                 <h:form id="form-dialog-confirm-delete">
                     <h:panelGroup layout="block" style="padding:5px;">  

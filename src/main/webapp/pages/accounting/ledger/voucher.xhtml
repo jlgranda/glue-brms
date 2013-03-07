@@ -55,11 +55,13 @@ limitations under the License.
 
 
 
-        <h:form id="form">
+        <h:form id="form" class="form-horizontal">
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-            <h:panelGroup id="postingtype" layout="block" class="clearfix" rendered="true">
-                <label for="postingtype_" class="">#{messages['module.account.posting.type']}</label>
-                <div class="input">
+          
+            <h:panelGroup id="postingtype" layout="block" class="control-group" rendered="true">
+                <label for="postingtype_" class="control-label">#{messages['module.account.posting.type']}</label>
+               
+                <div class="controls">
                     <p:selectOneMenu id="postingtype_" value="#{postingHome.instance.postingType}" effect="fade"  
                                      converter="omnifaces.GenericEnumConverter" required="true"
                                      rendered="true" label="#{messages['module.account.posting.type']}">
@@ -69,9 +71,10 @@ limitations under the License.
                     </p:selectOneMenu>                        
                     <h:graphicImage value="#{resource['success.gif']}" rendered="#{postingHome.instance.postingType != null}"
                                     styleClass="validation-status" />
-                    <span class="help-inline"><br/>#{messages['posting.type.inlinehelp']}<ocp:message forId="postingtype_" /></span>
+                    <span class="help-block"><br/>#{messages['posting.type.inlinehelp']}<ocp:message forId="postingtype_" /></span>
                 </div>
             </h:panelGroup>
+            
             <glue:input  id="amount"  name="amount" type="decimal" 
                          label="#{messages['module.accounting.amount']}" 
                          value="#{postingHome.instance.amount}" required="true" 
@@ -81,9 +84,10 @@ limitations under the License.
                         label="#{messages['module.accounting.posting.paymentdate']}"
                         render="paymentDate"
                         required="true"/>
-            <h:panelGroup id="csg" layout="block" class="clearfix" rendered="true">             
-                <label for="consigne">#{messages['module.accounting.posting.consigne']}</label>
-                <div class="input">
+            <h:panelGroup id="csg" layout="block" rendered="true" class="control-group">             
+                <label for="consigne" class="control-label">#{messages['module.accounting.posting.consigne']}</label>
+                
+                <div class="controls">
                     <p:selectOneMenu id="consigne" value="#{postingHome.instance.consigne}" effect="fade"  
                                      required="true"
                                      rendered="true"
@@ -95,9 +99,10 @@ limitations under the License.
                     </p:selectOneMenu>
                     <h:graphicImage value="#{resource['success.gif']}" rendered="#{postingHome.instance.consigne != null}"
                                     styleClass="validation-status" />
-                    <span class="help-inline"><br/>#{messages['posting.consigne.inlinehelp']}<ocp:message forId="consigne" /></span>
+                    <span class="help-block"><br/>#{messages['posting.consigne.inlinehelp']}<ocp:message forId="consigne" /></span>
                 </div>
             </h:panelGroup>
+            
             <glue:input id="memo" name="memo" type="textarea" 
                         label="#{messages['module.accounting.posting.memo']}"
                         value="#{postingHome.instance.memo}"  required="true"
@@ -172,7 +177,7 @@ limitations under the License.
                 </div>
             </p:panel>
 
-            <div class="admin-actions">
+            <div class="actions">
                 <p:commandButton id="save" value="#{messages['common.save']}" rendered="true"
                                  actionListener="#{postingHome.savePosting()}" 
                                  ajax="false" 
