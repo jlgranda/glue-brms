@@ -970,10 +970,15 @@ public class InitializeDatabase {
             entityManager.persist(bussinesEntityType);
 
 
-            Ledger ledger = new Ledger();
-            ledger.setName("Libro Contable");
-            ledger.setCreatedOn(now);
-            ledger.setLastUpdate(now);
+            Ledger ledger1 = new Ledger();
+            ledger1.setName("Libro Contable - Prueba1");
+            ledger1.setCreatedOn(now);
+            ledger1.setLastUpdate(now);
+
+             Ledger ledger2 = new Ledger();
+            ledger2.setName("Libro Contable - Prueba2");
+            ledger2.setCreatedOn(now);
+            ledger2.setLastUpdate(now);
 
 
             Posting posting = new Posting();
@@ -988,7 +993,7 @@ public class InitializeDatabase {
             posting.setPostingType(Posting.Type.PAYMENT);
             posting.setLastUpdate(now);
             posting.setMemo("PR.");
-            posting.setLedger(ledger);
+            posting.setLedger(ledger1);
 
 
 
@@ -1045,7 +1050,8 @@ public class InitializeDatabase {
             posting.addEntry(entry3);
 
 
-            entityManager.persist(ledger);
+            entityManager.persist(ledger1);
+            entityManager.persist(ledger2);
             entityManager.persist(posting);
             entityManager.persist(account1);
             entityManager.persist(account2);

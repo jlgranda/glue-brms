@@ -8,6 +8,9 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core">
 
+    <f:metadata>
+        <f:viewParam name="ledgerId" value="${postingHome.ledgerId}"/>
+    </f:metadata>    
 
     <ui:define name="header-replace">
 
@@ -15,6 +18,7 @@
             <div class="container">
                 <div class="span9 columns">
                     <div class="row fl" style="margin-top: 5px;">
+                        <h1>#{postingHome.ledger.name}</h1>
                         <h2>#{messages['module.accounting.posting']}</h2>   
                     </div>                    
                 </div> 
@@ -43,23 +47,19 @@
                 </h:link>
                 #{' '}
 
-                <h:link value="#{messages['common.edit']}" rendered="#{true}" outcome="voucher" styleClass="btn">
-                    <f:param name="postingId"></f:param>
-                </h:link>
-                #{' '}
                 <h:link value="#{messages['common.cancel']}" rendered="#{true}" outcome="list" styleClass="btn">
 
                 </h:link>
 
             </div>
 
-            <p:dataTable id="postingTablePrueba" var="_posting" value="#{postingListService}"
+            <p:dataTable id="postingTablePrueba" var="_posting" value="#{ledgerHome.instance.postings}"
                          paginator="true" rows="10" rendered="true"
                          paginatorAlwaysVisible="false"
                          paginatorPosition="top"
                          rowsPerPageTemplate="5,10,15"
                          paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
-                         selectionMode="single" lazy="true">
+                         selectionMode="single">
 
                 <f:facet name="header">  
                     <h5>#{messages['module.accounting.posting']}</h5>
@@ -114,7 +114,9 @@
 
             </p:dataTable>
 
-
+            #{ledgerHome.instance.postings}
+            
+            
         </h:form>
     </ui:define>
 </ui:composition>

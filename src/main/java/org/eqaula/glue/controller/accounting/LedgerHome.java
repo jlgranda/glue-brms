@@ -17,9 +17,12 @@ package org.eqaula.glue.controller.accounting;
 
 import java.util.Calendar;
 import java.util.Date;
+import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -37,6 +40,8 @@ import org.jboss.seam.transaction.Transactional;
  *
  * @author jlgranda
  */
+@Named
+@RequestScoped
 public class LedgerHome extends BussinesEntityHome<Ledger> {
 
     private static final long serialVersionUID = -347442906892035526L;
@@ -45,7 +50,6 @@ public class LedgerHome extends BussinesEntityHome<Ledger> {
     @Web
     private EntityManager em;
     private String uuid;
-    
     private LedgerService ledgerService;
 
     public Long getLedgerId() {
@@ -64,6 +68,12 @@ public class LedgerHome extends BussinesEntityHome<Ledger> {
         this.uuid = uuid;
     }
 
+//    @PostConstruct
+//    public void init() {
+//        setEntityManager(em);
+//        ledgerService.setEntityManager(em);
+//    }
+
     @Produces
     @Named("ledger")
     @Current
@@ -71,18 +81,19 @@ public class LedgerHome extends BussinesEntityHome<Ledger> {
     public Ledger load() {
         if (isIdDefined()) {
             wire();
-        } else if(this.instance == null){
+        } else if (this.instance == null) {
             Date now = Calendar.getInstance().getTime();
             String code = DateUtils.formatDate(now, "dd.MM.yyyy");
             setInstance(ledgerService.retrivePosting(code));
         }
         return getInstance();
     }
+
     @TransactionAttribute
     public void wire() {
         getInstance();
     }
-    
+
     @Override
     protected Ledger createInstance() {
         log.info("eqaula --> SettingHome create instance");
