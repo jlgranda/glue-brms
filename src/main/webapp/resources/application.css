@@ -451,12 +451,8 @@ PRE.prettyprint {
 
 /* Customs for bootstrpas 2.3.1
 -------------------------------------------------- */
-.help-block,
-.help-inline {
-  color: red;
-}
-
 .help-block {
-  display: block;
-  margin-bottom: 0px;
-}
+    font-size: 12px;
+    color: #bfbfbf;
+    display: inline;
+    }
