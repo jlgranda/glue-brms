@@ -63,8 +63,8 @@ import org.primefaces.component.commandbutton.CommandButton;
 @ViewScoped
 public class ProfileHome extends BussinesEntityHome<Profile> implements Serializable {
 
-    private static final long serialVersionUID = 7632987414391869389L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ProfileHome.class);
+    private static final long serialVersionUID = -6503672639384138097L;
     @Inject
     @Web
     private EntityManager em;
@@ -144,9 +144,11 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
             if (identity.isLoggedIn() && !(identity.inGroup(SecurityRules.ADMIN, "GROUP") || "admin".contains(SecurityRules.getUsername(identity)))) {                
                 setInstance(ps.getProfileByUsername(identity.getUser().getKey()));
             } else if (identity.isLoggedIn() && (identity.inGroup(SecurityRules.ADMIN, "GROUP") || "admin".contains(SecurityRules.getUsername(identity)))){
+                //TODO fix current to null when admin login
                 setInstance(createInstance());
             }
         }
+        
         return getInstance();
     }
 

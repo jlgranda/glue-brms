@@ -34,15 +34,10 @@
                         </div>
                     </p:panel>
                     
-                    
-                    
-                    <center><h4>#{messages['common.login.title']}</h4></center>
+                    <center><h4>#{messages['common.login.title']}</h4>
                     <br/>
                     
-                    
-                    
-                    <h:form id="signin">
-
+                    <h:form id="signin" class="form-horizontal">
                         <script type="text/javascript">
                             $(document).ready(function() {
                                 $('#signin\\:username').attr("placeholder", "¿Quién eres tú?").focus();
@@ -55,22 +50,22 @@
                             }
                         </style>
 
-                        <div class="clearfix">
-                            <label for="name">#{messages['common.username']}</label>
-                            <div class="input">
+                        <div class="control-group">
+                            <label for="name" class="control-label">#{messages['common.username']}</label>
+                            <div class="controls">
                                 <h:inputText id="username" value="#{credentials.username}"
                                              styleClass="xLarge" required="true"/>
-                                <br/><span class="help-inline"></span>
+                                <br/><span class="help-block"></span>
                             </div>
                         </div>
 
-                        <div class="clearfix">
-                            <label for="password">#{messages['common.password']}</label>
-                            <div class="input">
+                        <div class="control-group">
+                            <label for="password" class="control-label">#{messages['common.password']}</label>
+                            <div class="controls">
                                 <h:inputSecret id="password" value="#{credentials.password}"
                                                styleClass="xLarge" style="text-transform: uppercase;"  required="true">
                                 </h:inputSecret>
-                                <br/><span class="help-inline"></span>
+                                <br/><span class="help-block"></span>
                             </div>
                         </div>
 

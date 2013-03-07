@@ -36,6 +36,7 @@ package org.eqaula.glue.controller.management;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.TransactionAttribute;
 
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.RequestScoped;
@@ -126,7 +127,13 @@ public class Organizations implements Serializable
 
    public List<Organization> getAll()
    {
-      return organizationService.findByProfile(profile);
+       if (profile.isPersistent()){
+           return organizationService.findByProfile(profile);
+       } else {
+           //TODO mejorar admin case
+           return organizationService.getOrganizations();
+       }
+      
    }
 /*
    public int getAssignedTaskCount(final Profile profile, final Organization organization)

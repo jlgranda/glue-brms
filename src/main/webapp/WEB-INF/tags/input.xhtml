@@ -38,9 +38,9 @@ limitations under the License.
     <c:set var="disabled" value="#{not empty disabled ? disabled : 'false'}" />    
     <c:set var="size" value="#{not empty size ? size: '26'}" />    
     <!-- TODO habilitar o deshabilitar ajax validation -->
-    <h:panelGroup id="panel-group-#{id}" layout="block" class="clearfix">
-        <label for="#{name}" class="#{(not empty required and required) ? 'required' : ''}">#{label}#{(not empty required and required) ? '*&#160;' : ''}</label>
-        <div class="input">
+    <h:panelGroup id="panel-group-#{id}" layout="block" class="control-group">
+        <label for="#{name}" class="control-label #{(not empty required and required) ? 'required' : ''}">#{label}#{(not empty required and required) ? '*&#160;' : ''}</label>
+        <div class="controls">
             <c:choose>
                 <c:when test="#{type == 'java.lang.String' or type == 'text'}">
                     <p:inputText value="#{value}" id="#{name}" styleClass="xLarge span4" 
@@ -87,7 +87,7 @@ limitations under the License.
             </c:choose>
             <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
                             styleClass="validation-status" />
-            <span class="help-inline"><br/>#{inlinehelp} <ocp:message forId="#{name}" /></span>
+            <span class="help-block"><br/>#{inlinehelp} <ocp:message forId="#{name}" /></span>
         </div>
     </h:panelGroup>  
 </ui:composition>
