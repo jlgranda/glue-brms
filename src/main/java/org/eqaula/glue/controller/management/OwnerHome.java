@@ -18,6 +18,7 @@ package org.eqaula.glue.controller.management;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
@@ -46,6 +47,8 @@ import org.eqaula.glue.service.OrganizationService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 
 /*
  * @author dianita
@@ -64,11 +67,11 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     @Current
     @Inject
     private Profile profile;
-  
     private Long organizationId;
     private Organization organization;
     @Inject
     private OrganizationService organizationService;
+ 
 
     public OwnerHome() {
     }
@@ -98,18 +101,17 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         if (organization == null) {
             if (organizationId == null) {
                 organization = null;
-            }else {
+            } else {
                 organization = organizationService.find(getOrganizationId());
             }
         }
         return organization;
     }
-    
-    public void setOrganization(Organization organization){
-        this.organization=organization;
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
-    
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -151,7 +153,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
-            
+
             getInstance().setAuthor(this.profile);
             getInstance().setOrganization(getOrganization());
             create(getInstance());
@@ -192,5 +194,5 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         return "/pages/management/organization/list.xhtml?faces-redirect=true";
     }
 
-   
+    
 }

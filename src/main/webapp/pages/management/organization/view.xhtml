@@ -49,35 +49,24 @@
                         <f:param name="organizationId" value="#{organizationHome.organizationId}"></f:param>
                     </h:link> 
                 </div>
-                <c:forEach items="#{organizationHome.instance.owners}" var="o" >
-                    <p:panel header="#{o.name}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{o.name}">
-                        <f:facet name="header">
-                            <strong>#{o.name}</strong>#{' '}
-                        </f:facet>
-                        <c:choose>                        
-
-                            <c:when test="#{empty o}">
-                                <p:dataTable id="theme" var="m" value="#{o.themes}" 
-                                             editable="false" 
-                                             emptyMessage="#{messages['common.emptyList']}">  
-
-                                    <p:columns value="theme" var="column" columnIndexVar="colIndex"   
-                                               sortBy="#{themes.name}">  
-                                        <f:facet name="header">  
-                                            #{column.header}  
-                                        </f:facet>  
-                                        <!--#{m.findAttributeValue(column.property)}  -->
-                                        <h:outputText value="#{themes.name}" />
-                                    </p:columns>
-                                    <p:column value="theme" var="column" columnIndexVar="colIndex"   
-                                              sortBy="#{themes.code}">
-                                        <h:outputText value="#{themes.name}" />
-                                    </p:column> 
-                                </p:dataTable>
-                            </c:when>
-                        </c:choose>
-                    </p:panel>
-                </c:forEach>
+                <div >
+                    <p:tree value="#{organizationHome.organizationNode}" var="node" orientation="horizontal" animate="true" highlight="true" propagateSelectionDown="true" >  
+                        <p:treeNode expandedIcon="ui-icon-folder-open"  
+                                    collapsedIcon="ui-icon-folder-collapsed">  
+                            <h:outputText value="#{node.name}"/>       
+                        </p:treeNode>  
+                        <p:treeNode type="organization" icon="ui-icon-home">  
+                            <h:outputText value="#{node.name}" />  
+                        </p:treeNode>  
+                        <p:treeNode type="owner" icon="ui-icon-person">  
+                            <h:outputText value="#{node.name}" />  
+                        </p:treeNode>  
+                        <p:treeNode type="objetive" icon="ui-icon-document">  
+                            <h:outputText value="#{node.name}" />  
+                        </p:treeNode>
+                        
+                    </p:tree>
+                </div>
             </h:form>
         </ui:define>
     </ui:composition>
