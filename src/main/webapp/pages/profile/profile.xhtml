@@ -25,7 +25,7 @@
             </div>             
         </ui:define>
         <ui:define name="content">    
-            
+
             <h:form id="profile" class="form-horizontal">
 
                 <!-- Attributos para usuario -->
@@ -51,20 +51,26 @@
 
                 <glue:input id="bio" name="bio" type="textarea" label="#{messages['common.bio']}" value="#{profileHome.instance.bio}" required="false" inlinehelp="#{messages['common.bio.inlinehelp']}" execute="@this save"/>
 
-                 <h:panelGroup id="eml" layout="block" class="control-group">
+                <h:panelGroup id="eml" layout="block" class="control-group">
                     <label for="email" class="control-label">#{messages['common.email']}</label>
                     <div class="controls">
-                        <h:inputText id="email" value="#{profileHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
-                            <f:validator validatorId="emailValidator" />
-                            <f:validator validatorId="signupEmailAvailabilityValidator" />
-                            <f:ajax execute="@this" render="eml"  />
-                        </h:inputText>
+
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-camera"></i></span>
+                            <h:inputText id="email" value="#{profileHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
+                                <f:validator validatorId="emailValidator" />
+                                <f:validator validatorId="signupEmailAvailabilityValidator" />
+                                <f:ajax execute="@this" render="eml"  />
+                            </h:inputText>
+                        </div>
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.email != null}"
                                         styleClass="validation-status" />
                         <span class="help-block"><br/>Prometemos <b>nunca</b> compartir su dirección de correo. <ocp:message forId="email" /></span>
                     </div>
+                    
+                    
                 </h:panelGroup>
-               
+
 
                 <glue:input id="showBootcamp" name="showBootcamp" type="checkbox" value="#{profileHome.instance.showBootcamp}" required="true" inlinehelp="#{messages['common.bootcamp.inlinehelp']}" execute="@this save"/>
 
