@@ -182,7 +182,10 @@ limitations under the License.
                         </table>
                     </div>
                 </div>
-                 <f:facet name="footer">
+
+            </p:panel>
+
+            <div class="form-actions">
                 <p:commandButton id="save" value="#{messages['common.save']}" rendered="true"
                                  actionListener="#{postingHome.savePosting()}" 
                                  ajax="false" 
@@ -190,11 +193,9 @@ limitations under the License.
                                  style="margin-top:10px;" icon="ui-icon-disk">  
 
                 </p:commandButton>
-            </f:facet>
-            </p:panel>
+            </div>
 
-           
-            
+
         </h:form>
 
 
