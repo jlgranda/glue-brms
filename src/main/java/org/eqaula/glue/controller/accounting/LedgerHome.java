@@ -50,6 +50,7 @@ public class LedgerHome extends BussinesEntityHome<Ledger> {
     @Web
     private EntityManager em;
     private String uuid;
+    @Inject
     private LedgerService ledgerService;
 
     public Long getLedgerId() {
@@ -68,11 +69,11 @@ public class LedgerHome extends BussinesEntityHome<Ledger> {
         this.uuid = uuid;
     }
 
-//    @PostConstruct
-//    public void init() {
-//        setEntityManager(em);
-//        ledgerService.setEntityManager(em);
-//    }
+    @PostConstruct
+    public void init() {
+        setEntityManager(em);
+        ledgerService.setEntityManager(em);
+    }
 
     @Produces
     @Named("ledger")
