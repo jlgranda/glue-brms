@@ -41,7 +41,7 @@
                 <h:panelGroup id="attributes" layout="block" class="control-group">                                         
                     <ui:repeat value="#{organizationHome.instance.findBussinesEntityAttribute('org.eqaula.glue.model.management.Organization')}" var="a" varStatus="status">
                         <h:panelGroup layout="block" class="control-group">                    
-                            <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
+                            <label for="#{a.name}" class="control-label #{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
                             <div class="controls">
                                 <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" 
                                               rendered="#{a.property.type eq 'java.lang.String'}">

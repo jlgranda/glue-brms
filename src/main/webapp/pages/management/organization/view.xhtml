@@ -33,7 +33,7 @@
                                     <f:param name="organizationId" value="#{organizationHome.instance.id}"/>
                                 </h:link>
                                 <br/>
-                                <h:link outcome="list" styleClass="btn secondary" value="#{messages['common.cancel']}">
+                                <h:link outcome="list" styleClass="btn" value="#{messages['common.cancel']}">
                                 </h:link>
                             </h:form>
                         </div>
@@ -44,11 +44,15 @@
 
         <ui:define name="content">
             <h:form id="summary">
+                <div class="actions">
+                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="/pages/management/owner/owner" styleClass="btn primary">                        
+                        <f:param name="organizationId" value="#{organizationHome.organizationId}"></f:param>
+                    </h:link> 
+                </div>
                 <c:forEach items="#{organizationHome.instance.owners}" var="o" >
                     <p:panel header="#{o.name}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{o.name}">
                         <f:facet name="header">
                             <strong>#{o.name}</strong>#{' '}
-
                         </f:facet>
                         <c:choose>                        
 
@@ -76,16 +80,5 @@
                 </c:forEach>
             </h:form>
         </ui:define>
-
-        <ui:define name="content">
-            <h:form id="form">
-                <div class="admin-actions">
-                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="/pages/management/owner/owner" styleClass="btn primary">                        
-                        <f:param name="organizationId" value="#{organizationHome.organizationId}"></f:param>
-                    </h:link> 
-                </div>
-            </h:form>
-        </ui:define>
-
     </ui:composition>
 </html>

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
@@ -169,7 +170,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
             BussinesEntity entity = new BussinesEntity();
             entity.setName(name);
             //TODO implementar generador de códigos para entidad de negocio
-            entity.setCode("" + now.getTime());
+            entity.setCode(UUID.randomUUID().toString());
             entity.setCreatedOn(now);
             entity.setLastUpdate(now);
             entity.setActivationTime(now);
