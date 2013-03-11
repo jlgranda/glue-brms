@@ -13,7 +13,7 @@
         <f:metadata>
             <f:viewParam name="ownerId" value="#{ownerHome.ownerId}"/>
             <f:viewParam name="organizationId" value="#{ownerHome.organizationId}"/>
-
+            <f:viewParam name="outcome" value="#{ownerHome.outcome}"/>
             <s:viewAction action="#{ownerHome.load}" if="#{conversation.transient}" />
         </f:metadata>
         <ui:define name="header-replace">
@@ -32,16 +32,16 @@
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{ownerHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{ownerHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
-                <div class="actions">
-                    <p:commandButton id="save" action="#{ownerHome.saveOwner()}" value="#{messages['common.save']}" styleClass="btn primary"/>
+                <div class="form-actions">
+                    <p:commandButton id="save" action="#{ownerHome.saveOwner()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
-                                     update=":cancel-dialog" rendered="#{ownerHome.ownerId!= null}">                        
+                                     update=":cancel-dialog" rendered="#{ownerHome.instance.persistent}">                        
                     </p:commandButton>
                     <!-- &nbsp;-->
-                    <h:link outcome="/pages/management/organization/view.xhtm?faces-redirect=true"
-                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
-                        <f:param name="organizationId" value="#{organizationHome.organizationId}" />
+                    <h:link outcome="/pages/management/organization/view"
+                            value="#{messages['common.cancel']}" styleClass="btn">
+                        <f:param name="organizationId" value="#{ownerHome.organizationId}"/>
                     </h:link>
                 </div>  
             </h:form>

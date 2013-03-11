@@ -58,8 +58,6 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
     @Current
     @Inject
     private Profile profile;
@@ -143,11 +141,11 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         getInstance().setLastUpdate(now);
         if (getInstance().isPersistent()) {
             save(getInstance());
-        } else {    
-            if (this.profile!= null && this.profile.isPersistent()){
+        } else {
+            if (this.profile != null && this.profile.isPersistent()) {
                 getInstance().setAuthor(this.profile);
             }
-            create(getInstance()); 
+            create(getInstance());
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -185,7 +183,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        return getOutcome();
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
     public TreeNode buildTree() {
@@ -209,21 +207,51 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void addChildren() {
+    public void redirecToAdd() {
 
+        StringBuilder outcomeBuilder = new StringBuilder();
         if (selectedNode != null) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
             FacesContext.getCurrentInstance().addMessage(null, message);
             BussinesEntity bussinesEntity = (BussinesEntity) selectedNode.getData();
             if ("organization".equals(selectedNode.getType())) {
-                String result = "/pages/management/owner/owner.xhtml?organizationId="+getOrganizationId();
-                navigation.handleNavigation(context, null, result + "&faces-redirect=true");
+                outcomeBuilder.append("/pages/management/owner/owner.xhtml?");
+                outcomeBuilder.append("organizationId=").append(getOrganizationId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             }
             if ("owner".equals(selectedNode.getType())) {
-                String result = "/pages/management/objetive/objetive.xhtml?ownerId="+bussinesEntity.getId();
-                navigation.handleNavigation(context, null, result + "&faces-redirect=true");
+                outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
+                outcomeBuilder.append("organizationId=").append(getOrganizationId());
+                outcomeBuilder.append("&ownerId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             }
-            
+
+        }
+    }
+    
+    public void redirecToEdit() {
+
+        StringBuilder outcomeBuilder = new StringBuilder();
+        if (selectedNode != null) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            BussinesEntity bussinesEntity = (BussinesEntity) selectedNode.getData();
+            if ("organization".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/organization/organization.xhtml?");
+                outcomeBuilder.append("organizationId=").append(getOrganizationId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            }
+            if ("owner".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/owner/owner.xhtml?");
+                outcomeBuilder.append("organizationId=").append(getOrganizationId());
+                outcomeBuilder.append("&ownerId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            }
+
         }
     }
 }

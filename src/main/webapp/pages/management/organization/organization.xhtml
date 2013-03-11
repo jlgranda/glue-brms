@@ -88,7 +88,9 @@
                     </p:commandButton>
                   
                     <h:link outcome="#{organizationHome.outcome}"
-                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
+                            rendered="#{organizationHome.managed}"
+                            value="#{messages['common.cancel']}" styleClass="btn">
+                        <f:param name="organizationId" value="#{organizationHome.organizationId}"/>
                     </h:link>
                 </div>           
                 
