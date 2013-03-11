@@ -43,28 +43,28 @@
         </ui:define>
 
         <ui:define name="content">
-            <h:form id="summary">
-                <div class="actions">
-                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="/pages/management/owner/owner" styleClass="btn primary">                        
-                        <f:param name="organizationId" value="#{organizationHome.organizationId}"></f:param>
-                    </h:link> 
-                </div>
+            <h:form id="summary">                
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+                <p:contextMenu for="organizationTree" >  
+                    <p:menuitem value="#{messages['common.add']}" update=":messages" actionListener="#{organizationHome.addChildren}" icon="ui-icon-search" />                   
+                </p:contextMenu>  
                 <div >
-                    <p:tree value="#{organizationHome.organizationNode}" var="node" orientation="horizontal" animate="true" highlight="true" propagateSelectionDown="true" >  
+                    <p:tree id="organizationTree" value="#{organizationHome.organizationNode}" var="node" orientation="horizontal" selectionMode="single" selection="#{organizationHome.selectedNode}"  dynamic="true">  
+
                         <p:treeNode expandedIcon="ui-icon-folder-open"  
                                     collapsedIcon="ui-icon-folder-collapsed">  
-                            <h:outputText value="#{node.name}"/>       
+
                         </p:treeNode>  
-                        <p:treeNode type="organization" icon="ui-icon-home">  
+                        <p:treeNode  type="organization" >    
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
                         <p:treeNode type="owner" icon="ui-icon-person">  
-                            <h:outputText value="#{node.name}" />  
+                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
                         <p:treeNode type="objetive" icon="ui-icon-document">  
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>
-                        
+
                     </p:tree>
                 </div>
             </h:form>

@@ -22,15 +22,15 @@
         <ui:define name="header-replace">
             <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
                 <div class="container">
-                    <div class="row fl" style="margin-top: 5px;">
-                        <div class="span2 columns">                            
+                    <div class="row-fluid" style="margin-top: 5px;">
+                        <div class="span2">                            
 
                             <h:link outcome="/pages/profile/profile" title="${profileHome.instance.fullName}">
                                 <ocp:gravatar email="${profileHome.instance.email}" size="90" updatable="false" />
                                 <f:param name="profileId" value="#{profileHome.instance.id}"/>
                             </h:link>
                         </div>
-                        <div class="span7 columns">
+                        <div class="span7">
                             <h2>#{messages['common.edit']}: #{groupHome.instance.property.label} #{messages['common.for']} #{groupHome.profile.fullName}</h2>
                             <br />
                             <p><span style="">#{profileHome.instance.code}</span>
@@ -39,7 +39,7 @@
                             </p>
                         </div>
 
-                        <div class="span4 columns offset3">
+                        <div class="span3">
                             <h:form id="control">
                                 <p:commandButton value="#{messages['common.editionEnabled']}"  actionListener="#{profileHome.commuteEdition()}" 
                                                  rendered="#{not profileHome.editionEnabled}" styleClass="btn primary"
@@ -61,7 +61,7 @@
                 <h:panelGroup layout="block" class="clearfix">
                     <p:commandButton value="#{messages['common.add']} #{groupHome.instance.property.label}" ajax="true"
                                      action="#{groupHome.addBussinesEntity(groupHome.instance)}" process="@this, :edit-dialog"
-                                     icon="ui-icon-plus" update=":edit-dialog" styleClass="btn primary"/>  
+                                     icon="ui-icon-plus" update=":edit-dialog" styleClass="btn btn-primary"/>  
 
                     <p:panel id="dataTable">
                         <p:dataTable id="members" var="m" value="#{groupHome.instance.findOtherMembers(groupHome.profile)}" 
@@ -84,8 +84,8 @@
                         </p:dataTable>
                     </p:panel>
                 </h:panelGroup>
-                <div class="actions">
-                    <p:commandButton id="save" action="#{groupHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary" rendered="true"/>
+                <div class="form-actions">
+                    <p:commandButton id="save" action="#{groupHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn btn-primary" rendered="true"/>
                     &nbsp;
                     <p:commandButton value="#{messages['common.cancel']}"
                                      styleClass="btn"
@@ -97,17 +97,18 @@
                 </div>
             </h:form>
 
-            <h:panelGroup layout="block" class="clearfix">
+            <h:panelGroup layout="block" class="control-group">
 
                 <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.edit']} #{groupHome.bussinesEntity.name}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="550">
 
-                    <h:form id="form-dialog">
+                    <h:form id="form-dialog" class="form-horizontal">
                         <p:messages id="messages-dialog" showDetail="true" autoUpdate="true" closable="true" />  
                         <!-- Attributos de clase, siempre mostrar, almacena nombre y código único -->
-                        <h:panelGroup layout="block" class="clearfix" rendered="#{groupHome.instance.property.showDefaultBussinesEntityProperties}">
-                            <h:panelGroup layout="block" class="clearfix">
-                                <label for="name" class="required">#{messages['common.name']}*</label>
-                                <div class="input">
+                        <h:panelGroup layout="block" class="control-group" rendered="#{groupHome.instance.property.showDefaultBussinesEntityProperties}">
+                            <h:panelGroup layout="block" class="control-group">
+                                <!-- class="required" -->
+                                <label for="name" class="control-label">#{messages['common.name']}*</label>
+                                <div class="controls">
                                     <p:inputText name="name" value="#{groupHome.bussinesEntity.name}" styleClass="xLarge span4" required="true" label="#{messages['common.name']}" 
                                                  rendered="true">
                                         <f:validator validatorId="safeTextUTF8Validator"/>
@@ -115,12 +116,12 @@
                                     </p:inputText>
                                     <h:graphicImage value="#{resource['success.gif']}" rendered="#{groupHome.bussinesEntity.name != null}"
                                                     styleClass="validation-status" />
-                                    <span class="help-inline"><br/>#{messages['common.name.inlinehelp']} <ocp:message forId="name" /></span>
+                                    <span class="help-block"><br/>#{messages['common.name.inlinehelp']} <ocp:message forId="name" /></span>
                                 </div>
                             </h:panelGroup> 
-                            <h:panelGroup layout="block" class="clearfix">
-                                <label for="code" class="required">#{messages['common.code']}*</label>
-                                <div class="input">
+                            <h:panelGroup layout="block" class="control-group">
+                                <label for="code" class="control-label">#{messages['common.code']}*</label>
+                                <div class="controls">
                                     <p:inputText  name="code" value="#{groupHome.bussinesEntity.code}" styleClass="xLarge span4" required="false" label="#{messages['common.name']}" 
                                                   rendered="true">
                                         <f:validator validatorId="safeTextUTF8Validator"/>                                        
@@ -129,15 +130,16 @@
                                     </p:inputText>
                                     <h:graphicImage value="#{resource['success.gif']}" rendered="#{groupHome.bussinesEntity.code != null}"
                                                     styleClass="validation-status" />
-                                    <span class="help-inline"><br/>#{messages['common.name.inlinehelp']} <ocp:message forId="code" /></span>
+                                    <span class="help-block"><br/>#{messages['common.name.inlinehelp']} <ocp:message forId="code" /></span>
                                 </div>
                             </h:panelGroup> 
                         </h:panelGroup>
-                        <h:panelGroup layout="block" class="clearfix">
+                        <h:panelGroup layout="block" class="control-group">
                             <ui:repeat value="#{groupHome.bussinesEntity.findBussinesEntityAttribute(groupHome.instance.name)}" var="a" varStatus="status">
-                                <h:panelGroup layout="block" class="clearfix">
-                                    <label class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
-                                    <div class="input">
+                                <h:panelGroup layout="block" class="control-group">
+                                    <!-- class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"-->
+                                    <label class="control-label">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
+                                    <div class="controls">
                                         <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" 
                                                       rendered="#{a.property.type eq 'java.lang.String'}">
                                             <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
@@ -170,7 +172,7 @@
                                         -->
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{a.value != null}"
                                                         styleClass="validation-status" />
-                                        <span class="help-inline"><br/>#{a.property.helpInline}</span>
+                                        <span class="help-block"><br/>#{a.property.helpInline}</span>
                                     </div>
                                 </h:panelGroup>  
                             </ui:repeat>

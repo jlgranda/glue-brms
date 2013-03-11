@@ -22,6 +22,7 @@ import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -30,6 +31,7 @@ import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
+import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.management.Organization;
@@ -39,6 +41,7 @@ import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -57,12 +60,15 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     private EntityManager em;
     @Inject
     private BussinesEntityService bussinesEntityService;
-    
     @Current
     @Inject
     private Profile profile;
-    
     private TreeNode organizationNode;
+    private TreeNode selectedNode;
+    @Inject
+    private NavigationHandler navigation;
+    @Inject
+    private FacesContext context;
 
     public OrganizationHome() {
     }
@@ -74,13 +80,13 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public void setOrganizationId(Long organizationId) {
         setId(organizationId);
     }
-    
-    public String getStructureName(){
+
+    public String getStructureName() {
         return getInstance().getName();
     }
 
     public TreeNode getOrganizationNode() {
-        if(organizationNode==null){
+        if (organizationNode == null) {
             buildTree();
         }
         return organizationNode;
@@ -89,7 +95,15 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public void setOrganizationNode(TreeNode organizationNode) {
         this.organizationNode = organizationNode;
     }
-    
+
+    public TreeNode getSelectedNode() {
+        return selectedNode;
+    }
+
+    public void setSelectedNode(TreeNode selectedNode) {
+        this.selectedNode = selectedNode;
+    }
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -112,12 +126,12 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     protected Organization createInstance() {
         BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Organization.class.getName());
         Date now = Calendar.getInstance().getTime();
-        Organization organization = new Organization();    
+        Organization organization = new Organization();
         organization.setCode(UUID.randomUUID().toString());
         organization.setCreatedOn(now);
         organization.setLastUpdate(now);
         organization.setActivationTime(now);
-        organization.setExpirationTime(Dates.addDays(now, 364)); 
+        organization.setExpirationTime(Dates.addDays(now, 364));
         organization.setType(_type);
         organization.buildAttributes(bussinesEntityService);
         return organization;
@@ -127,7 +141,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public String saveOrganization() {
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
-        if (getInstance().isPersistent()){
+        if (getInstance().isPersistent()) {
             save(getInstance());
         } else {    
             if (this.profile!= null && this.profile.isPersistent()){
@@ -137,7 +151,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-    
+
     public boolean isWired() {
         return true;
     }
@@ -150,18 +164,18 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public Class<Organization> getEntityClass() {
         return Organization.class;
     }
-    
+
     @Transactional
     public String deleteOrganization() {
         try {
             if (getInstance() == null) {
                 throw new NullPointerException("Organization is null");
-            } 
+            }
             if (getInstance().isPersistent()) {
                 delete(getInstance());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
                 RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
-                
+
             } else {
                 //remover de la lista, si aún no esta persistido
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una organización para ser borrada!", ""));
@@ -173,22 +187,43 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         }
         return getOutcome();
     }
-         
+
     public TreeNode buildTree() {
-        organizationNode = new DefaultTreeNode("organization",getInstance(), null);
+        organizationNode = new DefaultTreeNode("organization", getInstance(), null);
         TreeNode ownerNode = null;
         TreeNode objetiveNode = null;
         organizationNode.setExpanded(true);
         for (Owner owner : getInstance().getOwners()) {
-            ownerNode = new DefaultTreeNode("owner",owner, organizationNode);
+            ownerNode = new DefaultTreeNode("owner", owner, organizationNode);
             ownerNode.setExpanded(true);
             for (Objetive objetive : owner.getObjetives()) {
-                objetiveNode = new DefaultTreeNode("objetive",objetive, ownerNode);
+                objetiveNode = new DefaultTreeNode("objetive", objetive, ownerNode);
                 objetiveNode.setExpanded(true);
             }
         }
         return organizationNode;
     }
-    
-    
+
+    public void onNodeSelect(NodeSelectEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", event.getTreeNode().toString());
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void addChildren() {
+
+        if (selectedNode != null) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            BussinesEntity bussinesEntity = (BussinesEntity) selectedNode.getData();
+            if ("organization".equals(selectedNode.getType())) {
+                String result = "/pages/management/owner/owner.xhtml?organizationId="+getOrganizationId();
+                navigation.handleNavigation(context, null, result + "&faces-redirect=true");
+            }
+            if ("owner".equals(selectedNode.getType())) {
+                String result = "/pages/management/objetive/objetive.xhtml?ownerId="+bussinesEntity.getId();
+                navigation.handleNavigation(context, null, result + "&faces-redirect=true");
+            }
+            
+        }
+    }
 }
