@@ -58,7 +58,7 @@
         <ui:define name="content">
             <h:form id="form-table">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-                <h:panelGroup layout="block" class="clearfix">
+                <h:panelGroup layout="block" class="control-group">
                     <p:commandButton value="#{messages['common.add']} #{groupHome.instance.property.label}" ajax="true"
                                      action="#{groupHome.addBussinesEntity(groupHome.instance)}" process="@this, :edit-dialog"
                                      icon="ui-icon-plus" update=":edit-dialog" styleClass="btn btn-primary"/>  
@@ -99,7 +99,7 @@
 
             <h:panelGroup layout="block" class="control-group">
 
-                <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.edit']} #{groupHome.bussinesEntity.name}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="550">
+                <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.edit']} #{groupHome.bussinesEntity.name}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="550"  >
 
                     <h:form id="form-dialog" class="form-horizontal">
                         <p:messages id="messages-dialog" showDetail="true" autoUpdate="true" closable="true" />  
@@ -122,7 +122,7 @@
                             <h:panelGroup layout="block" class="control-group">
                                 <label for="code" class="control-label">#{messages['common.code']}*</label>
                                 <div class="controls">
-                                    <p:inputText  name="code" value="#{groupHome.bussinesEntity.code}" styleClass="xLarge span4" required="false" label="#{messages['common.name']}" 
+                                    <p:inputText  name="code" value="#{groupHome.bussinesEntity.code}" required="false" label="#{messages['common.name']}" 
                                                   rendered="true">
                                         <f:validator validatorId="safeTextUTF8Validator"/>                                        
 
@@ -137,10 +137,10 @@
                         <h:panelGroup layout="block" class="control-group">
                             <ui:repeat value="#{groupHome.bussinesEntity.findBussinesEntityAttribute(groupHome.instance.name)}" var="a" varStatus="status">
                                 <h:panelGroup layout="block" class="control-group">
-                                    <!-- class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"-->
-                                    <label class="control-label">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
+
+                                    <label class="#{(not empty a.property.required and a.property.required) ? 'control-label required' : 'control-label'}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
                                     <div class="controls">
-                                        <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" 
+                                        <p:inputText  value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}" 
                                                       rendered="#{a.property.type eq 'java.lang.String'}">
                                             <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
@@ -149,7 +149,7 @@
                                                     rendered="#{a.property.type eq 'java.util.Date'}">
                                             <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
                                         </p:calendar>  
-                                        <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}"
+                                        <pe:inputNumber value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}"
                                                         rendered="#{a.property.type eq 'java.lang.Long' or a.property.type eq 'java.lang.Double' or a.property.type eq 'java.lang.Float'}">  
                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                         </pe:inputNumber>  
@@ -158,7 +158,7 @@
                                             <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
                                             <p:ajax event="change" update="@parent" partialSubmit="true"/>
                                         </p:selectOneMenu> 
-                                        <p:inputTextarea value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
+                                        <p:inputTextarea value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
                                                          rendered="#{a.property.type eq 'java.lang.MultiLineString'}">
                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                         </p:inputTextarea>
@@ -181,7 +181,8 @@
                                          actionListener="#{groupHome.saveBussinesEntity()}" 
                                          update=":form-table:dataTable messages-dialog :edit-dialog"
                                          ajax="true" process="@this"
-                                         style="margin-top:10px;" icon="ui-icon-disk">  
+                                         style="margin-top:10px;" icon="ui-icon-disk"
+                                         styleClass="btn btn-primary">  
                         </p:commandButton>  
 
                         <p:commandButton type="button" value="#{messages['common.delete']}" style="margin-top:10px;" rendered="#{groupHome.bussinesEntity.persistent}" onclick="deletedDlg.show();"/>  

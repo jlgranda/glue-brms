@@ -54,16 +54,16 @@
         </ui:define>
         <ui:define name="content">             
 
-            <h:form id="form" class="form-stacked">
+            <h:form id="form" class="form-horizontal">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <!-- Attributos personalizados -->
                 <h:panelGroup id="attributes" layout="block" class="control-group">
                     <ui:repeat value="#{profileHome.instance.findBussinesEntityAttribute(profileHome.structureName)}" var="a" varStatus="status">
                         <h:panelGroup layout="block" class="control-group" rendered="#{a.property.survey}">
-                            <h:panelGroup layout="block" class="control-row">
+                            <h:panelGroup layout="block" class="survey-content">
                                 <span class="#{(not empty a.property.required and a.property.required) ? 'survey-label required' : 'survey-label'}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</span>
                                 <div class="survey-input">
-                                    <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" 
+                                    <p:inputText  value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}" 
                                                   rendered="#{a.property.type eq 'java.lang.String'}">
                                         <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
                                     </p:inputText>
@@ -71,7 +71,7 @@
                                                 rendered="#{a.property.type eq 'java.util.Date'}">
                                         <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
                                     </p:calendar>  
-                                    <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}"
+                                    <pe:inputNumber value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}"
                                                     rendered="#{a.property.type eq 'java.lang.Long' or a.property.type eq 'java.lang.Double' or a.property.type eq 'java.lang.Float'}">  
                                         <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                     </pe:inputNumber>  
@@ -80,7 +80,7 @@
                                         <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
                                         <p:ajax event="change" update="@parent" partialSubmit="true"/>
                                     </p:selectOneMenu> 
-                                    <p:inputTextarea value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
+                                    <p:inputTextarea value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
                                                      rendered="#{a.property.type eq 'java.lang.MultiLineString'}">
                                         <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                     </p:inputTextarea>
@@ -102,10 +102,13 @@
                             </h:panelGroup>
 
                         </h:panelGroup>
-                        <h:panelGroup layout="block" class="clearfix" rendered="#{not a.property.survey}">
-                            <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
-                            <div class="input">
-                                <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" 
+
+                        <!-- Bloque de código para editar roles -->
+                        <h:panelGroup layout="block" class="control-group" rendered="#{not a.property.survey}">
+                            <!--  class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"  -->
+                            <label for="#{a.name}" class="control-label">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
+                            <div class="controls">
+                                <p:inputText  value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}" 
                                               rendered="#{a.property.type eq 'java.lang.String'}">
                                     <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
                                 </p:inputText>
@@ -113,7 +116,7 @@
                                             rendered="#{a.property.type eq 'java.util.Date'}">
                                     <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
                                 </p:calendar>  
-                                <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}"
+                                <pe:inputNumber value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}"
                                                 rendered="#{a.property.type eq 'java.lang.Long' or a.property.type eq 'java.lang.Double' or a.property.type eq 'java.lang.Float'}">  
                                     <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                 </pe:inputNumber>  
@@ -122,7 +125,7 @@
                                     <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
                                     <p:ajax event="change" update="@parent" partialSubmit="true"/>
                                 </p:selectOneMenu> 
-                                <p:inputTextarea value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
+                                <p:inputTextarea value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
                                                  rendered="#{a.property.type eq 'java.lang.MultiLineString'}">
                                     <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                 </p:inputTextarea>
@@ -136,12 +139,12 @@
                                 -->
                                 <h:graphicImage value="#{resource['success.gif']}" rendered="#{a.value != null}"
                                                 styleClass="validation-status" />
-                                <span class="help-inline"><br/>#{a.property.helpInline} <ocp:message forId="#{a.name}" /></span>
+                                <span class="help-block"><br/>#{a.property.helpInline} <ocp:message forId="#{a.name}" /></span>
                             </div>
                         </h:panelGroup>  
                     </ui:repeat>
                 </h:panelGroup>
-                <div class="form-actions">
+                <div class="form form-actions">
                     <h:commandButton id="save" action="#{profileHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     &nbsp;
                     <h:link outcome="/pages/profile/view.xhtml?faces-redirect=true"
