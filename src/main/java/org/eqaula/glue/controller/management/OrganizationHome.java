@@ -31,12 +31,16 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
+import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.management.Organization;
+import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 
 /**
  *
@@ -57,6 +61,8 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     @Current
     @Inject
     private Profile profile;
+    
+    private TreeNode organizationNode;
 
     public OrganizationHome() {
     }
@@ -71,6 +77,17 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     
     public String getStructureName(){
         return getInstance().getName();
+    }
+
+    public TreeNode getOrganizationNode() {
+        if(organizationNode==null){
+            buildTree();
+        }
+        return organizationNode;
+    }
+
+    public void setOrganizationNode(TreeNode organizationNode) {
+        this.organizationNode = organizationNode;
     }
     
     @TransactionAttribute
@@ -155,5 +172,22 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         }
         return "/pages/management/organization/list.xhtml?faces-redirect=true";
     }
-        
+         
+    public TreeNode buildTree() {
+        organizationNode = new DefaultTreeNode("organization",getInstance(), null);
+        TreeNode ownerNode = null;
+        TreeNode objetiveNode = null;
+        organizationNode.setExpanded(true);
+        for (Owner owner : getInstance().getOwners()) {
+            ownerNode = new DefaultTreeNode("owner",owner, organizationNode);
+            ownerNode.setExpanded(true);
+            for (Objetive objetive : owner.getObjetives()) {
+                objetiveNode = new DefaultTreeNode("objetive",objetive, ownerNode);
+                objetiveNode.setExpanded(true);
+            }
+        }
+        return organizationNode;
+    }
+    
+    
 }
