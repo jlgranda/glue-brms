@@ -129,11 +129,13 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         getInstance().setLastUpdate(now);
         if (getInstance().isPersistent()){
             save(getInstance());
-        } else {                        
-            getInstance().setAuthor(this.profile);
-            create(getInstance());
+        } else {    
+            if (this.profile!= null && this.profile.isPersistent()){
+                getInstance().setAuthor(this.profile);
+            }
+            create(getInstance()); 
         }
-        return "/pages/management/organization/list";
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
     
     public boolean isWired() {
@@ -166,11 +168,10 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             }
 
         } catch (Exception e) {
-            //System.out.println("deleteBussinessEntity ERROR = " + e.getMessage());
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        return "/pages/management/organization/list.xhtml?faces-redirect=true";
+        return getOutcome();
     }
          
     public TreeNode buildTree() {

@@ -56,25 +56,26 @@ limitations under the License.
             <div class="admin-actions">
                 <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="profile" styleClass="btn primary">
                     <f:param name="profileId"></f:param>
-                    <f:param name="backView" value="list"></f:param>
+                    <f:param name="outcome" value="list"></f:param>
+                    <f:param name="command" value="add"></f:param>
                 </h:link>
                 #{' '}
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="profile" styleClass="btn" 
                         disabled="#{empty profileListService.selectedProfile}">
                     <f:param name="profileId" value="#{profileListService.selectedProfile.id}"></f:param>
-                    <f:param name="backView" value="list"></f:param>
+                    <f:param name="outcome" value="list"></f:param>
                 </h:link>
                 #{' '}
                 <h:link id="button-view" value="#{messages['common.view']}" rendered="#{true}" outcome="view" styleClass="btn"
                         disabled="#{empty profileListService.selectedProfile}">
                     <f:param name="profileId" value="#{profileListService.selectedProfile.id}"></f:param>
-                    <f:param name="backView" value="list"></f:param>
+                    <f:param name="outcome" value="list"></f:param>
                 </h:link>
                 #{' '}
                 <h:link id="button-authorize" value="#{messages['common.authorize']}" rendered="#{true}" outcome="/pages/admin/security/authorization.xhtml?faces-redirect=true" styleClass="btn"
                         disabled="#{empty  profileListService.selectedProfile}">
                     <f:param name="username" value="#{profileListService.selectedProfile.username}"></f:param>
-                    <f:param name="backView" value="list"></f:param>
+                    <f:param name="outcome" value="list"></f:param>
                 </h:link>
                 #{' '}
                 <h:commandLink id="button-print" value="#{messages['common.print']}" actionListener="#{profileReport.createPdf()}" styleClass="btn"> 

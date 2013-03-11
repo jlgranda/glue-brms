@@ -56,7 +56,6 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
     @Inject
     private PostingService postingService;
     private Posting postingSelected;
-    private String backview;
     private Ledger ledger;
     private Long ledgerId;
     
@@ -166,11 +165,9 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
             e.setAmount(e.getCredit() != null ? e.getCredit() : (e.getDebit() != null ? e.getDebit() : new BigDecimal(0)));
         }
         if (getInstance().isPersistent()) {
-            log.info("eqaula --> Saving instance");
             save(getInstance());
             outcome = "/pages/accounting/ledger/ledger.xhtml?faces-redirect=true";
         } else {
-            log.info("eqaula --> Creating instance");
             save(getInstance());
             outcome = "/pages/accounting/ledger/ledger.xhtml?faces-redirect=true";
         }
