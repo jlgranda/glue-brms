@@ -451,10 +451,73 @@ PRE.prettyprint {
 
 /* Customs for bootstrpas 2.3.1
 -------------------------------------------------- */
-.help-block {
-    font-size: 11px;
-    color: #bfbfbf;
-    display: inline;
-    line-height: 14px;
+element.style {
 }
+
+.help-inline {
+    padding-left: 5px;
+}
+.help-inline, .help-block {
+    font-size: 11px;
+    line-height: 6px;
+    color: #bfbfbf;
+    
+}
+
+.form-horizontal .control-group {
+    margin-bottom: 1px;
+    padding: 2px;
+}
+
+
+form .survey-content {
+    float: left;
+    padding-top: 6px;
+    width: 50%;
+}
+
+.survey-label.required {
+    font-weight: bold;
+}
+
+survey-label {
+    color: #404040;
+    float: left;
+    font-size: 13px;
+    line-height: 18px;
+    padding-top: 6px;
+    text-align: right;
+    width: 130px;
+}
+
+form .survey-input {
+    margin-left: 0;
+}
+
+
+form .survey-help {
+    float: right;
+    padding-top: 6px;
+    width: 48%;
+}
+
+.survey-label-help {
+    float: left;
+    border-radius: 3px 3px 3px 3px;
+    color: #BFBFBF;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 18px;
+}
+.survey-help-text {
+    float: left;
+    border-radius: 3px 3px 3px 3px;
+    color: #BFBFBF;
+    font-family: inherit;
+    font-size: 11px;
+    line-height: 18px;
+}
+
+
 

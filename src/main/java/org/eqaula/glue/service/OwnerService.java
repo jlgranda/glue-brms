@@ -16,16 +16,16 @@
 package org.eqaula.glue.service;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.management.Owner_;
+import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.PersistenceUtil;
-
 
 /**
  *
@@ -67,5 +67,32 @@ public class OwnerService extends PersistenceUtil<Owner> implements Serializable
         Root<Owner> bussinesEntityType= query.from(Owner.class);
         query.where(builder.equal(bussinesEntityType.get(Owner_.name), name));
         return getSingleResult(query);
+    }
+    
+    public List<Owner> findByProfile(Profile profile) {
+        LOG.info("find Owner with profile " + profile);
+        if (profile == null) return new ArrayList<Owner>(0);
+
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Owner> query = builder.createQuery(Owner.class);
+        Root<Owner> bussinesEntityType = query.from(Owner.class);
+        query.where(builder.equal(bussinesEntityType.get(Owner_.author), profile));
+        //TODO agregar busqueda por organizationCode
+        return getResultList(query);
+    }
+
+    public Owner findByProfileAndCode(Profile profile, String ownerCode) {
+        LOG.info("find Owner with profile " + profile + " owner code " + ownerCode);
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Owner> query = builder.createQuery(Owner.class);
+        Root<Owner> bussinesEntityType = query.from(Owner.class);
+        query.where(builder.equal(bussinesEntityType.get(Owner_.author), profile));
+        //TODO agregar busqueda por organizationCode
+        return getSingleResult(query);
+    }
+
+    public void create(Profile loggedIn, Owner current) {
+        current.setAuthor(loggedIn);
+        create(current);
     }
 }
