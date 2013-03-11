@@ -153,7 +153,6 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
-
             getInstance().setAuthor(this.profile);
             getInstance().setOrganization(getOrganization());
             create(getInstance());
