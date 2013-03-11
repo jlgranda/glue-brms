@@ -13,7 +13,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-            <f:viewParam name="organizationId" value="#{organizationHome.organizationId}" />            
+            <f:viewParam name="organizationId" value="#{organizationHome.organizationId}" />
+            <f:viewParam name="outcome" value="#{organizationHome.outcome}" />
             <s:viewAction action="#{organizationHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
 
@@ -79,14 +80,14 @@
                         </h:panelGroup>  
                     </ui:repeat>                                   
                 </h:panelGroup>
-                <div class="actions">
+                <div class="controls">
                     <p:commandButton id="save" action="#{organizationHome.saveOrganization()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                    
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
-                                     update=":cancel-dialog" rendered="#{organizationHome.organizationId != null}">                        
+                                     update=":cancel-dialog" rendered="#{organizationHome.managed}">                        
                     </p:commandButton>
                   
-                    <h:link outcome="/pages/management/organization/list.xhtml?faces-redirect=true"
+                    <h:link outcome="#{organizationHome.outcome}"
                             value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
                     </h:link>
                 </div>           
