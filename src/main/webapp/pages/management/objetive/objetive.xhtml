@@ -26,6 +26,7 @@ limitations under the License.
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml" >
         <f:metadata>
             <f:viewParam name="objetiveId" value="#{objetiveHome.objetiveId}"/>
+            <f:viewParam name="ownerId" value="#{objetiveHome.ownerId}"/>
             <s:viewAction action="#{objetiveHome.load}" if="#{conversation.transient}" />
         </f:metadata>
         <ui:define name="header-replace">

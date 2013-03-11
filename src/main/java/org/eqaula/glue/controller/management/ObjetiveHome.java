@@ -35,8 +35,10 @@ import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Objetive;
+import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
+import org.eqaula.glue.service.OwnerService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.jboss.solder.logging.Logger;
@@ -62,8 +64,11 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
     @Current
     @Inject
     private Profile profile;
-    @Resource
-    private javax.transaction.UserTransaction utx;
+    
+    private Owner owner;
+    private Long ownerId;
+    @Inject
+    private OwnerService ownerService;
 
     public ObjetiveHome() {
     }
@@ -80,6 +85,32 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         return getInstance().getName();
     }
 
+    @Transactional
+    public Owner getOwner() {
+        if(owner==null){
+            if(ownerId==null){
+                owner=null;
+            }else{
+                owner = ownerService.find(getOwnerId());
+            }
+        }
+        return owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
+    
+    
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -95,6 +126,7 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
     @PostConstruct
     public void init() {
         setEntityManager(em);
+        ownerService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
 
@@ -121,9 +153,10 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
+            getInstance().setOwner(getOwner());
             create(getInstance());
         }
-        return "/pages/management/organization/organization";
+        return "/pages/management/organization/view?organizationId="+getOwner().getOrganization().getId();
     }
 
     public boolean isWired() {
@@ -159,17 +192,7 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         return "/pages/management/organization/list.xhtml?faces-redirect=true";
     }
 
-    protected void persist(Object object) {
-        try {
-            utx.begin();
-            em.joinTransaction();
-            em.persist(object);
-            utx.commit();
-        } catch (Exception e) {
-            java.util.logging.Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
-            throw new RuntimeException(e);
-        }
-    }
+   
     
     
     

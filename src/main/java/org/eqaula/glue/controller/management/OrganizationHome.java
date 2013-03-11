@@ -221,8 +221,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             if ("owner".equals(selectedNode.getType())) {
                 String result = "/pages/management/objetive/objetive.xhtml?ownerId="+bussinesEntity.getId();
                 navigation.handleNavigation(context, null, result + "&faces-redirect=true");
-            }
-            
+            } 
         }
     }
 }
