@@ -12,8 +12,7 @@
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-            <f:viewParam name="organizationId" value="#{organizationHome.organizationId}" />                
-
+            <f:viewParam name="organizationId" value="#{organizationHome.organizationId}" />
         </f:metadata>
         <ui:param name="title" value="#{organizationHome.instance.name}" />
         <ui:define name="header-replace">
@@ -29,11 +28,12 @@
 
                         <div class="span3 ">
                             <h:form id="control">                                
-                                <h:link outcome="organization" styleClass="btn" value="#{messages['common.edit']} #{messages['module.organization']}" rendered="true">
+                                <h:link outcome="organization" styleClass="link" value="#{messages['common.edit']} #{messages['module.organization']}" rendered="true">
                                     <f:param name="organizationId" value="#{organizationHome.instance.id}"/>
+                                    <f:param name="outcome" value="view"/>
                                 </h:link>
                                 <br/>
-                                <h:link outcome="list" styleClass="btn" value="#{messages['common.cancel']}">
+                                <h:link outcome="/pages/home" styleClass="link" value="#{messages['common.cancel']}">
                                 </h:link>
                             </h:form>
                         </div>

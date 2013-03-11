@@ -26,10 +26,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityAttribute;
-import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.Property;
-import org.eqaula.glue.model.Structure;
-import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.jboss.seam.transaction.Transactional;
 
@@ -46,7 +43,8 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
     protected BussinesEntityService bussinesEntityService;
     protected BussinesEntity bussinesEntity;
     private Property property;
-    private String backView;
+    private String outcome;
+    private String command;
     private boolean editionEnabled = true;
 
     public Property getProperty() {
@@ -57,12 +55,20 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
         this.property = property;
     }
 
-    public String getBackView() {
-        return backView;
+    public String getOutcome() {
+        return outcome;
     }
 
-    public void setBackView(String backView) {
-        this.backView = backView;
+    public void setOutcome(String outcome) {
+        this.outcome = outcome;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
     }
 
     public boolean isEditionEnabled() {
@@ -144,7 +150,6 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
 
     public void setBussinesEntity(BussinesEntity bussinesEntity) {
         this.bussinesEntity = bussinesEntity;
-        log.info("eqaula --> BussinessEntity set to " + bussinesEntity);
     }
 
     //protected abstract void buildAttributes(E entity);
@@ -170,11 +175,9 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
         for (String name : names) {
             if (attrs.containsKey(name)) {
                 _buffer.addAll(attrs.get(name));
-                log.info("eqaula --> attributes from cache map");
             } else {
                 _buffer.addAll(((BussinesEntity) getInstance()).getBussinessEntityAttributes(name));
                 putAttributesIntoMap(name, _buffer);
-                log.info("eqaula --> add into chace " + name + ", " + _buffer);
             }
         }
         return _buffer;
@@ -193,14 +196,12 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
      * lists
      */
     public List<BussinesEntityAttribute> findBussinesEntityAttribute(final String names) {
-        log.info("eqaula --> findBussinesEntityAttribute  " + names + " into " + getInstance());
         if (getInstance() == null) {
             return new ArrayList<BussinesEntityAttribute>();
         }
 
         List<BussinesEntityAttribute> temp = findAttributes(names.split(","));
 
-        log.info("eqaula --> attributes (" + temp.size() + ")");
         return temp;
     }
     

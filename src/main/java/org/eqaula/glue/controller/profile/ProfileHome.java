@@ -37,7 +37,6 @@ import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.profile.ProfileService;
-import org.eqaula.glue.security.authorization.SecurityRules;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.web.ParamsBean;
 import org.jboss.seam.international.status.Messages;
@@ -139,14 +138,13 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     public Profile load() {
         if (isIdDefined()) {
             wire();
-        } else if(this.instance == null){
-            
-            if (identity.isLoggedIn() && !(identity.inGroup(SecurityRules.ADMIN, "GROUP") || "admin".contains(SecurityRules.getUsername(identity)))) {                
-                setInstance(ps.getProfileByUsername(identity.getUser().getKey()));
-            } else if (identity.isLoggedIn() && (identity.inGroup(SecurityRules.ADMIN, "GROUP") || "admin".contains(SecurityRules.getUsername(identity)))){
-                //TODO fix current to null when admin login
+        } else if (this.instance == null){
+            if (identity.isLoggedIn() && "add".equalsIgnoreCase(getCommand())) {
                 setInstance(createInstance());
-            }
+            } else if (identity.isLoggedIn()) {
+                setInstance(ps.getProfileByUsername(identity.getUser().getKey()));
+            } 
+            //TODO thinking in other cases
         }
         
         return getInstance();
@@ -308,16 +306,12 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         } else {
             try {
                 register();
-
-
-
-
             } catch (IdentityException ex) {
                 Logger.getLogger(ProfileHome.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if ("list".equalsIgnoreCase(getBackView())) {
+        if ("list".equalsIgnoreCase(getOutcome())) {
             return "/pages/profile/list?typeName=org.eqaula.glue.model.Profile";
         } else {
             return "/pages/profile/view?faces-redirect=true&profileId=" + getProfileId();

@@ -89,7 +89,7 @@
                 <!-- Attributos personalizados -->
                 <h:panelGroup id="attributes" layout="block" class="control-group">
                     <ui:repeat value="#{profileHome.instance.findBussinesEntityAttribute(profileHome.structureName)}" var="a" varStatus="status">
-                        <h:panelGroup layout="block" class="clearfix">
+                        <h:panelGroup layout="block" class="control-group">
                             <!-- class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}" -->
                             <label for="#{a.name}" class="control-label" >#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
                             <div class="controls">

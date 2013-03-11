@@ -226,7 +226,7 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
     }
 
     public String previousView() {
-        if ("account".equals(this.getBackView())) {
+        if ("account".equals(this.getOutcome())) {
             return "/pages/accounting/account.xhtml?faces-redirect=true&accountId=" + getParentId();
 
         } else {
