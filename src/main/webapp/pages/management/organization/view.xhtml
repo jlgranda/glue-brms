@@ -60,13 +60,20 @@
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
                         <p:treeNode type="owner" icon="ui-icon-person">  
-                             <h:outputText value="#{node.name}" />  
+                            <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
                         <p:treeNode type="objetive" icon="ui-icon-document">  
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>
 
                     </p:tree>
+
+
+                    <h:link outcome="/pages/management/theme/theme" styleClass="link" value="#{messages['common.edit']} #{messages['module.organization']}" rendered="true">
+                        <f:param name="themeId" value="1"/>
+                        <f:param name="ownerId" value=""/>                        
+                    </h:link>
+                    
                 </div>
             </h:form>
         </ui:define>
