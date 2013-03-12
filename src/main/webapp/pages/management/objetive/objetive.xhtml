@@ -45,6 +45,14 @@ limitations under the License.
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{objetiveHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{objetiveHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+                
+                <p:selectOneMenu id="parent_" value="#{objetiveHome.instance.parent}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="false"  var="p"
+                                 rendered="true" label="#{messages['Account']}" filter="true" filterMatchMode="contains">
+                    <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                    <f:selectItems value="#{accountHome.accounts}" var="parentItem" itemLabel="#{parentItem.code} #{parentItem.name}" itemValue="#{parentItem}"/>                          
+                    <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                </p:selectOneMenu>                        
+
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{objetiveHome.saveObjetive()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->

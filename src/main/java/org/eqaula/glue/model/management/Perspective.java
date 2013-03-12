@@ -39,6 +39,9 @@ public class Perspective extends BussinesEntity implements Serializable {
     
     private static final long serialVersionUID = -4535279430871708301L;
     
+    private Long sequence;
+        
+    
     @ManyToOne
     private Theme theme;
     
@@ -52,6 +55,15 @@ public class Perspective extends BussinesEntity implements Serializable {
     public void setObjetives(List<Objetive> objetives) {
         this.objetives = objetives;
     }
+
+    public Long getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(Long sequence) {
+        this.sequence = sequence;
+    }
+    
     
     @Override
     public int hashCode() {
