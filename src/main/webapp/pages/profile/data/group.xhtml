@@ -100,94 +100,98 @@
             <h:panelGroup layout="block" class="control-group">
 
                 <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.edit']} #{groupHome.bussinesEntity.name}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="550"  >
-
-                    <h:form id="form-dialog" class="form-horizontal">
-                        <p:messages id="messages-dialog" showDetail="true" autoUpdate="true" closable="true" />  
-                        <!-- Attributos de clase, siempre mostrar, almacena nombre y código único -->
-                        <h:panelGroup layout="block" class="control-group" rendered="#{groupHome.instance.property.showDefaultBussinesEntityProperties}">
-                            <h:panelGroup layout="block" class="control-group">
-                                <!-- class="required" -->
-                                <label for="name" class="control-label">#{messages['common.name']}*</label>
-                                <div class="controls">
-                                    <p:inputText name="name" value="#{groupHome.bussinesEntity.name}" styleClass="xLarge span4" required="true" label="#{messages['common.name']}" 
-                                                 rendered="true">
-                                        <f:validator validatorId="safeTextUTF8Validator"/>
-                                        <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                    </p:inputText>
-                                    <h:graphicImage value="#{resource['success.gif']}" rendered="#{groupHome.bussinesEntity.name != null}"
-                                                    styleClass="validation-status" />
-                                    <span class="help-block"><br/>#{messages['common.name.inlinehelp']} <ocp:message forId="name" /></span>
-                                </div>
-                            </h:panelGroup> 
-                            <h:panelGroup layout="block" class="control-group">
-                                <label for="code" class="control-label">#{messages['common.code']}*</label>
-                                <div class="controls">
-                                    <p:inputText  name="code" value="#{groupHome.bussinesEntity.code}" required="false" label="#{messages['common.name']}" 
-                                                  rendered="true">
-                                        <f:validator validatorId="safeTextUTF8Validator"/>                                        
-
-                                        <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                    </p:inputText>
-                                    <h:graphicImage value="#{resource['success.gif']}" rendered="#{groupHome.bussinesEntity.code != null}"
-                                                    styleClass="validation-status" />
-                                    <span class="help-block"><br/>#{messages['common.name.inlinehelp']} <ocp:message forId="code" /></span>
-                                </div>
-                            </h:panelGroup> 
-                        </h:panelGroup>
-                        <h:panelGroup layout="block" class="control-group">
-                            <ui:repeat value="#{groupHome.bussinesEntity.findBussinesEntityAttribute(groupHome.instance.name)}" var="a" varStatus="status">
+                    <p:scrollPanel style="width:500px;height:500px">
+                        <h:form id="form-dialog" class="form-horizontal">
+                            <p:messages id="messages-dialog" showDetail="true" autoUpdate="true" closable="true" />  
+                            <!-- Attributos de clase, siempre mostrar, almacena nombre y código único -->
+                            <h:panelGroup layout="block" class="control-group" rendered="#{groupHome.instance.property.showDefaultBussinesEntityProperties}">
                                 <h:panelGroup layout="block" class="control-group">
-
-                                    <label class="#{(not empty a.property.required and a.property.required) ? 'control-label required' : 'control-label'}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
+                                    <!-- class="required" -->
+                                    <label for="name" class="control-label">#{messages['common.name']}*</label>
                                     <div class="controls">
-                                        <p:inputText  value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}" 
-                                                      rendered="#{a.property.type eq 'java.lang.String'}">
-                                            <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
+                                        <p:inputText name="name" value="#{groupHome.bussinesEntity.name}" styleClass="xLarge span4" required="true" label="#{messages['common.name']}" 
+                                                     rendered="true">
+                                            <f:validator validatorId="safeTextUTF8Validator"/>
                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                         </p:inputText>
-                                        <p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
-                                                    rendered="#{a.property.type eq 'java.util.Date'}">
-                                            <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
-                                        </p:calendar>  
-                                        <pe:inputNumber value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}"
-                                                        rendered="#{a.property.type eq 'java.lang.Long' or a.property.type eq 'java.lang.Double' or a.property.type eq 'java.lang.Float'}">  
-                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                        </pe:inputNumber>  
-                                        <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
-                                                         rendered="#{a.property.type eq 'java.lang.String[]'}">  
-                                            <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
-                                            <p:ajax event="change" update="@parent" partialSubmit="true"/>
-                                        </p:selectOneMenu> 
-                                        <p:inputTextarea value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
-                                                         rendered="#{a.property.type eq 'java.lang.MultiLineString'}">
-                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                        </p:inputTextarea>
-                                        <!-- TODO add support for boolean
-                                        <p:panel rendered="#{a.property.type eq 'java.lang.Boolean'}">
-                                            <p:selectBooleanCheckbox value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}"
-                                                                     rendered="#{a.property.type eq 'java.lang.Boolean'}">
-                                                <p:ajax event="change" update="@parent" partialSubmit="true"/>
-                                            </p:selectBooleanCheckbox>
-                                        </p:panel>
-                                        -->
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{a.value != null}"
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{groupHome.bussinesEntity.name != null}"
                                                         styleClass="validation-status" />
-                                        <span class="help-block"><br/>#{a.property.helpInline}</span>
+                                        <span class="help-block"><br/>#{messages['common.name.inlinehelp']} <ocp:message forId="name" /></span>
                                     </div>
-                                </h:panelGroup>  
-                            </ui:repeat>
-                        </h:panelGroup>
-                        <p:commandButton value="#{messages['common.add']}" 
-                                         actionListener="#{groupHome.saveBussinesEntity()}" 
-                                         update=":form-table:dataTable messages-dialog :edit-dialog"
-                                         ajax="true" process="@this"
-                                         style="margin-top:10px;" icon="ui-icon-disk"
-                                         styleClass="btn btn-primary">  
-                        </p:commandButton>  
+                                </h:panelGroup> 
+                                <h:panelGroup layout="block" class="control-group">
+                                    <label for="code" class="control-label">#{messages['common.code']}*</label>
+                                    <div class="controls">
+                                        <p:inputText  name="code" value="#{groupHome.bussinesEntity.code}" required="false" label="#{messages['common.name']}" 
+                                                      rendered="true">
+                                            <f:validator validatorId="safeTextUTF8Validator"/>                                        
 
-                        <p:commandButton type="button" value="#{messages['common.delete']}" style="margin-top:10px;" rendered="#{groupHome.bussinesEntity.persistent}" onclick="deletedDlg.show();"/>  
-                        <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" rendered="#{not groupHome.bussinesEntity.persistent}" onclick="editDlg.hide();" actionListener="#{groupHome.deleteBussinessEntity()}"/>  
-                    </h:form>
+                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                        </p:inputText>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{groupHome.bussinesEntity.code != null}"
+                                                        styleClass="validation-status" />
+                                        <span class="help-block"><br/>#{messages['common.name.inlinehelp']} <ocp:message forId="code" /></span>
+                                    </div>
+                                </h:panelGroup> 
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="control-group">
+                                <ui:repeat value="#{groupHome.bussinesEntity.findBussinesEntityAttribute(groupHome.instance.name)}" var="a" varStatus="status">
+                                    <h:panelGroup layout="block" class="control-group">
+
+                                        <label class="#{(not empty a.property.required and a.property.required) ? 'control-label required' : 'control-label'}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
+                                        <div class="controls">
+                                            <p:inputText  value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}" 
+                                                          rendered="#{a.property.type eq 'java.lang.String'}">
+                                                <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
+                                                <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                            </p:inputText>
+                                            <p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
+                                                        rendered="#{a.property.type eq 'java.util.Date'}">
+                                                <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
+                                            </p:calendar>  
+                                            <pe:inputNumber value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}"
+                                                            rendered="#{a.property.type eq 'java.lang.Long' or a.property.type eq 'java.lang.Double' or a.property.type eq 'java.lang.Float'}">  
+                                                <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                            </pe:inputNumber>  
+                                            <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
+                                                             rendered="#{a.property.type eq 'java.lang.String[]'}">  
+                                                <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
+                                                <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                            </p:selectOneMenu> 
+                                            <p:inputTextarea value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
+                                                             rendered="#{a.property.type eq 'java.lang.MultiLineString'}">
+                                                <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                            </p:inputTextarea>
+                                            <!-- TODO add support for boolean
+                                            <p:panel rendered="#{a.property.type eq 'java.lang.Boolean'}">
+                                                <p:selectBooleanCheckbox value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}"
+                                                                         rendered="#{a.property.type eq 'java.lang.Boolean'}">
+                                                    <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                                </p:selectBooleanCheckbox>
+                                            </p:panel>
+                                            -->
+                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{a.value != null}"
+                                                            styleClass="validation-status" />
+                                            <span class="help-block"><br/>#{a.property.helpInline}</span>
+                                        </div>
+                                    </h:panelGroup>  
+                                </ui:repeat>
+                            </h:panelGroup>
+                            
+                            <div class="controls">
+                            <p:commandButton value="#{messages['common.add']}" 
+                                             actionListener="#{groupHome.saveBussinesEntity()}" 
+                                             update=":form-table:dataTable messages-dialog :edit-dialog"
+                                             ajax="true" process="@this"
+                                             style="margin-top:10px;" icon="ui-icon-disk"
+                                             styleClass="btn">  
+                            </p:commandButton>  
+
+                            <p:commandButton type="button" value="#{messages['common.delete']}" style="margin-top:10px;" rendered="#{groupHome.bussinesEntity.persistent}" onclick="deletedDlg.show();"/>  
+                            <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" rendered="#{not groupHome.bussinesEntity.persistent}" onclick="editDlg.hide();" actionListener="#{groupHome.deleteBussinessEntity()}"/>  
+                            </div>
+                        </h:form>
+                    </p:scrollPanel>
                 </p:dialog>
                 <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">  
                     <h:form id="form-dialog-confirm-delete">

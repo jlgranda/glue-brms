@@ -43,7 +43,7 @@ limitations under the License.
         <div class="controls">
             <c:choose>
                 <c:when test="#{type == 'java.lang.String' or type == 'text'}">
-                    <p:inputText value="#{value}" id="#{name}" styleClass="xLarge span4" 
+                    <p:inputText value="#{value}" id="#{name}" 
                                  required="#{required}" label="#{label}" disabled="#{disabled}"
                                  size="#{size}">
                         <f:validator validatorId="#{validator}"/>
@@ -56,13 +56,13 @@ limitations under the License.
                     </p:calendar>  
                 </c:when>
                 <c:when test="#{type == 'java.lang.Boolean' or type == 'checkbox'}">
-                    <h:selectBooleanCheckbox value="#{value}" id="#{name}" styleClass="xLarge" required="#{required}" label="#{label}">
+                    <h:selectBooleanCheckbox value="#{value}" id="#{name}" required="#{required}" label="#{label}">
                         <f:ajax execute="#{execute}" render="#{render}"  />
                     </h:selectBooleanCheckbox>
                     <span>#{inlinehelp}</span>
                 </c:when>
                 <c:when test="#{type == 'java.lang.MultiLineString' or type == 'textarea'}">
-                    <p:inputTextarea value="#{value}" id="#{name}" styleClass="xLarge span4" 
+                    <p:inputTextarea value="#{value}" id="#{name}"
                                      required="#{required}" label="#{label}" style="width: 250px; height: 100px;">
                         <p:ajax update="#{render}" partialSubmit="true"/>
                     </p:inputTextarea>
@@ -80,7 +80,7 @@ limitations under the License.
                     <br/>
                 </c:when>
                 <c:otherwise>
-                    <h:inputText value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}">
+                    <h:inputText value="#{value}" id="#{name}" required="#{required}" label="#{label}">
                         <f:ajax execute="#{execute}" render="#{render}"  />
                     </h:inputText>
                 </c:otherwise>

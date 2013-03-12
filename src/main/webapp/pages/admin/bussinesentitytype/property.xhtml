@@ -28,7 +28,7 @@
             </div>             
         </ui:define>
         <ui:define name="content">             
-            <h:form id="form" acceptcharset="UTF-8">
+            <h:form id="form" acceptcharset="UTF-8" class="form-horizontal">
                 <p:panel header="#{messages['common.properties']} #{messages['panel.Basic']}">
                     <glue:input id="groupn" name="groupName" type="text" label="#{messages['common.property.groupName']}" 
                                 value="#{propertyHome.instance.groupName}" required="false" inlinehelp="#{messages['common.property.groupName.help']}" execute="@this save" />
@@ -73,9 +73,9 @@
                                 value="#{propertyHome.instance.generatorName}" required="false" inlinehelp="#{messages['common.property.generatorName.help']}" execute="@this save" /> 
                 </p:panel>
 
-                <div class="actions">
+                <div class="form-actions">
                     <p:commandButton id="save" action="#{propertyHome.saveProperty()}" 
-                                     value="#{messages['common.save']}" styleClass="btn primary"/>
+                                     value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     #{' '}                     
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="#{propertyHome.hasValuesBussinesEntity()?  'deletedDlg.show()' : 'alertDlg.show()' }"  immediate="true"
                                      update=":cancel-dialog :alerts-dialog:" rendered="#{not empty propertyHome.instance.id}">                        

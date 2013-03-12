@@ -49,7 +49,7 @@ limitations under the License.
                     <div class="span3">
                         <br/>
                         <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn btn-primary">                                
+                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
                         </h:link>                       
                     </div>
                 </div>     
@@ -185,12 +185,12 @@ limitations under the License.
 
             </p:panel>
 
-            <div class="form-actions">
+            <div class="form-actions" style="padding-left: 20px">
                 <p:commandButton id="save" value="#{messages['common.save']}" rendered="true"
                                  actionListener="#{postingHome.savePosting()}" 
                                  ajax="false" 
-                                 styleClass="btn primary"
-                                 style="margin-top:10px;" icon="ui-icon-disk">  
+                                 styleClass="btn btn-primary"
+                                 icon="ui-icon-disk">  
 
                 </p:commandButton>
             </div>
