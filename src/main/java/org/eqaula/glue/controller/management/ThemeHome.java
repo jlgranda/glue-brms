@@ -22,8 +22,10 @@ import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
@@ -39,10 +41,12 @@ import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
 
-/**
- *
+/*
  * @author dianita
  */
+
+@Named
+@ViewScoped
 public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable {
     private static final long serialVersionUID = 6941666069724371093L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(OwnerHome.class);
@@ -144,7 +148,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             getInstance().setAuthor(this.profile);
             getInstance().setOwner(getOwner());
             create(getInstance());
-        }
+        }     
         return "/pages/management/organization/view?organizationId="+getOwner().getOrganization().getId();
     }
     

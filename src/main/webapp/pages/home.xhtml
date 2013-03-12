@@ -86,8 +86,13 @@
                                     <div class="box" style="margin-bottom: 8px;">
                                         <div class="row">
                                             <div class="span6 columns">
+                                                #{_organization.name}
                                                 <h:link outcome="/pages/management/organization/view.xhtml"
-                                                        value="#{_organization.name}">
+                                                        value="#{messages['module.management']}">
+                                                    <f:param name="organizationId" value="#{_organization.id}" />
+                                                </h:link>
+                                                <h:link outcome="/pages/accounting/view.xhtml"
+                                                        value="#{messages['module.accounting']}">
                                                     <f:param name="organizationId" value="#{_organization.id}" />
                                                 </h:link>
                                             </div>

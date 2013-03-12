@@ -37,8 +37,8 @@ import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
+import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
@@ -203,7 +203,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", event.getTreeNode().toString());
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), ((BussinesEntity) event.getTreeNode().getData()).getName());
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
@@ -211,21 +211,20 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
 
         StringBuilder outcomeBuilder = new StringBuilder();
         if (selectedNode != null) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
-            FacesContext.getCurrentInstance().addMessage(null, message);
             BussinesEntity bussinesEntity = (BussinesEntity) selectedNode.getData();
             if ("organization".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/owner/owner.xhtml?");
                 outcomeBuilder.append("organizationId=").append(getOrganizationId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            }
-            if ("owner".equals(selectedNode.getType())) {
+            } else if ("owner".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
-                outcomeBuilder.append("organizationId=").append(getOrganizationId());
                 outcomeBuilder.append("&ownerId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("objetive".equals(selectedNode.getType())) {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
+                FacesContext.getCurrentInstance().addMessage(null, message);
             }
 
         }
@@ -243,11 +242,14 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                 outcomeBuilder.append("organizationId=").append(getOrganizationId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            }
-            if ("owner".equals(selectedNode.getType())) {
+            } else if ("owner".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/owner/owner.xhtml?");
-                outcomeBuilder.append("organizationId=").append(getOrganizationId());
                 outcomeBuilder.append("&ownerId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("objetive".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
+                outcomeBuilder.append("&objetiveId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             }
