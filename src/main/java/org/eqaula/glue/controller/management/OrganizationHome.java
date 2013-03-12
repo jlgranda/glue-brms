@@ -37,7 +37,6 @@ import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;

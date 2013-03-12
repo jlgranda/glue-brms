@@ -45,19 +45,19 @@
             <div class="form-actions" style="padding-left: 20px">
                 <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="organization" styleClass="btn btn-primary">
                     <f:param name="organizationId"></f:param>
-                    <f:param name="backView" value="list"></f:param>
+                    <f:param name="outcome" value="list"></f:param>
                 </h:link>                
                 #{' '}
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="true" outcome="organization" styleClass="btn" 
                         disabled="#{empty organizationListService.selectedOrganization.id}">
                     <f:param name="organizationId" value="#{organizationListService.selectedOrganization.id}"></f:param>
-                    <f:param name="backView" value="list"></f:param>
+                    <f:param name="outcome" value="list"></f:param>
                 </h:link> 
                 #{' '}
                 <h:link id="button-view" value="#{messages['common.view']}" rendered="#{true}" outcome="view" styleClass="btn"
                         disabled="#{empty organizationListService.selectedOrganization.id}">
                     <f:param name="organizationId" value="#{organizationListService.selectedOrganization.id}"></f:param>
-                    <f:param name="backView" value="list"></f:param>
+                    <f:param name="outcome" value="list"></f:param>
                 </h:link>
             </div>
             <p:dataTable var="_organization" value="#{organizationListService}"
