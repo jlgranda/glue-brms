@@ -27,6 +27,7 @@ limitations under the License.
         <f:metadata>
             <f:viewParam name="objetiveId" value="#{objetiveHome.objetiveId}"/>
             <f:viewParam name="ownerId" value="#{objetiveHome.ownerId}"/>
+            <f:viewParam name="outcome" value="#{objetiveHome.outcome}"/>
             <s:viewAction action="#{objetiveHome.load}" if="#{conversation.transient}" />
         </f:metadata>
         <ui:define name="header-replace">
@@ -40,20 +41,20 @@ limitations under the License.
             </div>
         </ui:define>
         <ui:define name="content" >
-            <h:form id="form" acceptcharset="UTF-8">
-
+            <h:form id="form" acceptcharset="UTF-8" class="form-horizontal">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{objetiveHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{objetiveHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
-                <div class="actions">
-                    <p:commandButton id="save" action="#{objetiveHome.saveObjetive()}" value="#{messages['common.save']}" styleClass="btn primary"/>
+                <div class="form-actions">
+                    <p:commandButton id="save" action="#{objetiveHome.saveObjetive()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
-                                     update=":cancel-dialog" rendered="#{objetiveHome.objetiveId != null}">                        
+                                     update=":cancel-dialog" rendered="#{objetiveHome.managed}">                        
                     </p:commandButton>
                     <!-- &nbsp;-->
-                    <h:link outcome="/pages/management/organization/list.xhtml?faces-redirect=true"
-                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
+                    <h:link outcome="#{objetiveHome.outcome}"
+                            value="#{messages['common.cancel']}" styleClass="btn">
+                        <f:param name="organizationId" value="#{objetiveHome.owner.organization.id}"/>
                     </h:link>
                 </div>  
             </h:form>
