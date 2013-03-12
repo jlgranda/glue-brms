@@ -51,6 +51,11 @@ limitations under the License.
                 <f:param name="result"></f:param>
             </h:link>
             <br />
+            <h:link value="#{messages['panel.admin.perspectives']}" rendered="#{true}" 
+                    outcome="/pages/management/perspective/list">
+                <f:param name="result"></f:param>
+            </h:link>
+            <br />
         </p:panel>
 
         <p:panel header="#{messages['panel.admin.settings']}" toggleable="true" toggleOrientation="vertical">

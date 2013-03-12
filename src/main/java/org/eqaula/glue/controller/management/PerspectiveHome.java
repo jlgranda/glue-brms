@@ -31,11 +31,10 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.management.Objetive;
-import org.eqaula.glue.model.management.Owner;
+import org.eqaula.glue.model.management.Organization;
+import org.eqaula.glue.model.management.Perspective;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
-import org.eqaula.glue.service.OwnerService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.jboss.solder.logging.Logger;
@@ -45,13 +44,13 @@ import org.primefaces.context.RequestContext;
  * @author dianita
  */
 
+
 @Named
 @ViewScoped
-public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serializable{
-    
-    private static final long serialVersionUID = -4224903764118210792L;
-    private static Logger log = Logger.getLogger(ObjetiveHome.class);
-       
+public class PerspectiveHome extends BussinesEntityHome<Perspective> implements Serializable {
+
+    private static Logger log = Logger.getLogger(Perspective.class);
+    private static final long serialVersionUID = 1140758227557893365L;
     @Inject
     @Web
     private EntityManager em;
@@ -60,52 +59,22 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
     @Current
     @Inject
     private Profile profile;
-    
-    private Owner owner;
-    private Long ownerId;
-    @Inject
-    private OwnerService ownerService;
 
-    public ObjetiveHome() {
+    // agregar los atributos de theme service
+    public PerspectiveHome() {
     }
 
-    public Long getObjetiveId() {
+    public Long getPerspectiveId() {
         return (Long) getId();
     }
 
-    public void setObjetiveId(Long objetiveId) {
-        setId(objetiveId);
+    public void setPerspectiveId(Long perspectiveId) {
+        setId(perspectiveId);
     }
 
     public String getStructureName() {
         return getInstance().getName();
     }
-
-    @Transactional
-    public Owner getOwner() {
-        if(owner==null){
-            if(ownerId==null){
-                owner=null;
-            }else{
-                owner = ownerService.find(getOwnerId());
-            }
-        }
-        return owner;
-    }
-
-    public void setOwner(Owner owner) {
-        this.owner = owner;
-    }
-
-    public Long getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
-    }
-    
-    
 
     @TransactionAttribute
     public void load() {
@@ -114,47 +83,44 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         }
     }
 
+    @PostConstruct
+    public void init() {
+        setEntityManager(em);
+        bussinesEntityService.setEntityManager(em);
+    }
+
     @TransactionAttribute
     public void wire() {
         getInstance();
     }
 
-    @PostConstruct
-    public void init() {
-        setEntityManager(em);
-        ownerService.setEntityManager(em);
-        bussinesEntityService.setEntityManager(em);
-    }
-
     @Override
-    protected Objetive createInstance() {
-        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Objetive.class.getName());
+    protected Perspective createInstance() {
+        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Perspective.class.getName());
         Date now = Calendar.getInstance().getTime();
-        Objetive objetive = new Objetive();
-        objetive.setCode(UUID.randomUUID().toString());
-        objetive.setCreatedOn(now);
-        objetive.setLastUpdate(now);
-        objetive.setActivationTime(now);
-        objetive.setExpirationTime(Dates.addDays(now, 364));
-        objetive.setType(_type);
-        objetive.buildAttributes(bussinesEntityService);
-        return objetive;
+        Perspective perspective = new Perspective();
+        perspective.setCode(UUID.randomUUID().toString());
+        perspective.setCreatedOn(now);
+        perspective.setLastUpdate(now);
+        perspective.setActivationTime(now);
+        perspective.setExpirationTime(Dates.addDays(now, 364));
+        perspective.setType(_type);
+        perspective.buildAttributes(bussinesEntityService);
+        return perspective;
     }
 
     @TransactionAttribute
-    public String saveObjetive() {
+    public String savePerspective() {
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
-            getInstance().setAuthor(this.profile);
-            getInstance().setOwner(getOwner());
+            if (this.profile != null && this.profile.isPersistent()) {
+                getInstance().setAuthor(this.profile);
+            }
+            //fijar theme
             create(getInstance());
-        }
-         //TODO idear una mejor forma de redireccionar
-        if (getOwner()!= null){
-            return getOutcome() + "?organizationId=" + getOwner().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -163,42 +129,34 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         return true;
     }
 
-    public Objetive getDefiniedInstance() {
+    public Perspective getDefinedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
 
     @Override
-    public Class<Objetive> getEntityClass() {
-        return Objetive.class;
+    public Class<Perspective> getEntityClass() {
+        return Perspective.class;
     }
-
+    
     @Transactional
-    public String deleteObjetive() {
+    public String deletePerspective() {
         try {
             if (getInstance() == null) {
-                throw new NullPointerException("Objetive is Null");
+                throw new NullPointerException("Perspective is null");
             }
             if (getInstance().isPersistent()) {
                 delete(getInstance());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
-                RequestContext.getCurrentInstance().execute("editDlg.hide()");
+                RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
+
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un objetivo para ser borrado!", ""));
+                //remover de la lista, si aún no esta persistido
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una perspectiva para ser borrada!", ""));
             }
         } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        //TODO idear una mejor forma de redireccionar
-        if (getOwner()!= null){
-            return getOutcome() + "?organizationId=" + getOwner().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
-        }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-
-   
-    
-    
-    
-    
 }
