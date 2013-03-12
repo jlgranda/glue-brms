@@ -67,7 +67,7 @@ limitations under the License.
         </div>         
     </ui:define>
     <ui:define name="content">          
-        <h:panelGroup layout="block" class="clearfix">
+        <h:panelGroup layout="block" class="control-group">
             <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.edit']} #{bussinesEntityTypeHome.instance.name}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="550">
                 <h:form id="form-dialog" class="form-horizontal">                    
                     <h:panelGroup layout="block" class="control-group" rendered="true">
@@ -164,7 +164,7 @@ limitations under the License.
                         <strong>#{e.name}</strong>#{' '}                            
                     </f:facet>-->
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
-                    <div id="div-controls" class="form form-actions">
+                    <div id="div-controls" class="form-actions" style="padding-left: 20px">
 
                         <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="property" styleClass="btn btn-primary">
                             <f:param name="propertyId"></f:param>

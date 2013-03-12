@@ -43,7 +43,7 @@
 
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
 
-            <div>
+            <div class="form-actions" style="padding-left: 20px">
                 <h:link id="button-view" value="#{messages['common.view']}" rendered="#{true}" outcome="ledger" styleClass="btn btn-primary"  
                         disabled="#{empty ledgerListService.selectedLedger.id}">
                     <f:param name="ledgerId" value="${ledgerListService.selectedLedger.id}" ></f:param>
@@ -56,7 +56,7 @@
 
             </div>
             
-            <br/>
+            
             <p:dataTable var="_ledger" value="#{ledgerListService}"
                          paginator="true" rows="10"
                          paginatorAlwaysVisible="false"
