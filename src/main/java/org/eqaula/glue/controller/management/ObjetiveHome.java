@@ -44,8 +44,7 @@ import org.jboss.seam.transaction.Transactional;
 import org.jboss.solder.logging.Logger;
 import org.primefaces.context.RequestContext;
 
-/**
- *
+/*
  * @author dianita
  */
 
