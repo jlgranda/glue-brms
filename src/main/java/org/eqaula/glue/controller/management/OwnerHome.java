@@ -18,11 +18,8 @@ package org.eqaula.glue.controller.management;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
@@ -30,25 +27,17 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.transaction.UserTransaction;
-import org.apache.http.impl.cookie.DateUtils;
 import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
-import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.accounting.Ledger;
-import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.OrganizationService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
-import org.primefaces.model.DefaultTreeNode;
-import org.primefaces.model.TreeNode;
 
 /*
  * @author dianita
@@ -62,8 +51,6 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
     @Current
     @Inject
     private Profile profile;
@@ -157,7 +144,11 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
             getInstance().setOrganization(getOrganization());
             create(getInstance());
         }
-        return "/pages/management/organization/view?organizationId=" + getOrganizationId();
+        //TODO idear una mejor forma de redireccionar
+        if (getOrganizationId() != null){
+            return getOutcome() + "?organizationId=" + getOrganizationId() + "&faces-redirect=true&includeViewParams=true";
+        }
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
     public boolean isWired() {
@@ -190,7 +181,10 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        return "/pages/management/organization/list.xhtml?faces-redirect=true";
+         if (getOrganizationId() != null){
+            return getOutcome() + "?organizationId=" + getOrganizationId() + "&faces-redirect=true&includeViewParams=true";
+        }
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
     

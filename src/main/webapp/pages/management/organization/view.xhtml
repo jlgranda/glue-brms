@@ -46,7 +46,8 @@
             <h:form id="summary">                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <p:contextMenu for="organizationTree" >  
-                    <p:menuitem value="#{messages['common.add']}" update=":messages" actionListener="#{organizationHome.addChildren}" icon="ui-icon-search" />                   
+                    <p:menuitem value="#{messages['common.add']}" update=":messages" actionListener="#{organizationHome.redirecToAdd}" icon="ui-icon-plus" />
+                    <p:menuitem value="#{messages['common.edit']}" update=":messages" actionListener="#{organizationHome.redirecToEdit}" icon="ui-icon-pencil" />
                 </p:contextMenu>  
                 <div >
                     <p:tree id="organizationTree" value="#{organizationHome.organizationNode}" var="node" orientation="horizontal" selectionMode="single" selection="#{organizationHome.selectedNode}"  dynamic="true">  
@@ -55,7 +56,7 @@
                                     collapsedIcon="ui-icon-folder-collapsed">  
 
                         </p:treeNode>  
-                        <p:treeNode  type="organization" >    
+                        <p:treeNode  type="organization" icon="ui-icon-home">    
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
                         <p:treeNode type="owner" icon="ui-icon-person">  

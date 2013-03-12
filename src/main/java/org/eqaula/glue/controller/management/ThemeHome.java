@@ -19,16 +19,11 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
-import java.util.logging.Level;
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.view.facelets.FaceletContext;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
@@ -36,26 +31,22 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.management.Owner;
+import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.OwnerService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
-import org.jboss.solder.logging.Logger;
 import org.primefaces.context.RequestContext;
 
 /**
  *
  * @author dianita
  */
-
-@Named
-@ViewScoped
-public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serializable{
+public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable {
+    private static final long serialVersionUID = 6941666069724371093L;
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(OwnerHome.class);
     
-    private static final long serialVersionUID = -4224903764118210792L;
-    private static Logger log = Logger.getLogger(ObjetiveHome.class);
-       
     @Inject
     @Web
     private EntityManager em;
@@ -64,41 +55,24 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
     @Current
     @Inject
     private Profile profile;
-    
     private Owner owner;
     private Long ownerId;
     @Inject
     private OwnerService ownerService;
 
-    public ObjetiveHome() {
+    public ThemeHome() {
     }
-
-    public Long getObjetiveId() {
-        return (Long) getId();
+   
+    public Long getThemeId(){
+        return (Long)getId();
     }
-
-    public void setObjetiveId(Long objetiveId) {
-        setId(objetiveId);
+    
+    public void setThemeId(Long themeId){
+        setId(themeId);
     }
-
-    public String getStructureName() {
+    
+    public String getStructureName(){
         return getInstance().getName();
-    }
-
-    @Transactional
-    public Owner getOwner() {
-        if(owner==null){
-            if(ownerId==null){
-                owner=null;
-            }else{
-                owner = ownerService.find(getOwnerId());
-            }
-        }
-        return owner;
-    }
-
-    public void setOwner(Owner owner) {
-        this.owner = owner;
     }
 
     public Long getOwnerId() {
@@ -108,45 +82,60 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
     public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
     }
-    
-    
 
+    
+    @Transactional
+    public Owner getOwner() {
+        if(owner==null){
+            if(ownerId==null){
+                owner=null;
+            }else{
+                owner=ownerService.find(getOwnerId());
+            }
+        }
+        return owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+    
     @TransactionAttribute
-    public void load() {
-        if (isIdDefined()) {
+    public void load(){
+        if(isIdDefined()){
             wire();
         }
     }
-
+    
     @TransactionAttribute
     public void wire() {
         getInstance();
     }
-
+    
     @PostConstruct
     public void init() {
         setEntityManager(em);
         ownerService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
-
+    
     @Override
-    protected Objetive createInstance() {
-        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Objetive.class.getName());
+    protected Theme createInstance() {
+        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Theme.class.getName());
         Date now = Calendar.getInstance().getTime();
-        Objetive objetive = new Objetive();
-        objetive.setCode(UUID.randomUUID().toString());
-        objetive.setCreatedOn(now);
-        objetive.setLastUpdate(now);
-        objetive.setActivationTime(now);
-        objetive.setExpirationTime(Dates.addDays(now, 364));
-        objetive.setType(_type);
-        objetive.buildAttributes(bussinesEntityService);
-        return objetive;
+        Theme theme = new Theme();
+        theme.setCode(UUID.randomUUID().toString());
+        theme.setCreatedOn(now);
+        theme.setLastUpdate(now);
+        theme.setActivationTime(now);
+        theme.setExpirationTime(Dates.addDays(now, 364));
+        theme.setType(_type);
+        theme.buildAttributes(bussinesEntityService);
+        return theme;
     }
-
+    
     @TransactionAttribute
-    public String saveObjetive() {
+    public String saveTheme() {
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         if (getInstance().isPersistent()) {
@@ -158,32 +147,32 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         }
         return "/pages/management/organization/view?organizationId="+getOwner().getOrganization().getId();
     }
-
+    
     public boolean isWired() {
         return true;
     }
 
-    public Objetive getDefiniedInstance() {
+    public Theme getDefiniedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
-
+    
     @Override
-    public Class<Objetive> getEntityClass() {
-        return Objetive.class;
+    public Class<Theme> getEntityClass() {
+        return Theme.class;
     }
 
     @Transactional
-    public String deleteObjetive() {
+    public String deleteTheme() {
         try {
             if (getInstance() == null) {
-                throw new NullPointerException("Objetive is Null");
+                throw new NullPointerException("Theme is Null");
             }
             if (getInstance().isPersistent()) {
                 delete(getInstance());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
                 RequestContext.getCurrentInstance().execute("editDlg.hide()");
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un objetivo para ser borrado!", ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un tema para ser borrado!", ""));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -192,9 +181,4 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         return "/pages/management/organization/list.xhtml?faces-redirect=true";
     }
 
-   
-    
-    
-    
-    
 }
