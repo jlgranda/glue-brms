@@ -155,7 +155,11 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
             getInstance().setOwner(getOwner());
             create(getInstance());
         }
-        return "/pages/management/organization/view?organizationId="+getOwner().getOrganization().getId();
+         //TODO idear una mejor forma de redireccionar
+        if (getOwner()!= null){
+            return getOutcome() + "?organizationId=" + getOwner().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+        }
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
     public boolean isWired() {
@@ -188,7 +192,11 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        return "/pages/management/organization/list.xhtml?faces-redirect=true";
+        //TODO idear una mejor forma de redireccionar
+        if (getOwner()!= null){
+            return getOutcome() + "?organizationId=" + getOwner().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+        }
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
    
