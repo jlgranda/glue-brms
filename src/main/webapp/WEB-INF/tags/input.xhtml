@@ -77,7 +77,6 @@ limitations under the License.
                     <pe:inputNumber id="#{name}" value="#{value}" required="#{required}" label="#{label}">  
                         <p:ajax event="blur" update="#{render}" partialSubmit="true"/>
                     </pe:inputNumber>  
-                    <br/>
                 </c:when>
                 <c:otherwise>
                     <h:inputText value="#{value}" id="#{name}" required="#{required}" label="#{label}">

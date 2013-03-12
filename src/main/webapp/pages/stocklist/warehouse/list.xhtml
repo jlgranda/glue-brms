@@ -18,34 +18,28 @@
 
 
             <div class="container">
-                <div class="row fl" style="margin-top: 5px;">
-                    <div class="span7 columns">   
-                        <div class="row fl" style="margin-top: 5px;">
-                            <h1>#{messages['module.stocklist']}</h1>   
-                        </div>
+                <div class="row-fluid" style="margin-top: 5px;">
+                    <div class="span9">   
+                        <h1>#{messages['module.stocklist']}</h1>   
                     </div>
-                </div>
-
-                <div class="span4 columns offset3">
-                    <h:form id="control">                                                         
+                    <div class="span3">
+                        <br/>
                         <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn primary">                                
+                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
                         </h:link>                            
-                    </h:form>
+                    </div>
                 </div>
             </div>
         </div>
 
     </ui:define>
 
-
-
     <ui:define name="content">
 
         <h:form id="form">
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-            <div class="admin-actions">
-                <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="warehouse" styleClass="btn primary">
+            <div class="form-actions" style="padding-left: 20px">
+                <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="warehouse" styleClass="btn btn-primary">
                     <f:param name="warehouseId" value="#{warehouseListService.selectedWarehouse.id}"></f:param>
                     <f:param name="backView" value="list"></f:param>
                 </h:link>                

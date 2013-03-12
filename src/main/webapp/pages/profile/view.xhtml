@@ -88,8 +88,11 @@
                         <h:outputText id="bioIn" value="#{profileHome.instance.bio}" styleClass="span4" />
                     </div>
                 </h:panelGroup>
+                
+                
+                
                 <c:forEach items="#{ui.getProperties(profileHome.instance)}" var="p" >
-                    <p:panel header="#{p.label}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{p.name}">
+                    <p:panel styleClass="form-horizontal" header="#{p.label}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{p.name}">
                         <f:facet name="header">
                             <strong>#{p.label}</strong>#{' '}
                             <h:link outcome="#{p.customForm != null ? p.customForm : '/pages/profile/data/structure'}" styleClass="btn" value="#{messages['common.edit']}" 
@@ -107,16 +110,16 @@
                         <c:choose>                        
                             <c:when test="#{p.type == 'org.eqaula.glue.model.Structure'}">
                                 <!-- Mostrar los datos de estructure-->
-                                <h:panelGroup id="attributes" layout="block" class="clearfix">
+                                <h:panelGroup id="attributes" layout="block" class="control-group">
                                     <ui:repeat value="#{profileHome.instance.findBussinesEntityAttribute(p.name)}" var="a" varStatus="status">
-                                        <h:panelGroup layout="block" class="clearfix" rendered="#{a.property.survey}">
-                                            <span class="#{(not empty a.property.required and a.property.required) ? 'survey-label required' : 'survey-label'}">#{a.property.label}</span>
-                                            <div class="survey-output">
+                                        <h:panelGroup layout="block" class="control-group" rendered="#{a.property.survey}">
+                                            <span class="#{(not empty a.property.required and a.property.required) ? 'control-label required' : 'control-label'}">#{a.property.label}</span>
+                                            <div class="output">
                                                 <h:outputText value="#{a.value}"/>
                                             </div>
                                         </h:panelGroup>
-                                        <h:panelGroup layout="block" class="clearfix" rendered="#{not a.property.survey}">
-                                            <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</strong></label>
+                                        <h:panelGroup layout="block" class="control-group" rendered="#{not a.property.survey}">
+                                            <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'control-label required' : 'control-label'}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</strong></label>
                                             <div class="output">                                     
                                                 <h:outputText value="#{a.value}"/>
                                             </div>
