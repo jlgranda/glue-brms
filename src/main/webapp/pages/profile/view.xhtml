@@ -112,13 +112,14 @@
                                 <!-- Mostrar los datos de estructure-->
                                 <h:panelGroup id="attributes" layout="block" class="control-group">
                                     <ui:repeat value="#{profileHome.instance.findBussinesEntityAttribute(p.name)}" var="a" varStatus="status">
-                                        <h:panelGroup layout="block" class="control-group" rendered="#{a.property.survey}">
-                                            <span class="#{(not empty a.property.required and a.property.required) ? 'control-label required' : 'control-label'}">#{a.property.label}</span>
-                                            <div class="output">
+                                        <h:panelGroup layout="block" class="form" rendered="#{a.property.survey}">
+                                            <span style="font-weight: bold; color: rgb(105,105,105)" class="#{(not empty a.property.required and a.property.required) ? 'required' : 'required'}">#{a.property.label}</span>
+                                            <div>
                                                 <h:outputText value="#{a.value}"/>
                                             </div>
+                                            <br/>
                                         </h:panelGroup>
-                                        <h:panelGroup layout="block" class="control-group" rendered="#{not a.property.survey}">
+                                        <h:panelGroup layout="block" class=" control-group" rendered="#{not a.property.survey}">
                                             <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'control-label required' : 'control-label'}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</strong></label>
                                             <div class="output">                                     
                                                 <h:outputText value="#{a.value}"/>
