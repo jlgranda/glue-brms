@@ -171,7 +171,7 @@ public class Organizations implements Serializable
    @RequestScoped
    public Organization getCurrent()
    {
-      if ((current != null) && (params.getProjectSlug() != null))
+      if ((current != null) && (params.getOrganizationCode() != null))
       {
          try
          {

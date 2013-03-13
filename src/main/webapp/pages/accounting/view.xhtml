@@ -11,7 +11,7 @@
 
     <f:metadata>
         <f:viewParam name="accountId" value="#{accountHome.accountId}" />            
-        <f:viewParam name="backView" value="#{accountHome.backView}" />            
+        <f:viewParam name="outcome" value="#{accountHome.outcome}" />            
         <s:viewAction action="#{accountHome.load}" if="#{conversation.transient}"/>
     </f:metadata>
 
@@ -21,7 +21,7 @@
                 <div class="row-fluid" style="margin-top: 5px;">
                     <div class="span10">   
                         <div class="row-fluid" style="margin-top: 5px;">
-                            <h3>#{accountHome.managed?  messages['common.edit'] : messages['common.add']} 
+                            <h3>#{accountHome.managed?  "" : messages['common.add']} 
                                 #{accountHome.instance.persistent ? accountHome.instance.name : ""}</h3>   
                             <p><span style=""><b>#{accountHome.instance.accountType}</b></span>
                                 <br/>
@@ -35,12 +35,12 @@
                             <p:commandButton value="#{messages['common.edit']}" ajax="true" type="button"
                                              process="@this, :edit-dialog" onclick="editDlg.show();"
                                              icon="ui-icon-plus" update=":edit-dialog" styleClass="btn btn-primary"
-                                             rendered="#{accountHome.instance.persistent}" />
+                                             rendered="#{accountHome.managed}" />
                                                   
                             <br/>
                             <!--TODO:  falta accion de borrar -->
                             <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();"  immediate="true"
-                                             update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{accountHome.instance.persistent}"/>
+                                             update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{accountHome.managed}"/>
                         </h:form>
                     </div>
                 </div>     
@@ -48,23 +48,22 @@
         </div>
     </ui:define>
     <ui:define name="content">
-        <p:tree value="#{accountHome.treeAccount}" var="accountN" dynamic="true" cache="true" id="tree">              
+        <p:tree value="#{accountHome.treeAccount}" var="_account" dynamic="true" cache="true" id="tree">              
             <p:treeNode type ="default" expandedIcon="ui-icon-folder-open"  
                         collapsedIcon="ui-icon-folder-collapsed">
-                <h:outputText value="#{accountN.code}"/> 
+                <h:outputText value="#{_account.code}"/> 
                 #{' '}
-                <h:outputText value="#{accountN.name}"/>  
+                <h:outputText value="#{_account.name}"/>  
             </p:treeNode>  
             <p:treeNode type ="SCHEMA" expandedIcon="ui-icon-folder-open"  
                         collapsedIcon="ui-icon-folder-collapsed">                
-                <h:outputText value="#{accountN.name}"/>  
+                <h:outputText value="#{_account.name}"/>  
             </p:treeNode> 
             <p:treeNode type="ACCOUNT" icon="ui-icon-document"  >  
-                <h:outputText value="#{accountN.code}"/> 
+                <h:outputText value="#{_account.code}"/> 
                 #{' '}
-                <h:outputText value="#{accountN.name}"/>  
+                <h:outputText value="#{_account.name}"/>  
             </p:treeNode> 
         </p:tree>
-
     </ui:define>
 </ui:composition>

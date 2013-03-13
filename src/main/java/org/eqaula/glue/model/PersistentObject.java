@@ -32,26 +32,20 @@
 package org.eqaula.glue.model;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
-import org.eqaula.glue.model.profile.Profile;
 
 @MappedSuperclass
 public abstract class PersistentObject<E extends PersistentObject<E>> implements Serializable {
@@ -84,10 +78,13 @@ public abstract class PersistentObject<E extends PersistentObject<E>> implements
     private Date expirationTime;
     @Column(nullable=true)
     private Integer priority;
+    @Column(nullable=true)
+    private Boolean active;
 
     @PrePersist
     void prePersist() {
         createdOn = new Date();
+        active = true;
     }
 
     @PreUpdate
@@ -197,5 +194,19 @@ public abstract class PersistentObject<E extends PersistentObject<E>> implements
     @Override
     public String toString(){
         return String.valueOf(getId());
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+    
+    @Transient
+    public boolean isExpired(){
+        Calendar now = Calendar.getInstance();
+        return now.after(getExpirationTime());
     }
 }

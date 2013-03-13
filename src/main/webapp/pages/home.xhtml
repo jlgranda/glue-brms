@@ -79,22 +79,33 @@
                             <f:param name="organizationId"></f:param>
                             <f:param name="outcome" value="/pages/home"></f:param>
                         </h:link>        
-                        <h2>#{messages['module.management.organizations']} (#{organizations.count})</h2>
+                        <h3>#{messages['module.management.organizations']} (#{organizations.count})</h3>
                         <ul class="nav nav-tabs nav-stacked">
                             <ui:repeat var="_organization" value="#{organizations.all}" varStatus="i">
                                 <li>
                                     <div class="box" style="margin-bottom: 8px;">
                                         <div class="row">
                                             <div class="span6 columns">
-                                                #{_organization.name}
-                                                <h:link outcome="/pages/management/organization/view.xhtml"
-                                                        value="#{messages['module.management']}">
-                                                    <f:param name="organizationId" value="#{_organization.id}" />
-                                                </h:link>
-                                                <h:link outcome="/pages/accounting/view.xhtml"
-                                                        value="#{messages['module.accounting']}">
-                                                    <f:param name="organizationId" value="#{_organization.id}" />
-                                                </h:link>
+                                                <h4>#{_organization.name}</h4>
+                                                <div class="btn-toolbar">
+                                                    <div class="btn-group">
+                                                        <h:link outcome="/pages/management/organization/view.xhtml"
+                                                                title="#{messages['module.management']}"
+                                                                styleClass="icon-home">
+                                                            <f:param name="organizationId" value="#{_organization.id}" />
+                                                        </h:link>
+                                                        <h:link outcome="/pages/accounting/home.xhtml"
+                                                                title="#{messages['module.accounting']}"
+                                                                styleClass=" icon-barcode">
+                                                            <f:param name="organizationId" value="#{_organization.id}" />
+                                                        </h:link>
+                                                        <h:link outcome="/pages/stocklist/warehouse/view.xhtml"
+                                                                title="#{messages['module.stocklist']}"
+                                                                styleClass=" icon-shopping-cart">
+                                                            <f:param name="organizationId" value="#{_organization.id}" />
+                                                        </h:link>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="span1 columns">
                                             </div>

@@ -28,18 +28,14 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.accounting.AccountService;
 import org.eqaula.glue.cdi.Web;
-import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.model.accounting.Account.Type;
 import org.eqaula.glue.model.accounting.Account_;
-import org.eqaula.glue.model.management.Organization;
-import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.eqaula.glue.util.UI;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
-import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 /**
@@ -48,14 +44,11 @@ import org.primefaces.model.SortOrder;
  */
 @Named
 @RequestScoped
-public class AccountListService extends LazyDataModel<Account> {
+public class AccountListService extends ListService<Account> {
 
     private static final long serialVersionUID = 4819808125494695197L;
-    private static final int MAX_RESULTS = 5;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(AccountListService.class);
-    @Inject
-    @Web
-    private EntityManager entityManager;
+    
     @Inject
     private AccountService accountService;
     private List<Account> resultList;
@@ -69,7 +62,7 @@ public class AccountListService extends LazyDataModel<Account> {
     }
 
     public List<Account> getResultList() {
-        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
+        if (resultList.isEmpty()) {
             resultList = accountService.getAccounts(this.getPageSize(), firstResult);
         }
         return resultList;
@@ -84,7 +77,6 @@ public class AccountListService extends LazyDataModel<Account> {
     }
 
     public void setFirstResult(int firstResult) {
-        log.info("set first result + firstResult");
         this.firstResult = firstResult;
         this.resultList = null;
     }
@@ -114,6 +106,7 @@ public class AccountListService extends LazyDataModel<Account> {
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
         _filters.put(Account_.accountType.getName(), Type.SCHEMA); //Filtro por defecto
+        _filters.put(Account_.organization.getName(), getOrganization());
         _filters.putAll(filters);
 
         if (sortField==null){
@@ -125,9 +118,11 @@ public class AccountListService extends LazyDataModel<Account> {
         return qData.getResult();
     }
     
-     @PostConstruct
+    @PostConstruct
+    @Override
     public void init() {
-        accountService.setEntityManager(entityManager);         
+         super.init();
+        accountService.setEntityManager(getEntityManager());         
     }
 
     public void onRowSelect(SelectEvent event) {

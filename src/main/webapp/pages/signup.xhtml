@@ -20,119 +20,112 @@
 
         <ui:define name="content">
 
-            <div class="row">
-                <div class="span8 columns">
+            <h:form id="signup" class="form-horizontal">
+                <fieldset>
+                    <legend>#{messages['common.createaccount']}</legend>
+                </fieldset>
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $('#signup\\:username').attr("placeholder", "¿Quién eres tú?").focus();
+                        $('#signup\\:username').attr("placeholder", "¿Como deseas que te llamemos?");
+                        $('#signup\\:email').attr("placeholder", "¿Su correo electrónico?");
+                    });
+                </script>
 
-                    <h:form id="signup">
-                        <fieldset>
-                            <legend>#{messages['common.createaccount']}</legend>
-                        </fieldset>
-
-                        <script type="text/javascript">
-                            $(document).ready(function() {
-                                $('#signup\\:username').attr("placeholder", "¿Quién eres tú?").focus();
-                                $('#signup\\:username').attr("placeholder", "¿Como deseas que te llamemos?");
-                                $('#signup\\:email').attr("placeholder", "¿Su correo electrónico?");
-                            });
-                        </script>
-
-                        <h:panelGroup id="unm" layout="block" class="clearfix">
-                            <label for="username">#{messages['common.username']}</label>
-                            <div class="input">
-                                <h:inputText id="username" value="#{profileHome.instance.username}" styleClass="xLarge" required="true" label="#{messages['common.username']}">
-                                    <f:ajax execute="@this" render="unm" />
-                                    <f:validator validatorId="usernameValidator" />
-                                    <f:validator validatorId="signupUsernameAvailabilityValidator" />
-                                </h:inputText>
-                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.username != null}"
-                                                styleClass="validation-status" />
-                                <span class="help-inline"><br/>Su nombre de usuario. Ej.:<b>jlgranda, juan, carlos21</b>. (Lo necesitará más adelante.) <ocp:message forId="username" /></span>
-                            </div>
-                        </h:panelGroup>
-
-                        <h:panelGroup id="eml" layout="block" class="clearfix">
-                            <label for="email">#{messages['common.email']}</label>
-                            <div class="input">
-                                <h:inputText id="email" value="#{profileHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
-                                    <f:validator validatorId="emailValidator" />
-                                    <f:validator validatorId="signupEmailAvailabilityValidator" />
-                                    <f:ajax execute="@this" render="eml"  />
-                                </h:inputText>
-                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.email != null}"
-                                                styleClass="validation-status" />
-                                <span class="help-inline"><br/>Prometemos <b>nunca</b> compartir su dirección de correo. <ocp:message forId="email" /></span>
-                            </div>
-                        </h:panelGroup>
-
-                        <div class="clearfix">
-                            <label for="password">#{messages['common.password']}</label>
-                            <div class="input">
-                                <h:inputSecret id="password" value="#{profileHome.password}" redisplay="true" 
-                                               styleClass="xLarge" style="text-transform: uppercase;" required="true" requiredMessage="Required" label="#{messages['common.password']}">
-                                    <f:ajax execute="password passwordConfirm passwordValidator" render="password passwordConfirm pwg pwcg :messages:messages"/>
-                                    <f:validator validatorId="passwordValidator" />
-                                </h:inputSecret>
-                                <h:panelGroup id="pwg">
-                                    <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.password != null}"
-                                                    styleClass="validation-status"/>
-                                    <span class="help-inline"><ocp:message id="pm"  forId="password" /></span>
-                                </h:panelGroup>
-                            </div>
-                        </div>
-
-                        <div class="clearfix">
-                            <label for="passwordConfirm">#{messages['common.confirmPassword']}</label>
-                            <div class="input">
-                                <h:inputSecret id="passwordConfirm" value="#{profileHome.passwordConfirm}"
-                                               redisplay="true" styleClass="xLarge" style="text-transform: uppercase;" label="#{messages['common.confirmPassword']}">
-                                    <f:ajax execute="password passwordConfirm passwordValidator signup:signupValidator" render="password passwordConfirm pwg pwcg :messages:messages"/>
-                                    <f:validator validatorId="passwordValidator" />
-                                </h:inputSecret>
-                                <h:panelGroup id="pwcg">
-                                    <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.passwordConfirm != null}"
-                                                    styleClass="validation-status"/>
-                                    <span class="help-inline"><ocp:message forId="passwordConfirm" /></span>
-                                </h:panelGroup>
-                            </div>
-                        </div>
-                        <br/>
-
-                        <div class="alert-message warning">
-                            <p>Al hacer clic sobre "#{messages['common.join']}", ud esta aceptando las   
-                                <h:link value="Condiciones de servicio" outcome="/pages/terms"/> y las
-                                <h:link value="Politicas de privacidad" outcome="/pages/privacy"/>.</p>
-                        </div>
-
-                        <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
-                        <s:validateForm id="signupValidator" validatorId="signupValidator" />
-
-                        <div class="actions">
-                            <h:commandButton action="#{profileHome.register}" value="#{messages['common.join']}"
-                                             styleClass="btn primary">
-                                <f:ajax execute="@form" render="@form" />
-                            </h:commandButton>
-                        </div>
-                    </h:form>
-                </div>
-
-                <p:panel rendered="false">
-                    <div class="span7 columns offset1">
-                        <br/><br/>
-                        <div class="well">
-                            <h4>Or sign up with your existing account from:</h4>
-                        </div>
-                        <div style="position: relative; left: 120px; width: 200px;">
-                            <ui:include src="/WEB-INF/view/elements/openIdForm.xhtml" />
-                        </div>
-                        <div class="well">
-                            <ul>
-                                <li>Never lose your password.</li>
-                                <li>One-click login.</li>
-                            </ul>
-                        </div>
+                <h:panelGroup id="unm" layout="block" class="control-group">
+                    <label for="username" class="control-label">#{messages['common.username']}</label>
+                    <div class="controls">
+                        <h:inputText id="username" value="#{profileHome.instance.username}" styleClass="xLarge" required="true" label="#{messages['common.username']}">
+                            <f:ajax execute="@this" render="unm" />
+                            <f:validator validatorId="usernameValidator" />
+                            <f:validator validatorId="signupUsernameAvailabilityValidator" />
+                        </h:inputText>
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.username != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-block"><br/>Su nombre de usuario. Ej.:<b>jlgranda, juan, carlos21</b>. (Lo necesitará más adelante.) <ocp:message forId="username" /></span>
                     </div>
-                </p:panel>
-            </div>
+                </h:panelGroup>
+
+                <h:panelGroup id="eml" layout="block" class="control-group">
+                    <label for="email" class="control-label">#{messages['common.email']}</label>
+                    <div class="controls">
+                        <h:inputText id="email" value="#{profileHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
+                            <f:validator validatorId="emailValidator" />
+                            <f:validator validatorId="signupEmailAvailabilityValidator" />
+                            <f:ajax execute="@this" render="eml"  />
+                        </h:inputText>
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.email != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-block"><br/>Prometemos <b>nunca</b> compartir su dirección de correo. <ocp:message forId="email" /></span>
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup id="password-input" layout="block" class="control-group">
+                    <label for="password" class="control-label">#{messages['common.password']}</label>
+                    <div class="controls">
+                        <h:inputSecret id="password" value="#{profileHome.password}" redisplay="true" 
+                                       styleClass="xLarge" style="text-transform: uppercase;" required="true" requiredMessage="Required" label="#{messages['common.password']}">
+                            <f:ajax execute="password passwordConfirm passwordValidator" render="password passwordConfirm pwg pwcg :messages:messages"/>
+                            <f:validator validatorId="passwordValidator" />
+                        </h:inputSecret>
+                        <h:panelGroup id="pwg">
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.instance.password != null}"
+                                            styleClass="validation-status"/>
+                            <span class="help-block"><ocp:message id="pm"  forId="password" /></span>
+                        </h:panelGroup>
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup id="password-retype" layout="block" class="control-group">
+                    <label for="passwordConfirm" class="control-label">#{messages['common.confirmPassword']}</label>
+                    <div class="controls">
+                        <h:inputSecret id="passwordConfirm" value="#{profileHome.passwordConfirm}"
+                                       redisplay="true" styleClass="xLarge" style="text-transform: uppercase;" label="#{messages['common.confirmPassword']}">
+                            <f:ajax execute="password passwordConfirm passwordValidator signup:signupValidator" render="password passwordConfirm pwg pwcg :messages:messages"/>
+                            <f:validator validatorId="passwordValidator" />
+                        </h:inputSecret>
+                        <h:panelGroup id="pwcg">
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{profileHome.passwordConfirm != null}"
+                                            styleClass="validation-status"/>
+                            <span class="help-block"><ocp:message forId="passwordConfirm" /></span>
+                        </h:panelGroup>
+                    </div>
+                </h:panelGroup>
+
+                <p:outputPanel styleClass="alert">
+                    Al hacer clic sobre "#{messages['common.join']}", ud esta aceptando las   
+                        <h:link value="Condiciones de servicio" outcome="/pages/terms"/> y las
+                        <h:link value="Politicas de privacidad" outcome="/pages/privacy"/>
+                </p:outputPanel>
+
+                <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
+                <s:validateForm id="signupValidator" validatorId="signupValidator" />
+
+                <div class="form-actions">
+                    <h:commandButton action="#{profileHome.register}" value="#{messages['common.join']}"
+                                     styleClass="btn primary">
+                        <f:ajax execute="@form" render="@form" />
+                    </h:commandButton>
+                </div>
+            </h:form>
+
+            <p:panel rendered="false">
+                <div class="span7 columns offset1">
+                    <br/><br/>
+                    <div class="well">
+                        <h4>Or sign up with your existing account from:</h4>
+                    </div>
+                    <div style="position: relative; left: 120px; width: 200px;">
+                        <ui:include src="/WEB-INF/view/elements/openIdForm.xhtml" />
+                    </div>
+                    <div class="well">
+                        <ul>
+                            <li>Never lose your password.</li>
+                            <li>One-click login.</li>
+                        </ul>
+                    </div>
+                </div>
+            </p:panel>
 
         </ui:define>
 

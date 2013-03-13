@@ -54,11 +54,6 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     @Current
     @Inject
     private Profile profile;
-    private Long organizationId;
-    private Organization organization;
-    @Inject
-    private OrganizationService organizationService;
- 
 
     public OwnerHome() {
     }
@@ -73,30 +68,6 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
 
     public String getOwnerName() {
         return getInstance().getName();
-    }
-
-    public Long getOrganizationId() {
-        return organizationId;
-    }
-
-    public void setOrganizationId(Long organizationId) {
-        this.organizationId = organizationId;
-    }
-
-    @Transactional
-    public Organization getOrganization() {
-        if (organization == null) {
-            if (organizationId == null) {
-                organization = null;
-            } else {
-                organization = organizationService.find(getOrganizationId());
-            }
-        }
-        return organization;
-    }
-
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
     }
 
     @TransactionAttribute

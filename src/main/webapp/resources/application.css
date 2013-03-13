@@ -518,5 +518,12 @@ form .survey-help {
     line-height: 18px;
 }
 
+.output {
+    margin-left: 20px;
+    vertical-align: sub;
+    display: inline;
+    }
+
+
 
 

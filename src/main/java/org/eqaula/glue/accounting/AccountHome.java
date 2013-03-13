@@ -34,6 +34,8 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
+import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.NodeUnselectEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.DefaultTreeNode;
@@ -56,8 +58,8 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
     private AccountService accountService;
     private Long parentId;
     private Account accountSelected;
-    private String backview;
     private TreeNode treeAccount;
+    private TreeNode selectedNode;
 
     public AccountHome() {
         this.treeAccount = new DefaultTreeNode();
@@ -81,7 +83,6 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
 
     public TreeNode getTreeAccount() {
         if (getInstance().isPersistent()) {
-            log.info("eqaula --> getTreeAccount");
             this.treeAccount = getRootAccount();
         }
         return treeAccount;
@@ -89,6 +90,14 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
 
     public void setTreeAccount(TreeNode treeAccount) {
         this.treeAccount = treeAccount;
+    }
+
+    public TreeNode getSelectedNode() {
+        return selectedNode;
+    }
+
+    public void setSelectedNode(TreeNode selectedNode) {
+        this.selectedNode = selectedNode;
     }
 
     @TransactionAttribute
@@ -197,6 +206,18 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setBussinesEntity(null);
     }
+    
+    public void onNodeSelect(NodeSelectEvent event) {  
+         FacesMessage msg = new FacesMessage(UI.getMessages("Account.subAcount") + " " + UI.getMessages("common.selected"), ((Account) event.getTreeNode().getData()).getName());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        this.setAccountSelected((Account) event.getTreeNode().getData());
+    }  
+  
+    public void onNodeUnselect(NodeUnselectEvent event) {  
+        FacesMessage msg = new FacesMessage(UI.getMessages("Account.subAcount") + " " + UI.getMessages("common.unselected"), ((Account) event.getTreeNode().getData()).getName());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        this.setAccountSelected(null);
+    }  
 
     public List<Account.Type> getAccountTypes() {
         wire();

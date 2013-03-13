@@ -6,24 +6,24 @@
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/view/templates/glue.xhtml">
-    <ui:param name="title" value="#{messages['module.accounting']}" />
+    <ui:param name="title" value="#{accountListService.organization.name} - #{messages['module.accounting']}" />
     <ui:define name="header-replace">
         <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">            
             <div class="container">
                 <div class="span9">
                     <div class="row fl" style="margin-top: 5px;">
-                        <h2>#{messages['module.accounting']}</h2>   
+                        <h2>#{messages['module.accounting.schemas']}</h2>   
                     </div>                    
                 </div> 
 
                 <div class="row-fluid">
                     <div class="span3">
-                        <h:form id="control">  
-                            <br/>
-                            <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                    outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
-                            </h:link>                            
-                        </h:form>
+                        <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
+                        </h:link>     
+                        <br/>
+                        <h:link outcome="/pages/home" styleClass="btn btn-link" value="#{messages['common.cancel']}">
+                        </h:link>
                     </div>
                 </div>
             </div> 
@@ -32,25 +32,26 @@
     <ui:define name="content"> 
         <f:metadata>
             <f:viewParam name="result" value="#{accountListService.firstResult}" />
+            <f:viewParam name="organizationId" value="#{accountListService.organizationId}" />
         </f:metadata> 
         <h:form id="form" class="form-horizontal">           
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
             <div class="actions">
                 <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="account" styleClass="btn btn-primary">
                     <f:param name="accountId"></f:param>
-                    <f:param name="backView" value="list"></f:param>
+                    <f:param name="outcome" value="list"></f:param>
                 </h:link>
                 #{' '}
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="account" styleClass="btn" 
                         disabled="#{empty  accountListService.selectedAccount.id}">
                     <f:param name="accountId" value="#{accountListService.selectedAccount.id}"></f:param>
-                    <f:param name="backView" value="list"></f:param>
+                    <f:param name="outcome" value="list"></f:param>
                 </h:link>
                 #{' '}
                 <h:link id="button-view" value="#{messages['common.view']}" rendered="#{true}" outcome="view" styleClass="btn" 
                         disabled="#{empty accountListService.selectedAccount.id}">
                     <f:param name="accountId" value="#{accountListService.selectedAccount.id}"></f:param>
-                    <f:param name="backView" value="list"></f:param>
+                    <f:param name="outcome" value="list"></f:param>
                 </h:link>
             </div>
             <br/>
@@ -78,6 +79,10 @@
 
                 <p:column headerText="#{messages['Account.type']}" sortBy="#{account_.accountType}">
                     <h:outputText value="#{account_.accountType}" />
+                </p:column>
+
+                <p:column headerText="#{messages['common.active']}" sortBy="#{account_.accountType}">
+                    <h:outputText value="#{messages[account_.active]}" />
                 </p:column>
 
                 <f:facet name="footer">                     
