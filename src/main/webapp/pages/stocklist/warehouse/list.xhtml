@@ -43,6 +43,7 @@
                 <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="warehouse" styleClass="btn btn-primary">
                     <f:param name="warehouseId" value="#{warehouseListService.selectedWarehouse.id}"></f:param>
                     <f:param name="backView" value="list"></f:param>
+                    <f:param name="organizationId" value="#{warehouseListService.organizationId}"/>
                 </h:link>                
                 #{' '}
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="warehouse" styleClass="btn" 
