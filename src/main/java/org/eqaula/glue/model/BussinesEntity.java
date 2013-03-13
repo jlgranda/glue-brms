@@ -51,6 +51,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
@@ -74,16 +75,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     @ManyToOne(optional = true)
     @JoinColumn(name = "author", nullable = true)
     private Profile author;
-   /* @ManyToOne
-    @JoinColumn(name = "parent")
-    public BussinesEntity parent;*/
-    /*@OneToMany(targetEntity = Group.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-     @JoinTable(name = "bussinesentity_group", joinColumns =
-     @JoinColumn(name = "bussinesEntityId", referencedColumnName = "id"),
-     inverseJoinColumns =
-     @JoinColumn(name = "groupId", referencedColumnName = "id"))
-     private List<Group> groups = new ArrayList<Group>();
-     @ManyToOne(cascade = CascadeType.ALL)*/
+
     //Best practice http://java.dzone.com/articles/deterring-%E2%80%9Ctomany%E2%80%9D?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3a+javalobby/frontpage+%28Javalobby+/+Java+Zone%29
     //Replace ManyToMany fro OneToMany and link entity
     @OneToMany(cascade = CascadeType.ALL)
@@ -95,15 +87,18 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     @ManyToOne
     @JoinColumn(name = "property_id")
     private Property property;
+    
+    @ManyToOne
+    private Organization organization;
 
-    /*public BussinesEntity getParent() {
-        return parent;
+    public Organization getOrganization() {
+        return organization;
     }
 
-    public void setParent(BussinesEntity parent) {
-        this.parent = parent;
-    }*/
-
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+    
     public List<Membership> getMemberships() {
         return memberships;
     }

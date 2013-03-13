@@ -27,7 +27,9 @@ import javax.persistence.EntityManager;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityAttribute;
 import org.eqaula.glue.model.Property;
+import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.service.BussinesEntityService;
+import org.eqaula.glue.service.OrganizationService;
 import org.jboss.seam.transaction.Transactional;
 
 /**
@@ -41,10 +43,14 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityHome.class);
     @Inject
     protected BussinesEntityService bussinesEntityService;
+    @Inject
+    protected OrganizationService organizationService;
     protected BussinesEntity bussinesEntity;
     private Property property;
     private String outcome;
     private String command;
+    private Long organizationId;
+    private Organization organization;
     private boolean editionEnabled = true;
 
     public Property getProperty() {
@@ -77,6 +83,30 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
 
     public void setEditionEnabled(boolean editionEnabled) {
         this.editionEnabled = editionEnabled;
+    }
+    
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
+
+    @Transactional
+    public Organization getOrganization() {
+        if (organization == null) {
+            if (organizationId == null) {
+                organization = null;
+            } else {
+                organization = organizationService.find(getOrganizationId());
+            }
+        }
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
     @Override

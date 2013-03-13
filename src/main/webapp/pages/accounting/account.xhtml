@@ -11,7 +11,7 @@
                 template="/WEB-INF/view/templates/glue.xhtml">
     <f:metadata>
         <f:viewParam name="accountId" value="#{accountHome.accountId}" />            
-        <f:viewParam name="backView" value="#{accountHome.backView}" />            
+        <f:viewParam name="outcome" value="#{accountHome.outcome}" />            
         <s:viewAction action="#{accountHome.load}" if="#{conversation.transient}"/>
     </f:metadata>
 
@@ -36,7 +36,7 @@
                                              process="@this, :edit-dialog" onclick="editDlg.show();"
                                              icon="ui-icon-plus" update=":edit-dialog" styleClass="btn btn-primary"
                                              rendered="#{accountHome.instance.persistent}" />
-                                                     
+
                             <br/>
                             <!--TODO:  falta accion de borrar -->
                             <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();"  immediate="true"
@@ -120,7 +120,7 @@
                     </div>
                 </h:panelGroup>
                 <glue:input id="des" name="description" type="textarea" label="#{messages['common.description']}" value="#{accountHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" execute="@this saveNew" render="des"/> 
-                
+
                 <div class="controls">                                                                                                                                          
                     <p:commandButton id="saveNew" action="#{accountHome.saveAccount()}" value="#{messages['common.save']}" styleClass="btn btn-primary" rendered="#{accountHome.hasParent() or !accountHome.instance.persistent}" />
                     #{' '}                    
@@ -139,22 +139,22 @@
             <p:panel id="panel" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{e.name}" rendered="#{accountHome.instance.persistent or accountHome.hasParent()}">                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
                 <div class="actions">                    
-                    <h:link value="#{messages['common.add']} #{messages['Account.subAcount']}" rendered="#{accountHome.managed != null}" outcome="account" styleClass="btn">
+                    <h:link value="#{messages['common.add']} #{messages['Account.subAcount']}" rendered="#{accountHome.managed != null}" outcome="account" styleClass="btn btn-primary">
                         <f:param name="parentId" value="#{accountHome.accountId}" ></f:param>
-                        <f:param name="accountId" ></f:param>
-                        <f:param name="backView" value="account"></f:param>
+                        <f:param name="accountId"></f:param>
+                        <f:param name="outcome" value="account"></f:param>
                     </h:link>
                     #{' '}
                     <h:link id="button-edit" value="#{messages['common.edit']}" outcome="account" styleClass="btn" disabled="#{empty accountHome.accountSelected}">
                         <f:param name="accountId" value="#{accountHome.accountSelected.id}"></f:param>
                         <f:param name="parentId" value="#{accountHome.accountId}"></f:param>
-                        <f:param name="backView" value="account"></f:param>
+                        <f:param name="outcome" value="account"></f:param>
                     </h:link>
                     #{' '}
                     <h:link id="button-view" value="#{messages['common.view']}" rendered="#{true}" outcome="view" styleClass="btn" 
                             disabled="#{empty accountHome.accountSelected}">
                         <f:param name="accountId" value="#{accountHome.accountSelected.id}"></f:param>
-                        <f:param name="backView" value="account"></f:param>
+                        <f:param name="outcome" value="account"></f:param>
                     </h:link>
                     #{' '}
                     <h:link outcome="#{accountHome.previousView()}" onclick="editDlg.hide();"
@@ -163,32 +163,33 @@
                 </div>
                 <br/>
                 <h:panelGroup layout="block" class="control-group" rendered="#{accountHome.instance.persistent}">                                
-                    <p:dataTable var="account_" value="#{accountHome.instance.subAccountsAsList}"
-                                 editable="false" 
-                                 id="subAccountTable"
-                                 rowKey="#{account_.id}"
-                                 selection="#{accountHome.accountSelected}" 
-                                 selectionMode="single" > 
+                    <p:treeTable value="#{accountHome.treeAccount}" var="_account"  
+                                 selection="#{accountHome.selectedNode}" selectionMode="single">  
 
-                        <p:ajax event="rowSelect" listener="#{accountHome.onRowSelect}"   
+                        <p:ajax event="select" listener="#{accountHome.onNodeSelect}"   
                                 update=":form:button-edit :form:button-view :form:messages"/>                 
-                        <p:ajax event="rowUnselect" listener="#{accountHome.onRowUnselect}" update=":form:button-edit :form:button-view :form:messages"/>
+                        <p:ajax event="unselect" listener="#{accountHome.onNodeUnselect}" update=":form:button-edit :form:button-view :form:messages"/>
 
-                        <p:column headerText="#{messages['account.code']}" sortBy="#{account_.code}">
-                            <h:outputText value="#{account_.code}" />
-                        </p:column>
 
-                        <p:column headerText="#{messages['account.name']}" sortBy="#{account_.name}">
-                            <h:outputText value="#{account_.name}" />
-                        </p:column>
-
-                        <p:column headerText="#{messages['account.type']}" sortBy="#{account_.accountType}">
-                            <h:outputText value="#{account_.accountType}" />
-                        </p:column>
-
-                        <f:facet name="footer">                     
-                        </f:facet>                        
-                    </p:dataTable>
+                        <p:column style="width:150px">  
+                            <f:facet name="header">  
+                                #{messages['account.code']} 
+                            </f:facet>  
+                            <h:outputText value="#{_account.code}" />  
+                        </p:column>  
+                        <p:column style="width:150px">  
+                            <f:facet name="header">  
+                                #{messages['account.name']} 
+                            </f:facet>  
+                            <h:outputText value="#{_account.name}" />  
+                        </p:column>  
+                        <p:column style="width:100px">  
+                            <f:facet name="header">  
+                                #{messages['account.type']}  
+                            </f:facet>  
+                            <h:outputText value="#{_account.accountType}" />  
+                        </p:column>  
+                    </p:treeTable>  
                 </h:panelGroup>            
             </p:panel>             
         </h:form>
