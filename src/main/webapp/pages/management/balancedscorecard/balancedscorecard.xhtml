@@ -26,7 +26,8 @@ limitations under the License.
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml" >
         <f:metadata>
             <f:viewParam name="balancedScorecarId" value="#{balancedScorecardHome.balancedScorecardId}"/>
-            <f:viewParam name="outcome" value="#{objetiveHome.outcome}"/>
+            <f:viewParam name="organizationId" value="#{balancedScorecardHome.organizationId}"/>
+            <f:viewParam name="outcome" value="#{balancedScorecardHome.outcome}"/>
             <s:viewAction action="#{balancedScorecardHome.load}" if="#{conversation.transient}" />
         </f:metadata>
         <ui:define name="header-replace">

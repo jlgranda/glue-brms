@@ -94,6 +94,13 @@
                                                                 styleClass="icon-home">
                                                             <f:param name="organizationId" value="#{_organization.id}" />
                                                         </h:link>
+                                                        
+                                                        <h:link outcome="/pages/management/balancedscorecard/list.xhtml"
+                                                                title="#{messages['module.balancedScorecard']}"
+                                                                styleClass="icon-tag">
+                                                            <f:param name="organizationId" value="#{_organization.id}" />
+                                                        </h:link>
+                                                        
                                                         <h:link outcome="/pages/accounting/home.xhtml"
                                                                 title="#{messages['module.accounting']}"
                                                                 styleClass=" icon-barcode">
