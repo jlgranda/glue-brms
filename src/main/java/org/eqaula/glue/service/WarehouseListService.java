@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.model.stocklist.Warehouse;
+import org.eqaula.glue.model.stocklist.Warehouse_;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.eqaula.glue.util.UI;
@@ -42,7 +43,7 @@ import org.primefaces.model.SortOrder;
  */
 @Named(value = "warehouseListService")
 @RequestScoped
-public class WarehouseListService extends LazyDataModel<Warehouse> {
+public class WarehouseListService extends ListService<Warehouse> {
 
     /**
      * Creates a new instance of WarehouseListService
@@ -114,8 +115,8 @@ public class WarehouseListService extends LazyDataModel<Warehouse> {
             order = QuerySortOrder.DESC;
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
-        /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
-         _filters.putAll(filters);*/
+        _filters.put(Warehouse_.organization.getName(), getOrganization()); //Filtro por defecto
+         _filters.putAll(filters);
 
         QueryData<Warehouse> qData = warehouseService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
@@ -123,7 +124,9 @@ public class WarehouseListService extends LazyDataModel<Warehouse> {
     }
 
     @PostConstruct
+    @Override
     public void init() {
+        super.init();
         log.info("Setup entityManager into WareHouseService...");
         warehouseService.setEntityManager(entityManager);
     }

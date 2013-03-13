@@ -59,19 +59,18 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     public BalancedScorecardHome() {
     }
 
-    public Long getBalancedScorecardId(){
-        return (Long)getId();
+    public Long getBalancedScorecardId() {
+        return (Long) getId();
     }
-    
-    public void setBalancedScorecardId(Long balancedScorecardId){
+
+    public void setBalancedScorecardId(Long balancedScorecardId) {
         setId(balancedScorecardId);
     }
-    
-    public String getBalancedScorecardName(){
+
+    public String getBalancedScorecardName() {
         return getInstance().getName();
     }
-    
-    
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -113,7 +112,11 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
+            getInstance().setOrganization(getOrganization());
             create(getInstance());
+        }
+        if (getOrganizationId() != null) {
+            return getOutcome() + "?organizationId=" + getOrganizationId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -150,5 +153,4 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-    
 }
