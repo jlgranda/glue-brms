@@ -94,7 +94,7 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        warehouseService.setEntityManager(em);
+        bussinesEntityService.setEntityManager(em);
         organizationService.setEntityManager(em);
 
     }
@@ -121,17 +121,33 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
         log.info("eqaula --> WarehouseHome save instance: " + getInstance().getId());
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
-        String outcome = null;
+       
+        log.info("id organization" + getOrganizationId());
+        log.info("id organization" + getOrganizationId());
+        log.info("id organization" + getOrganizationId());
+        log.info("id organization" + getOrganizationId());
+        log.info("id organization" + getOrganizationId());
+        
         if (getInstance().isPersistent()) {
+            save(getInstance());
+        } else {
             getInstance().setAuthor(this.profile);
             getInstance().setOrganization(getOrganization());
-            save(getInstance());
-            outcome = "/pages/stocklist/warehouse/list";
-        } else {
-            save(getInstance());
-            outcome = "/pages/stocklist/warehouse/list";
+            create(getInstance());
         }
-        return outcome;
+
+        log.info("outcome: "+ getOutcome());
+        log.info("outcome: "+ getOutcome());
+        log.info("outcome: "+ getOutcome());
+        log.info("outcome: "+ getOutcome());
+        log.info("outcome: "+ getOutcome());
+        
+        
+        if (getOrganizationId() != null) {
+            return getOutcome() + "?organizationId=" + getOrganizationId() + "&faces-redirect=true&includeViewParams=true";
+        }
+
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
     @Transactional

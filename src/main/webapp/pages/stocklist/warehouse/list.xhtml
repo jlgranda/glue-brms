@@ -41,21 +41,22 @@
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
             <div class="form-actions" style="padding-left: 20px">
                 <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="warehouse" styleClass="btn btn-primary">
-                    <f:param name="warehouseId" value="#{warehouseListService.selectedWarehouse.id}"></f:param>
-                    <f:param name="backView" value="list"></f:param>
                     <f:param name="organizationId" value="#{warehouseListService.organizationId}"/>
+                    <f:param name="outcome" value="list"/>
                 </h:link>                
                 #{' '}
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="warehouse" styleClass="btn" 
-                        disabled="#{warehouseListService.selectedWarehouse.id==null}">
+                        disabled="#{empty warehouseListService.selectedWarehouse.id}">
                     <f:param name="warehouseId" value="#{warehouseListService.selectedWarehouse.id}"></f:param>
-                    <f:param name="backView" value="list"></f:param>
+                    <f:param name="outcome" value="list"></f:param>
+                <f:param name="organizationId" value="#{warehouseListService.selectedWarehouse.organization.id}"></f:param>
+
                 </h:link> 
                 #{' '}
                 <h:link id="button-admin" value="#{messages['common.admin']}" rendered="#{true}" outcome="view" styleClass="btn"
                         disabled="#{warehouseListService.selectedWarehouse.id==null}">
                     <f:param name="warehouseId" value="#{warehouseListService.selectedWarehouse.id}"></f:param>
-                    <f:param name="backView" value="list"></f:param>
+                    <f:param name="outcome" value="list"></f:param>
                 </h:link>
 
             </div>
