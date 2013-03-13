@@ -95,10 +95,11 @@ public class Perspective extends BussinesEntity implements Serializable {
     
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Perspective[ "
+        /*return "org.eqaula.glue.model.management.Perspective[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
-                + " ]";
+                + " ]";*/
+        return String.valueOf(getId());
     }
 }
