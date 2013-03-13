@@ -47,7 +47,7 @@ limitations under the License.
                 <h:panelGroup id="pstv" layout="block" class="control-group">
                     <label for="perspective" class="control-label required">#{messages['module.perspective']}</label>
                     <div class="controls">
-                        <p:selectOneMenu id="perspective" value="#{objetiveHome.instance.perspective}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="#{messages['required.perspective']}" rendered="true" label="#{messages['Perspective']}" filter="true" filterMatchMode="contains">
+                        <p:selectOneMenu id="perspective" value="#{objetiveHome.instance.perspective}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.perspective']}" rendered="true" label="#{messages['Perspective']}" filter="true" filterMatchMode="contains">
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
                             <f:selectItems value="#{perspectiveListService.resultList}" var="_p" itemLabel="#{_p.name}" itemValue="#{_p}"/>                          
                             <p:ajax event="change" update="@parent " partialSubmit="true"/>
