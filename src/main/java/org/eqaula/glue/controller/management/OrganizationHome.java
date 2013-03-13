@@ -244,11 +244,13 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("owner".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/owner/owner.xhtml?");
+                outcomeBuilder.append("&organizationId=").append(getOrganizationId());
                 outcomeBuilder.append("&ownerId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("objetive".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
+                outcomeBuilder.append("&organizationId=").append(getOrganizationId());
                 outcomeBuilder.append("&objetiveId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");

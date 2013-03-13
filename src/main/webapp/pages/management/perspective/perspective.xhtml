@@ -48,7 +48,7 @@ limitations under the License.
             <h:form id="form" class="form-horizontal" acceptcharset="UTF-8">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{perspectiveHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
-                <glue:input id="sequence" name="sequence" type="text" label="#{messages['common.sequence']}" value="#{perspectiveHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                <glue:input id="sequence" name="sequence" type="text" label="#{messages['common.sequence']}" value="#{perspectiveHome.instance.sequence}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{perspectiveHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
                 <!-- Attributos personalizados --> 
                 <div class="form-actions">
