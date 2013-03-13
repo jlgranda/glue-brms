@@ -77,7 +77,7 @@
                     <p:commandButton id="save" action="#{propertyHome.saveProperty()}" 
                                      value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     #{' '}                     
-                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="#{propertyHome.hasValuesBussinesEntity()?  'deletedDlg.show()' : 'alertDlg.show()' }"  immediate="true"
+                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn btn-danger" onclick="#{propertyHome.hasValuesBussinesEntity()?  'deletedDlg.show()' : 'alertDlg.show()' }"  immediate="true"
                                      update=":cancel-dialog :alerts-dialog:" rendered="#{not empty propertyHome.instance.id}">                        
                     </p:commandButton>
                     #{' '}

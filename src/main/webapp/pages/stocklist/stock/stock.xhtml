@@ -25,12 +25,10 @@
                 <div class="container">
 
 
-                    <div class="row fl" style="margin-top: 5px;">
-                        <div class="span7 columns"> 
-                            <div class="row fl" style="margin-top: 5px;">
-                                <h3>#{stockHome.stockId != null? messages['common.edit'] : messages['common.add']} 
-                                    #{messages['module.stocklist.item']} #{stockHome.instance.item.name}</h3>   
-                            </div>
+                    <div class="row-fluid" style="margin-top: 5px;">
+                        <div class="span9"> 
+                            <h3>#{stockHome.stockId != null? messages['common.edit'] : messages['common.add']} 
+                                #{messages['module.stocklist.item']} #{stockHome.instance.item.name}</h3>   
                         </div>
                     </div>
                 </div>
@@ -64,23 +62,22 @@
                 </h:panelGroup>
 
                 <glue:input id="amount" name="amount" type="java.lang.Double" label="#{messages['module.stocklist.stock.amount']}" value="#{stockHome.instance.amount}" required="true" inlinehelp="#{messages['module.stocklist.amount.inlinehelp']}" execute="@this save" render="amount"/>
-               
                 <glue:input id="unit" name="unit" type="text" label="#{messages['module.stocklist.stock.unit']}" value="#{stockHome.instance.unit}" required="true" inlinehelp="#{messages['module.stocklist.unit.inlinehelp']}" execute="@this save" render="unit"/>
 
-                <div class="actions">
+                <div class="form-actions">
                     <p:commandButton id="save" action="#{stockHome.saveStock()}" value="#{messages['common.save']}" styleClass="btn btn-primary">
                         <f:param name="warehouseId" value="#{stockHome.warehouseId}"/>
                         <f:param name="backView" value="list"></f:param>
                     </p:commandButton>
-                    
-                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
+
+                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn btn-danger" onclick="deletedDlg.show();" immediate="true"
                                      update="form-dialog-confirm-delete" rendered="#{stockHome.instance.id != null}">
 
                         <f:param name="warehouseId" value="#{stockHome.warehouseId}"/>
                         <f:param name="backView" value="list"></f:param>
                     </p:commandButton>
-                    
-                    
+
+
                     <h:link outcome="/pages/stocklist/warehouse/view.xhtml?faces-redirect=true" onclick="editDlg.hide();"
                             value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
                         <f:param name="warehouseId" value="#{stockHome.warehouseId}"/>
