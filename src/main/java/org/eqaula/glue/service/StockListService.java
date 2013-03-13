@@ -30,6 +30,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.model.stocklist.Stock;
+import org.eqaula.glue.model.stocklist.Stock_;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.eqaula.glue.util.UI;
@@ -44,7 +45,7 @@ import org.primefaces.model.SortOrder;
  */
 @Named(value = "stockListService")
 @RequestScoped
-public class StockListService extends LazyDataModel<Stock> {
+public class StockListService extends ListService<Stock> {
 
     private static final long serialVersionUID = 4819808125494695197L;
     private static final int MAX_RESULTS = 5;
@@ -113,16 +114,23 @@ public class StockListService extends LazyDataModel<Stock> {
             order = QuerySortOrder.DESC;
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
-        /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
-         _filters.putAll(filters);*/
+       
+        _filters.put(Stock_.organization.getName(), getOrganization());
+        _filters.putAll(filters);
+       
 
         QueryData<Stock> qData = stockService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();
     }
 
+    /**
+     *
+     */
     @PostConstruct
+    @Override
     public void init() {
+        super.init();
         log.info("Setup entityManager into StockService...");
         stockService.setEntityManager(entityManager);
     }

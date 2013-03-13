@@ -118,6 +118,7 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
         getInstance().setLastUpdate(now);
         String outcome = null;
         if (getInstance().isPersistent()) {
+            //getInstance().getOrganization()
             save(getInstance());
             outcome = "/pages/stocklist/warehouse/list";
         } else {

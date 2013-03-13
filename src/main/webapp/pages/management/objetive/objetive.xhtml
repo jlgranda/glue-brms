@@ -21,6 +21,7 @@ limitations under the License.
       xmlns:s="http://jboss.org/seam/faces"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
       xmlns:glue ="http://eqaula.org/jsf/facelets">
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml" >
@@ -43,15 +44,21 @@ limitations under the License.
         <ui:define name="content" >
             <h:form id="form" acceptcharset="UTF-8" class="form-horizontal">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                <h:panelGroup id="pstv" layout="block" class="control-group">
+                    <label for="perspective" class="control-label required">#{messages['module.perspective']}</label>
+                    <div class="controls">
+                        <p:selectOneMenu id="perspective" value="#{objetiveHome.instance.perspective}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="#{messages['required.perspective']}" rendered="true" label="#{messages['Perspective']}" filter="true" filterMatchMode="contains">
+                            <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
+                            <f:selectItems value="#{perspectiveListService.resultList}" var="_p" itemLabel="#{_p.name}" itemValue="#{_p}"/>                          
+                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                        </p:selectOneMenu> 
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-block"><br/>#{messages['perspective.inlinehelp']} <ocp:message forId="perspective" /></span>
+                    </div>
+                </h:panelGroup>
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{objetiveHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{objetiveHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
-                
-                <p:selectOneMenu id="parent_" value="#{objetiveHome.instance.parent}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="false"  var="p"
-                                 rendered="true" label="#{messages['Account']}" filter="true" filterMatchMode="contains">
-                    <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
-                    <f:selectItems value="#{accountHome.accounts}" var="parentItem" itemLabel="#{parentItem.code} #{parentItem.name}" itemValue="#{parentItem}"/>                          
-                    <p:ajax event="change" update="@parent " partialSubmit="true"/>
-                </p:selectOneMenu>                        
 
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{objetiveHome.saveObjetive()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
