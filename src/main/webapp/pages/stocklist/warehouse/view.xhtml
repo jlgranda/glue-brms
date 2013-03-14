@@ -56,7 +56,7 @@
 
 
 
-                    <h:link outcome="#{warehouseHome.outcome}"                                                                                                                                                        
+                    <h:link outcome="/pages/stocklist/warehouse/list"                                                                                                                                                        
                             value="#{messages['common.cancel']}" styleClass="btn" immediate="true">
                         <f:param name="organizationId" value="#{warehouseHome.instance.organization.id}"/>
                     </h:link> 
@@ -90,19 +90,6 @@
                         <h:outputText value="#{stock.unit}" />
                     </p:column>
                 </p:dataTable>
-
-
-                #{warehouseHome.instance.stocks}
-                #{warehouseHome.outcome}
-                <h:outputLabel value="#{stockHome.outcome}" />
-                #{warehouseListService.organization.id}
-                #{warehouseListService.organizationId}
-                #{stockListService.organization.id}
-                #{stockListService.organizationId}
-                
-                #{warehouseHome.instance.organization.id}
-                #{warehouseHome.organization.id}
-
 
             </h:form>
         </ui:define>
