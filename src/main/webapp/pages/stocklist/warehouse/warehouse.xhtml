@@ -16,7 +16,6 @@
             <f:viewParam name="warehouseId" value="#{warehouseHome.warehouseId}" /> 
             <f:viewParam name="organizationId" value="#{warehouseHome.organizationId}" /> 
             <f:viewParam name="outcome" value="#{warehouseHome.outcome}" /> 
-
             <s:viewAction action="#{warehouseHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
 
@@ -82,8 +81,7 @@
                                      style="margin-top:10px;"/>  
                 </h:form>
             </p:dialog>
-
-        </ui:define>             
+            </ui:define>             
     </ui:composition>
 </html>
 

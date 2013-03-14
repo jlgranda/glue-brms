@@ -121,13 +121,13 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
         log.info("eqaula --> WarehouseHome save instance: " + getInstance().getId());
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
-       
+
         log.info("id organization" + getOrganizationId());
         log.info("id organization" + getOrganizationId());
         log.info("id organization" + getOrganizationId());
         log.info("id organization" + getOrganizationId());
         log.info("id organization" + getOrganizationId());
-        
+
         if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
@@ -136,18 +136,18 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
             create(getInstance());
         }
 
-        log.info("outcome: "+ getOutcome());
-        log.info("outcome: "+ getOutcome());
-        log.info("outcome: "+ getOutcome());
-        log.info("outcome: "+ getOutcome());
-        log.info("outcome: "+ getOutcome());
-        
-        
+        log.info("outcome: " + getOutcome());
+        log.info("outcome: " + getOutcome());
+        log.info("outcome: " + getOutcome());
+        log.info("outcome: " + getOutcome());
+        log.info("outcome: " + getOutcome());
+
+
         if (getOrganizationId() != null) {
             return getOutcome() + "?organizationId=" + getOrganizationId() + "&faces-redirect=true&includeViewParams=true";
         }
 
-        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
+        return getOutcome() +"?faces-redirect=true&includeViewParams=true";
     }
 
     @Transactional
@@ -176,7 +176,10 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", e.toString()));
         }
-        return "/pages/stocklist/warehouse/list";
+        if (getOrganizationId() != null) {
+            return getOutcome()+"?organizationId=" + getOrganizationId()+"&faces-redirect=true&includeViewParams=true";
+        }
+        return getOutcome()+"?faces-redirect=true";
     }
 
     public boolean isWired() {

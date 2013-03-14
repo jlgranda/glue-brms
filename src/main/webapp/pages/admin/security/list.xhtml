@@ -20,7 +20,7 @@
                     <div class="span3">
                         <br/>
                         <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn btn-primary">                                
+                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
                         </h:link>                            
 
                     </div>
@@ -45,7 +45,7 @@
                 </h:link>                                
                 #{''}
                 <p:commandLink id="button-delete" value="#{messages['common.delete']}" 
-                               type="button" immediate="true" styleClass="btn"
+                               type="button" immediate="true" styleClass="btn btn-danger"
                                onclick="deletedDlg.show();"
                                rendered="true">                     
                 </p:commandLink>
