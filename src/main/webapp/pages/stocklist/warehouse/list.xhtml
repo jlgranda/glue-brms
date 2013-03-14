@@ -11,6 +11,8 @@
     <f:metadata>
         <f:viewParam name="result" value="#{warehouseListService.firstResult}" />
         <f:viewParam name="organizationId" value="#{warehouseListService.organizationId}" />
+        <f:viewParam name="organizationId" value="#{warehouseHome.organizationId}" />
+
     </f:metadata>
 
     <ui:param name="title" value="#{messages['module.stocklist']} - #{warehouseHome.instance.name}" />
@@ -36,13 +38,12 @@
     </ui:define>
 
     <ui:define name="content">
-
-        <h:form id="form">
+             <h:form id="form">
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
             <div class="form-actions" style="padding-left: 20px">
                 <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="warehouse" styleClass="btn btn-primary">
                     <f:param name="organizationId" value="#{warehouseListService.organizationId}"/>
-                <f:param name="outcome" value="list"></f:param>
+                    <f:param name="outcome" value="list"></f:param>
                 </h:link>                
                 #{' '}
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="warehouse" styleClass="btn" 
