@@ -22,10 +22,11 @@ limitations under the License.
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:glue ="http://eqaula.org/jsf/facelets">
-     <ui:composition template="/WEB-INF/view/templates/glue.xhtml" >
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml" >
         <f:metadata>
             <f:viewParam name="themeId" value="#{themeHome.themeId}"/>
-            <f:viewParam name="ownerId" value="#{themeHome.ownerId}"/>
+            <f:viewParam name="balancedScorecardId" value="#{themeHome.balancedScorecardId}"/>
+            <f:viewParam name="outcome" value="#{themeHome.outcome}"/>
             <s:viewAction action="#{themeHome.load}" if="#{conversation.transient}" />
         </f:metadata>
         <ui:define name="header-replace">
@@ -51,7 +52,7 @@ limitations under the License.
                                      update=":cancel-dialog" rendered="#{themeHome.instance.persistent}">                        
                     </p:commandButton>
                     <!-- &nbsp;-->
-                     <h:link outcome="/pages/management/organization/list.xhtml?faces-redirect=true"
+                    <h:link outcome="/pages/management/organization/list.xhtml?faces-redirect=true"
                             value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
                     </h:link>
                 </div>  

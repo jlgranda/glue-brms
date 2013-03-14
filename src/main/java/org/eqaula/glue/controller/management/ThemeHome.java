@@ -31,10 +31,12 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
+import org.eqaula.glue.model.management.BalancedScorecard;
 import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
+import org.eqaula.glue.service.BalancedScorecardService;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.OwnerService;
 import org.eqaula.glue.util.Dates;
@@ -44,13 +46,12 @@ import org.primefaces.context.RequestContext;
 /*
  * @author dianita
  */
-
 @Named
 @ViewScoped
 public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable {
+
     private static final long serialVersionUID = 6941666069724371093L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(OwnerHome.class);
-    
     @Inject
     @Web
     private EntityManager em;
@@ -63,19 +64,23 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     private Long ownerId;
     @Inject
     private OwnerService ownerService;
+    private BalancedScorecard balancedScorecard;
+    private Long balancedScorecardId;
+    @Inject
+    private BalancedScorecardService balancedScorecardService;
 
     public ThemeHome() {
     }
-   
-    public Long getThemeId(){
-        return (Long)getId();
+
+    public Long getThemeId() {
+        return (Long) getId();
     }
-    
-    public void setThemeId(Long themeId){
+
+    public void setThemeId(Long themeId) {
         setId(themeId);
     }
-    
-    public String getStructureName(){
+
+    public String getStructureName() {
         return getInstance().getName();
     }
 
@@ -87,14 +92,13 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         this.ownerId = ownerId;
     }
 
-    
     @Transactional
     public Owner getOwner() {
-        if(owner==null){
-            if(ownerId==null){
-                owner=null;
-            }else{
-                owner=ownerService.find(getOwnerId());
+        if (owner == null) {
+            if (ownerId == null) {
+                owner = null;
+            } else {
+                owner = ownerService.find(getOwnerId());
             }
         }
         return owner;
@@ -103,26 +107,51 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     public void setOwner(Owner owner) {
         this.owner = owner;
     }
-    
+
+    public Long getBalancedScorecardId() {
+        return balancedScorecardId;
+    }
+
+    public void setBalancedScorecardId(Long balancedScorecardId) {
+        this.balancedScorecardId = balancedScorecardId;
+    }
+
+    @Transactional
+    public BalancedScorecard getBalancedScorecard() {
+        if (balancedScorecard == null) {
+            if (balancedScorecardId == null) {
+                balancedScorecard = null;
+            } else {
+                balancedScorecard = balancedScorecardService.find(getBalancedScorecardId());
+            }
+        }
+        return balancedScorecard;
+    }
+
+    public void setBalancedScorecard(BalancedScorecard balancedScorecard) {
+        this.balancedScorecard = balancedScorecard;
+    }
+
     @TransactionAttribute
-    public void load(){
-        if(isIdDefined()){
+    public void load() {
+        if (isIdDefined()) {
             wire();
         }
     }
-    
+
     @TransactionAttribute
     public void wire() {
         getInstance();
     }
-    
+
     @PostConstruct
     public void init() {
         setEntityManager(em);
         ownerService.setEntityManager(em);
+        balancedScorecardService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
-    
+
     @Override
     protected Theme createInstance() {
         BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Theme.class.getName());
@@ -137,7 +166,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         theme.buildAttributes(bussinesEntityService);
         return theme;
     }
-    
+
     @TransactionAttribute
     public String saveTheme() {
         Date now = Calendar.getInstance().getTime();
@@ -146,12 +175,16 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setOwner(getOwner());
+            getInstance().setBalancedScorecard(getBalancedScorecard());
+            //getInstance().setOwner(getOwner());
             create(getInstance());
-        }     
-        return "/pages/management/organization/view?organizationId="+getOwner().getOrganization().getId();
+        }
+        if (getBalancedScorecardId() != null) {            
+            return getOutcome() + "?balancedScorecardId=" + getBalancedScorecardId()+ "&faces-redirect=true&includeViewParams=true";
+        }
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true"; 
     }
-    
+
     public boolean isWired() {
         return true;
     }
@@ -159,7 +192,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     public Theme getDefiniedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
-    
+
     @Override
     public Class<Theme> getEntityClass() {
         return Theme.class;
@@ -184,5 +217,4 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         }
         return "/pages/management/organization/list.xhtml?faces-redirect=true";
     }
-
 }

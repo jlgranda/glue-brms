@@ -72,9 +72,12 @@ public class BalancedScorecardListService extends ListService<BalancedScorecard>
     public void setResultList(List<BalancedScorecard> resultList) {
         this.resultList = resultList;
     }
+    
+    
 
     public int getFirstResult() {
         return firstResult;
+        
     }
 
     public void setFirstResult(int firstResult) {
@@ -116,7 +119,7 @@ public class BalancedScorecardListService extends ListService<BalancedScorecard>
 
     @PostConstruct
     public void init() {
-        super.init();
+        super.init();        
         balancedScorecardService.setEntityManager(getEntityManager());
     }
 

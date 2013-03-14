@@ -29,9 +29,11 @@ import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.model.management.BalancedScorecard;
 import org.eqaula.glue.model.management.Theme;
+import org.eqaula.glue.model.management.Theme_;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.eqaula.glue.util.UI;
+import org.jboss.seam.transaction.Transactional;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
@@ -57,12 +59,22 @@ public class ThemeListService  extends  LazyDataModel<Theme>{
     private int firstResult = 0;
     private Theme[] selectedThemes;
     private Theme selectedTheme;
+    
+    @Inject
+    protected BalancedScorecardService balancedScorecardService;
+    
+    private BalancedScorecard balancedScorecard;
+    private Long balancedScorecardId;
+    
+    
 
     public ThemeListService() {
        setPageSize(MAX_RESULTS);
        resultList= new ArrayList<Theme>();
     }
 
+    
+    
     public List<Theme> getResultList() {
         if(resultList.isEmpty()){
             resultList= themeService.getThemes();
@@ -90,6 +102,31 @@ public class ThemeListService  extends  LazyDataModel<Theme>{
     public void setSelectedTheme(Theme selectedTheme) {
         this.selectedTheme = selectedTheme;
     }
+
+    public Long getBalancedScorecardId() {
+        return balancedScorecardId;
+    }
+
+    public void setBalancedScorecardId(Long balancedScorecardId) {
+        this.balancedScorecardId = balancedScorecardId;
+    }
+
+    @Transactional
+    public BalancedScorecard getBalancedScorecard() {
+        if(balancedScorecard==null){
+            if(balancedScorecardId==null){
+                balancedScorecard= null;
+            }else{
+                balancedScorecard = balancedScorecardService.find(getBalancedScorecardId());
+            }
+        }
+        return balancedScorecard;
+    }
+
+    public void setBalancedScorecard(BalancedScorecard balancedScorecard) {
+        this.balancedScorecard = balancedScorecard;
+    }
+
     
      public int getNextFirstResult() {
         return firstResult + this.getPageSize();
@@ -106,7 +143,10 @@ public class ThemeListService  extends  LazyDataModel<Theme>{
         if (sortOrder == SortOrder.DESCENDING) {
             order = QuerySortOrder.DESC;
         }
-        Map<String, Object> _filters = new HashMap<String, Object>();
+         Map<String, Object> _filters = new HashMap<String, Object>();        
+        _filters.put(Theme_.balancedScorecard.getName(), getBalancedScorecard());
+        _filters.putAll(filters);
+        
          QueryData<Theme> qData = themeService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();
@@ -115,6 +155,7 @@ public class ThemeListService  extends  LazyDataModel<Theme>{
      @PostConstruct
     public void init() {
         themeService.setEntityManager(entityManager);
+        balancedScorecardService.setEntityManager(entityManager);
     }
      
     public void onRowSelect(SelectEvent event) {
