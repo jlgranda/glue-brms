@@ -42,7 +42,7 @@
                 <div class="form-actions" style="padding-left: 20px">
                     <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="/pages/stocklist/stock/stock" styleClass="btn btn-primary">
                         <f:param name="warehouseId" value="#{warehouseHome.warehouseId}"></f:param>
-                        <f:param name="backView" value="list"></f:param>
+                        <f:param name="outcome" value="list"></f:param>
                     </h:link> 
 
                     #{' '}
@@ -55,10 +55,11 @@
                     #{' '}
 
 
-                    <h:link outcome="/pages/stocklist/warehouse/list.xhtml?faces-redirect=true"                                                                                                                                                        
-                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/> 
 
-                    <input type="reset" value="#{messages['common.cancel']}" onClick="history.back()" class="btn"/>
+                    <h:link outcome="/pages/stocklist/warehouse/list"                                                                                                                                                        
+                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">
+                        <f:param name="organizationId" value="#{warehouseHome.instance.organization.id}"/>
+                    </h:link> 
 
 
                 </div>
@@ -89,6 +90,7 @@
                         <h:outputText value="#{stock.unit}" />
                     </p:column>
                 </p:dataTable>
+
             </h:form>
         </ui:define>
     </ui:composition>

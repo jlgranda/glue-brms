@@ -87,6 +87,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     public void init() {
         setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
+        organizationService.setEntityManager(em);
     }
 
     @Override
@@ -151,6 +152,11 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
+        if (getOrganizationId() != null) {
+                     
+            return getOutcome() + "?organizationId=" + getOrganizationId() + "&faces-redirect=true&includeViewParams=true";
+        }
+        
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 }

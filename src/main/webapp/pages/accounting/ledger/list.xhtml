@@ -22,6 +22,7 @@
 
                     </div> 
                     <div class="span3">
+                        <br/>
                         <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
                                 outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
                         </h:link>                            
@@ -35,7 +36,7 @@
     </ui:define>
     <ui:define name="content"> 
 
-        <h:form id="form" class="form-horizontal">           
+        <h:form id="form" class="form-horizontal" style="padding-left: 20px">           
 
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
 

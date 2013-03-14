@@ -13,7 +13,9 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-            <f:viewParam name="warehouseId" value="#{warehouseHome.warehouseId}" />            
+            <f:viewParam name="warehouseId" value="#{warehouseHome.warehouseId}" /> 
+            <f:viewParam name="organizationId" value="#{warehouseHome.organizationId}" /> 
+            <f:viewParam name="outcome" value="#{warehouseHome.outcome}" /> 
             <s:viewAction action="#{warehouseHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
 
@@ -46,8 +48,10 @@
                                      immediate="true"
                                      update=":cancel-dialog" rendered="#{warehouseHome.instance.id != null}"/>
 
-                    <h:link outcome="/pages/stocklist/warehouse/list.xhtml?faces-redirect=true" onclick="editDlg.hide();"
-                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
+                    <h:link outcome="/pages/stocklist/warehouse/list" 
+                            onclick="editDlg.hide();"
+                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true"> 
+                        <f:param name="organizationId" value="#{warehouseHome.organization.id}"/>
                     </h:link>
                 </div>
 
@@ -77,8 +81,7 @@
                                      style="margin-top:10px;"/>  
                 </h:form>
             </p:dialog>
-
-        </ui:define>             
+            </ui:define>             
     </ui:composition>
 </html>
 

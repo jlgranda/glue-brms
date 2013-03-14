@@ -29,11 +29,13 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.controller.accounting.PostingHome;
 import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.model.accounting.Posting;
+import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.model.stocklist.Item;
 import org.eqaula.glue.model.stocklist.Warehouse;
 import org.eqaula.glue.util.Dates;
@@ -61,6 +63,9 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
     private Warehouse warehouseSelected;
     private String backview;
     private Long parentId;
+    @Current
+    @Inject
+    private Profile profile;
 
     public Long getWarehouseId() {
         return (Long) getId();
@@ -89,8 +94,8 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        warehouseService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
+        organizationService.setEntityManager(em);
 
     }
 
@@ -116,16 +121,33 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
         log.info("eqaula --> WarehouseHome save instance: " + getInstance().getId());
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
-        String outcome = null;
+
+        log.info("id organization" + getOrganizationId());
+        log.info("id organization" + getOrganizationId());
+        log.info("id organization" + getOrganizationId());
+        log.info("id organization" + getOrganizationId());
+        log.info("id organization" + getOrganizationId());
+
         if (getInstance().isPersistent()) {
-            //getInstance().getOrganization()
             save(getInstance());
-            outcome = "/pages/stocklist/warehouse/list";
         } else {
-            save(getInstance());
-            outcome = "/pages/stocklist/warehouse/list";
+            getInstance().setAuthor(this.profile);
+            getInstance().setOrganization(getOrganization());
+            create(getInstance());
         }
-        return outcome;
+
+        log.info("outcome: " + getOutcome());
+        log.info("outcome: " + getOutcome());
+        log.info("outcome: " + getOutcome());
+        log.info("outcome: " + getOutcome());
+        log.info("outcome: " + getOutcome());
+
+
+        if (getOrganizationId() != null) {
+            return getOutcome() + "?organizationId=" + getOrganizationId() + "&faces-redirect=true&includeViewParams=true";
+        }
+
+        return getOutcome() +"?faces-redirect=true&includeViewParams=true";
     }
 
     @Transactional
@@ -154,7 +176,10 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", e.toString()));
         }
-        return "/pages/stocklist/warehouse/list";
+        if (getOrganizationId() != null) {
+            return getOutcome()+"?organizationId=" + getOrganizationId()+"&faces-redirect=true&includeViewParams=true";
+        }
+        return getOutcome()+"?faces-redirect=true";
     }
 
     public boolean isWired() {

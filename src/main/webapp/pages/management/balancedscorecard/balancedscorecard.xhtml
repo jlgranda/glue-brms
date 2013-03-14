@@ -25,7 +25,7 @@ limitations under the License.
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml" >
         <f:metadata>
-            <f:viewParam name="balancedScorecarId" value="#{balancedScorecardHome.balancedScorecardId}"/>
+            <f:viewParam name="balancedScorecardId" value="#{balancedScorecardHome.balancedScorecardId}"/>
             <f:viewParam name="organizationId" value="#{balancedScorecardHome.organizationId}"/>
             <f:viewParam name="outcome" value="#{balancedScorecardHome.outcome}"/>
             <s:viewAction action="#{balancedScorecardHome.load}" if="#{conversation.transient}" />
@@ -45,7 +45,7 @@ limitations under the License.
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{balancedScorecardHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{balancedScorecardHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
-                
+
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{balancedScorecardHome.saveBalancedScorecard()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->
@@ -53,10 +53,8 @@ limitations under the License.
                                      update=":cancel-dialog" rendered="#{balancedScorecardHome.managed}">                        
                     </p:commandButton>
                     <!-- &nbsp;-->
-                    <h:link outcome="#{balancedScorecardHome.outcome}"
-                            rendered="#{balancedScorecardHome.managed}"
-                            value="#{messages['common.cancel']}" styleClass="btn">
-                        <f:param name="balancedScorecardId" value="#{balancedScorecardHome.balancedScorecardId}"/>
+                    <h:link outcome="#{balancedScorecardHome.outcome}" value="#{messages['common.cancel']}" styleClass="btn">
+                        <f:param name="organizationId" value="#{balancedScorecardHome.organization.id}"/>
                     </h:link>
                 </div>  
             </h:form>
