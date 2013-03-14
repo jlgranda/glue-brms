@@ -14,17 +14,18 @@
                     <div class="span9">
 
                         <h2>#{messages['module.accounting.schemas']}</h2>   
-                    </div>                    
+                    </div>  
+                    <div class="span3">
+                        <br/>
+                        <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
+                        </h:link>     
+                        <br/>
+                        <h:link outcome="/pages/home" styleClass="btn btn-link" value="#{messages['common.cancel']}">
+                        </h:link>
+                    </div>
                 </div> 
-                <div class="span3">
-                    <br/>
-                    <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                            outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
-                    </h:link>     
-                    <br/>
-                    <h:link outcome="/pages/home" styleClass="btn btn-link" value="#{messages['common.cancel']}">
-                    </h:link>
-                </div>
+
             </div> 
         </div>             
     </ui:define>

@@ -24,7 +24,7 @@
                 <div class="container">
                     <div class="row-fluid" style="margin-top: 5px;">
                         <div class="span9"> 
-                            <h1>#{warehouseHome.instance.name}</h1>   
+                            <h1>#{messages['module.stocklist.stock']} #{warehouseHome.instance.name}</h1>   
                         </div>
                         <div class="span3">
                             <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
@@ -64,7 +64,7 @@
 
                 </div>
 
-                <h3> #{messages['module.stocklist.stock']}</h3>
+             
                 <p:dataTable var="stock" value="#{warehouseHome.instance.stocks}"
                              rows="10"
                              rendered="true"

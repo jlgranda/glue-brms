@@ -93,7 +93,7 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
             //TODO check for a better code format
             Date now = Calendar.getInstance().getTime();
             String code = DateUtils.formatDate(now, "dd.MM.yyyy");
-            ledger = ledgerService.retrivePosting(code);}
+            ledger = ledgerService.retrivePosting(code, getOrganization());}
             else {
                 ledger = ledgerService.find(getLedgerId());
             }

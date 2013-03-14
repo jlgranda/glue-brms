@@ -25,6 +25,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.accounting.Ledger;
 import org.eqaula.glue.model.accounting.Ledger_;
+import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.PersistenceUtil;
 import org.eqaula.glue.util.UI;
@@ -56,16 +57,16 @@ public class LedgerService extends PersistenceUtil<Ledger> implements Serializab
     }
     
     @Transactional
-    public Ledger retrivePosting(String code){
+    public Ledger retrivePosting(String code, Organization organization){
         Ledger p = findByCode(code);
         if (p == null) {
-            p = createInstance(code);
+            p = createInstance(code, organization);
             this.create(p);
         }
         return p;
     }
     
-    protected Ledger createInstance(String code) {
+    protected Ledger createInstance(String code, Organization organization) {
         Date now = Calendar.getInstance().getTime();
         Ledger ledger = new Ledger();
         ledger.setCode(code);
@@ -74,6 +75,7 @@ public class LedgerService extends PersistenceUtil<Ledger> implements Serializab
         ledger.setLastUpdate(now);
         ledger.setActivationTime(now);
         ledger.setExpirationTime(Dates.addDays(now, 364));
+        ledger.setOrganization(organization);
        return ledger;
     }
 

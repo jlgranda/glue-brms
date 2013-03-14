@@ -32,6 +32,7 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.accounting.Ledger;
+import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.LedgerService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
@@ -72,7 +73,8 @@ public class LedgerHome extends BussinesEntityHome<Ledger> {
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        ledgerService.setEntityManager(em);
+        organizationService.setEntityManager(em);
+        bussinesEntityService.setEntityManager(em);
     }
 
     @Produces
@@ -85,7 +87,8 @@ public class LedgerHome extends BussinesEntityHome<Ledger> {
         } else if (this.instance == null) {
             Date now = Calendar.getInstance().getTime();
             String code = DateUtils.formatDate(now, "dd.MM.yyyy");
-            setInstance(ledgerService.retrivePosting(code));
+            //getInstance().setOrganization(getOrganization());
+            setInstance(ledgerService.retrivePosting(code, getOrganization()));
         }
         return getInstance();
     }
