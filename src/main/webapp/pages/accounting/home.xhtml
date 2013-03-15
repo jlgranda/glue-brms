@@ -50,6 +50,16 @@
                     </p>
                 </div>
 
+                <div class="span4">
+                    <h2>#{messages['panel.admin.vouchers']}</h2>
+                    <p>Ingrese movimientos</p>
+                    <p>
+                        <h:link value="#{messages['common.view']}" class="btn btn-primary" outcome="/pages/accounting/ledger/voucher.xhtml">
+                            <f:param name="organizationId" value="#{accountListService.organizationId}" />
+                        </h:link>
+                    </p>
+                </div>
+
             </div>
         </div>
     </ui:define>

@@ -10,7 +10,7 @@
     <f:metadata>
         <f:viewParam name="result" value="#{ledgerListService.firstResult}" />
         <f:viewParam name="organizationId" value="#{ledgerListService.organizationId}" />
-        <f:viewParam name="organizationId" value="#{ledgerHome.organizationId}" />
+       
         
     </f:metadata>
 
@@ -26,22 +26,18 @@
                     </div> 
                     <div class="span3">
                         <br/>
-                        <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
+                        <h:link value="#{messages['common.cancel']} " rendered="#{true}" 
+                                outcome="/pages/accounting/home.xhtml?organizationId=#{ledgerListService.organizationId}" styleClass="btn btn-link">                                
                         </h:link>                            
                         <br/>
-                        <h:link outcome="/pages/home" styleClass="btn btn-link" value="#{messages['common.cancel']}">
-                        </h:link>
+                      
                     </div>
                 </div>
             </div> 
         </div>             
     </ui:define>
     <ui:define name="content"> 
-        Prueba: #{ledgerHome.organizationId}
-        Prueba: #{ledgerListService.organizationId}
-        Prueba: #{ledgerHome.organization.name}
-        Prueba: #{ledgerListService.organization.name}
+       
         <h:form id="form" class="form-horizontal" style="padding-left: 20px">           
 
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
@@ -52,9 +48,10 @@
                     <f:param name="ledgerId" value="${ledgerListService.selectedLedger.id}" ></f:param>
                 </h:link>
                 #{' '}
-                <h:link id="button-admin" value="#{messages['common.admin']}" rendered="#{true}" outcome="voucher" styleClass="btn"
+                <h:link id="button-admin" value="#{messages['common.add']} #{messages['panel.admin.vouchers']}" rendered="#{true}" outcome="voucher" styleClass="btn"
                         disabled="#{emptyledgerListService.selectedLedger.id}">
-                    <f:param name="ledgerId" value="${ledgerListService.selectedLedger.id}"></f:param>
+                    <!--<f:param name="ledgerId" value="${ledgerListService.selectedLedger.id}"></f:param> -->
+                    <f:param name="organizationId" value="#{ledgerListService.organizationId}" />
                 </h:link>
 
             </div>

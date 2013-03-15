@@ -24,12 +24,10 @@ import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.apache.http.impl.cookie.DateUtils;
-import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.accounting.Entry;
@@ -58,8 +56,6 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
     private Posting postingSelected;
     private Ledger ledger;
     private Long ledgerId;
-    
-    
     @Inject
     private LedgerService ledgerService;
 
@@ -84,17 +80,17 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
         this.ledgerId = ledgerId;
     }
 
-    
-    
     @Transactional
     public Ledger getLedger() {
+
+
         if (ledger == null) {
-            if (getLedgerId() == null){
-            //TODO check for a better code format
-            Date now = Calendar.getInstance().getTime();
-            String code = DateUtils.formatDate(now, "dd.MM.yyyy");
-            ledger = ledgerService.retrivePosting(code, getOrganization());}
-            else {
+            if (getLedgerId() == null) {
+                //TODO check for a better code format
+                Date now = Calendar.getInstance().getTime();
+                String code = DateUtils.formatDate(now, "dd.MM.yyyy." + getOrganization().getId());
+                ledger = ledgerService.retrivePosting(code, getOrganization());
+            } else {
                 ledger = ledgerService.find(getLedgerId());
             }
         }
@@ -115,7 +111,8 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        postingService.setEntityManager(em);
+        bussinesEntityService.setEntityManager(em);
+        organizationService.setEntityManager(em);
         ledgerService.setEntityManager(em);
     }
 
