@@ -25,6 +25,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.accounting.Ledger;
 import org.eqaula.glue.model.accounting.Ledger_;
+import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.PersistenceUtil;
 import org.eqaula.glue.util.UI;
@@ -35,6 +36,7 @@ import org.jboss.seam.transaction.Transactional;
  * @author jlgranda
  */
 public class LedgerService extends PersistenceUtil<Ledger> implements Serializable {
+
     private static final long serialVersionUID = 4591338293144180367L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(LedgerService.class);
 
@@ -45,7 +47,7 @@ public class LedgerService extends PersistenceUtil<Ledger> implements Serializab
     public Ledger getLedgerById(final Long id) {
         return (Ledger) findById(Ledger.class, id);
     }
-   
+
     public Ledger findByCode(final String code) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Ledger> query = builder.createQuery(Ledger.class);
@@ -54,18 +56,18 @@ public class LedgerService extends PersistenceUtil<Ledger> implements Serializab
         System.out.println("Estoy en find code");
         return getSingleResult(query);
     }
-    
+
     @Transactional
-    public Ledger retrivePosting(String code){
+    public Ledger retrivePosting(String code, Organization organization) {
         Ledger p = findByCode(code);
         if (p == null) {
-            p = createInstance(code);
+            p = createInstance(code, organization);
             this.create(p);
         }
         return p;
     }
-    
-    protected Ledger createInstance(String code) {
+
+    protected Ledger createInstance(String code, Organization organization) {
         Date now = Calendar.getInstance().getTime();
         Ledger ledger = new Ledger();
         ledger.setCode(code);
@@ -74,16 +76,16 @@ public class LedgerService extends PersistenceUtil<Ledger> implements Serializab
         ledger.setLastUpdate(now);
         ledger.setActivationTime(now);
         ledger.setExpirationTime(Dates.addDays(now, 364));
-       return ledger;
+        ledger.setOrganization(organization);
+        return ledger;
     }
 
     @Override
     public void setEntityManager(EntityManager em) {
         this.em = em;
     }
-    
-    public List<Ledger> findAll(){
+
+    public List<Ledger> findAll() {
         return super.findAll(Ledger.class);
     }
-
 }

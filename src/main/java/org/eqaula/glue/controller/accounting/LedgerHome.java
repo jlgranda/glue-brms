@@ -15,6 +15,7 @@
  */
 package org.eqaula.glue.controller.accounting;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.PostConstruct;
@@ -32,6 +33,8 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.accounting.Ledger;
+import org.eqaula.glue.model.management.Organization;
+import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.LedgerService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
@@ -41,8 +44,8 @@ import org.jboss.seam.transaction.Transactional;
  * @author jlgranda
  */
 @Named
-@RequestScoped
-public class LedgerHome extends BussinesEntityHome<Ledger> {
+@ViewScoped
+public class LedgerHome extends BussinesEntityHome<Ledger> implements Serializable {
 
     private static final long serialVersionUID = -347442906892035526L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(LedgerHome.class);
@@ -72,7 +75,9 @@ public class LedgerHome extends BussinesEntityHome<Ledger> {
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        ledgerService.setEntityManager(em);
+        bussinesEntityService.setEntityManager(em);
+        organizationService.setEntityManager(em);
+
     }
 
     @Produces
@@ -85,7 +90,20 @@ public class LedgerHome extends BussinesEntityHome<Ledger> {
         } else if (this.instance == null) {
             Date now = Calendar.getInstance().getTime();
             String code = DateUtils.formatDate(now, "dd.MM.yyyy");
-            setInstance(ledgerService.retrivePosting(code));
+            //getInstance().setOrganization(getOrganization());
+            Organization organization = organizationService.find(getOrganizationId());
+            log.info("el id de organizacion es: " + getOrganizationId());
+            log.info("el id de organizacion es: " + getOrganizationId());
+            log.info("el id de organizacion es: " + getOrganizationId());
+            log.info("el id de organizacion es: " + getOrganizationId());
+            log.info("el id de organizacion es: " + getOrganizationId());
+            log.info("La organización actual es: " + organization.getName());
+            log.info("La organización actual es: " + organization.getName());
+            log.info("La organización actual es: " + organization.getName());
+            log.info("La organización actual es: " + organization.getName());
+            log.info("La organización actual es: " + organization.getName());
+            log.info("La organización actual es: " + organization.getName());
+            setInstance(ledgerService.retrivePosting(code, getOrganization()));
         }
         return getInstance();
     }

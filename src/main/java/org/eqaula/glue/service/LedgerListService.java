@@ -29,6 +29,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.model.accounting.Ledger;
+import org.eqaula.glue.model.accounting.Ledger_;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.eqaula.glue.util.UI;
@@ -43,9 +44,9 @@ import org.primefaces.model.SortOrder;
  */
 @Named
 @ViewScoped
-public class LedgerListService extends LazyDataModel<Ledger> {
+public class LedgerListService extends ListService<Ledger> {
 
-   private static final long serialVersionUID = 4819808125494695197L;
+    private static final long serialVersionUID = 4819808125494695197L;
     private static final int MAX_RESULTS = 5;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(LedgerListService.class);
     @Inject
@@ -108,8 +109,8 @@ public class LedgerListService extends LazyDataModel<Ledger> {
             order = QuerySortOrder.DESC;
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
-        /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
-         _filters.putAll(filters);*/
+        _filters.put(Ledger_.organization.getName(), getOrganization()); //Filtro por defecto
+        _filters.putAll(filters);
 
         QueryData<Ledger> qData = ledgerService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
@@ -117,12 +118,14 @@ public class LedgerListService extends LazyDataModel<Ledger> {
     }
 
     @PostConstruct
+    @Override
     public void init() {
+        super.init();
         ledgerService.setEntityManager(entityManager);
     }
 
     public void onRowSelect(SelectEvent event) {
-         System.out.println("Entrando al metodo getRowSelect");
+        System.out.println("Entrando al metodo getRowSelect");
         System.out.println("Entrando al metodo getRowSelect");
         System.out.println("Entrando al metodo getRowSelect");
         FacesMessage msg = new FacesMessage(UI.getMessages("module.accounting.ledger") + " " + UI.getMessages("common.selected"), ((Ledger) event.getObject()).getName());
@@ -141,7 +144,7 @@ public class LedgerListService extends LazyDataModel<Ledger> {
         System.out.println("Entrando al metodo getRowData" + rowKey);
         System.out.println("Entrando al metodo getRowData" + rowKey);
         System.out.println("Entrando al metodo getRowData");
-        
+
         return ledgerService.findByCode(rowKey);
     }
 
@@ -152,5 +155,4 @@ public class LedgerListService extends LazyDataModel<Ledger> {
         System.out.println("Entrando al metodo getRowKey");
         return entity.getCode();
     }
-    
 }
