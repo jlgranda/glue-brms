@@ -21,11 +21,13 @@ limitations under the License.
       xmlns:s="http://jboss.org/seam/faces"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:glue ="http://eqaula.org/jsf/facelets">
+      xmlns:glue ="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml" >
         <f:metadata>
             <f:viewParam name="themeId" value="#{themeHome.themeId}"/>
             <f:viewParam name="balancedScorecardId" value="#{themeHome.balancedScorecardId}"/>
+            <f:viewParam name="organizationId" value="#{ownerListService.organizationId}"/>
             <f:viewParam name="outcome" value="#{themeHome.outcome}"/>
             <s:viewAction action="#{themeHome.load}" if="#{conversation.transient}" />
         </f:metadata>
@@ -41,8 +43,21 @@ limitations under the License.
             </div>
         </ui:define>
         <ui:define name="content" >
-            <h:form  id="form" acceptcharset="UTF-8" >
+            <h:form  id="form" acceptcharset="UTF-8" class="form-horizontal" >
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                <h:panelGroup id="onr" layout="block" class="control-group">
+                    <label for="owner" class="control-label required">#{messages['module.owner']}</label>
+                    <div class="controls">
+                        <p:selectOneMenu id="owner" value="#{themeHome.instance.owner}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.owner']}" rendered="true" label="#{messages['module.owner']}" filter="true" filterMatchMode="contains">
+                            <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
+                            <f:selectItems value="#{ownerListService.resultList}" var="_p" itemLabel="#{_p.name}" itemValue="#{_p}"/>                          
+                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                        </p:selectOneMenu> 
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-block"><br/>#{messages['owner.inlinehelp']} <ocp:message forId="owner"/></span>
+                    </div>
+                </h:panelGroup>
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{themeHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{themeHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
                 <div class="form-actions">

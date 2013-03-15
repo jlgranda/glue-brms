@@ -176,7 +176,6 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         } else {
             getInstance().setAuthor(this.profile);
             getInstance().setBalancedScorecard(getBalancedScorecard());
-            //getInstance().setOwner(getOwner());
             create(getInstance());
         }
         if (getBalancedScorecardId() != null) {            

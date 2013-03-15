@@ -27,57 +27,55 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
-import org.eqaula.glue.model.accounting.Account;
-import org.eqaula.glue.model.accounting.Account_;
-import org.eqaula.glue.model.management.BalancedScorecard;
-import org.eqaula.glue.model.management.BalancedScorecard_;
+import org.eqaula.glue.model.BussinesEntity_;
+import org.eqaula.glue.model.management.Owner;
+import org.eqaula.glue.model.management.Owner_;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.eqaula.glue.util.UI;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
-import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
-/*
+/**
+ *
  * @author dianita
  */
-
 @Named
 @RequestScoped
-public class BalancedScorecardListService extends ListService<BalancedScorecard>{
-    
-    private static final long serialVersionUID = 1229207884508672223L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BalancedScorecardListService.class);
-    @Inject
-    private BalancedScorecardService balancedScorecardService;
-    private List<BalancedScorecard> resultList;
-    private int firstResult = 0;
-    private BalancedScorecard[] selectedBalancedScorecards;
-    private BalancedScorecard selectedBalancedScorecard;
+public class OwnerListService extends ListService<Owner> {
 
-   
-    public BalancedScorecardListService() {
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(OwnerListService.class);
+    private static final long serialVersionUID = 7779055498085217448L;
+    @Inject
+    private OwnerService ownerService;
+    private List<Owner> resultList;
+    private int firstResult = 0;
+    private Owner[] selectedOwners;
+    private Owner selectedOwner;
+
+    public OwnerListService() {
         setPageSize(MAX_RESULTS);
-        resultList= new ArrayList<BalancedScorecard>();
+        resultList = new ArrayList<Owner>();
     }
 
-    public List<BalancedScorecard> getResultList() {
-        if(resultList.isEmpty()){
-            resultList= balancedScorecardService.getBalancedScorecards();
+    public List<Owner> getResultList() {
+        if (resultList.isEmpty()) {
+            resultList = ownerService.getOwners();
         }
+        System.out.println("------------------------------");
+        System.out.println("------------------------------");
+        System.out.println("------------------------------");
+        System.out.println(getOrganizationId() + "------------- id inyectado");
         return resultList;
     }
 
-    public void setResultList(List<BalancedScorecard> resultList) {
+    public void setResultList(List<Owner> resultList) {
         this.resultList = resultList;
     }
-    
-    
 
     public int getFirstResult() {
         return firstResult;
-        
     }
 
     public void setFirstResult(int firstResult) {
@@ -85,14 +83,14 @@ public class BalancedScorecardListService extends ListService<BalancedScorecard>
         this.resultList = null;
     }
 
-    public BalancedScorecard getSelectedBalancedScorecard() {
-        return selectedBalancedScorecard;
+    public Owner getSelectedOwner() {
+        return selectedOwner;
     }
 
-    public void setSelectedBalancedScorecard(BalancedScorecard selectedBalancedScorecard) {
-        this.selectedBalancedScorecard = selectedBalancedScorecard;
+    public void setSelectedOwner(Owner selectedOwner) {
+        this.selectedOwner = selectedOwner;
     }
-    
+
     public int getNextFirstResult() {
         return firstResult + this.getPageSize();
     }
@@ -100,19 +98,20 @@ public class BalancedScorecardListService extends ListService<BalancedScorecard>
     public int getPreviousFirstResult() {
         return this.getPageSize() >= firstResult ? 0 : firstResult - this.getPageSize();
     }
-    
+
     @Override
-    public List<BalancedScorecard> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+    public List<Owner> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
         int end = first + pageSize;
         QuerySortOrder order = QuerySortOrder.ASC;
         if (sortOrder == SortOrder.DESCENDING) {
             order = QuerySortOrder.DESC;
         }
-        Map<String, Object> _filters = new HashMap<String, Object>();        
-        _filters.put(BalancedScorecard_.organization.getName(), getOrganization());
-        _filters.putAll(filters);
         
-        QueryData<BalancedScorecard> qData = balancedScorecardService.find(first, end, sortField, order, _filters);
+        Map<String, Object> _filters = new HashMap<String, Object>();
+        _filters.put(Owner_.organization.getName(), getOrganization());
+        _filters.putAll(filters);
+
+        QueryData<Owner> qData = ownerService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();
     }
@@ -120,27 +119,28 @@ public class BalancedScorecardListService extends ListService<BalancedScorecard>
     @PostConstruct
     @Override
     public void init() {
-        super.init();        
-        balancedScorecardService.setEntityManager(getEntityManager());
+        super.init();
+        ownerService.setEntityManager(getEntityManager());
     }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.balancedScorecard") + " " + UI.getMessages("common.selected") , ((BalancedScorecard) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.owner") + " " + UI.getMessages("common.selected"), ((Owner) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.balancedScorecard") + " " + UI.getMessages("common.unselected") , ((BalancedScorecard) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.owner") + " " + UI.getMessages("common.unselected"), ((Owner) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        this.setSelectedBalancedScorecard(null);
-    }
-    @Override
-    public BalancedScorecard getRowData(String rowKey) {
-        return balancedScorecardService.findByName(rowKey);
+        this.setSelectedOwner(null);
     }
 
     @Override
-    public Object getRowKey(BalancedScorecard entity) {
+    public Owner getRowData(String rowKey) {
+        return ownerService.findByName(rowKey);
+    }
+
+    @Override
+    public Object getRowKey(Owner entity) {
         return entity.getName();
     }
 }

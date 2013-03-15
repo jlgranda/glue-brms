@@ -46,6 +46,7 @@
                 <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="theme" styleClass="btn btn-primary">
                     <f:param name="themeId"></f:param>
                     <f:param name="balancedScorecardId" value="#{themeListService.balancedScorecardId}"></f:param>
+                    <f:param name="organizationId" value="#{themeListService.selectedTheme.balancedScorecard.organization.id}"></f:param>
                     <f:param name="outcome" value="list"></f:param>
                 </h:link>                
                 #{' '}
