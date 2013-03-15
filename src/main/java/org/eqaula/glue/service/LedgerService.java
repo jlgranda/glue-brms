@@ -36,6 +36,7 @@ import org.jboss.seam.transaction.Transactional;
  * @author jlgranda
  */
 public class LedgerService extends PersistenceUtil<Ledger> implements Serializable {
+
     private static final long serialVersionUID = 4591338293144180367L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(LedgerService.class);
 
@@ -46,7 +47,7 @@ public class LedgerService extends PersistenceUtil<Ledger> implements Serializab
     public Ledger getLedgerById(final Long id) {
         return (Ledger) findById(Ledger.class, id);
     }
-   
+
     public Ledger findByCode(final String code) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Ledger> query = builder.createQuery(Ledger.class);
@@ -55,9 +56,9 @@ public class LedgerService extends PersistenceUtil<Ledger> implements Serializab
         System.out.println("Estoy en find code");
         return getSingleResult(query);
     }
-    
+
     @Transactional
-    public Ledger retrivePosting(String code, Organization organization){
+    public Ledger retrivePosting(String code, Organization organization) {
         Ledger p = findByCode(code);
         if (p == null) {
             p = createInstance(code, organization);
@@ -65,7 +66,7 @@ public class LedgerService extends PersistenceUtil<Ledger> implements Serializab
         }
         return p;
     }
-    
+
     protected Ledger createInstance(String code, Organization organization) {
         Date now = Calendar.getInstance().getTime();
         Ledger ledger = new Ledger();
@@ -76,16 +77,15 @@ public class LedgerService extends PersistenceUtil<Ledger> implements Serializab
         ledger.setActivationTime(now);
         ledger.setExpirationTime(Dates.addDays(now, 364));
         ledger.setOrganization(organization);
-       return ledger;
+        return ledger;
     }
 
     @Override
     public void setEntityManager(EntityManager em) {
         this.em = em;
     }
-    
-    public List<Ledger> findAll(){
+
+    public List<Ledger> findAll() {
         return super.findAll(Ledger.class);
     }
-
 }
