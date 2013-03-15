@@ -37,8 +37,8 @@ import org.jboss.seam.transaction.Transactional;
  */
 public class LedgerService extends PersistenceUtil<Ledger> implements Serializable {
 
-    private static final long serialVersionUID = 4591338293144180367L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(LedgerService.class);
+    private static final long serialVersionUID = 8704375580788276842L;
 
     public LedgerService() {
         super(Ledger.class);
@@ -53,12 +53,33 @@ public class LedgerService extends PersistenceUtil<Ledger> implements Serializab
         CriteriaQuery<Ledger> query = builder.createQuery(Ledger.class);
         Root<Ledger> bussinesEntityType = query.from(Ledger.class);
         query.where(builder.equal(bussinesEntityType.get(Ledger_.code), code));
-        System.out.println("Estoy en find code");
         return getSingleResult(query);
     }
 
     @Transactional
     public Ledger retrivePosting(String code, Organization organization) {
+        log.info("Llamando al método retrivePosting");
+        log.info("Llamando al método retrivePosting");
+        log.info("Llamando al método retrivePosting");
+        log.info("Llamando al método retrivePosting");
+        log.info("Llamando al método retrivePosting");
+
+
+
+
+        log.info("El code es: " + code);
+        log.info("El code es: " + code);
+        log.info("El code es: " + code);
+        log.info("El code es: " + code);
+        log.info("El code es: " + code);
+
+        log.info("la organizacion es: " + organization.getName());
+        log.info("la organizacion es: " + organization.getName());
+
+        log.info("la organizacion es: " + organization.getName());
+        log.info("la organizacion es: " + organization.getName());
+
+
         Ledger p = findByCode(code);
         if (p == null) {
             p = createInstance(code, organization);
@@ -68,6 +89,23 @@ public class LedgerService extends PersistenceUtil<Ledger> implements Serializab
     }
 
     protected Ledger createInstance(String code, Organization organization) {
+        log.info("Llamando al create instance");
+        log.info("Llamando al create instance");
+        log.info("Llamando al create instance");
+        log.info("Llamando al create instance");
+        log.info("Llamando al create instance");
+        log.info("Llamando al create instance");
+        log.info("El code es: " + code);
+        log.info("El code es: " + code);
+        log.info("El code es: " + code);
+        log.info("El code es: " + code);
+        log.info("El code es: " + code);
+
+        log.info("la organizacion es: " + organization.getName());
+        log.info("la organizacion es: " + organization.getName());
+
+        log.info("la organizacion es: " + organization.getName());
+        log.info("la organizacion es: " + organization.getName());
         Date now = Calendar.getInstance().getTime();
         Ledger ledger = new Ledger();
         ledger.setCode(code);

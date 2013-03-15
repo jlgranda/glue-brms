@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -35,7 +34,6 @@ import org.eqaula.glue.util.QuerySortOrder;
 import org.eqaula.glue.util.UI;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
-import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 /**
@@ -141,18 +139,11 @@ public class LedgerListService extends ListService<Ledger> {
 
     @Override
     public Ledger getRowData(String rowKey) {
-        System.out.println("Entrando al metodo getRowData" + rowKey);
-        System.out.println("Entrando al metodo getRowData" + rowKey);
-        System.out.println("Entrando al metodo getRowData");
-
         return ledgerService.findByCode(rowKey);
     }
 
     @Override
     public Object getRowKey(Ledger entity) {
-        System.out.println("Entrando al metodo getRowKey" + entity);
-        System.out.println("Entrando al metodo getRowKey");
-        System.out.println("Entrando al metodo getRowKey");
         return entity.getCode();
     }
 }
