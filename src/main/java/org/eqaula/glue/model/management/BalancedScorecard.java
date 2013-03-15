@@ -17,6 +17,7 @@ package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -37,7 +38,7 @@ import org.eqaula.glue.model.BussinesEntity;
 public class BalancedScorecard extends BussinesEntity implements Serializable {
     private static final long serialVersionUID = -8149661791009499829L;
     
-    @OneToMany(mappedBy = "balancedScorecard")
+    @OneToMany(mappedBy = "balancedScorecard", cascade = CascadeType.ALL)
     List<Theme> themes;
 
     public List<Theme> getThemes() {

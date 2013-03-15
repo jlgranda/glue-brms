@@ -27,7 +27,6 @@ limitations under the License.
         <f:metadata>
             <f:viewParam name="themeId" value="#{themeHome.themeId}"/>
             <f:viewParam name="balancedScorecardId" value="#{themeHome.balancedScorecardId}"/>
-            <f:viewParam name="organizationId" value="#{ownerListService.organizationId}"/>
             <f:viewParam name="outcome" value="#{themeHome.outcome}"/>
             <s:viewAction action="#{themeHome.load}" if="#{conversation.transient}" />
         </f:metadata>
@@ -48,9 +47,10 @@ limitations under the License.
                 <h:panelGroup id="onr" layout="block" class="control-group">
                     <label for="owner" class="control-label required">#{messages['module.owner']}</label>
                     <div class="controls">
+                        
                         <p:selectOneMenu id="owner" value="#{themeHome.instance.owner}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.owner']}" rendered="true" label="#{messages['module.owner']}" filter="true" filterMatchMode="contains">
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
-                            <f:selectItems value="#{ownerListService.resultList}" var="_p" itemLabel="#{_p.name}" itemValue="#{_p}"/>                          
+                            <f:selectItems value="#{themeHome.instance.id==null ? themeHome.balancedScorecard.organization.owners : themeHome.instance.balancedScorecard.organization.owners}" var="_o" itemLabel="#{_o.name}" itemValue="#{_o}"/>                          
                             <p:ajax event="change" update="@parent " partialSubmit="true"/>
                         </p:selectOneMenu> 
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
@@ -67,9 +67,10 @@ limitations under the License.
                                      update=":cancel-dialog" rendered="#{themeHome.instance.persistent}">                        
                     </p:commandButton>
                     <!-- &nbsp;-->
-                    <h:link outcome="/pages/management/organization/list.xhtml?faces-redirect=true"
-                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
+                    <h:link outcome="#{themeHome.outcome}" value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
+                        <f:param name="balancedScorecardId" value="#{themeHome.balancedScorecard.id}"/>
                     </h:link>
+          
                 </div>  
             </h:form>
 
