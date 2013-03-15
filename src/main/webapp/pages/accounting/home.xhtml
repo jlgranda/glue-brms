@@ -8,7 +8,6 @@
 
     <f:metadata>
         <f:viewParam name="organizationId" value="#{accountListService.organizationId}"/>
-        <f:viewParam name="organizationId" value="#{ledgerListService.organizationId}"/>
     </f:metadata>
 
     <ui:define name="header-replace">
@@ -20,8 +19,8 @@
                     </div>
                     <div class="span3">
                         <br/>
-                        <h:link value="#{messages['panel.admin']}" 
-                                outcome="/pages/admin/home.xhtml?faces-redirect=true"
+                        <h:link value="#{messages['common.home']}" 
+                                outcome="/pages/home"
                                 styleClass="btn btn-link">
                         </h:link>                       
                     </div>
@@ -30,33 +29,28 @@
         </div>
     </ui:define>
     <ui:define name="content">
-        <div class="container" style="margin-top: 50px">
-            <ul class="thumbnails row-fluid">
-                <li class="span4 offset2">
-                    <div class="thumbnail">
-                        <h2>#{messages['account.catalogue']}</h2>
-                        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                        <p>
-                            <h:link value="#{messages['common.view']}" class="btn btn-primary" outcome="/pages/accounting/list.xhtml">
-                                <f:param name="organizationId" value="#{accountListService.organizationId}" />
-                            </h:link>
-                        </p>
-                    </div>
-                </li>
-                <li class="span4 offset1">
-                    <div class="thumbnail">
-                        <h2>#{messages['module.accounting.ledger']}</h2>
-                        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                        <p>
-                            <h:link value="#{messages['common.view']}" class="btn btn-primary" outcome="/pages/accounting/ledger/list.xhtml">
-                                <f:param name="organizationId" value="#{ledgerListService.organizationId}" />
-                            </h:link>
-                        </p>
-                    </div>
-                </li>
+        <div class="container">
+            <div class="row-fluid">
+                <div class="span4">
+                    <h2>#{messages['account.catalogue']}</h2>
+                    <p>Defina el esquema contable vigente para su empresa</p>
+                    <p>
+                        <h:link value="#{messages['common.view']}" class="btn btn-primary" outcome="/pages/accounting/list.xhtml">
+                            <f:param name="organizationId" value="#{accountListService.organizationId}" />
+                        </h:link>
+                    </p>
+                </div>
+                <div class="span4">
+                    <h2>#{messages['module.accounting.ledger']}</h2>
+                    <p>Su empresa se mueve, vea como</p>
+                    <p>
+                        <h:link value="#{messages['common.view']}" class="btn btn-primary" outcome="/pages/accounting/ledger/list.xhtml">
+                            <f:param name="organizationId" value="#{accountListService.organizationId}" />
+                        </h:link>
+                    </p>
+                </div>
 
-            </ul>
+            </div>
         </div>
     </ui:define>
 </ui:composition>
-
