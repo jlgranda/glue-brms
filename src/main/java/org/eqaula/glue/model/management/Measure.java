@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 jlgranda.
+ * Copyright 2013 dianita.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,52 +28,49 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eqaula.glue.model.BussinesEntity;
 
-/**
- *
- * @author jlgranda
+/*
+ * @author dianita
  */
 @Entity
-@Table(name = "Objetive")
-@DiscriminatorValue(value = "OBJ")
+@Table(name = "Measure")
+@DiscriminatorValue(value = "MSR")
 @PrimaryKeyJoinColumn(name = "id")
-public class Objetive extends BussinesEntity implements Serializable {
-    private static final long serialVersionUID = 3521500957575111824L;
+public class Measure extends BussinesEntity implements Serializable {
+
+    private static final long serialVersionUID = -6935266135527132362L;
+    private Long frequency;
+    
+    @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL)
+    private List<Target> targets;
+   
     @ManyToOne
-    private Owner owner;
+    private Objetive objetive;
+
+    public Long getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(Long frequency) {
+        this.frequency = frequency;
+    }
+
+    public List<Target> getTargets() {
+        return targets;
+    }
+
+    public void setTargets(List<Target> targets) {
+        this.targets = targets;
+    }
+
+    public Objetive getObjetive() {
+        return objetive;
+    }
+
+    public void setObjetive(Objetive objetive) {
+        this.objetive = objetive;
+    }
+
     
-    @ManyToOne
-    private Perspective perspective;
-
-    @OneToMany(mappedBy = "objetive", cascade = CascadeType.ALL)
-    private List<Measure> measures;
-    
-    
-    public Perspective getPerspective() {
-        return perspective;
-    }
-
-    public void setPerspective(Perspective perspective) {
-        this.perspective = perspective;
-    }
-    
-    public Owner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Owner owner) {
-        this.owner = owner;
-    }
-
-    public List<Measure> getMeasures() {
-        return measures;
-    }
-
-    public void setMeasures(List<Measure> measures) {
-        this.measures = measures;
-    }
-
-
-      
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -94,17 +91,17 @@ public class Objetive extends BussinesEntity implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Objetive other = (Objetive) obj;
+        Measure other = (Measure) obj;
         return new EqualsBuilder().
                 // if deriving: appendSuper(super.equals(obj)).
                 append(getName(), other.getName()).
                 append(getType(), other.getType()).
                 isEquals();
     }
-    
+
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Objetive[ "
+        return "org.eqaula.glue.model.management.Theme[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","

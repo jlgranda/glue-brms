@@ -33,6 +33,8 @@ import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
+import org.eqaula.glue.model.management.Measure;
+import org.eqaula.glue.model.management.Target;
 import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
@@ -190,6 +192,8 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         organizationNode = new DefaultTreeNode("organization", getInstance(), null);
         TreeNode ownerNode = null;
         TreeNode objetiveNode = null;
+        TreeNode measureNode = null;
+        TreeNode targetNode = null;
         organizationNode.setExpanded(true);
         for (Owner owner : getInstance().getOwners()) {
             ownerNode = new DefaultTreeNode("owner", owner, organizationNode);
@@ -197,6 +201,14 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             for (Objetive objetive : owner.getObjetives()) {
                 objetiveNode = new DefaultTreeNode("objetive", objetive, ownerNode);
                 objetiveNode.setExpanded(true);
+                for (Measure measure : objetive.getMeasures()) {
+                    measureNode = new DefaultTreeNode("measure", measure, objetiveNode);
+                    measureNode.setExpanded(true);
+                    for (Target target : measure.getTargets()) {
+                        targetNode = new DefaultTreeNode("target", target, measureNode);
+                        targetNode.setExpanded(true);
+                    }
+                }
             }
         }
         return organizationNode;
@@ -223,13 +235,22 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("objetive".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/measure/measure.xhtml?");
+                outcomeBuilder.append("&objetiveId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("measure".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/targets/target.xhtml?");
+                outcomeBuilder.append("&measureId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("target".equals(selectedNode.getType())) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, message);
             }
-
         }
     }
-    
+
     public void redirecToEdit() {
 
         StringBuilder outcomeBuilder = new StringBuilder();
@@ -250,8 +271,20 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("objetive".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
-                outcomeBuilder.append("&organizationId=").append(getOrganizationId());
                 outcomeBuilder.append("&objetiveId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&ownerId=").append(((Objetive) bussinesEntity).getOwner().getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("measure".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/measure/measure.xhtml?");
+                outcomeBuilder.append("&measureId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&objetiveId=").append(((Measure) bussinesEntity).getObjetive().getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("target".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/targets/target.xhtml?");
+                outcomeBuilder.append("&targetId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&measureId=").append(((Target) bussinesEntity).getMeasure().getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             }
