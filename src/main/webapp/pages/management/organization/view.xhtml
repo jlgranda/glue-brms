@@ -45,15 +45,15 @@
         <ui:define name="content">
             <h:form id="view">                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-                <p:contextMenu for="organizationTree" >  
-                    <p:menuitem value="#{messages['common.add']}" update=":messages" actionListener="#{organizationHome.redirecToAdd}" icon="ui-icon-plus" />
-                    <p:menuitem value="#{messages['common.edit']}" update=":messages" actionListener="#{organizationHome.redirecToEdit}" icon="ui-icon-pencil" />
+                <p:contextMenu id="nodeContextMenu" for="organizationTree" model="#{organizationHome.menuModel}">  
+                   
                 </p:contextMenu>  
                 <p:panel id="explorer-panel" header="#{messages['common.overview']}" toggleable="true">
                         <p:tree id="organizationTree" value="#{organizationHome.organizationNode}" var="node" orientation="horizontal" 
                                 selectionMode="single" selection="#{organizationHome.selectedNode}"  dynamic="true">  
 
-                            <p:ajax event="select" update=":messages :view:detail-panel" listener="#{organizationHome.onNodeSelect}" /> 
+                            <p:ajax event="select" update=":messages :view:detail-panel :view:nodeContextMenu" listener="#{organizationHome.onNodeSelect}" /> 
+                            
                             <p:treeNode expandedIcon="ui-icon-folder-open"  
                                         collapsedIcon="ui-icon-folder-collapsed">  
                             </p:treeNode>  
@@ -70,6 +70,7 @@
                         </p:tree>
                 </p:panel>
                 <p:panel id="detail-panel" header="#{organizationHome.selectedNode.data.name}" toggleable="true">
+                    
                 </p:panel>
             </h:form>
         </ui:define>

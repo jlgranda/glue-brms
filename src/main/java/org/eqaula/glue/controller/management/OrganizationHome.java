@@ -21,10 +21,15 @@ import java.util.Date;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
+import javax.el.ExpressionFactory;
+import javax.el.MethodExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ActionListener;
+import javax.faces.event.MethodExpressionActionListener;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -40,9 +45,12 @@ import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
+import org.primefaces.component.menuitem.MenuItem;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.model.DefaultMenuModel;
 import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.MenuModel;
 import org.primefaces.model.TreeNode;
 
 /**
@@ -229,7 +237,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
 
         }
     }
-    
+
     public void redirecToEdit() {
 
         StringBuilder outcomeBuilder = new StringBuilder();
@@ -257,5 +265,34 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             }
 
         }
+    }
+    /*
+     * UI management
+     */
+    private MenuModel model = null;
+    private String lastNodeType = "";
+
+    public MenuModel getMenuModel() {
+        model = new DefaultMenuModel();
+        
+        log.debug("node=<" + selectedNode + ">");
+        if (selectedNode != null && !lastNodeType.equalsIgnoreCase(selectedNode.getType())) {
+            lastNodeType = selectedNode.getType();
+            BussinesEntity info = (BussinesEntity) selectedNode.getData();
+            MenuItem item = new MenuItem();
+            item.setValue(UI.getMessages("common.add") + " " + UI.getMessages("common.in")  + " " + info.getName());
+            item.setIcon("ui-icon-plus");
+            item.setUpdate(":messages");
+            item.addActionListener(createMethodActionListener("#{organizationHome.redirecToAdd}"));
+            model.addMenuItem(item);
+        }
+        return model;
+    }
+
+    public ActionListener createMethodActionListener(String menuAction) {
+        ExpressionFactory factory = FacesContext.getCurrentInstance().getApplication().getExpressionFactory();
+        MethodExpression methodsexpression = factory.createMethodExpression(FacesContext.getCurrentInstance().getELContext(), menuAction, null, new Class[]{ActionEvent.class});
+        MethodExpressionActionListener actionListener = new MethodExpressionActionListener(methodsexpression);
+        return actionListener;
     }
 }
