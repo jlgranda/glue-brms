@@ -37,8 +37,8 @@ import org.jboss.seam.transaction.Transactional;
  */
 public class LedgerService extends PersistenceUtil<Ledger> implements Serializable {
 
-    private static final long serialVersionUID = 4591338293144180367L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(LedgerService.class);
+    private static final long serialVersionUID = 8704375580788276842L;
 
     public LedgerService() {
         super(Ledger.class);
@@ -53,7 +53,15 @@ public class LedgerService extends PersistenceUtil<Ledger> implements Serializab
         CriteriaQuery<Ledger> query = builder.createQuery(Ledger.class);
         Root<Ledger> bussinesEntityType = query.from(Ledger.class);
         query.where(builder.equal(bussinesEntityType.get(Ledger_.code), code));
-        System.out.println("Estoy en find code");
+        return getSingleResult(query);
+    }
+
+    public Ledger findByOrganizationAndCode(final String code, final Long organizationId) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Ledger> query = builder.createQuery(Ledger.class);
+        Root<Ledger> bussinesEntityType = query.from(Ledger.class);
+        query.where(builder.equal(bussinesEntityType.get(Ledger_.code), code));
+        query.where(builder.equal(bussinesEntityType.get(Ledger_.organization), organizationId));
         return getSingleResult(query);
     }
 

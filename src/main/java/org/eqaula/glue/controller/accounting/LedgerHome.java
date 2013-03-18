@@ -89,20 +89,7 @@ public class LedgerHome extends BussinesEntityHome<Ledger> implements Serializab
             wire();
         } else if (this.instance == null) {
             Date now = Calendar.getInstance().getTime();
-            String code = DateUtils.formatDate(now, "dd.MM.yyyy");
-            //getInstance().setOrganization(getOrganization());
-            Organization organization = organizationService.find(getOrganizationId());
-            log.info("el id de organizacion es: " + getOrganizationId());
-            log.info("el id de organizacion es: " + getOrganizationId());
-            log.info("el id de organizacion es: " + getOrganizationId());
-            log.info("el id de organizacion es: " + getOrganizationId());
-            log.info("el id de organizacion es: " + getOrganizationId());
-            log.info("La organización actual es: " + organization.getName());
-            log.info("La organización actual es: " + organization.getName());
-            log.info("La organización actual es: " + organization.getName());
-            log.info("La organización actual es: " + organization.getName());
-            log.info("La organización actual es: " + organization.getName());
-            log.info("La organización actual es: " + organization.getName());
+            String code = DateUtils.formatDate(now, "dd.MM.yyyy."+getOrganization().getId());
             setInstance(ledgerService.retrivePosting(code, getOrganization()));
         }
         return getInstance();

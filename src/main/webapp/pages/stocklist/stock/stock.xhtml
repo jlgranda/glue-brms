@@ -41,14 +41,23 @@
                 <h:panelGroup layout="block" class="control-group">
                     <label for="itemtype_" class="control-label"> #{messages['module.stocklist.item']}*</label>
                     <div class="controls">
-                        <p:selectOneMenu id="itemtype_" value="#{stockHome.instance.item}" effect="fade"  
+                        <p:selectOneMenu style="float: left" id="itemtype_" value="#{stockHome.instance.item}" effect="fade"  
                                          rendered="true" label="Items" required="true"
                                          converter="org.eqaula.glue.faces.converter.GenericConverter"
+                                         filter="true"
                                          disabled="#{empty stockHome.stockId?false : true}">
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""/>  
                             <f:selectItems value="#{itemHome.items}" var="item" itemLabel="#{item}" itemValue="#{item}"/>                          
-                        </p:selectOneMenu>  
-                        <p:button value="" icon="ui-icon-circle-plus" rendered="#{stockHome.stockId==null}" 
+                        </p:selectOneMenu> 
+                        <h:link rendered="#{stockHome.stockId==null}" styleClass="btn" outcome="/pages/stocklist/item/item.xhtml?faces-redirect=true" >
+                            <i class="icon-plus"></i>
+                            <f:param name="warehouseId" value="#{stockHome.warehouseId}"/>
+                            <c:if test="#{not empty stockHome.stockId}">
+                                <f:param name="stockId" value="#{stockHome.stockId}"/>
+                            </c:if>
+                            <f:param name="backView" value="list"></f:param>
+                        </h:link>
+                        <!--<p:button value="" icon="ui-icon-circle-plus" rendered="#{stockHome.stockId==null}" 
                                   outcome="/pages/stocklist/item/item.xhtml?faces-redirect=true"
                                   style="position: absolute; float: right; height: 26px; width: 32px">     
                             <f:param name="warehouseId" value="#{stockHome.warehouseId}"/>
@@ -56,7 +65,7 @@
                                 <f:param name="stockId" value="#{stockHome.stockId}"/>
                             </c:if>
                             <f:param name="backView" value="list"></f:param>
-                        </p:button>
+                        </p:button> -->
                     </div>
 
                 </h:panelGroup>

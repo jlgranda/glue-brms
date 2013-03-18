@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.model.accounting.Posting;
+import org.eqaula.glue.model.accounting.Posting_;
 import org.eqaula.glue.model.config.Setting;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
@@ -43,7 +44,7 @@ import org.primefaces.model.SortOrder;
  */
 @Named(value = "postingListService")
 @RequestScoped
-public class PostingListService extends LazyDataModel<Posting> {
+public class PostingListService extends ListService<Posting>{
 
     private static final long serialVersionUID = 4819808125494695197L;
     private static final int MAX_RESULTS = 5;
@@ -109,16 +110,22 @@ public class PostingListService extends LazyDataModel<Posting> {
             order = QuerySortOrder.DESC;
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
+        
+        _filters.put(Posting_.organization.getName(), getOrganization());
+        _filters.putAll(filters);
         /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
          _filters.putAll(filters);*/
 
+        
         QueryData<Posting> qData = postingService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();
     }
 
     @PostConstruct
+    @Override
     public void init() {
+        super.init();
         postingService.setEntityManager(entityManager);
     }
 

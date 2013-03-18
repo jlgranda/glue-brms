@@ -93,34 +93,38 @@
    </url-mapping>
    
    <!-- Administracion contabilidad -->
-   <url-mapping id="list">
-      <pattern value="/admin/accounting/list"></pattern>
+   <url-mapping id="accounting-home">
+      <pattern value="/accounting"></pattern>
+      <view-id value="/pages/accounting/home.xhtml"></view-id>       
+   </url-mapping>  
+   <url-mapping id="accounting-list">
+      <pattern value="/accounting/list"></pattern>
       <view-id value="/pages/accounting/list.xhtml"></view-id>       
    </url-mapping>   
-   <url-mapping id="view">
-      <pattern value="/admin/accounting/view"></pattern>
+   <url-mapping id="accounting-view">
+      <pattern value="/accounting/view"></pattern>
       <view-id value="/pages/accounting/view.xhtml"></view-id>       
    </url-mapping>
-   <url-mapping id="account">
-      <pattern value="/admin/accounting/account"></pattern>
+   <url-mapping id="accounting-account">
+      <pattern value="/accounting/account"></pattern>
       <view-id value="/pages/accounting/account.xhtml"></view-id>
       <query-param name="accountId" decode="false">#{accountHome.accountId}</query-param>
       <query-param name="parentId" decode="false">#{accountHome.parentId}</query-param>
    </url-mapping>
    
    
-    <url-mapping id="voucher">
-      <pattern value="/voucher"></pattern>
+    <url-mapping id="accounting-voucher">
+      <pattern value="/accounting/voucher"></pattern>
       <view-id value="/pages/accounting/ledger/voucher.xhtml"></view-id>
     </url-mapping>
     
-    <url-mapping id="ledger">
-      <pattern value="/ledger"></pattern>
+    <url-mapping id="accounting-ledger">
+      <pattern value="/accounting/ledger"></pattern>
       <view-id value="/pages/accounting/ledger/ledger.xhtml"></view-id>
     </url-mapping>
    
-    <url-mapping id="ledger-list">
-      <pattern value="/ledgers"></pattern>
+    <url-mapping id="accounting-ledger-list">
+      <pattern value="/accounting/ledgers"></pattern>
       <view-id value="/pages/accounting/ledger/list.xhtml"></view-id>
     </url-mapping>
    

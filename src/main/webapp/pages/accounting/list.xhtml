@@ -21,7 +21,8 @@
                                 outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
                         </h:link>     
                         <br/>
-                        <h:link outcome="/pages/home" styleClass="btn btn-link" value="#{messages['common.cancel']}">
+                        <h:link outcome="home" styleClass="btn btn-link" value="#{messages['common.cancel']}">
+                            <f:param name="organizationId" value="#{accountListService.organizationId}"></f:param>
                         </h:link>
                     </div>
                 </div> 
