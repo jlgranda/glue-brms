@@ -33,6 +33,7 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.accounting.Entry;
 import org.eqaula.glue.model.accounting.Ledger;
 import org.eqaula.glue.model.accounting.Posting;
+import org.eqaula.glue.profile.ProfileService;
 import org.eqaula.glue.service.LedgerService;
 import org.eqaula.glue.service.PostingService;
 import org.eqaula.glue.util.Dates;
@@ -56,8 +57,11 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
     private Posting postingSelected;
     private Ledger ledger;
     private Long ledgerId;
+    private Long profileId;
     @Inject
     private LedgerService ledgerService;
+    @Inject
+    private ProfileService profileService;
 
     @Override
     public Class<Posting> getEntityClass() {
@@ -78,6 +82,14 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
 
     public void setLedgerId(Long ledgerId) {
         this.ledgerId = ledgerId;
+    }
+
+    public Long getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(Long profileId) {
+        this.profileId = profileId;
     }
 
     @Transactional
@@ -114,6 +126,7 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
         bussinesEntityService.setEntityManager(em);
         organizationService.setEntityManager(em);
         ledgerService.setEntityManager(em);
+        profileService.setEntityManager(em);
     }
 
     @TransactionAttribute
@@ -252,5 +265,12 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
         } catch (Exception e) {
         }
         return total;
+    }
+
+    public String addConsigne() {
+        if (getProfileId() != null) {
+            getInstance().setConsigne(profileService.find(getProfileId()));
+        }
+        return "/pages/accounting/ledger/voucher";
     }
 }
