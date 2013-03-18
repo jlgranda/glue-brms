@@ -30,6 +30,9 @@ limitations under the License.
 
     <f:metadata>
         <f:viewParam name="ledgerId" value="${postingHome.ledgerId}"/>
+        <f:viewParam name="organizationId" value="${postingHome.organizationId}" />
+        <f:viewParam name="profileId" value="#{postingHome.profileId}"/>
+        <f:event listener="#{postingHome.addConsigne()}" type="preRenderView"/>
     </f:metadata>        
 
     <ui:param name="title" value="#{messages['panel.admin.accounting.voucher']}" />
@@ -40,7 +43,7 @@ limitations under the License.
                     <div class="span9">   
                         <div class="row-fluid" style="margin-top: 5px;">
                             <h3>#{postingHome.ledger.name}</h3>
-                            <h3>EQAULA TECNOLOGIAS CIA LTDA</h3> 
+                            <h3>#{postingHome.organization.name}</h3> 
                             <h3>1191725932001</h3> 
                             <h4>COMPROBANTE DE PAGO N° EQ-PAGO-000</h4>   
                             <h:outputLabel value=""/>
@@ -48,9 +51,12 @@ limitations under the License.
                     </div>
                     <div class="span3">
                         <br/>
-                        <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
-                        </h:link>                       
+                        <h:link value="#{messages['common.cancel']}" 
+                                outcome="/pages/accounting/home?organizationId=#{postingHome.organizationId}"
+                                styleClass="btn btn-link">
+
+                        </h:link> 
+
                     </div>
                 </div>     
             </div>
@@ -58,8 +64,6 @@ limitations under the License.
     </ui:define>
 
     <ui:define name="content">
-
-
 
         <h:form id="form" class="form-horizontal">
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
@@ -92,17 +96,25 @@ limitations under the License.
                         required="true"/>
             <h:panelGroup id="csg" layout="block" rendered="true" class="control-group">             
                 <label for="consigne" class="control-label">#{messages['module.accounting.posting.consigne']}</label>
-
                 <div class="controls">
                     <p:selectOneMenu id="consigne" value="#{postingHome.instance.consigne}" effect="fade"  
+                                     style="float: left"
                                      required="true"
                                      rendered="true"
                                      requiredMessage="#{messages['module.accounting.posting.consigne.required']}"
-                                     converter="omnifaces.SelectItemsConverter">
+                                     converter="omnifaces.SelectItemsConverter"
+                                     disabled="#{empty postingHome.postingId?false : true}">>
                         <f:selectItem  itemLabel = "#{messages['common.choice']}" />
                         <f:selectItems value="#{profileListService.resultList}" var="p" itemValue="#{p}" itemLabel="#{p.fullName}"/>                          
                         <p:ajax event="change" update="@parent" partialSubmit="true"/>
                     </p:selectOneMenu>
+                    <h:link styleClass="btn" outcome="/pages/profile/payee" >
+                        <i class="icon-plus"></i>
+                        <f:param name="organizationId" value="#{postingHome.organizationId}" />
+                        <c:if test="#{not empty postingHome.postingId}">
+                            <f:param name="postingId" value="#{postingHome.postingId}"/>
+                        </c:if>
+                    </h:link>
                     <h:graphicImage value="#{resource['success.gif']}" rendered="#{postingHome.instance.consigne != null}"
                                     styleClass="validation-status" />
                     <span class="help-block"><br/>#{messages['posting.consigne.inlinehelp']}<ocp:message forId="consigne" /></span>

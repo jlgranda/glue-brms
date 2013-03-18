@@ -18,6 +18,7 @@ package org.eqaula.glue.model.management;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -43,7 +44,7 @@ public class Owner extends BussinesEntity implements Serializable {
     private Organization organization;
     @OneToMany(mappedBy = "owner")
     private List<Theme> themes ;
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<Objetive> objetives;
 
     public Owner() {

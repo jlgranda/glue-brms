@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 jlgranda.
+ * Copyright 2013 dianita.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -27,27 +28,48 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eqaula.glue.model.BussinesEntity;
 
-/**
- *
- * @author jlgranda
+/*
+ * @author dianita
  */
 @Entity
-@Table(name = "BalancedScorecard")
-@DiscriminatorValue(value = "BSC")
+@Table(name = "Measure")
+@DiscriminatorValue(value = "MSR")
 @PrimaryKeyJoinColumn(name = "id")
-public class BalancedScorecard extends BussinesEntity implements Serializable {
-    private static final long serialVersionUID = -8149661791009499829L;
+public class Measure extends BussinesEntity implements Serializable {
+
+    private static final long serialVersionUID = -6935266135527132362L;
+    private Long frequency;
     
-    @OneToMany(mappedBy = "balancedScorecard", cascade = CascadeType.ALL)
-    List<Theme> themes;
+    @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL)
+    private List<Target> targets;
+   
+    @ManyToOne
+    private Objetive objetive;
 
-    public List<Theme> getThemes() {
-        return themes;
+    public Long getFrequency() {
+        return frequency;
     }
 
-    public void setThemes(List<Theme> themes) {
-        this.themes = themes;
+    public void setFrequency(Long frequency) {
+        this.frequency = frequency;
     }
+
+    public List<Target> getTargets() {
+        return targets;
+    }
+
+    public void setTargets(List<Target> targets) {
+        this.targets = targets;
+    }
+
+    public Objetive getObjetive() {
+        return objetive;
+    }
+
+    public void setObjetive(Objetive objetive) {
+        this.objetive = objetive;
+    }
+
     
     @Override
     public int hashCode() {
@@ -69,17 +91,17 @@ public class BalancedScorecard extends BussinesEntity implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        BalancedScorecard other = (BalancedScorecard) obj;
+        Measure other = (Measure) obj;
         return new EqualsBuilder().
                 // if deriving: appendSuper(super.equals(obj)).
                 append(getName(), other.getName()).
                 append(getType(), other.getType()).
                 isEquals();
     }
-    
+
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.BalancedScorecard[ "
+        return "org.eqaula.glue.model.management.Theme[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","

@@ -24,17 +24,16 @@ import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.apache.http.impl.cookie.DateUtils;
-import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.accounting.Entry;
 import org.eqaula.glue.model.accounting.Ledger;
 import org.eqaula.glue.model.accounting.Posting;
+import org.eqaula.glue.profile.ProfileService;
 import org.eqaula.glue.service.LedgerService;
 import org.eqaula.glue.service.PostingService;
 import org.eqaula.glue.util.Dates;
@@ -58,10 +57,11 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
     private Posting postingSelected;
     private Ledger ledger;
     private Long ledgerId;
-    
-    
+    private Long profileId;
     @Inject
     private LedgerService ledgerService;
+    @Inject
+    private ProfileService profileService;
 
     @Override
     public Class<Posting> getEntityClass() {
@@ -84,17 +84,25 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
         this.ledgerId = ledgerId;
     }
 
-    
-    
+    public Long getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(Long profileId) {
+        this.profileId = profileId;
+    }
+
     @Transactional
     public Ledger getLedger() {
+
+
         if (ledger == null) {
-            if (getLedgerId() == null){
-            //TODO check for a better code format
-            Date now = Calendar.getInstance().getTime();
-            String code = DateUtils.formatDate(now, "dd.MM.yyyy");
-            ledger = ledgerService.retrivePosting(code, getOrganization());}
-            else {
+            if (getLedgerId() == null) {
+                //TODO check for a better code format
+                Date now = Calendar.getInstance().getTime();
+                String code = DateUtils.formatDate(now, "dd.MM.yyyy." + getOrganization().getId());
+                ledger = ledgerService.retrivePosting(code, getOrganization());
+            } else {
                 ledger = ledgerService.find(getLedgerId());
             }
         }
@@ -115,8 +123,10 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        postingService.setEntityManager(em);
+        bussinesEntityService.setEntityManager(em);
+        organizationService.setEntityManager(em);
         ledgerService.setEntityManager(em);
+        profileService.setEntityManager(em);
     }
 
     @TransactionAttribute
@@ -255,5 +265,12 @@ public class PostingHome extends BussinesEntityHome<Posting> implements Serializ
         } catch (Exception e) {
         }
         return total;
+    }
+
+    public String addConsigne() {
+        if (getProfileId() != null) {
+            getInstance().setConsigne(profileService.find(getProfileId()));
+        }
+        return "/pages/accounting/ledger/voucher";
     }
 }

@@ -16,9 +16,12 @@
 package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -41,6 +44,10 @@ public class Objetive extends BussinesEntity implements Serializable {
     @ManyToOne
     private Perspective perspective;
 
+    @OneToMany(mappedBy = "objetive", cascade = CascadeType.ALL)
+    private List<Measure> measures;
+    
+    
     public Perspective getPerspective() {
         return perspective;
     }
@@ -56,6 +63,17 @@ public class Objetive extends BussinesEntity implements Serializable {
     public void setOwner(Owner owner) {
         this.owner = owner;
     }
+
+    public List<Measure> getMeasures() {
+        return measures;
+    }
+
+    public void setMeasures(List<Measure> measures) {
+        this.measures = measures;
+    }
+
+
+      
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 jlgranda.
+ * Copyright 2013 dianita.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,39 +16,59 @@
 package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eqaula.glue.model.BussinesEntity;
 
-/**
- *
- * @author jlgranda
+/*
+ * @author dianita
  */
+
 @Entity
-@Table(name = "BalancedScorecard")
-@DiscriminatorValue(value = "BSC")
+@Table(name = "Target")
+@DiscriminatorValue(value = "TGT")
 @PrimaryKeyJoinColumn(name = "id")
-public class BalancedScorecard extends BussinesEntity implements Serializable {
-    private static final long serialVersionUID = -8149661791009499829L;
-    
-    @OneToMany(mappedBy = "balancedScorecard", cascade = CascadeType.ALL)
-    List<Theme> themes;
+public class Target extends BussinesEntity implements Serializable {
 
-    public List<Theme> getThemes() {
-        return themes;
-    }
+    private static final long serialVersionUID = 449175027015485864L;
 
-    public void setThemes(List<Theme> themes) {
-        this.themes = themes;
+    public enum Type {
+        DEFAULT; //Esquema contable         
+        private Type() {
+        }
     }
     
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Target.Type targetType;
+    
+    @ManyToOne
+    private Measure measure;
+
+    public Type getTargetType() {
+        return targetType;
+    }
+
+    public void setTargetType(Type targetType) {
+        this.targetType = targetType;
+    }
+
+    public Measure getMeasure() {
+        return measure;
+    }
+
+    public void setMeasure(Measure measure) {
+        this.measure = measure;
+    }
+
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -59,7 +79,7 @@ public class BalancedScorecard extends BussinesEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(final Object obj) {
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -69,17 +89,17 @@ public class BalancedScorecard extends BussinesEntity implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        BalancedScorecard other = (BalancedScorecard) obj;
+        Target other = (Target) obj;
         return new EqualsBuilder().
                 // if deriving: appendSuper(super.equals(obj)).
                 append(getName(), other.getName()).
                 append(getType(), other.getType()).
                 isEquals();
     }
-    
+
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.BalancedScorecard[ "
+        return "org.eqaula.glue.model.management.Target[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
