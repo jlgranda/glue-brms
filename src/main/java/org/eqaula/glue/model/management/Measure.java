@@ -39,12 +39,17 @@ public class Measure extends BussinesEntity implements Serializable {
 
     private static final long serialVersionUID = -6935266135527132362L;
     private Long frequency;
-    
     @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL)
     private List<Target> targets;
-   
     @ManyToOne
     private Objetive objetive;
+    @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL)
+    private List<Method> methods;
+    @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL)
+    private List<Period> periods;
+    @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL)
+    private List<Initiative> initiatives;
+    
 
     public Long getFrequency() {
         return frequency;
@@ -70,7 +75,32 @@ public class Measure extends BussinesEntity implements Serializable {
         this.objetive = objetive;
     }
 
+    public List<Method> getMethods() {
+        return methods;
+    }
+
+    public void setMethods(List<Method> methods) {
+        this.methods = methods;
+    }
+
+    public List<Period> getPeriods() {
+        return periods;
+    }
+
+    public void setPeriods(List<Period> periods) {
+        this.periods = periods;
+    }
+
+    public List<Initiative> getInitiatives() {
+        return initiatives;
+    }
+
+    public void setInitiatives(List<Initiative> initiatives) {
+        this.initiatives = initiatives;
+    }
     
+    
+
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers

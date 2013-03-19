@@ -16,54 +16,50 @@
 package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eqaula.glue.model.BussinesEntity;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /*
  * @author dianita
  */
 @Entity
-@Table(name = "Method")
-@DiscriminatorValue(value = "MTHD")
+@Table(name = "Resource")
+@DiscriminatorValue(value = "RSRC")
 @PrimaryKeyJoinColumn(name = "id")
-public class Method extends BussinesEntity implements Serializable {
+public class Resource extends BussinesEntity implements Serializable {
 
-    private static final long serialVersionUID = -2099259320492517035L;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "lastUpdated", nullable = false)
-    private Date lastUpdated;
-    @ManyToOne
-    private Measure measure;
+    private BigDecimal amount;
+    @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL)
+    private List<Initiative> initiatives;
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public List<Initiative> getInitiatives() {
+        return initiatives;
+    }
+
+    public void setInitiatives(List<Initiative> initiatives) {
+        this.initiatives = initiatives;
+    }
+
     
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
-    public Measure getMeasure() {
-        return measure;
-    }
-
-    public void setMeasure(Measure measure) {
-        this.measure = measure;
-    }
-
- 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -84,7 +80,7 @@ public class Method extends BussinesEntity implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Method other = (Method) obj;
+        Resource other = (Resource) obj;
         return new EqualsBuilder().
                 // if deriving: appendSuper(super.equals(obj)).
                 append(getName(), other.getName()).
@@ -94,7 +90,7 @@ public class Method extends BussinesEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Method[ "
+        return "org.eqaula.glue.model.management.Resource[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","

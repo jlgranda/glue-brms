@@ -17,12 +17,10 @@ package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -35,24 +33,43 @@ import org.eqaula.glue.model.BussinesEntity;
  * @author dianita
  */
 @Entity
-@Table(name = "Method")
-@DiscriminatorValue(value = "MTHD")
+@Table(name = "Initiative")
+@DiscriminatorValue(value = "INTTV")
 @PrimaryKeyJoinColumn(name = "id")
-public class Method extends BussinesEntity implements Serializable {
+public class Initiative extends BussinesEntity implements Serializable {
 
-    private static final long serialVersionUID = -2099259320492517035L;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "lastUpdated", nullable = false)
-    private Date lastUpdated;
+    @Column(name = "startDate", nullable = false)
+    private Date startDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "endDate", nullable = false)
+    private Date endDate;
+    @ManyToOne
+    private Resource resource;
     @ManyToOne
     private Measure measure;
-    
-    public Date getLastUpdated() {
-        return lastUpdated;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Resource getResource() {
+        return resource;
+    }
+
+    public void setResource(Resource resource) {
+        this.resource = resource;
     }
 
     public Measure getMeasure() {
@@ -62,8 +79,9 @@ public class Method extends BussinesEntity implements Serializable {
     public void setMeasure(Measure measure) {
         this.measure = measure;
     }
+    
+    
 
- 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -84,7 +102,7 @@ public class Method extends BussinesEntity implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Method other = (Method) obj;
+        Initiative other = (Initiative) obj;
         return new EqualsBuilder().
                 // if deriving: appendSuper(super.equals(obj)).
                 append(getName(), other.getName()).
@@ -94,7 +112,7 @@ public class Method extends BussinesEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Method[ "
+        return "org.eqaula.glue.model.management.Initiative[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
