@@ -16,14 +16,17 @@
 package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eqaula.glue.model.BussinesEntity;
@@ -32,49 +35,50 @@ import org.eqaula.glue.model.BussinesEntity;
  * @author dianita
  */
 @Entity
-@Table(name = "Measure")
-@DiscriminatorValue(value = "MSR")
+@Table(name = "Method")
+@DiscriminatorValue(value = "MTHD")
 @PrimaryKeyJoinColumn(name = "id")
-public class Measure extends BussinesEntity implements Serializable {
+public class Method extends BussinesEntity implements Serializable {
 
-    private static final long serialVersionUID = -6935266135527132362L;
-    private Long frequency;
+    private static final long serialVersionUID = -2099259320492517035L;
     
-    @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL)
-    private List<Target> targets;
-   
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastUpdated;
+    
     @ManyToOne
-    private Objetive objetive;
+    private Measure measure;
+    
+    @OneToMany(mappedBy = "method")
+    private List<Method> methods;
 
-    public Long getFrequency() {
-        return frequency;
+    public Date getLastUpdated() {
+        return lastUpdated;
     }
 
-    public void setFrequency(Long frequency) {
-        this.frequency = frequency;
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }    
+
+    public Measure getMeasure() {
+        return measure;
     }
 
-    public List<Target> getTargets() {
-        return targets;
+    public void setMeasure(Measure measure) {
+        this.measure = measure;
     }
 
-    public void setTargets(List<Target> targets) {
-        this.targets = targets;
+    public List<Method> getMethods() {
+        return methods;
     }
 
-    public Objetive getObjetive() {
-        return objetive;
+    public void setMethods(List<Method> methods) {
+        this.methods = methods;
     }
-
-    public void setObjetive(Objetive objetive) {
-        this.objetive = objetive;
-    }
-
     
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
-                // if deriving: appendSuper(super.hashCode()).
+                                           // if deriving: appendSuper(super.hashCode()).
                 append(getName()).
                 append(getType()).
                 toHashCode();
@@ -91,7 +95,7 @@ public class Measure extends BussinesEntity implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Measure other = (Measure) obj;
+        Method other = (Method) obj;
         return new EqualsBuilder().
                 // if deriving: appendSuper(super.equals(obj)).
                 append(getName(), other.getName()).
@@ -101,7 +105,7 @@ public class Measure extends BussinesEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Measure[ "
+        return "org.eqaula.glue.model.management.Method[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
