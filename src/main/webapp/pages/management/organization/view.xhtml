@@ -45,8 +45,10 @@
         <ui:define name="content">
             <h:form id="view">                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-                <p:contextMenu id="nodeContextMenu" for="organizationTree" model="#{organizationHome.menuModel}">  
-                   
+                <!-- <p:contextMenu id="nodeContextMenu" for="organizationTree" model="#{organizationHome.menuModel}">  -->
+                <p:contextMenu for="organizationTree" >  
+                    <p:menuitem value="#{messages['common.add']}" update=":messages" actionListener="#{organizationHome.redirecToAdd}" icon="ui-icon-plus" /> 
+                    <p:menuitem value="#{messages['common.edit']}" update=":messages" actionListener="#{organizationHome.redirecToEdit}" icon="ui-icon-plus" /> 
                 </p:contextMenu>  
                 <p:panel id="explorer-panel" header="#{messages['common.overview']}" toggleable="true">
                     <p:tree id="organizationTree" value="#{organizationHome.organizationNode}" var="node" orientation="horizontal" 
@@ -68,14 +70,34 @@
                         <p:treeNode type="measure" icon="ui-icon-flag">  
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>
-                        <p:treeNode type="target" icon="ui-icon-list">  
+                        <p:treeNode type="targets" icon="icon-tasks">  
+                            <h:outputText value="#{node}" />  
+                        </p:treeNode>
+                        <p:treeNode type="periods" icon="icon-tasks">  
+                            <h:outputText value="#{node}" />  
+                        </p:treeNode>
+                        <p:treeNode type="initiatives" icon="icon-tasks">  
+                            <h:outputText value="#{node}" />  
+                        </p:treeNode>
+                        <p:treeNode type="methods" icon="icon-tasks">  
+                            <h:outputText value="#{node}" />  
+                        </p:treeNode>
+                        <p:treeNode type="target" icon="icon-hand-right">  
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>
-
+                        <p:treeNode type="period" icon="icon-hand-right">  
+                            <h:outputText value="#{node.duration}" />  
+                        </p:treeNode>
+                        <p:treeNode type="initiative" icon="icon-hand-right">  
+                            <h:outputText value="#{node.name}" />  
+                        </p:treeNode>
+                        <p:treeNode type="method" icon="icon-hand-right">  
+                            <h:outputText value="#{node.name}" />  
+                        </p:treeNode>
                     </p:tree>
                 </p:panel>
                 <p:panel id="detail-panel" header="#{organizationHome.selectedNode.data.name}" toggleable="true">
-                    
+
                 </p:panel>
 
             </h:form>

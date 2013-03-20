@@ -16,10 +16,8 @@
 package org.eqaula.glue.controller.management;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
@@ -34,6 +32,7 @@ import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Measure;
+import org.eqaula.glue.model.management.Period;
 import org.eqaula.glue.model.management.Target;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
@@ -42,16 +41,16 @@ import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
 
-
 /*
  * @author dianita
  */
+
 @Named
 @ViewScoped
-public class TargetHome extends BussinesEntityHome<Target> implements Serializable {
-
-    private static final long serialVersionUID = 5699917875695874467L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(TargetHome.class);
+public class PeriodHome extends BussinesEntityHome<Period> implements Serializable{
+    private static final long serialVersionUID = -983206829229967385L;
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(PeriodHome.class);
+    
     @Inject
     @Web
     private EntityManager em;
@@ -65,23 +64,23 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
     @Inject
     private MeasureService measureService;
 
-    public TargetHome() {
+    public PeriodHome() {
     }
-
-    public Long getTargetId() {
-        return (Long) getId();
+    
+    public Long getPeriodId(){
+        return (Long)getId();
     }
-
-    public void setTargetId(Long targetId) {
-        setId(targetId);
+    
+    public void setPeriodId(Long periodId){
+        setId(periodId);
     }
-
+    
     public String getStructureName() {
         return getInstance().getName();
     }
 
     public Measure getMeasure() {
-        if (measure == null) {
+         if (measure == null) {
             if (measureId == null) {
                 measure = null;
             } else {
@@ -102,7 +101,7 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
     public void setMeasureId(Long measureId) {
         this.measureId = measureId;
     }
-
+    
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -121,24 +120,24 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         measureService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
-
+    
     @Override
-    protected Target createInstance() {
-        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Target.class.getName());
+    protected Period createInstance() {
+        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Period.class.getName());
         Date now = Calendar.getInstance().getTime();
-        Target target = new Target();
-        target.setCode(UUID.randomUUID().toString());
-        target.setCreatedOn(now);
-        target.setLastUpdate(now);
-        target.setActivationTime(now);
-        target.setExpirationTime(Dates.addDays(now, 364));
-        target.setType(_type);
-        target.buildAttributes(bussinesEntityService);
-        return target;
+        Period period = new Period();
+        period.setCode(UUID.randomUUID().toString());
+        period.setCreatedOn(now);
+        period.setLastUpdate(now);
+        period.setActivationTime(now);
+        period.setExpirationTime(Dates.addDays(now, 364));
+        period.setType(_type);
+        period.buildAttributes(bussinesEntityService);
+        return period;
     }
 
     @TransactionAttribute
-    public String saveTarget() {
+    public String savePeriod() {
 
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
@@ -159,27 +158,27 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         return true;
     }
 
-    public Target getDefiniedInstance() {
+    public Period getDefiniedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
 
     @Override
-    public Class<Target> getEntityClass() {
-        return Target.class;
+    public Class<Period> getEntityClass() {
+        return Period.class;
     }
 
     @Transactional
-    public String deleteTarget() {
+    public String deletePeriod() {
         try {
             if (getInstance() == null) {
-                throw new NullPointerException("Target is Null");
+                throw new NullPointerException("Period is Null");
             }
             if (getInstance().isPersistent()) {
                 delete(getInstance());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
                 RequestContext.getCurrentInstance().execute("editDlg.hide()");
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una meta para ser borrada!", ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un periodo para ser borrado!", ""));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -191,9 +190,6 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
-    public List<Target.Type> getTargetTypes() {
-        wire();
-        List<Target.Type> list = Arrays.asList(getInstance().getTargetType().values());
-        return list;
-    }
+
+    
 }
