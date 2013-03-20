@@ -33,16 +33,21 @@ import javax.faces.event.MethodExpressionActionListener;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import org.eclipse.jdt.internal.compiler.ast.MessageSend;
 import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
+import org.eqaula.glue.model.management.Initiative;
 import org.eqaula.glue.model.management.Measure;
+import org.eqaula.glue.model.management.Method;
 import org.eqaula.glue.model.management.Target;
 import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
+import org.eqaula.glue.model.management.Period;
+import org.eqaula.glue.model.management.Resource;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
@@ -202,6 +207,14 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         TreeNode objetiveNode = null;
         TreeNode measureNode = null;
         TreeNode targetNode = null;
+        TreeNode periodNode = null;
+        TreeNode initiativeNode = null;
+        TreeNode methodNode = null;
+        TreeNode targetMasterNode = null;
+        TreeNode periodMasterNode = null;
+        TreeNode initiativeMasterNode = null;
+        TreeNode methodMasterNode = null;
+
         organizationNode.setExpanded(true);
         for (Owner owner : getInstance().getOwners()) {
             ownerNode = new DefaultTreeNode("owner", owner, organizationNode);
@@ -211,10 +224,28 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                 objetiveNode.setExpanded(true);
                 for (Measure measure : objetive.getMeasures()) {
                     measureNode = new DefaultTreeNode("measure", measure, objetiveNode);
-                    measureNode.setExpanded(true);
+                    measureNode.setExpanded(false);
+
+                    targetMasterNode = new DefaultTreeNode("targets", UI.getMessages("common.targets"), measureNode);
+                    periodMasterNode = new DefaultTreeNode("periods", UI.getMessages("common.periods"), measureNode);
+                    initiativeMasterNode = new DefaultTreeNode("initiatives", UI.getMessages("common.initiatives"), measureNode);
+                    methodMasterNode = new DefaultTreeNode("methods", UI.getMessages("common.methods"), measureNode);
+
                     for (Target target : measure.getTargets()) {
-                        targetNode = new DefaultTreeNode("target", target, measureNode);
-                        targetNode.setExpanded(true);
+                        targetNode = new DefaultTreeNode("target", target, targetMasterNode);
+                        targetNode.setExpanded(false);
+                    }
+                    for (Period period : measure.getPeriods()) {
+                        periodNode = new DefaultTreeNode("period", period, periodMasterNode);
+                        periodNode.setExpanded(false);
+                    }
+                    for (Initiative initiative : measure.getInitiatives()) {
+                        initiativeNode = new DefaultTreeNode("initiative", initiative, initiativeMasterNode);
+                        initiativeNode.setExpanded(false);
+                    }
+                    for (Method method : measure.getMethods()) {
+                        methodNode = new DefaultTreeNode("method", method, methodMasterNode);
+                        methodNode.setExpanded(false);
                     }
                 }
             }
@@ -230,8 +261,18 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public void redirecToAdd() {
 
         StringBuilder outcomeBuilder = new StringBuilder();
+        String masterNodoName = "";
         if (selectedNode != null) {
-            BussinesEntity bussinesEntity = (BussinesEntity) selectedNode.getData();
+            if (selectedNode.getData().toString().equals(UI.getMessages("common.targets"))||
+                    selectedNode.getData().toString().equals(UI.getMessages("common.periods"))||
+                    selectedNode.getData().toString().equals(UI.getMessages("common.initiatives"))||
+                    selectedNode.getData().toString().equals(UI.getMessages("common.methods"))) {
+                masterNodoName = selectedNode.getData().toString();
+                System.out.println(masterNodoName+ "--------------------------------");
+            } else {
+                BussinesEntity bussinesEntity = (BussinesEntity) selectedNode.getData();
+            }
+
             if ("organization".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/owner/owner.xhtml?");
                 outcomeBuilder.append("organizationId=").append(getOrganizationId());
@@ -248,11 +289,38 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("measure".equals(selectedNode.getType())) {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            } else if (masterNodoName.equals(UI.getMessages("common.targets"))) {
                 outcomeBuilder.append("/pages/management/targets/target.xhtml?");
-                outcomeBuilder.append("&measureId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&measureId=").append(((BussinesEntity) selectedNode.getParent().getData()).getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("target".equals(selectedNode.getType())) {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            } else if (masterNodoName.equals(UI.getMessages("common.periods"))) {
+                outcomeBuilder.append("/pages/management/period/period.xhtml?");
+                outcomeBuilder.append("&measureId=").append(((BussinesEntity) selectedNode.getParent().getData()).getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("period".equals(selectedNode.getType())) {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            } else if (masterNodoName.equals(UI.getMessages("common.initiatives"))) {
+                outcomeBuilder.append("/pages/management/initiative/initiative.xhtml?");
+                outcomeBuilder.append("&measureId=").append(((BussinesEntity) selectedNode.getParent().getData()).getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("initiative".equals(selectedNode.getType())) {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            } else if (masterNodoName.equals(UI.getMessages("common.methods"))) {
+                outcomeBuilder.append("/pages/management/method/method.xhtml?");
+                outcomeBuilder.append("&measureId=").append(((BussinesEntity) selectedNode.getParent().getData()).getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("method".equals(selectedNode.getType())) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, message);
             }
@@ -295,8 +363,25 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                 outcomeBuilder.append("&measureId=").append(((Target) bussinesEntity).getMeasure().getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("period".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/period/period.xhtml?");
+                outcomeBuilder.append("&periodId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&measureId=").append(((Period) bussinesEntity).getMeasure().getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("initiative".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/initiative/initiative.xhtml?");
+                outcomeBuilder.append("&initiativeId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&measureId=").append(((Initiative) bussinesEntity).getMeasure().getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("method".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/method/method.xhtml?");
+                outcomeBuilder.append("&methodId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&measureId=").append(((Method) bussinesEntity).getMeasure().getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             }
-
         }
     }
     /*
@@ -307,13 +392,13 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
 
     public MenuModel getMenuModel() {
         model = new DefaultMenuModel();
-        
+
         log.debug("node=<" + selectedNode + ">");
         if (selectedNode != null && !lastNodeType.equalsIgnoreCase(selectedNode.getType())) {
             lastNodeType = selectedNode.getType();
             BussinesEntity info = (BussinesEntity) selectedNode.getData();
             MenuItem item = new MenuItem();
-            item.setValue(UI.getMessages("common.add") + " " + UI.getMessages("common.in")  + " " + info.getName());
+            item.setValue(UI.getMessages("common.add") + " " + UI.getMessages("common.in") + " " + info.getName());
             item.setIcon("ui-icon-plus");
             item.setUpdate(":messages");
             item.addActionListener(createMethodActionListener("#{organizationHome.redirecToAdd}"));
