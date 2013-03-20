@@ -73,8 +73,10 @@
                     &nbsp;
                     <h:commandButton action="/pages/profile/list.xhtml?faces-redirect=true"
                                      value="#{messages['common.cancel']}" styleClass="btn" immediate="true" rendered="#{not empty backView}"/>
-                    <h:commandButton action="/pages/home"
-                                     value="#{messages['common.cancel']}" styleClass="btn" immediate="true" rendered="#{empty backView}"/>
+                    <h:link outcome="/pages/accounting/ledger/voucher?faces-redirect=true" includeViewParams="true"
+                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true" rendered="#{empty backView}">
+                        <f:param name="organizationId" value="${customizeProfileHome.organizationId}"/>
+                    </h:link>
                 </div>
             </h:form>
 
