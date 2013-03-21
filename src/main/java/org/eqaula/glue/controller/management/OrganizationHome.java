@@ -268,7 +268,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                     selectedNode.getData().toString().equals(UI.getMessages("common.initiatives"))||
                     selectedNode.getData().toString().equals(UI.getMessages("common.methods"))) {
                 masterNodoName = selectedNode.getData().toString();
-                System.out.println(masterNodoName+ "--------------------------------");
+              
             } else {
                 BussinesEntity bussinesEntity = (BussinesEntity) selectedNode.getData();
             }

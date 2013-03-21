@@ -63,8 +63,16 @@ public class Perspective extends BussinesEntity implements Serializable {
     public void setSequence(Long sequence) {
         this.sequence = sequence;
     }
+
+    public Theme getTheme() {
+        return theme;
+    }
+
+    public void setTheme(Theme theme) {
+        this.theme = theme;
+    }
     
-    
+      
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
