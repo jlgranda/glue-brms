@@ -33,9 +33,13 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.management.Owner;
+import org.eqaula.glue.model.management.Perspective;
+import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.OwnerService;
+import org.eqaula.glue.service.PerspectiveService;
+import org.eqaula.glue.service.ThemeService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.jboss.solder.logging.Logger;
@@ -60,11 +64,18 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
     @Current
     @Inject
     private Profile profile;
-    
-    private Owner owner;
-    private Long ownerId;
+  
+    private Theme theme;
+    private Long themeId;
     @Inject
-    private OwnerService ownerService;
+    private ThemeService themeService;
+    
+    private Perspective perspective;
+    private Long perspectiveId;
+    @Inject
+    private PerspectiveService perspectiveService;
+    
+    
 
     public ObjetiveHome() {
     }
@@ -81,32 +92,56 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         return getInstance().getName();
     }
 
+  
     @Transactional
-    public Owner getOwner() {
-        if(owner==null){
-            if(ownerId==null){
-                owner=null;
+    public Theme getTheme() {
+         if(theme==null){
+            if(themeId==null){
+                theme=null;
             }else{
-                owner = ownerService.find(getOwnerId());
+                theme = themeService.find(getThemeId());
             }
         }
-        return owner;
+        return theme;
     }
 
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public void setTheme(Theme theme) {
+        this.theme = theme;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
+    public Long getThemeId() {
+        return themeId;
     }
 
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
+    public void setThemeId(Long themeId) {
+        this.themeId = themeId;
+    }
+
+    @Transactional
+    public Perspective getPerspective() {
+        if(perspective==null){
+            if(perspectiveId==null){
+                perspective=null;
+            }else{
+                perspective= perspectiveService.find(getPerspectiveId());
+            }
+        }
+        return perspective;
+    }
+
+    public void setPerspective(Perspective perspective) {
+        this.perspective = perspective;
+    }
+
+    public Long getPerspectiveId() {
+        return perspectiveId;
+    }
+
+    public void setPerspectiveId(Long perspectiveId) {
+        this.perspectiveId = perspectiveId;
     }
     
     
-
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -122,7 +157,8 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        ownerService.setEntityManager(em);
+        themeService.setEntityManager(em);
+        perspectiveService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
 
@@ -149,12 +185,13 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setOwner(getOwner());
+            getInstance().setTheme(getTheme());
+            getInstance().setPerspective(getPerspective());
             create(getInstance());
         }
          //TODO idear una mejor forma de redireccionar
-        if (getOwner()!= null){
-            return getOutcome() + "?organizationId=" + getOwner().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+        if (getInstance().getTheme().getBalancedScorecard().getId()!= null){
+            return getOutcome() + "?balancedScorecardId=" + getInstance().getTheme().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -190,15 +227,10 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
         //TODO idear una mejor forma de redireccionar
-        if (getOwner()!= null){
-            return getOutcome() + "?organizationId=" + getOwner().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+        if (getInstance().getTheme().getBalancedScorecard().getId()!= null){
+            return getOutcome() + "?balancedScorecardId=" + getInstance().getTheme().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
-   
-    
-    
-    
-    
 }

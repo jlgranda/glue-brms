@@ -68,9 +68,8 @@ limitations under the License.
                     </p:commandButton>
                     <!-- &nbsp;-->
                     <h:link outcome="#{themeHome.outcome}" value="#{messages['common.cancel']}" styleClass="btn" >                         
-                        <f:param name="balancedScorecardId" value="#{themeHome.balancedScorecardId}"/>
+                        <f:param name="balancedScorecardId" value="#{themeHome.instance.balancedScorecard.id}"/>
                     </h:link>    
-                    
                 </div>  
             </h:form>
 

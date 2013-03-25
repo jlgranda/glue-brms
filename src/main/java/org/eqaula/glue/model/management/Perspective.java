@@ -40,13 +40,9 @@ public class Perspective extends BussinesEntity implements Serializable {
     private static final long serialVersionUID = -4535279430871708301L;
     
     private Long sequence;
-        
-    
-    @ManyToOne
-    private Theme theme;
-    
+            
     @OneToMany(mappedBy = "perspective")
-    List<Objetive> objetives;
+    private  List<Objetive> objetives;
 
     public List<Objetive> getObjetives() {
         return objetives;
@@ -64,14 +60,6 @@ public class Perspective extends BussinesEntity implements Serializable {
         this.sequence = sequence;
     }
 
-    public Theme getTheme() {
-        return theme;
-    }
-
-    public void setTheme(Theme theme) {
-        this.theme = theme;
-    }
-    
       
     @Override
     public int hashCode() {

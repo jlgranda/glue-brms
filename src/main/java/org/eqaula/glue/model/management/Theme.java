@@ -47,7 +47,7 @@ public class Theme extends BussinesEntity implements Serializable {
     private Owner owner;
     
     @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL)
-    private List<Perspective> perspectives;
+    private List<Objetive> objetives;
 
     public Owner getOwner() {
         return owner;
@@ -65,15 +65,15 @@ public class Theme extends BussinesEntity implements Serializable {
         this.balancedScorecard = balancedScorecard;
     }
 
-    public List<Perspective> getPerspectives() {
-        return perspectives;
+    public List<Objetive> getObjetives() {
+        return objetives;
     }
 
-    public void setPerspectives(List<Perspective> perspectives) {
-        this.perspectives = perspectives;
+    public void setObjetives(List<Objetive> objetives) {
+        this.objetives = objetives;
     }
-    
-    
+
+       
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers

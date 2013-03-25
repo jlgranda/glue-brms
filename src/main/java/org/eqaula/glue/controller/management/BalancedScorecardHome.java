@@ -196,9 +196,9 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getOrganizationId() != null) {
+        if (getBalancedScorecardId() != null) {
 
-            return getOutcome() + "?organizationId=" + getOrganizationId() + "&faces-redirect=true&includeViewParams=true";
+            return getOutcome() + "?balancedScorecardId=" + getBalancedScorecardId() + "&faces-redirect=true&includeViewParams=true";
         }
 
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
@@ -207,7 +207,6 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     public TreeNode buildTree() {
         bscNode = new DefaultTreeNode("bsc", getInstance(), null);
         TreeNode themeNode = null;
-        TreeNode perspectiveNode = null;
         TreeNode objetiveNode = null;
         TreeNode measureNode = null;
         TreeNode targetNode = null;
@@ -223,51 +222,58 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         for (Theme theme : getInstance().getThemes()) {
             themeNode = new DefaultTreeNode("theme", theme, bscNode);
             themeNode.setExpanded(true);
-            for (Perspective perspective : theme.getPerspectives()) {
-                perspectiveNode = new DefaultTreeNode("perspective", perspective, themeNode);
-                perspectiveNode.setExpanded(true);
-                for (Objetive objetive : perspective.getObjetives()) {
-                    objetiveNode = new DefaultTreeNode("objetive", objetive, perspectiveNode);
-                    objetiveNode.setExpanded(true);
-                    for (Measure measure : objetive.getMeasures()) {
-                        measureNode = new DefaultTreeNode("measure", measure, objetiveNode);
-                        measureNode.setExpanded(false);
-                        targetMasterNode = new DefaultTreeNode("targets", UI.getMessages("common.targets"), measureNode);
-                        periodMasterNode = new DefaultTreeNode("periods", UI.getMessages("common.periods"), measureNode);
-                        initiativeMasterNode = new DefaultTreeNode("initiatives", UI.getMessages("common.initiatives"), measureNode);
-                        methodMasterNode = new DefaultTreeNode("methods", UI.getMessages("common.methods"), measureNode);
+            for (Objetive objetive : theme.getObjetives()) {
+                objetiveNode = new DefaultTreeNode("objetive", objetive, themeNode);
+                objetiveNode.setExpanded(true);
+                for (Measure measure : objetive.getMeasures()) {
+                    measureNode = new DefaultTreeNode("measure", measure, objetiveNode);
+                    measureNode.setExpanded(false);
+                    targetMasterNode = new DefaultTreeNode("targets", UI.getMessages("common.targets"), measureNode);
+                    periodMasterNode = new DefaultTreeNode("periods", UI.getMessages("common.periods"), measureNode);
+                    initiativeMasterNode = new DefaultTreeNode("initiatives", UI.getMessages("common.initiatives"), measureNode);
+                    methodMasterNode = new DefaultTreeNode("methods", UI.getMessages("common.methods"), measureNode);
 
-                        for (Target target : measure.getTargets()) {
-                            targetNode = new DefaultTreeNode("target", target, targetMasterNode);
-                            targetNode.setExpanded(false);
-                        }
-                        for (Period period : measure.getPeriods()) {
-                            periodNode = new DefaultTreeNode("period", period, periodMasterNode);
-                            periodNode.setExpanded(false);
-                        }
-                        for (Initiative initiative : measure.getInitiatives()) {
-                            initiativeNode = new DefaultTreeNode("initiative", initiative, initiativeMasterNode);
-                            initiativeNode.setExpanded(false);
-                        }
-                        for (Method method : measure.getMethods()) {
-                            methodNode = new DefaultTreeNode("method", method, methodMasterNode);
-                            methodNode.setExpanded(false);
-                        }
+                    for (Target target : measure.getTargets()) {
+                        targetNode = new DefaultTreeNode("target", target, targetMasterNode);
+                        targetNode.setExpanded(false);
+                    }
+                    for (Period period : measure.getPeriods()) {
+                        periodNode = new DefaultTreeNode("period", period, periodMasterNode);
+                        periodNode.setExpanded(false);
+                    }
+                    for (Initiative initiative : measure.getInitiatives()) {
+                        initiativeNode = new DefaultTreeNode("initiative", initiative, initiativeMasterNode);
+                        initiativeNode.setExpanded(false);
+                    }
+                    for (Method method : measure.getMethods()) {
+                        methodNode = new DefaultTreeNode("method", method, methodMasterNode);
+                        methodNode.setExpanded(false);
                     }
                 }
             }
         }
+
         return bscNode;
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), ((BussinesEntity) event.getTreeNode().getData()).getName());
-        FacesContext.getCurrentInstance().addMessage(null, message);
+
+        if (event.getTreeNode().getData().toString().equals(UI.getMessages("common.targets"))
+                || event.getTreeNode().getData().toString().equals(UI.getMessages("common.periods"))
+                || event.getTreeNode().getData().toString().equals(UI.getMessages("common.initiatives"))
+                || event.getTreeNode().getData().toString().equals(UI.getMessages("common.methods"))) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), event.getTreeNode().getData().toString());
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), ((BussinesEntity) event.getTreeNode().getData()).getName());
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
     }
 
     public void redirecToAdd() {
         StringBuilder outcomeBuilder = new StringBuilder();
         String masterNodoName = "";
+        BussinesEntity bussinesEntity = null;
         if (selectedNode != null) {
             if (selectedNode.getData().toString().equals(UI.getMessages("common.targets"))
                     || selectedNode.getData().toString().equals(UI.getMessages("common.periods"))
@@ -275,7 +281,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                     || selectedNode.getData().toString().equals(UI.getMessages("common.methods"))) {
                 masterNodoName = selectedNode.getData().toString();
             } else {
-                BussinesEntity bussinesEntity = (BussinesEntity) selectedNode.getData();
+                bussinesEntity = (BussinesEntity) selectedNode.getData();
             }
 
             if ("bsc".equals(selectedNode.getType())) {
@@ -284,19 +290,14 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("theme".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/perspective/perspective.xhtml?");
+                outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
                 outcomeBuilder.append("&themeId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("perspective".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
-                outcomeBuilder.append("&perspectiveId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("objetive".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/measure/measure.xhtml?");
                 outcomeBuilder.append("&objetiveId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("measure".equals(selectedNode.getType())) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
@@ -304,7 +305,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             } else if (masterNodoName.equals(UI.getMessages("common.targets"))) {
                 outcomeBuilder.append("/pages/management/targets/target.xhtml?");
                 outcomeBuilder.append("&measureId=").append(((BussinesEntity) selectedNode.getParent().getData()).getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("target".equals(selectedNode.getType())) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
@@ -312,7 +313,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             } else if (masterNodoName.equals(UI.getMessages("common.periods"))) {
                 outcomeBuilder.append("/pages/management/period/period.xhtml?");
                 outcomeBuilder.append("&measureId=").append(((BussinesEntity) selectedNode.getParent().getData()).getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("period".equals(selectedNode.getType())) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
@@ -320,7 +321,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             } else if (masterNodoName.equals(UI.getMessages("common.initiatives"))) {
                 outcomeBuilder.append("/pages/management/initiative/initiative.xhtml?");
                 outcomeBuilder.append("&measureId=").append(((BussinesEntity) selectedNode.getParent().getData()).getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("initiative".equals(selectedNode.getType())) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
@@ -328,7 +329,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             } else if (masterNodoName.equals(UI.getMessages("common.methods"))) {
                 outcomeBuilder.append("/pages/management/method/method.xhtml?");
                 outcomeBuilder.append("&measureId=").append(((BussinesEntity) selectedNode.getParent().getData()).getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("method".equals(selectedNode.getType())) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
@@ -356,47 +357,41 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 outcomeBuilder.append("&themeId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("perspective".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/perspective/perspective.xhtml?");
-                outcomeBuilder.append("&perspectiveId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&themeId=").append(((Perspective) bussinesEntity).getTheme().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("objetive".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
                 outcomeBuilder.append("&objetiveId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&ownerId=").append(((Objetive) bussinesEntity).getOwner().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                outcomeBuilder.append("&themeId=").append(((Objetive) bussinesEntity).getTheme().getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("measure".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/measure/measure.xhtml?");
                 outcomeBuilder.append("&measureId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&objetiveId=").append(((Measure) bussinesEntity).getObjetive().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("target".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/targets/target.xhtml?");
                 outcomeBuilder.append("&targetId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&measureId=").append(((Target) bussinesEntity).getMeasure().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("period".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/period/period.xhtml?");
                 outcomeBuilder.append("&periodId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&measureId=").append(((Period) bussinesEntity).getMeasure().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("initiative".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/initiative/initiative.xhtml?");
                 outcomeBuilder.append("&initiativeId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&measureId=").append(((Initiative) bussinesEntity).getMeasure().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("method".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/method/method.xhtml?");
                 outcomeBuilder.append("&methodId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&measureId=").append(((Method) bussinesEntity).getMeasure().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             }
         }

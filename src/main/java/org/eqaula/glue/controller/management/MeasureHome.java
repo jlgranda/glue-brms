@@ -150,7 +150,7 @@ public class MeasureHome extends BussinesEntityHome<Measure> implements Serializ
         }
         //TODO idear una mejor forma de redireccionar
         if (getObjetive()!= null){
-            return getOutcome() + "?organizationId=" + getObjetive().getOwner().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+            return getOutcome() + "?balancedScorecardId=" + getObjetive().getTheme().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -186,7 +186,7 @@ public class MeasureHome extends BussinesEntityHome<Measure> implements Serializ
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
         if (getObjetive()!= null){
-            return getOutcome() + "?organizationId=" + getObjetive().getOwner().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+            return getOutcome() + "?balancedScorecardId=" + getObjetive().getTheme().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }

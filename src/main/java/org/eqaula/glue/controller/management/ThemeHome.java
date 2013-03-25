@@ -178,8 +178,8 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             getInstance().setBalancedScorecard(getBalancedScorecard());
             create(getInstance());
         }
-        if (getBalancedScorecardId() != null) {            
-            return getOutcome() + "?balancedScorecardId=" + getBalancedScorecardId()+ "&faces-redirect=true&includeViewParams=true";
+        if (getInstance().getBalancedScorecard().getId() != null) {            
+            return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId()+ "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true"; 
     }
@@ -214,8 +214,8 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getBalancedScorecardId() != null) {            
-            return getOutcome() + "?balancedScorecardId=" + getBalancedScorecardId()+ "&faces-redirect=true&includeViewParams=true";
+        if (getInstance().getBalancedScorecard().getId()!= null) {            
+            return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId()+ "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true"; 
     }

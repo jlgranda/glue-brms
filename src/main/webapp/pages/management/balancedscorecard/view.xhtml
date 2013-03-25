@@ -21,7 +21,7 @@
                     <div class="row fluid" style="margin-top: 5px;">
                         <div class="span9 ">
                             <h2>#{balancedScorecardHome.managed ? balancedScorecardHome.instance.name : ""}</h2>
-                            <p><span style="">#{messages['common.name']} #{balancedScorecardHome.instance.name}</span>                                
+                            <p><span style="">#{messages['common.description']} #{balancedScorecardHome.instance.description}</span>                                
 
                             </p>
                         </div>
@@ -40,8 +40,7 @@
 
         <ui:define name="content">
             <h:form id="view">                
-                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-<!-- <p:contextMenu id="nodeContextMenu" for="organizationTree" model="#{balancedScorecardHome.menuModel}">  -->
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
                 <p:contextMenu for="bscTree" >  
                     <p:menuitem value="#{messages['common.add']}" update=":messages" actionListener="#{balancedScorecardHome.redirecToAdd}" icon="ui-icon-plus" /> 
                     <p:menuitem value="#{messages['common.edit']}" update=":messages" actionListener="#{balancedScorecardHome.redirecToEdit}" icon="ui-icon-plus" /> 
@@ -58,9 +57,6 @@
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
                         <p:treeNode  type="theme" icon="ui-icon-home">    
-                            <h:outputText value="#{node.name}" />  
-                        </p:treeNode>  
-                        <p:treeNode type="perspective" icon="ui-icon-person">  
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
                         <p:treeNode type="objetive" icon="ui-icon-document">  

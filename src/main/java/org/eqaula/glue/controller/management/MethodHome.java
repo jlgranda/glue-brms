@@ -150,7 +150,7 @@ public class MethodHome extends BussinesEntityHome<Method> implements Serializab
             create(getInstance());
         }
         if (getMeasure() != null) {
-            return getOutcome() + "?organizationId=" + getMeasure().getObjetive().getOwner().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+            return getOutcome() + "?balancedScorecardId=" + getMeasure().getObjetive().getTheme().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -186,7 +186,7 @@ public class MethodHome extends BussinesEntityHome<Method> implements Serializab
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
         if (getMeasure() != null) {
-            return getOutcome() + "?organizationId=" + getMeasure().getObjetive().getOwner().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+            return getOutcome() + "?balancedScorecardId=" + getMeasure().getObjetive().getTheme().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }

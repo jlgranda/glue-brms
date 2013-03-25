@@ -38,15 +38,15 @@ import org.eqaula.glue.model.BussinesEntity;
 @PrimaryKeyJoinColumn(name = "id")
 public class Objetive extends BussinesEntity implements Serializable {
     private static final long serialVersionUID = 3521500957575111824L;
-    @ManyToOne
-    private Owner owner;
-    
+      
     @ManyToOne
     private Perspective perspective;
 
     @OneToMany(mappedBy = "objetive", cascade = CascadeType.ALL)
     private List<Measure> measures;
     
+    @ManyToOne
+    private Theme theme;
     
     public Perspective getPerspective() {
         return perspective;
@@ -54,14 +54,6 @@ public class Objetive extends BussinesEntity implements Serializable {
 
     public void setPerspective(Perspective perspective) {
         this.perspective = perspective;
-    }
-    
-    public Owner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Owner owner) {
-        this.owner = owner;
     }
 
     public List<Measure> getMeasures() {
@@ -72,8 +64,14 @@ public class Objetive extends BussinesEntity implements Serializable {
         this.measures = measures;
     }
 
+    public Theme getTheme() {
+        return theme;
+    }
 
-      
+    public void setTheme(Theme theme) {
+        this.theme = theme;
+    }
+  
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers

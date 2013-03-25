@@ -58,14 +58,12 @@ limitations under the License.
                                      update=":cancel-dialog" rendered="#{perspectiveHome.managed}">                        
                     </p:commandButton>
                   
-                    <h:link outcome="#{perspectiveHome.outcome}"
-                            rendered="#{perspectiveHome.managed}"
-                            value="#{messages['common.cancel']}" styleClass="btn">
-                        <f:param name="perspectiveId" value="#{perspectiveHome.perspectiveId}"/>
-                    </h:link>
+                    <h:link outcome="#{perspectiveHome.outcome}"  value="#{messages['common.cancel']}" styleClass="btn">                        
+                    
+                    </h:link>    
                 </div>           
                 
-                
+               
             </h:form> 
             
             
