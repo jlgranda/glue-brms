@@ -44,9 +44,7 @@ public class Owner extends BussinesEntity implements Serializable {
     private Organization organization;
     @OneToMany(mappedBy = "owner")
     private List<Theme> themes ;
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    private List<Objetive> objetives;
-
+    
     public Owner() {
         themes = new ArrayList<Theme>();
     }
@@ -67,14 +65,6 @@ public class Owner extends BussinesEntity implements Serializable {
         this.themes = themes;
     }
 
-    public List<Objetive> getObjetives() {
-        return objetives;
-    }
-
-    public void setObjetives(List<Objetive> objetives) {
-        this.objetives = objetives;
-    }
-    
     public boolean addTheme(Theme theme){
         theme.setOwner(this);
         return getThemes().add(theme);

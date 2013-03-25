@@ -219,36 +219,36 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         for (Owner owner : getInstance().getOwners()) {
             ownerNode = new DefaultTreeNode("owner", owner, organizationNode);
             ownerNode.setExpanded(true);
-            for (Objetive objetive : owner.getObjetives()) {
-                objetiveNode = new DefaultTreeNode("objetive", objetive, ownerNode);
-                objetiveNode.setExpanded(true);
-                for (Measure measure : objetive.getMeasures()) {
-                    measureNode = new DefaultTreeNode("measure", measure, objetiveNode);
-                    measureNode.setExpanded(false);
-
-                    targetMasterNode = new DefaultTreeNode("targets", UI.getMessages("common.targets"), measureNode);
-                    periodMasterNode = new DefaultTreeNode("periods", UI.getMessages("common.periods"), measureNode);
-                    initiativeMasterNode = new DefaultTreeNode("initiatives", UI.getMessages("common.initiatives"), measureNode);
-                    methodMasterNode = new DefaultTreeNode("methods", UI.getMessages("common.methods"), measureNode);
-
-                    for (Target target : measure.getTargets()) {
-                        targetNode = new DefaultTreeNode("target", target, targetMasterNode);
-                        targetNode.setExpanded(false);
-                    }
-                    for (Period period : measure.getPeriods()) {
-                        periodNode = new DefaultTreeNode("period", period, periodMasterNode);
-                        periodNode.setExpanded(false);
-                    }
-                    for (Initiative initiative : measure.getInitiatives()) {
-                        initiativeNode = new DefaultTreeNode("initiative", initiative, initiativeMasterNode);
-                        initiativeNode.setExpanded(false);
-                    }
-                    for (Method method : measure.getMethods()) {
-                        methodNode = new DefaultTreeNode("method", method, methodMasterNode);
-                        methodNode.setExpanded(false);
-                    }
-                }
-            }
+//            for (Objetive objetive : owner.getObjetives()) {
+//                objetiveNode = new DefaultTreeNode("objetive", objetive, ownerNode);
+//                objetiveNode.setExpanded(true);
+//                for (Measure measure : objetive.getMeasures()) {
+//                    measureNode = new DefaultTreeNode("measure", measure, objetiveNode);
+//                    measureNode.setExpanded(false);
+//
+//                    targetMasterNode = new DefaultTreeNode("targets", UI.getMessages("common.targets"), measureNode);
+//                    periodMasterNode = new DefaultTreeNode("periods", UI.getMessages("common.periods"), measureNode);
+//                    initiativeMasterNode = new DefaultTreeNode("initiatives", UI.getMessages("common.initiatives"), measureNode);
+//                    methodMasterNode = new DefaultTreeNode("methods", UI.getMessages("common.methods"), measureNode);
+//
+//                    for (Target target : measure.getTargets()) {
+//                        targetNode = new DefaultTreeNode("target", target, targetMasterNode);
+//                        targetNode.setExpanded(false);
+//                    }
+//                    for (Period period : measure.getPeriods()) {
+//                        periodNode = new DefaultTreeNode("period", period, periodMasterNode);
+//                        periodNode.setExpanded(false);
+//                    }
+//                    for (Initiative initiative : measure.getInitiatives()) {
+//                        initiativeNode = new DefaultTreeNode("initiative", initiative, initiativeMasterNode);
+//                        initiativeNode.setExpanded(false);
+//                    }
+//                    for (Method method : measure.getMethods()) {
+//                        methodNode = new DefaultTreeNode("method", method, methodMasterNode);
+//                        methodNode.setExpanded(false);
+//                    }
+//                }
+//            }
         }
         return organizationNode;
     }
@@ -268,7 +268,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                     selectedNode.getData().toString().equals(UI.getMessages("common.initiatives"))||
                     selectedNode.getData().toString().equals(UI.getMessages("common.methods"))) {
                 masterNodoName = selectedNode.getData().toString();
-                System.out.println(masterNodoName+ "--------------------------------");
+              
             } else {
                 BussinesEntity bussinesEntity = (BussinesEntity) selectedNode.getData();
             }
@@ -348,7 +348,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             } else if ("objetive".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
                 outcomeBuilder.append("&objetiveId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&ownerId=").append(((Objetive) bussinesEntity).getOwner().getId());
+                //outcomeBuilder.append("&ownerId=").append(((Objetive) bussinesEntity).getOwner().getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("measure".equals(selectedNode.getType())) {

@@ -41,20 +41,10 @@ import org.eqaula.glue.model.BussinesEntity;
 public class Method extends BussinesEntity implements Serializable {
 
     private static final long serialVersionUID = -2099259320492517035L;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "lastUpdated", nullable = false)
-    private Date lastUpdated;
+    
     @ManyToOne
     private Measure measure;
     
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
     public Measure getMeasure() {
         return measure;
     }
