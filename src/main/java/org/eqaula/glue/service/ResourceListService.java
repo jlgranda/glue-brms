@@ -27,14 +27,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
-import org.eqaula.glue.model.management.BalancedScorecard;
-import org.eqaula.glue.model.management.Perspective;
-import org.eqaula.glue.model.management.Theme;
-import org.eqaula.glue.model.management.Theme_;
+import org.eqaula.glue.model.management.Resource;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.eqaula.glue.util.UI;
-import org.jboss.seam.transaction.Transactional;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
@@ -45,38 +41,35 @@ import org.primefaces.model.SortOrder;
  */
 @Named
 @RequestScoped
-public class ThemeListService extends LazyDataModel<Theme> {
+public class ResourceListService extends LazyDataModel<Resource> {
 
     private static final int MAX_RESULTS = 5;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ThemeListService.class);
-    private static final long serialVersionUID = -3077669958110754391L;
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ResourceListService.class);
+    private static final long serialVersionUID = 713832742895636952L;
     @Inject
     @Web
     private EntityManager entityManager;
     @Inject
-    private ThemeService themeService;
-    private List<Theme> resultList;
+    private ResourceService resourceService;
+    private List<Resource> resultList;
     private int firstResult = 0;
-    private Theme[] selectedThemes;
-    private Theme selectedTheme;
-    @Inject
-    protected PerspectiveService perspectiveService;
-    private Perspective perspective;
-    private Long perspectiveId;
+    private Resource[] selectedResources;
+    private Resource selectedResource;
 
-    public ThemeListService() {
+    public ResourceListService() {
         setPageSize(MAX_RESULTS);
-        resultList = new ArrayList<Theme>();
+        resultList = new ArrayList<Resource>();
     }
 
-    public List<Theme> getResultList() {
+
+    public List<Resource> getResultList() {
         if (resultList.isEmpty()) {
-            resultList = themeService.getThemes();
+            resultList = resourceService.getResources();
         }
         return resultList;
     }
 
-    public void setResultList(List<Theme> resultList) {
+    public void setResultList(List<Resource> resultList) {
         this.resultList = resultList;
     }
 
@@ -89,39 +82,14 @@ public class ThemeListService extends LazyDataModel<Theme> {
         this.resultList = null;
     }
 
-    public Theme getSelectedTheme() {
-        return selectedTheme;
+    public Resource getSelectedResource() {
+        return selectedResource;
     }
 
-    public void setSelectedTheme(Theme selectedTheme) {
-        this.selectedTheme = selectedTheme;
+    public void setSelectedResource(Resource selectedResource) {
+        this.selectedResource = selectedResource;
     }
 
-    public Long getPerspectiveId() {
-        return perspectiveId;
-    }
-
-    public void setPerspectiveId(Long perspectiveId) {
-        this.perspectiveId = perspectiveId;
-    }
-
-    @Transactional
-    public Perspective getPerspective() {
-        if (perspective == null) {
-            if (perspectiveId == null) {
-                perspective=null;
-            } else {
-                perspective = perspectiveService.find(getPerspectiveId());
-            }
-        }
-        return perspective;
-    }
-
-    public void setPerspective(Perspective perspective) {
-        this.perspective = perspective;
-    }
-
-    
     public int getNextFirstResult() {
         return firstResult + this.getPageSize();
     }
@@ -131,45 +99,41 @@ public class ThemeListService extends LazyDataModel<Theme> {
     }
 
     @Override
-    public List<Theme> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+    public List<Resource> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
         int end = first + pageSize;
         QuerySortOrder order = QuerySortOrder.ASC;
         if (sortOrder == SortOrder.DESCENDING) {
             order = QuerySortOrder.DESC;
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
-        _filters.put(Theme_.perspective.getName(), getPerspective());
-        _filters.putAll(filters);
-
-        QueryData<Theme> qData = themeService.find(first, end, sortField, order, _filters);
+        QueryData<Resource> qData = resourceService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();
     }
 
     @PostConstruct
     public void init() {
-        themeService.setEntityManager(entityManager);
-        perspectiveService.setEntityManager(entityManager);
+        resourceService.setEntityManager(entityManager);
     }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.theme") + " " + UI.getMessages("common.selected"), ((Theme) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.resource") + " " + UI.getMessages("common.selected"), ((Resource) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.theme") + " " + UI.getMessages("common.unselected"), ((Theme) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.resource") + " " + UI.getMessages("common.unselected"), ((Resource) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        this.setSelectedTheme(null);
+        this.setSelectedResource(null);
     }
 
     @Override
-    public Theme getRowData(String rowKey) {
-        return themeService.findByName(rowKey);
+    public Resource getRowData(String rowKey) {
+        return resourceService.findByName(rowKey);
     }
 
     @Override
-    public Object getRowKey(Theme entity) {
+    public Object getRowKey(Resource entity) {
         return entity.getName();
     }
 }

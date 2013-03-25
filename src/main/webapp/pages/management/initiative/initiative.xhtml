@@ -21,7 +21,8 @@ limitations under the License.
       xmlns:s="http://jboss.org/seam/faces"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:glue ="http://eqaula.org/jsf/facelets">
+      xmlns:glue ="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml" >
         <f:metadata>
             <f:viewParam name="initiativeId" value="#{initiativeHome.initiativeId}"/>
@@ -35,7 +36,7 @@ limitations under the License.
                     <div class="row-fluid" style="margin-top: 5px;" >
 
                         <h3>#{initiativeHome.initiativeId!= null? messages['common.edit'] : messages['common.add']} 
-                            #{messages['module.period']}</h3> 
+                            #{messages['module.initiative']}</h3> 
                     </div>    
                 </div>
             </div>
@@ -43,22 +44,41 @@ limitations under the License.
         <ui:define name="content" >
             <h:form  id="form" acceptcharset="UTF-8" class="form-horizontal" >
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                <glue:input id="sequence" name="sequence" type="decimal" label="#{messages['common.sequence']}" value="#{periodHome.instance.sequence}" required="true" inlinehelp="#{messages['common.sequence.inlinehelp']}" execute="@this save" render="sequence"/>
                 <glue:input id="startDate" name="startDate" type="calendar" label="#{messages['common.startDate']}" value="#{initiativeHome.instance.startDate}" required="true" inlinehelp="#{messages['common.startDate.inlinehelp']}" execute="@this save" render="startDate" />
-                <glue:input id="periodTo" name="periodTo" type="calendar" label="#{messages['common.periodTo']}" value="#{periodHome.instance.periodTo}" required="true" inlinehelp="#{messages['common.periodTo.inlinehelp']}" execute="@this save" render="periodTo" />
+                <glue:input id="endDate" name="endDate" type="calendar" label="#{messages['common.endDate']}" value="#{initiativeHome.instance.endDate}" required="true" inlinehelp="#{messages['common.endDate.inlinehelp']}" execute="@this save" render="endDate" />
+                <h:panelGroup id="rsc" layout="block" class="control-group">
+                    <label for="resource" class="control-label required">#{messages['module.resource']}</label>
+                    <div class="controls">
+                        <p:selectOneMenu id="resource" style="float: left" value="#{initiativeHome.instance.resource}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.resource']}" rendered="true" label="#{messages['Resource']}" filter="true" filterMatchMode="contains">
+
+                            <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
+                            <f:selectItems value="#{resourceListService.resultList}" var="_r" itemLabel="#{_r.name}" itemValue="#{_r}"/>                          
+                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
+
+                        </p:selectOneMenu>
+                        <h:link styleClass="btn" outcome="/pages/management/resource/resource">
+                            <i class="icon-plus"></i>
+                            <f:param name="outcome" value="/pages/management/objetive/objetive"/>
+                        </h:link>
+                        
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-block"><br/>#{messages['perspective.inlinehelp']} <ocp:message forId="perspective" /></span>
+
+                    </div>
+                </h:panelGroup>
                 
-                <glue:input id="duration" name="duration" type="text" label="#{messages['common.duration']}" value="#{periodHome.instance.duration}" required="true" inlinehelp="#{messages['common.duration.help']}" render="duration" execute="@this save" />
                 <div class="form-actions">
-                    <p:commandButton id="save" action="#{periodHome.savePeriod()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
+                    <p:commandButton id="save" action="#{initiativeHome.saveInitiative()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
-                                     update=":cancel-dialog" rendered="#{periodHome.instance.persistent}">                        
+                                     update=":cancel-dialog" rendered="#{initiativeHome.instance.persistent}">                        
                     </p:commandButton>
                     <!-- &nbsp;-->
                     
                     <h:link outcome="/pages/management/balancedscorecard/view"
                             value="#{messages['common.cancel']}" styleClass="btn">
-                        <f:param name="balancedScorecardId" value="#{periodHome.measure.objetive.theme.balancedScorecard.id}"/>
+                        <f:param name="balancedScorecardId" value="#{initiativeHome.measure.objetive.theme.perspective.balancedScorecard.id}"/>
                     </h:link>
                 </div>  
             </h:form>
@@ -69,7 +89,7 @@ limitations under the License.
                         <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                     </h:panelGroup>  
                     <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
-                                     action="#{periodHome.deletePeriod()}"                                         
+                                     action="#{initiativeHome.deleteInitiative()}"                                         
                                      ajax="true" process="@this"  
                                      style="margin-top:10px;">  
                     </p:commandButton>  

@@ -56,6 +56,9 @@
                         <p:treeNode  type="bsc" icon="ui-icon-home">    
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
+                        <p:treeNode  type="perspective" icon="ui-icon-home">    
+                            <h:outputText value="#{node.name}" />  
+                        </p:treeNode>  
                         <p:treeNode  type="theme" icon="ui-icon-home">    
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
@@ -84,7 +87,7 @@
                             <h:outputText value="#{node.duration}" />  
                         </p:treeNode>
                         <p:treeNode type="initiative" icon="icon-hand-right">  
-                            <h:outputText value="#{node.name}" />  
+                            <h:outputText value="#{node.startDate} - #{node.endDate}" />  
                         </p:treeNode>
                         <p:treeNode type="method" icon="icon-hand-right">  
                             <h:outputText value="#{node.name}" />  

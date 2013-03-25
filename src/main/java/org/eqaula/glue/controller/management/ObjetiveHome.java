@@ -186,12 +186,11 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         } else {
             getInstance().setAuthor(this.profile);
             getInstance().setTheme(getTheme());
-            getInstance().setPerspective(getPerspective());
             create(getInstance());
         }
          //TODO idear una mejor forma de redireccionar
-        if (getInstance().getTheme().getBalancedScorecard().getId()!= null){
-            return getOutcome() + "?balancedScorecardId=" + getInstance().getTheme().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        if (getTheme()!= null){
+            return getOutcome() + "?balancedScorecardId=" + getInstance().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -227,8 +226,8 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
         //TODO idear una mejor forma de redireccionar
-        if (getInstance().getTheme().getBalancedScorecard().getId()!= null){
-            return getOutcome() + "?balancedScorecardId=" + getInstance().getTheme().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        if (getTheme()!= null){
+            return getOutcome() + "?balancedScorecardId=" + getInstance().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }

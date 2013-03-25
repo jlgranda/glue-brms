@@ -41,14 +41,14 @@ public class Theme extends BussinesEntity implements Serializable {
     private static final long serialVersionUID = -7436571688718703657L;
     
     @ManyToOne
-    private BalancedScorecard balancedScorecard;
-    
-    @ManyToOne
     private Owner owner;
     
     @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL)
     private List<Objetive> objetives;
 
+    @ManyToOne
+    private Perspective perspective;
+    
     public Owner getOwner() {
         return owner;
     }
@@ -56,15 +56,7 @@ public class Theme extends BussinesEntity implements Serializable {
     public void setOwner(Owner owner) {
         this.owner = owner;
     }
-
-    public BalancedScorecard getBalancedScorecard() {
-        return balancedScorecard;
-    }
-
-    public void setBalancedScorecard(BalancedScorecard balancedScorecard) {
-        this.balancedScorecard = balancedScorecard;
-    }
-
+    
     public List<Objetive> getObjetives() {
         return objetives;
     }
@@ -73,6 +65,15 @@ public class Theme extends BussinesEntity implements Serializable {
         this.objetives = objetives;
     }
 
+    public Perspective getPerspective() {
+        return perspective;
+    }
+
+    public void setPerspective(Perspective perspective) {
+        this.perspective = perspective;
+    }
+
+    
        
     @Override
     public int hashCode() {

@@ -26,7 +26,7 @@ limitations under the License.
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml" >
         <f:metadata>
             <f:viewParam name="themeId" value="#{themeHome.themeId}"/>
-            <f:viewParam name="balancedScorecardId" value="#{themeHome.balancedScorecardId}"/>
+            <f:viewParam name="perspectiveId" value="#{themeHome.perspectiveId}"/>
             <f:viewParam name="outcome" value="#{themeHome.outcome}"/>
             <s:viewAction action="#{themeHome.load}" if="#{conversation.transient}" />
         </f:metadata>
@@ -68,7 +68,7 @@ limitations under the License.
                     </p:commandButton>
                     <!-- &nbsp;-->
                     <h:link outcome="#{themeHome.outcome}" value="#{messages['common.cancel']}" styleClass="btn" >                         
-                        <f:param name="balancedScorecardId" value="#{themeHome.instance.balancedScorecard.id}"/>
+                        <f:param name="balancedScorecardId" value="#{themeHome.instance.perspective.balancedScorecard.id}"/>
                     </h:link>    
                 </div>  
             </h:form>

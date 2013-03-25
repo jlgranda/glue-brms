@@ -42,14 +42,17 @@ public class Perspective extends BussinesEntity implements Serializable {
     private Long sequence;
             
     @OneToMany(mappedBy = "perspective")
-    private  List<Objetive> objetives;
+    private  List<Theme> themes;
 
-    public List<Objetive> getObjetives() {
-        return objetives;
+    @ManyToOne
+    private BalancedScorecard balancedScorecard;
+    
+    public List<Theme> getThemes() {
+        return themes;
     }
 
-    public void setObjetives(List<Objetive> objetives) {
-        this.objetives = objetives;
+    public void setThemes(List<Theme> themes) {
+        this.themes = themes;
     }
 
     public Long getSequence() {
@@ -60,6 +63,15 @@ public class Perspective extends BussinesEntity implements Serializable {
         this.sequence = sequence;
     }
 
+    public BalancedScorecard getBalancedScorecard() {
+        return balancedScorecard;
+    }
+
+    public void setBalancedScorecard(BalancedScorecard balancedScorecard) {
+        this.balancedScorecard = balancedScorecard;
+    }
+
+    
       
     @Override
     public int hashCode() {

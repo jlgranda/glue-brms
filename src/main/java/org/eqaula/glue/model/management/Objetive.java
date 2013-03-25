@@ -39,23 +39,12 @@ import org.eqaula.glue.model.BussinesEntity;
 public class Objetive extends BussinesEntity implements Serializable {
     private static final long serialVersionUID = 3521500957575111824L;
       
-    @ManyToOne
-    private Perspective perspective;
-
     @OneToMany(mappedBy = "objetive", cascade = CascadeType.ALL)
     private List<Measure> measures;
     
     @ManyToOne
     private Theme theme;
     
-    public Perspective getPerspective() {
-        return perspective;
-    }
-
-    public void setPerspective(Perspective perspective) {
-        this.perspective = perspective;
-    }
-
     public List<Measure> getMeasures() {
         return measures;
     }
