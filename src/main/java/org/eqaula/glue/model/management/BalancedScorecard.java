@@ -39,15 +39,16 @@ public class BalancedScorecard extends BussinesEntity implements Serializable {
     private static final long serialVersionUID = -8149661791009499829L;
     
     @OneToMany(mappedBy = "balancedScorecard", cascade = CascadeType.ALL)
-    List<Theme> themes;
+    List<Perspective> perspectives;
 
-    public List<Theme> getThemes() {
-        return themes;
+    public List<Perspective> getPerspectives() {
+        return perspectives;
     }
 
-    public void setThemes(List<Theme> themes) {
-        this.themes = themes;
+    public void setPerspectives(List<Perspective> perspectives) {
+        this.perspectives = perspectives;
     }
+
     
     @Override
     public int hashCode() {

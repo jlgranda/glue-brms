@@ -206,6 +206,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
 
     public TreeNode buildTree() {
         bscNode = new DefaultTreeNode("bsc", getInstance(), null);
+        TreeNode perspectiveNode = null;
         TreeNode themeNode = null;
         TreeNode objetiveNode = null;
         TreeNode measureNode = null;
@@ -219,35 +220,40 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         TreeNode methodMasterNode = null;
 
         bscNode.setExpanded(true);
-        for (Theme theme : getInstance().getThemes()) {
-            themeNode = new DefaultTreeNode("theme", theme, bscNode);
-            themeNode.setExpanded(true);
-            for (Objetive objetive : theme.getObjetives()) {
-                objetiveNode = new DefaultTreeNode("objetive", objetive, themeNode);
-                objetiveNode.setExpanded(true);
-                for (Measure measure : objetive.getMeasures()) {
-                    measureNode = new DefaultTreeNode("measure", measure, objetiveNode);
-                    measureNode.setExpanded(false);
-                    targetMasterNode = new DefaultTreeNode("targets", UI.getMessages("common.targets"), measureNode);
-                    periodMasterNode = new DefaultTreeNode("periods", UI.getMessages("common.periods"), measureNode);
-                    initiativeMasterNode = new DefaultTreeNode("initiatives", UI.getMessages("common.initiatives"), measureNode);
-                    methodMasterNode = new DefaultTreeNode("methods", UI.getMessages("common.methods"), measureNode);
+        for (Perspective perspective : getInstance().getPerspectives()) {
+            perspectiveNode = new DefaultTreeNode("perspective", perspective, bscNode);
+            perspectiveNode.setExpanded(true);
 
-                    for (Target target : measure.getTargets()) {
-                        targetNode = new DefaultTreeNode("target", target, targetMasterNode);
-                        targetNode.setExpanded(false);
-                    }
-                    for (Period period : measure.getPeriods()) {
-                        periodNode = new DefaultTreeNode("period", period, periodMasterNode);
-                        periodNode.setExpanded(false);
-                    }
-                    for (Initiative initiative : measure.getInitiatives()) {
-                        initiativeNode = new DefaultTreeNode("initiative", initiative, initiativeMasterNode);
-                        initiativeNode.setExpanded(false);
-                    }
-                    for (Method method : measure.getMethods()) {
-                        methodNode = new DefaultTreeNode("method", method, methodMasterNode);
-                        methodNode.setExpanded(false);
+            for (Theme theme : perspective.getThemes()) {
+                themeNode = new DefaultTreeNode("theme", theme, perspectiveNode);
+                themeNode.setExpanded(true);
+                for (Objetive objetive : theme.getObjetives()) {
+                    objetiveNode = new DefaultTreeNode("objetive", objetive, themeNode);
+                    objetiveNode.setExpanded(true);
+                    for (Measure measure : objetive.getMeasures()) {
+                        measureNode = new DefaultTreeNode("measure", measure, objetiveNode);
+                        measureNode.setExpanded(false);
+                        targetMasterNode = new DefaultTreeNode("targets", UI.getMessages("common.targets"), measureNode);
+                        periodMasterNode = new DefaultTreeNode("periods", UI.getMessages("common.periods"), measureNode);
+                        initiativeMasterNode = new DefaultTreeNode("initiatives", UI.getMessages("common.initiatives"), measureNode);
+                        methodMasterNode = new DefaultTreeNode("methods", UI.getMessages("common.methods"), measureNode);
+
+                        for (Target target : measure.getTargets()) {
+                            targetNode = new DefaultTreeNode("target", target, targetMasterNode);
+                            targetNode.setExpanded(false);
+                        }
+                        for (Period period : measure.getPeriods()) {
+                            periodNode = new DefaultTreeNode("period", period, periodMasterNode);
+                            periodNode.setExpanded(false);
+                        }
+                        for (Initiative initiative : measure.getInitiatives()) {
+                            initiativeNode = new DefaultTreeNode("initiative", initiative, initiativeMasterNode);
+                            initiativeNode.setExpanded(false);
+                        }
+                        for (Method method : measure.getMethods()) {
+                            methodNode = new DefaultTreeNode("method", method, methodMasterNode);
+                            methodNode.setExpanded(false);
+                        }
                     }
                 }
             }
@@ -285,8 +291,13 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             }
 
             if ("bsc".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/theme/theme.xhtml?");
+                outcomeBuilder.append("/pages/management/perspective/perspective.xhtml?");
                 outcomeBuilder.append("balancedScorecardId=").append(getBalancedScorecardId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("perspective".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/theme/theme.xhtml?");
+                outcomeBuilder.append("&perspectiveId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("theme".equals(selectedNode.getType())) {

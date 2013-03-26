@@ -34,11 +34,13 @@ import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.BalancedScorecard;
 import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.management.Owner;
+import org.eqaula.glue.model.management.Perspective;
 import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BalancedScorecardService;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.OwnerService;
+import org.eqaula.glue.service.PerspectiveService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
@@ -64,10 +66,11 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     private Long ownerId;
     @Inject
     private OwnerService ownerService;
-    private BalancedScorecard balancedScorecard;
-    private Long balancedScorecardId;
+    
+    private Perspective perspective;
+    private Long perspectiveId;
     @Inject
-    private BalancedScorecardService balancedScorecardService;
+    private PerspectiveService perspectiveService;
 
     public ThemeHome() {
     }
@@ -108,30 +111,32 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         this.owner = owner;
     }
 
-    public Long getBalancedScorecardId() {
-        return balancedScorecardId;
+    public Long getPerspectiveId() {
+        return perspectiveId;
     }
 
-    public void setBalancedScorecardId(Long balancedScorecardId) {
-        this.balancedScorecardId = balancedScorecardId;
+    public void setPerspectiveId(Long perspectiveId) {
+        this.perspectiveId = perspectiveId;
     }
 
+    
     @Transactional
-    public BalancedScorecard getBalancedScorecard() {
-        if (balancedScorecard == null) {
-            if (balancedScorecardId == null) {
-                balancedScorecard = null;
-            } else {
-                balancedScorecard = balancedScorecardService.find(getBalancedScorecardId());
+    public Perspective getPerspective() {
+        if(perspective==null){
+            if(perspectiveId==null){
+                perspective=null;
+            }else{
+                perspective= perspectiveService.find(getPerspectiveId());
             }
         }
-        return balancedScorecard;
+        return perspective;
     }
 
-    public void setBalancedScorecard(BalancedScorecard balancedScorecard) {
-        this.balancedScorecard = balancedScorecard;
+    public void setPerspective(Perspective perspective) {
+        this.perspective = perspective;
     }
 
+    
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -148,7 +153,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     public void init() {
         setEntityManager(em);
         ownerService.setEntityManager(em);
-        balancedScorecardService.setEntityManager(em);
+        perspectiveService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
 
@@ -175,11 +180,11 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setBalancedScorecard(getBalancedScorecard());
+            getInstance().setPerspective(getPerspective());
             create(getInstance());
         }
-        if (getInstance().getBalancedScorecard().getId() != null) {            
-            return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId()+ "&faces-redirect=true&includeViewParams=true";
+        if (getPerspective()!= null) {            
+            return getOutcome() + "?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId()+ "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true"; 
     }
@@ -214,8 +219,8 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getInstance().getBalancedScorecard().getId()!= null) {            
-            return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId()+ "&faces-redirect=true&includeViewParams=true";
+        if (getPerspective() != null) {            
+            return getOutcome() + "?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId()+ "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true"; 
     }

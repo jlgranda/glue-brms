@@ -57,7 +57,7 @@
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="true" outcome="theme" styleClass="btn" 
                         disabled="#{empty themeListService.selectedTheme.id}">
                     <f:param name="themeId" value="#{themeListService.selectedTheme.id}"></f:param>
-                    <f:param name="balancedScorecardId" value="#{themeListService.selectedTheme.balancedScorecard.id}"></f:param>
+                    <f:param name="balancedScorecardId" value="#{themeListService.selectedTheme.perspective.balancedScorecard.id}"></f:param>
                     <f:param name="outcome" value="list"></f:param>
                 </h:link> 
             </div>

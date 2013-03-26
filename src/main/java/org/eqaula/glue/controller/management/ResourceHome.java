@@ -31,26 +31,24 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.management.BalancedScorecard;
-import org.eqaula.glue.model.management.Organization;
-import org.eqaula.glue.model.management.Perspective;
+import org.eqaula.glue.model.management.Resource;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BalancedScorecardService;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
-import org.jboss.solder.logging.Logger;
 import org.primefaces.context.RequestContext;
 
 /*
  * @author dianita
  */
+
 @Named
 @ViewScoped
-public class PerspectiveHome extends BussinesEntityHome<Perspective> implements Serializable {
-
-    private static Logger log = Logger.getLogger(Perspective.class);
-    private static final long serialVersionUID = 1140758227557893365L;
+public class ResourceHome extends BussinesEntityHome<Resource> implements Serializable{
+    
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ResourceHome.class);
+    private static final long serialVersionUID = 2729403385742460165L;
+    
     @Inject
     @Web
     private EntityManager em;
@@ -59,51 +57,21 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
     @Current
     @Inject
     private Profile profile;
-    private BalancedScorecard balancedScorecard;
-    private Long balancedScorecardId;
-    @Inject
-    private BalancedScorecardService balancedScorecardService;
 
-    // agregar los atributos de theme service
-    public PerspectiveHome() {
+    public ResourceHome() {
     }
-
-    public Long getPerspectiveId() {
+   
+    public Long getResourceId() {
         return (Long) getId();
     }
 
-    public void setPerspectiveId(Long perspectiveId) {
-        setId(perspectiveId);
+    public void setResourceId(Long resourceId) {
+        setId(resourceId);
     }
 
     public String getStructureName() {
         return getInstance().getName();
     }
-
-    @Transactional
-    public BalancedScorecard getBalancedScorecard() {
-        if(balancedScorecard==null){
-            if(balancedScorecardId==null){
-                balancedScorecard=null;
-            }else{
-                balancedScorecard= balancedScorecardService.find(getBalancedScorecardId());
-            }
-        }
-        return balancedScorecard;
-    }
-
-    public void setBalancedScorecard(BalancedScorecard balancedScorecard) {
-        this.balancedScorecard = balancedScorecard;
-    }
-
-    public Long getBalancedScorecardId() {
-        return balancedScorecardId;
-    }
-
-    public void setBalancedScorecardId(Long balancedScorecardId) {
-        this.balancedScorecardId = balancedScorecardId;
-    }
-    
 
     @TransactionAttribute
     public void load() {
@@ -124,22 +92,22 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
     }
 
     @Override
-    protected Perspective createInstance() {
-        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Perspective.class.getName());
+    protected Resource createInstance() {
+        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Resource.class.getName());
         Date now = Calendar.getInstance().getTime();
-        Perspective perspective = new Perspective();
-        perspective.setCode(UUID.randomUUID().toString());
-        perspective.setCreatedOn(now);
-        perspective.setLastUpdate(now);
-        perspective.setActivationTime(now);
-        perspective.setExpirationTime(Dates.addDays(now, 364));
-        perspective.setType(_type);
-        perspective.buildAttributes(bussinesEntityService);
-        return perspective;
+        Resource resource = new Resource();
+        resource.setCode(UUID.randomUUID().toString());
+        resource.setCreatedOn(now);
+        resource.setLastUpdate(now);
+        resource.setActivationTime(now);
+        resource.setExpirationTime(Dates.addDays(now, 364));
+        resource.setType(_type);
+        resource.buildAttributes(bussinesEntityService);
+        return resource;
     }
 
     @TransactionAttribute
-    public String savePerspective() {
+    public String saveResource() {
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         if (getInstance().isPersistent()) {
@@ -147,16 +115,9 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
         } else {
             if (this.profile != null && this.profile.isPersistent()) {
                 getInstance().setAuthor(this.profile);
-                getInstance().setBalancedScorecard(getBalancedScorecard());
             }
-            //fijar theme
             create(getInstance());
         }
-        
-        if (getBalancedScorecard()!= null) {            
-            return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId()+ "&faces-redirect=true&includeViewParams=true";
-        }
-        
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
@@ -164,20 +125,20 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
         return true;
     }
 
-    public Perspective getDefinedInstance() {
+    public Resource getDefinedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
 
     @Override
-    public Class<Perspective> getEntityClass() {
-        return Perspective.class;
+    public Class<Resource> getEntityClass() {
+        return Resource.class;
     }
-
+    
     @Transactional
-    public String deletePerspective() {
+    public String deleteResource() {
         try {
             if (getInstance() == null) {
-                throw new NullPointerException("Perspective is null");
+                throw new NullPointerException("Resource is null");
             }
             if (getInstance().isPersistent()) {
                 delete(getInstance());
@@ -186,16 +147,13 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
 
             } else {
                 //remover de la lista, si aún no esta persistido
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una perspectiva para ser borrada!", ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un recurso para ser borrado!", ""));
             }
         } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        
-        if (getBalancedScorecard()!= null) {            
-            return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId()+ "&faces-redirect=true&includeViewParams=true";
-        }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
+
 }

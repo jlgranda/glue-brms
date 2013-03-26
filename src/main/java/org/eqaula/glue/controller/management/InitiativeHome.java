@@ -149,7 +149,7 @@ public class InitiativeHome extends BussinesEntityHome<Initiative> implements Se
             create(getInstance());
         }
         if (getMeasure() != null) {
-            return getOutcome() + "?balancedScorecardId=" + getMeasure().getObjetive().getTheme().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+            return getOutcome() + "?balancedScorecardId=" + getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -185,7 +185,7 @@ public class InitiativeHome extends BussinesEntityHome<Initiative> implements Se
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
         if (getMeasure() != null) {
-            return getOutcome() + "?balancedScorecardId=" + getMeasure().getObjetive().getTheme().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+            return getOutcome() + "?balancedScorecardId=" + getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }    
