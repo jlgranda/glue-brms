@@ -84,10 +84,11 @@ public class Method extends BussinesEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Method[ "
+        /*return "org.eqaula.glue.model.management.Method[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
-                + " ]";
+                + " ]";*/
+        return getName();
     }
 }

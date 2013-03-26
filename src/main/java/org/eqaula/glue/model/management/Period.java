@@ -129,10 +129,11 @@ public class Period extends BussinesEntity implements Serializable{
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Period[ "
+        /*return "org.eqaula.glue.model.management.Period[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
-                + " ]";
+                + " ]";*/
+        return getName();
     }
 }

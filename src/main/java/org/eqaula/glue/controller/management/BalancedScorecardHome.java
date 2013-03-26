@@ -16,6 +16,7 @@
 package org.eqaula.glue.controller.management;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -118,6 +119,8 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         this.selectedNode = selectedNode;
     }
 
+
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -152,6 +155,20 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         return balancedScorecard;
     }
 
+    protected Perspective createInstancePerspective() {
+        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Perspective.class.getName());
+        Date now = Calendar.getInstance().getTime();
+        Perspective perspective = new Perspective();
+        perspective.setCode(UUID.randomUUID().toString());
+        perspective.setCreatedOn(now);
+        perspective.setLastUpdate(now);
+        perspective.setActivationTime(now);
+        perspective.setExpirationTime(Dates.addDays(now, 364));
+        perspective.setType(_type);
+        perspective.buildAttributes(bussinesEntityService);
+        return perspective;
+    }
+
     @TransactionAttribute
     public String saveBalancedScorecard() {
         Date now = Calendar.getInstance().getTime();
@@ -162,8 +179,33 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             getInstance().setAuthor(this.profile);
             getInstance().setOrganization(getOrganization());
             create(getInstance());
+            createDefaultPerspectives(getInstance());
+            return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+        }
+
+        if (getOrganizationId() != null) {
+            return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
+    }
+
+    public void createDefaultPerspectives(BalancedScorecard balancedScorecard) {
+
+        ArrayList<String> messagesPerspectives = new ArrayList();
+        messagesPerspectives.add(UI.getMessages("common.perspective.Financial"));
+        messagesPerspectives.add(UI.getMessages("common.perspective.Customer"));
+        messagesPerspectives.add(UI.getMessages("common.perspective.Internal"));
+        messagesPerspectives.add(UI.getMessages("common.perspective.InnovationAndLearning"));
+
+        for (String createPerspectives : messagesPerspectives) {
+            Date now = Calendar.getInstance().getTime();
+            Perspective perspective = createInstancePerspective();
+            perspective.setName(createPerspectives);
+            perspective.setLastUpdate(now);
+            perspective.setAuthor(profile);
+            perspective.setBalancedScorecard(balancedScorecard);
+            create(perspective);
+        }
     }
 
     public boolean isWired() {
@@ -196,12 +238,9 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getBalancedScorecardId() != null) {
 
-            return getOutcome() + "?balancedScorecardId=" + getBalancedScorecardId() + "&faces-redirect=true&includeViewParams=true";
-        }
+        return "/pages/management/balancedscorecard/list.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
 
-        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
     public TreeNode buildTree() {
@@ -241,7 +280,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                         periodMasterNode.setExpanded(true);
                         initiativeMasterNode.setExpanded(true);
                         methodMasterNode.setExpanded(true);
-                        
+
                         for (Target target : measure.getTargets()) {
                             targetNode = new DefaultTreeNode("target", target, targetMasterNode);
                             targetNode.setExpanded(true);
@@ -374,7 +413,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("theme".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/theme/theme.xhtml?");
-                outcomeBuilder.append("&perspectiveId=").append(((Theme)bussinesEntity).getPerspective().getId());
+                outcomeBuilder.append("&perspectiveId=").append(((Theme) bussinesEntity).getPerspective().getId());
                 outcomeBuilder.append("&themeId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
@@ -446,4 +485,5 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         MethodExpressionActionListener actionListener = new MethodExpressionActionListener(methodsexpression);
         return actionListener;
     }
+
 }

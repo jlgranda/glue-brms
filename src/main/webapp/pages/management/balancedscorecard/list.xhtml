@@ -44,16 +44,15 @@
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
             <div class="form-actions" style="padding-left: 20px">
                 <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="balancedscorecard" styleClass="btn btn-primary">
-                    <f:param name="balancedScorecardId"></f:param>
                     <f:param name="organizationId" value="#{balancedScorecardListService.organizationId}" ></f:param>
-                    <f:param name="outcome" value="list"></f:param>
+                    <f:param name="outcome" value="/pages/management/balancedscorecard/list"></f:param>
                 </h:link>                
                 #{' '}
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="true" outcome="balancedscorecard" styleClass="btn" 
                         disabled="#{empty balancedScorecardListService.selectedBalancedScorecard.id}">
                     <f:param name= "balancedScorecardId" value="#{balancedScorecardListService.selectedBalancedScorecard.id}"></f:param>
                     <f:param name="organizationId" value="#{balancedScorecardListService.selectedBalancedScorecard.organization.id}" ></f:param>
-                    <f:param name="outcome" value="list"></f:param>
+                    <f:param name="outcome" value="/pages/management/balancedscorecard/list"></f:param>
                 </h:link> 
 
                 #{' '}

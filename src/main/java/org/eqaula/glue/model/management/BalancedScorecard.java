@@ -80,10 +80,11 @@ public class BalancedScorecard extends BussinesEntity implements Serializable {
     
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.BalancedScorecard[ "
+       /* return "org.eqaula.glue.model.management.BalancedScorecard[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
-                + " ]";
+                + " ]";*/
+        return getName();
     }
 }
