@@ -44,6 +44,8 @@ limitations under the License.
         <ui:define name="content" >
             <h:form  id="form" acceptcharset="UTF-8" class="form-horizontal" >
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{initiativeHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{initiativeHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
                 <glue:input id="startDate" name="startDate" type="calendar" label="#{messages['common.startDate']}" value="#{initiativeHome.instance.startDate}" required="true" inlinehelp="#{messages['common.startDate.inlinehelp']}" execute="@this save" render="startDate" />
                 <glue:input id="endDate" name="endDate" type="calendar" label="#{messages['common.endDate']}" value="#{initiativeHome.instance.endDate}" required="true" inlinehelp="#{messages['common.endDate.inlinehelp']}" execute="@this save" render="endDate" />
                 <h:panelGroup id="rsc" layout="block" class="control-group">

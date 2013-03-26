@@ -44,27 +44,7 @@ limitations under the License.
         <ui:define name="content" >
             <h:form id="form" acceptcharset="UTF-8" class="form-horizontal">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                <h:panelGroup id="pstv" layout="block" class="control-group">
-                    <label for="perspective" class="control-label required">#{messages['module.perspective']}</label>
-                    <div class="controls">
-                        <p:selectOneMenu id="perspective" style="float: left" value="#{objetiveHome.instance.perspective}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.perspective']}" rendered="true" label="#{messages['Perspective']}" filter="true" filterMatchMode="contains">
 
-                            <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
-                            <f:selectItems value="#{perspectiveListService.resultList}" var="_p" itemLabel="#{_p.name}" itemValue="#{_p}"/>                          
-                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
-
-                        </p:selectOneMenu>
-                        <h:link styleClass="btn" outcome="/pages/management/perspective/perspective">
-                            <i class="icon-plus"></i>
-                            <f:param name="outcome" value="/pages/management/objetive/objetive"/>
-                        </h:link>
-                        
-                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
-                                        styleClass="validation-status" />
-                        <span class="help-block"><br/>#{messages['perspective.inlinehelp']} <ocp:message forId="perspective" /></span>
-
-                    </div>
-                </h:panelGroup>
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{objetiveHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{objetiveHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
 

@@ -223,7 +223,6 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         for (Perspective perspective : getInstance().getPerspectives()) {
             perspectiveNode = new DefaultTreeNode("perspective", perspective, bscNode);
             perspectiveNode.setExpanded(true);
-
             for (Theme theme : perspective.getThemes()) {
                 themeNode = new DefaultTreeNode("theme", theme, perspectiveNode);
                 themeNode.setExpanded(true);
@@ -232,27 +231,32 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                     objetiveNode.setExpanded(true);
                     for (Measure measure : objetive.getMeasures()) {
                         measureNode = new DefaultTreeNode("measure", measure, objetiveNode);
-                        measureNode.setExpanded(false);
+                        measureNode.setExpanded(true);
                         targetMasterNode = new DefaultTreeNode("targets", UI.getMessages("common.targets"), measureNode);
                         periodMasterNode = new DefaultTreeNode("periods", UI.getMessages("common.periods"), measureNode);
                         initiativeMasterNode = new DefaultTreeNode("initiatives", UI.getMessages("common.initiatives"), measureNode);
                         methodMasterNode = new DefaultTreeNode("methods", UI.getMessages("common.methods"), measureNode);
 
+                        targetMasterNode.setExpanded(true);
+                        periodMasterNode.setExpanded(true);
+                        initiativeMasterNode.setExpanded(true);
+                        methodMasterNode.setExpanded(true);
+                        
                         for (Target target : measure.getTargets()) {
                             targetNode = new DefaultTreeNode("target", target, targetMasterNode);
-                            targetNode.setExpanded(false);
+                            targetNode.setExpanded(true);
                         }
                         for (Period period : measure.getPeriods()) {
                             periodNode = new DefaultTreeNode("period", period, periodMasterNode);
-                            periodNode.setExpanded(false);
+                            periodNode.setExpanded(true);
                         }
                         for (Initiative initiative : measure.getInitiatives()) {
                             initiativeNode = new DefaultTreeNode("initiative", initiative, initiativeMasterNode);
-                            initiativeNode.setExpanded(false);
+                            initiativeNode.setExpanded(true);
                         }
                         for (Method method : measure.getMethods()) {
                             methodNode = new DefaultTreeNode("method", method, methodMasterNode);
-                            methodNode.setExpanded(false);
+                            methodNode.setExpanded(true);
                         }
                     }
                 }
@@ -362,9 +366,15 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
 
+            } else if ("perspective".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/perspective/perspective.xhtml?");
+                outcomeBuilder.append("&balancedscorecardId=").append(getBalancedScorecardId());
+                outcomeBuilder.append("&perspectiveId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("theme".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/theme/theme.xhtml?");
-                outcomeBuilder.append("&balancedscorecardId=").append(getBalancedScorecardId());
+                outcomeBuilder.append("&perspectiveId=").append(((Theme)bussinesEntity).getPerspective().getId());
                 outcomeBuilder.append("&themeId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");

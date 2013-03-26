@@ -50,7 +50,7 @@ limitations under the License.
                         
                         <p:selectOneMenu id="owner" value="#{themeHome.instance.owner}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.owner']}" rendered="true" label="#{messages['module.owner']}" filter="true" filterMatchMode="contains">
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
-                            <f:selectItems value="#{themeHome.instance.id==null ? themeHome.balancedScorecard.organization.owners : themeHome.instance.balancedScorecard.organization.owners}" var="_o" itemLabel="#{_o.name}" itemValue="#{_o}"/>                          
+                            <f:selectItems value="#{themeHome.instance.id==null ? themeHome.perspective.balancedScorecard.organization.owners : themeHome.instance.perspective.balancedScorecard.organization.owners}" var="_o" itemLabel="#{_o.name}" itemValue="#{_o}"/>                          
                             <p:ajax event="change" update="@parent " partialSubmit="true"/>
                         </p:selectOneMenu> 
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"

@@ -82,11 +82,11 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
 
     @Transactional
     public BalancedScorecard getBalancedScorecard() {
-        if(balancedScorecard==null){
-            if(balancedScorecardId==null){
-                balancedScorecard=null;
-            }else{
-                balancedScorecard= balancedScorecardService.find(getBalancedScorecardId());
+        if (balancedScorecard == null) {
+            if (balancedScorecardId == null) {
+                balancedScorecard = null;
+            } else {
+                balancedScorecard = balancedScorecardService.find(getBalancedScorecardId());
             }
         }
         return balancedScorecard;
@@ -103,7 +103,6 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
     public void setBalancedScorecardId(Long balancedScorecardId) {
         this.balancedScorecardId = balancedScorecardId;
     }
-    
 
     @TransactionAttribute
     public void load() {
@@ -115,6 +114,7 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
     @PostConstruct
     public void init() {
         setEntityManager(em);
+        balancedScorecardService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
 
@@ -145,18 +145,15 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
         if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
-            if (this.profile != null && this.profile.isPersistent()) {
-                getInstance().setAuthor(this.profile);
-                getInstance().setBalancedScorecard(getBalancedScorecard());
-            }
-            //fijar theme
+            getInstance().setAuthor(this.profile);
+            getInstance().setBalancedScorecard(getBalancedScorecard());
             create(getInstance());
         }
-        
-        if (getBalancedScorecard()!= null) {            
-            return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId()+ "&faces-redirect=true&includeViewParams=true";
+
+        if (getInstance().getBalancedScorecard().getId()!= null) {
+            return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
-        
+
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
@@ -192,9 +189,9 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        
-        if (getBalancedScorecard()!= null) {            
-            return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId()+ "&faces-redirect=true&includeViewParams=true";
+
+        if (getInstance().getBalancedScorecard().getId()!= null) {
+            return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
