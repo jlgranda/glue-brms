@@ -271,6 +271,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                     for (Measure measure : objetive.getMeasures()) {
                         measureNode = new DefaultTreeNode("measure", measure, objetiveNode);
                         measureNode.setExpanded(true);
+                        
                         targetMasterNode = new DefaultTreeNode("targets", UI.getMessages("common.targets"), measureNode);
                         periodMasterNode = new DefaultTreeNode("periods", UI.getMessages("common.periods"), measureNode);
                         initiativeMasterNode = new DefaultTreeNode("initiatives", UI.getMessages("common.initiatives"), measureNode);
@@ -484,6 +485,17 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         MethodExpression methodsexpression = factory.createMethodExpression(FacesContext.getCurrentInstance().getELContext(), menuAction, null, new Class[]{ActionEvent.class});
         MethodExpressionActionListener actionListener = new MethodExpressionActionListener(methodsexpression);
         return actionListener;
+    }
+    
+    public String getValue(TreeNode node, String key){
+       if(node.getData().toString().equals(UI.getMessages("common.targets"))
+                    || node.getData().toString().equals(UI.getMessages("common.periods"))
+                    || node.getData().toString().equals(UI.getMessages("common.initiatives"))
+                    || node.getData().toString().equals(UI.getMessages("common.methods"))){
+           
+       }
+       return null;
+        
     }
 
 }

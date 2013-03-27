@@ -21,7 +21,7 @@
                     <div class="row fluid" style="margin-top: 5px;">
                         <div class="span9 ">
                             <h2>#{balancedScorecardHome.managed ? balancedScorecardHome.instance.name : ""}</h2>
-                            <p><span style="">#{messages['common.description']} #{balancedScorecardHome.instance.description}</span>                                
+                            <p><span style="">#{messages['common.description']}:#{balancedScorecardHome.instance.description}</span>                                
 
                             </p>
                         </div>
@@ -96,37 +96,20 @@
                 </p:panel>
                 <p:panel id="detail-panel" header="#{balancedScorecardHome.selectedNode.data.name}" toggleable="true">
 
-                    <p:treeTable id="treetable" value="#{balancedScorecardHome.selectedNode}" var="node">  
-                        <f:facet name="header">  
-                            #{messages['module.balancedScorecard']}
-                        </f:facet>  
+                    <p:treeTable id="treetable" value="#{balancedScorecardHome.selectedNode}" var="node"  propagateSelectionUp="true">  
                         <p:column style="width:150px">  
-                            <f:facet name="header">  
-                                #{messages['BussinesEntity']}
-                            </f:facet>  
+
                             <h:outputText value="#{node}"/>                               
                         </p:column>  
-                        <!--
-                        <p:column style="width:100px">  
-                            <f:facet name="header">  
-                                Size  
-                            </f:facet>  
-                            <h:outputText value="#{document.name}" />  
-                        </p:column>  
-                        <p:column style="width:100px">  
-                            <f:facet name="header">  
-                                Type  
-                            </f:facet>  
-                            <h:outputText value="#{document.name}" />  
-                        </p:column>  
 
-                        <p:column style="width:20px">  
-                            <p:commandLink update="documentPanel" oncomplete="documentDialog.show()" title="View Detail" styleClass="ui-icon ui-icon-search">  
-                                <f:setPropertyActionListener value="#{document}"   
-                                                             target="#{documentsController.selectedDocument}" />  
-                            </p:commandLink>  
-                        </p:column>  -->
+                        <p:column style="width:150px">  
+                            
+                             <h:outputText value="#{node.class.name.equals('org.eqaula.glue.model.management.Measure.class')}"/>  
+
+                        </p:column>
+
                     </p:treeTable>  
+                    #{node.data.class}
                 </p:panel>
 
             </h:form>
