@@ -21,7 +21,7 @@
                     <div class="row fluid" style="margin-top: 5px;">
                         <div class="span9 ">
                             <h2>#{balancedScorecardHome.managed ? balancedScorecardHome.instance.name : ""}</h2>
-                            <p><span style="">#{messages['common.description']} #{balancedScorecardHome.instance.description}</span>                                
+                            <p><span style="">#{messages['common.description']}:#{balancedScorecardHome.instance.description}</span>                                
 
                             </p>
                         </div>
@@ -49,17 +49,17 @@
                     <p:tree id="bscTree" value="#{balancedScorecardHome.bscNode}" var="node" orientation="horizontal" 
                             selectionMode="single" selection="#{balancedScorecardHome.selectedNode}"  dynamic="true">  
 
-                        <p:ajax event="select" update=":messages :view:detail-panel" listener="#{balancedScorecardHome.onNodeSelect}" /> 
+                        <p:ajax event="select" update=":messages :view:detail-panel " listener="#{balancedScorecardHome.onNodeSelect}" /> 
                         <p:treeNode expandedIcon="ui-icon-folder-open"  
                                     collapsedIcon="ui-icon-folder-collapsed">  
                         </p:treeNode>  
                         <p:treeNode  type="bsc" icon="ui-icon-home">    
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
-                        <p:treeNode  type="perspective" icon="ui-icon-home">    
+                        <p:treeNode  type="perspective" icon="ui-icon-screenshot">    
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
-                        <p:treeNode  type="theme" icon="ui-icon-home">    
+                        <p:treeNode  type="theme" icon="icon-asterisk">    
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
                         <p:treeNode type="objetive" icon="ui-icon-document">  
@@ -87,7 +87,7 @@
                             <h:outputText value="#{node.duration}" />  
                         </p:treeNode>
                         <p:treeNode type="initiative" icon="icon-hand-right">  
-                            <h:outputText value="#{node.startDate} - #{node.endDate}" />  
+                            <h:outputText value="#{node.name}" />  
                         </p:treeNode>
                         <p:treeNode type="method" icon="icon-hand-right">  
                             <h:outputText value="#{node.name}" />  
@@ -96,6 +96,20 @@
                 </p:panel>
                 <p:panel id="detail-panel" header="#{balancedScorecardHome.selectedNode.data.name}" toggleable="true">
 
+                    <p:treeTable id="treetable" value="#{balancedScorecardHome.selectedNode}" var="node"  propagateSelectionUp="true">  
+                        <p:column style="width:150px">  
+
+                            <h:outputText value="#{node}"/>                               
+                        </p:column>  
+
+                        <p:column style="width:150px">  
+                            
+                             <h:outputText value="#{node.class.name.equals('org.eqaula.glue.model.management.Measure.class')}"/>  
+
+                        </p:column>
+
+                    </p:treeTable>  
+                    #{node.data.class}
                 </p:panel>
 
             </h:form>

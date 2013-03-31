@@ -91,10 +91,11 @@ public class Objetive extends BussinesEntity implements Serializable {
     
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Objetive[ "
+        /*return "org.eqaula.glue.model.management.Objetive[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
-                + " ]";
+                + " ]";*/
+        return getName();
     }
 }

@@ -17,6 +17,7 @@ package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -41,7 +42,7 @@ public class Perspective extends BussinesEntity implements Serializable {
     
     private Long sequence;
             
-    @OneToMany(mappedBy = "perspective")
+    @OneToMany(mappedBy = "perspective", cascade = CascadeType.ALL)
     private  List<Theme> themes;
 
     @ManyToOne
@@ -108,6 +109,6 @@ public class Perspective extends BussinesEntity implements Serializable {
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
                 + " ]";*/
-        return String.valueOf(getId());
+        return getName();
     }
 }

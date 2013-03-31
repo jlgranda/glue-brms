@@ -131,10 +131,12 @@ public class Measure extends BussinesEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Measure[ "
+        /*return "org.eqaula.glue.model.management.Measure[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
-                + " ]";
+                + " ]";*/
+        
+        return getName();
     }
 }

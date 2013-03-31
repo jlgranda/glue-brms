@@ -112,10 +112,12 @@ public class Initiative extends BussinesEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Initiative[ "
+        /*return "org.eqaula.glue.model.management.Initiative[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
-                + " ]";
+                + " ]";*/
+        
+        return getName();
     }
 }

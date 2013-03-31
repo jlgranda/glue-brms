@@ -183,7 +183,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             getInstance().setPerspective(getPerspective());
             create(getInstance());
         }
-        if (getPerspective()!= null) {            
+        if (getInstance().getPerspective().getId()!= null) {            
             return getOutcome() + "?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId()+ "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true"; 
@@ -219,7 +219,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getPerspective() != null) {            
+        if (getPerspectiveId()!= null) {            
             return getOutcome() + "?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId()+ "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true"; 

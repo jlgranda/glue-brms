@@ -100,10 +100,11 @@ public class Owner extends BussinesEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Owner[ "
+        /*return "org.eqaula.glue.model.management.Owner[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
-                + " ]";
+                + " ]";*/
+        return getName();
     }
 }

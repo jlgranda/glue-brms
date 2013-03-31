@@ -105,10 +105,11 @@ public class Theme extends BussinesEntity implements Serializable {
     
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Theme[ "
+        /*return "org.eqaula.glue.model.management.Theme[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
-                + " ]";
+                + " ]";*/
+        return getName();
     }
 }

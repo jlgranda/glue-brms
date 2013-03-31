@@ -70,13 +70,7 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
     @Inject
     private ThemeService themeService;
     
-    private Perspective perspective;
-    private Long perspectiveId;
-    @Inject
-    private PerspectiveService perspectiveService;
-    
-    
-
+  
     public ObjetiveHome() {
     }
 
@@ -117,30 +111,6 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         this.themeId = themeId;
     }
 
-    @Transactional
-    public Perspective getPerspective() {
-        if(perspective==null){
-            if(perspectiveId==null){
-                perspective=null;
-            }else{
-                perspective= perspectiveService.find(getPerspectiveId());
-            }
-        }
-        return perspective;
-    }
-
-    public void setPerspective(Perspective perspective) {
-        this.perspective = perspective;
-    }
-
-    public Long getPerspectiveId() {
-        return perspectiveId;
-    }
-
-    public void setPerspectiveId(Long perspectiveId) {
-        this.perspectiveId = perspectiveId;
-    }
-    
     
     @TransactionAttribute
     public void load() {
@@ -158,7 +128,6 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
     public void init() {
         setEntityManager(em);
         themeService.setEntityManager(em);
-        perspectiveService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
 
@@ -189,7 +158,7 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
             create(getInstance());
         }
          //TODO idear una mejor forma de redireccionar
-        if (getTheme()!= null){
+        if (getInstance().getTheme().getId()!= null){
             return getOutcome() + "?balancedScorecardId=" + getInstance().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
@@ -226,7 +195,7 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
         //TODO idear una mejor forma de redireccionar
-        if (getTheme()!= null){
+        if (getInstance().getTheme().getId()!= null){
             return getOutcome() + "?balancedScorecardId=" + getInstance().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
