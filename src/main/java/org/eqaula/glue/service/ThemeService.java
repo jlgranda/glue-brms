@@ -22,6 +22,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.eqaula.glue.model.BussinesEntity;
+import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.management.Theme_;
 import org.eqaula.glue.model.profile.Profile;
@@ -87,6 +89,14 @@ public class ThemeService extends PersistenceUtil<Theme> implements Serializable
         Root<Theme> bussinesEntityType = query.from(Theme.class);
         query.where(builder.equal(bussinesEntityType.get(Theme_.author), profile));
         return getSingleResult(query);
+    }
+    
+      public List<Theme> findByOwner(Owner owner) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Theme> query = builder.createQuery(Theme.class);
+        Root<Theme> bussinesEntityType = query.from(Theme.class);
+        query.where(builder.equal(bussinesEntityType.get(Theme_.owner), owner));
+        return getResultList(query);
     }
 
     public void create(Profile loggedIn, Theme current) {

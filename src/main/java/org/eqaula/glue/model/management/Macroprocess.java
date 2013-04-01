@@ -99,10 +99,11 @@ public class Macroprocess extends BussinesEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Macroprocess[ "
+       /* return "org.eqaula.glue.model.management.Macroprocess[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
-                + " ]";
+                + " ]";*/
+        return getName();
     }
 }

@@ -89,7 +89,7 @@
                                                 <h4>#{_organization.name}</h4>
                                                 <div class="btn-toolbar">
                                                     <div class="btn-group">
-                                                        <h:link outcome="/pages/management/organization/view.xhtml"
+                                                        <h:link outcome="/pages/management/owner/list.xhtml"
                                                                 title="#{messages['module.management']}"
                                                                 styleClass="icon-home">
                                                             <f:param name="organizationId" value="#{_organization.id}" />
@@ -101,7 +101,7 @@
                                                             <f:param name="organizationId" value="#{_organization.id}" />
                                                         </h:link>
                                                         
-                                                        <h:link outcome="/pages/management/theme/list.xhtml"
+                                                        <h:link outcome="/pages/management/organization/viewTreeThemes.xhtml"
                                                                 title="#{messages['module.theme']}"
                                                                 styleClass="icon-th-large">
                                                             <f:param name="organizationId" value="#{_organization.id}" />

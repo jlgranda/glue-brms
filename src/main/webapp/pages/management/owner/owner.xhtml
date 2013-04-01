@@ -47,9 +47,9 @@
                                      update=":cancel-dialog" rendered="#{ownerHome.instance.persistent}">                        
                     </p:commandButton>
                     <!-- &nbsp;-->
-                    <h:link outcome="/pages/management/organization/view"
+                    <h:link outcome="/pages/management/owner/list"
                             value="#{messages['common.cancel']}" styleClass="btn">
-                        <f:param name="organizationId" value="#{ownerHome.organizationId}"/>
+                        <f:param name="organizationId" value="#{ownerHome.organizationId!=null?ownerHome.organizationId:ownerHome.instance.organization.id}"/>
                     </h:link>
                 </div>  
             </h:form>
