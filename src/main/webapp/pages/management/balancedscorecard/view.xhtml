@@ -29,7 +29,13 @@
                         <div class="span3 ">
                             <h:form id="control">                                
                                 <br/>
-                                <h:link outcome="/pages/home" styleClass="link" value="#{messages['common.cancel']}">
+                                <h:link outcome="/pages/management/balancedscorecard/list" styleClass="link" value="#{messages['common.cancel']}">
+                                    <f:param  name="organizationId" value="#{balancedScorecardHome.instance.organization.id}"></f:param>
+                                </h:link>
+                                
+                                <br/>
+                                <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                                        outcome="/pages/home.xhtml?faces-redirect=true" styleClass="link">                                
                                 </h:link>
                             </h:form>
                         </div>
@@ -103,8 +109,8 @@
                         </p:column>  
 
                         <p:column style="width:150px">  
-                            
-                             <h:outputText value="#{node.class.name.equals('org.eqaula.glue.model.management.Measure.class')}"/>  
+
+                            <h:outputText value="#{node.class.name.equals('org.eqaula.glue.model.management.Measure.class')}"/>  
 
                         </p:column>
 

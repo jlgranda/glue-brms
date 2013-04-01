@@ -45,7 +45,7 @@ import org.primefaces.model.SortOrder;
  */
 @Named
 @RequestScoped
-public class ThemeListService extends LazyDataModel<Theme> {
+public class ThemeListService extends ListService<Theme> {
 
     private static final int MAX_RESULTS = 5;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ThemeListService.class);
@@ -109,7 +109,7 @@ public class ThemeListService extends LazyDataModel<Theme> {
     public Perspective getPerspective() {
         if (perspective == null) {
             if (perspectiveId == null) {
-                perspective=null;
+                perspective = null;
             } else {
                 perspective = perspectiveService.find(getPerspectiveId());
             }
@@ -121,7 +121,6 @@ public class ThemeListService extends LazyDataModel<Theme> {
         this.perspective = perspective;
     }
 
-    
     public int getNextFirstResult() {
         return firstResult + this.getPageSize();
     }
@@ -138,7 +137,7 @@ public class ThemeListService extends LazyDataModel<Theme> {
             order = QuerySortOrder.DESC;
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
-        _filters.put(Theme_.perspective.getName(), getPerspective());
+        _filters.put(Theme_.organization.getName(), getOrganization());
         _filters.putAll(filters);
 
         QueryData<Theme> qData = themeService.find(first, end, sortField, order, _filters);
@@ -148,8 +147,8 @@ public class ThemeListService extends LazyDataModel<Theme> {
 
     @PostConstruct
     public void init() {
+        super.init();
         themeService.setEntityManager(entityManager);
-        perspectiveService.setEntityManager(entityManager);
     }
 
     public void onRowSelect(SelectEvent event) {

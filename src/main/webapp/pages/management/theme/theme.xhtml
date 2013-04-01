@@ -37,6 +37,20 @@ limitations under the License.
 
                         <h3>#{themeHome.themeId!= null? messages['common.edit'] : messages['common.add']} 
                             #{messages['module.theme']}</h3> 
+                        <div class="span3 ">
+                            <h:form id="control">                                
+                                <br/>
+                                <h:link outcome="/pages/management/balancedscorecard/view" styleClass="link" value="#{messages['common.cancel']}">
+                                    <f:param  name="organizationId" value="#{themeHome.instance.organization.id}"></f:param>
+                                </h:link>
+
+                                <br/>
+                                <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                                        outcome="/pages/home.xhtml?faces-redirect=true" styleClass="link">                                
+                                </h:link>
+                            </h:form>
+                        </div>
+
                     </div>    
                 </div>
             </div>
@@ -47,8 +61,8 @@ limitations under the License.
                 <h:panelGroup id="onr" layout="block" class="control-group">
                     <label for="owner" class="control-label required">#{messages['module.owner']}</label>
                     <div class="controls">
-                        
-                        <p:selectOneMenu id="owner" value="#{themeHome.instance.owner}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.owner']}" rendered="true" label="#{messages['module.owner']}" filter="true" filterMatchMode="contains">
+
+                        <p:selectOneMenu id="owner" value="#{themeHome.instance.owner}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['common.property.required.help']}" rendered="true" label="#{messages['module.owner']}" filter="true" filterMatchMode="contains">
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
                             <f:selectItems value="#{themeHome.instance.id==null ? themeHome.perspective.balancedScorecard.organization.owners : themeHome.instance.perspective.balancedScorecard.organization.owners}" var="_o" itemLabel="#{_o.name}" itemValue="#{_o}"/>                          
                             <p:ajax event="change" update="@parent " partialSubmit="true"/>
@@ -68,8 +82,9 @@ limitations under the License.
                     </p:commandButton>
                     <!-- &nbsp;-->
                     <h:link outcome="#{themeHome.outcome}" value="#{messages['common.cancel']}" styleClass="btn" >                         
-                        <f:param name="balancedScorecardId" value="#{themeHome.instance.perspective.balancedScorecard.id}"/>
+                        <f:param name="balancedScorecardId" value="#{themeHome.perspective.balancedScorecard.id}"/>
                     </h:link>    
+
                 </div>  
             </h:form>
 
