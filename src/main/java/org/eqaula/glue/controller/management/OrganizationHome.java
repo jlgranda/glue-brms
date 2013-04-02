@@ -40,6 +40,7 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Initiative;
+import org.eqaula.glue.model.management.Macroprocess;
 import org.eqaula.glue.model.management.Measure;
 import org.eqaula.glue.model.management.Method;
 import org.eqaula.glue.model.management.Target;
@@ -48,6 +49,7 @@ import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.management.Period;
 import org.eqaula.glue.model.management.Resource;
+import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
@@ -203,52 +205,23 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
 
     public TreeNode buildTree() {
         organizationNode = new DefaultTreeNode("organization", getInstance(), null);
-        TreeNode ownerNode = null;
-        TreeNode objetiveNode = null;
-        TreeNode measureNode = null;
-        TreeNode targetNode = null;
-        TreeNode periodNode = null;
-        TreeNode initiativeNode = null;
-        TreeNode methodNode = null;
-        TreeNode targetMasterNode = null;
-        TreeNode periodMasterNode = null;
-        TreeNode initiativeMasterNode = null;
-        TreeNode methodMasterNode = null;
-
         organizationNode.setExpanded(true);
-        for (Owner owner : getInstance().getOwners()) {
-            ownerNode = new DefaultTreeNode("owner", owner, organizationNode);
-            ownerNode.setExpanded(true);
-//            for (Objetive objetive : owner.getObjetives()) {
-//                objetiveNode = new DefaultTreeNode("objetive", objetive, ownerNode);
-//                objetiveNode.setExpanded(true);
-//                for (Measure measure : objetive.getMeasures()) {
-//                    measureNode = new DefaultTreeNode("measure", measure, objetiveNode);
-//                    measureNode.setExpanded(false);
-//
-//                    targetMasterNode = new DefaultTreeNode("targets", UI.getMessages("common.targets"), measureNode);
-//                    periodMasterNode = new DefaultTreeNode("periods", UI.getMessages("common.periods"), measureNode);
-//                    initiativeMasterNode = new DefaultTreeNode("initiatives", UI.getMessages("common.initiatives"), measureNode);
-//                    methodMasterNode = new DefaultTreeNode("methods", UI.getMessages("common.methods"), measureNode);
-//
-//                    for (Target target : measure.getTargets()) {
-//                        targetNode = new DefaultTreeNode("target", target, targetMasterNode);
-//                        targetNode.setExpanded(false);
-//                    }
-//                    for (Period period : measure.getPeriods()) {
-//                        periodNode = new DefaultTreeNode("period", period, periodMasterNode);
-//                        periodNode.setExpanded(false);
-//                    }
-//                    for (Initiative initiative : measure.getInitiatives()) {
-//                        initiativeNode = new DefaultTreeNode("initiative", initiative, initiativeMasterNode);
-//                        initiativeNode.setExpanded(false);
-//                    }
-//                    for (Method method : measure.getMethods()) {
-//                        methodNode = new DefaultTreeNode("method", method, methodMasterNode);
-//                        methodNode.setExpanded(false);
-//                    }
-//                }
-//            }
+
+        TreeNode macroprocessNode = null;
+        TreeNode processNode = null;
+        TreeNode themeNode = null;
+        
+        for (Theme theme : getInstance().getThemes()) {
+            themeNode = new DefaultTreeNode("theme", theme, organizationNode);
+            themeNode.setExpanded(true);
+            for (Macroprocess macroprocess : theme.getMacroprocess()) {
+                macroprocessNode = new DefaultTreeNode("macroprocess", macroprocess, themeNode);
+                macroprocessNode.setExpanded(true);
+                for (org.eqaula.glue.model.management.Process process : macroprocess.getProcess()) {
+                    processNode = new DefaultTreeNode("process", process, macroprocessNode);
+                    processNode.setExpanded(true);
+                }
+            }
         }
         return organizationNode;
     }
@@ -259,68 +232,24 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public void redirecToAdd() {
-
         StringBuilder outcomeBuilder = new StringBuilder();
-        String masterNodoName = "";
+        BussinesEntity bussinesEntity = null;
         if (selectedNode != null) {
-            if (selectedNode.getData().toString().equals(UI.getMessages("common.targets"))||
-                    selectedNode.getData().toString().equals(UI.getMessages("common.periods"))||
-                    selectedNode.getData().toString().equals(UI.getMessages("common.initiatives"))||
-                    selectedNode.getData().toString().equals(UI.getMessages("common.methods"))) {
-                masterNodoName = selectedNode.getData().toString();
-              
-            } else {
-                BussinesEntity bussinesEntity = (BussinesEntity) selectedNode.getData();
-            }
-
+            bussinesEntity = (BussinesEntity) selectedNode.getData();
             if ("organization".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/owner/owner.xhtml?");
-                outcomeBuilder.append("organizationId=").append(getOrganizationId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("owner".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
-                outcomeBuilder.append("&ownerId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("objetive".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/measure/measure.xhtml?");
-                outcomeBuilder.append("&objetiveId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("measure".equals(selectedNode.getType())) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, message);
-            } else if (masterNodoName.equals(UI.getMessages("common.targets"))) {
-                outcomeBuilder.append("/pages/management/targets/target.xhtml?");
-                outcomeBuilder.append("&measureId=").append(((BussinesEntity) selectedNode.getParent().getData()).getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+            } else if ("theme".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/macroprocess/macroprocess.xhtml?");
+                outcomeBuilder.append("themeId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/viewTreeThemes");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("target".equals(selectedNode.getType())) {
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
-                FacesContext.getCurrentInstance().addMessage(null, message);
-            } else if (masterNodoName.equals(UI.getMessages("common.periods"))) {
-                outcomeBuilder.append("/pages/management/period/period.xhtml?");
-                outcomeBuilder.append("&measureId=").append(((BussinesEntity) selectedNode.getParent().getData()).getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+            } else if ("macroprocess".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/process/process.xhtml?");
+                outcomeBuilder.append("&macroprocessId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/viewTreeThemes");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("period".equals(selectedNode.getType())) {
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
-                FacesContext.getCurrentInstance().addMessage(null, message);
-            } else if (masterNodoName.equals(UI.getMessages("common.initiatives"))) {
-                outcomeBuilder.append("/pages/management/initiative/initiative.xhtml?");
-                outcomeBuilder.append("&measureId=").append(((BussinesEntity) selectedNode.getParent().getData()).getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("initiative".equals(selectedNode.getType())) {
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
-                FacesContext.getCurrentInstance().addMessage(null, message);
-            } else if (masterNodoName.equals(UI.getMessages("common.methods"))) {
-                outcomeBuilder.append("/pages/management/method/method.xhtml?");
-                outcomeBuilder.append("&measureId=").append(((BussinesEntity) selectedNode.getParent().getData()).getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("method".equals(selectedNode.getType())) {
+            } else if ("process".equals(selectedNode.getType())) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, message);
             }
@@ -335,82 +264,24 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             FacesContext.getCurrentInstance().addMessage(null, message);
             BussinesEntity bussinesEntity = (BussinesEntity) selectedNode.getData();
             if ("organization".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/organization/organization.xhtml?");
-                outcomeBuilder.append("organizationId=").append(getOrganizationId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+                FacesMessage messag = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
+                FacesContext.getCurrentInstance().addMessage(null, messag);
+            } else if ("theme".equals(selectedNode.getType())) {
+                FacesMessage messag = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
+                FacesContext.getCurrentInstance().addMessage(null, messag);
+            } else if ("macroprocess".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/macroprocess/macroprocess.xhtml?");
+                outcomeBuilder.append("&macroprocessId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&themeId=").append(((Macroprocess) bussinesEntity).getTheme().getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/viewTreeThemes");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("owner".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/owner/owner.xhtml?");
-                outcomeBuilder.append("&organizationId=").append(getOrganizationId());
-                outcomeBuilder.append("&ownerId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("objetive".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
-                outcomeBuilder.append("&objetiveId=").append(bussinesEntity.getId());
-                //outcomeBuilder.append("&ownerId=").append(((Objetive) bussinesEntity).getOwner().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("measure".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/measure/measure.xhtml?");
-                outcomeBuilder.append("&measureId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&objetiveId=").append(((Measure) bussinesEntity).getObjetive().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("target".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/targets/target.xhtml?");
-                outcomeBuilder.append("&targetId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&measureId=").append(((Target) bussinesEntity).getMeasure().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("period".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/period/period.xhtml?");
-                outcomeBuilder.append("&periodId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&measureId=").append(((Period) bussinesEntity).getMeasure().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("initiative".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/initiative/initiative.xhtml?");
-                outcomeBuilder.append("&initiativeId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&measureId=").append(((Initiative) bussinesEntity).getMeasure().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-            } else if ("method".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/method/method.xhtml?");
-                outcomeBuilder.append("&methodId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&measureId=").append(((Method) bussinesEntity).getMeasure().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/view");
+            } else if ("process".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/process/process.xhtml?");
+                outcomeBuilder.append("&processId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&macroprocessId=").append(((org.eqaula.glue.model.management.Process) bussinesEntity).getMacroprocess().getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/organization/viewTreeThemes");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             }
         }
-    }
-    /*
-     * UI management
-     */
-    private MenuModel model = null;
-    private String lastNodeType = "";
-
-    public MenuModel getMenuModel() {
-        model = new DefaultMenuModel();
-
-        log.debug("node=<" + selectedNode + ">");
-        if (selectedNode != null && !lastNodeType.equalsIgnoreCase(selectedNode.getType())) {
-            lastNodeType = selectedNode.getType();
-            BussinesEntity info = (BussinesEntity) selectedNode.getData();
-            MenuItem item = new MenuItem();
-            item.setValue(UI.getMessages("common.add") + " " + UI.getMessages("common.in") + " " + info.getName());
-            item.setIcon("ui-icon-plus");
-            item.setUpdate(":messages");
-            item.addActionListener(createMethodActionListener("#{organizationHome.redirecToAdd}"));
-            model.addMenuItem(item);
-        }
-        return model;
-    }
-
-    public ActionListener createMethodActionListener(String menuAction) {
-        ExpressionFactory factory = FacesContext.getCurrentInstance().getApplication().getExpressionFactory();
-        MethodExpression methodsexpression = factory.createMethodExpression(FacesContext.getCurrentInstance().getELContext(), menuAction, null, new Class[]{ActionEvent.class});
-        MethodExpressionActionListener actionListener = new MethodExpressionActionListener(methodsexpression);
-        return actionListener;
     }
 }

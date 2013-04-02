@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 jlgranda.
+ * Copyright 2013 dianita.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,86 +16,45 @@
 package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eqaula.glue.model.BussinesEntity;
 
-/**
- *
- * @author jlgranda
+/*
+ * @author dianita
  */
+
 @Entity
-@Table(name = "Theme")
-@DiscriminatorValue(value = "THM")
+@Table(name = "Process")
+@DiscriminatorValue(value = "PCSS")
 @PrimaryKeyJoinColumn(name = "id")
-public class Theme extends BussinesEntity implements Serializable {
+public class Process extends BussinesEntity implements Serializable{
+    private static final long serialVersionUID = 8891572386502333388L;
     
-    private static final long serialVersionUID = -7436571688718703657L;
-    
+    private String series;
+            
     @ManyToOne
-    private Owner owner;
-    
-    @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL)
-    private List<Objetive> objetives;
+    private Macroprocess macroprocess;
 
-    @ManyToOne
-    private Perspective perspective;
-    
-    @ManyToOne
-    private Organization organization;
-    
-    @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL)
-    private List<Macroprocess> macroprocess;
-
-    public Owner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Owner owner) {
-        this.owner = owner;
-    }
-
-    public List<Objetive> getObjetives() {
-        return objetives;
-    }
-
-    public void setObjetives(List<Objetive> objetives) {
-        this.objetives = objetives;
-    }
-
-    public Perspective getPerspective() {
-        return perspective;
-    }
-
-    public void setPerspective(Perspective perspective) {
-        this.perspective = perspective;
-    }
-
-    public List<Macroprocess> getMacroprocess() {
+    public Macroprocess getMacroprocess() {
         return macroprocess;
     }
 
-    public void setMacroprocess(List<Macroprocess> macroprocess) {
+    public void setMacroprocess(Macroprocess macroprocess) {
         this.macroprocess = macroprocess;
     }
 
-    @Override
-    public Organization getOrganization() {
-        return this.organization;
+    public String getSeries() {
+        return series;
     }
 
-    @Override
-    public void setOrganization(Organization organization) {
-        this.organization=organization;
+    public void setSeries(String series) {
+        this.series = series;
     }
     
     @Override
@@ -118,21 +77,23 @@ public class Theme extends BussinesEntity implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Theme other = (Theme) obj;
+        Process other = (Process) obj;
         return new EqualsBuilder().
                 // if deriving: appendSuper(super.equals(obj)).
                 append(getName(), other.getName()).
                 append(getType(), other.getType()).
                 isEquals();
     }
-    
+
     @Override
     public String toString() {
-        /*return "org.eqaula.glue.model.management.Theme[ "
+       /* return "org.eqaula.glue.model.management.Process[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
-                + " ]";*/
-        return getName();
+                + " ]";        */
+        
+         return getName();
     }
+    
 }

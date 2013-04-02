@@ -19,6 +19,8 @@ import org.eqaula.glue.model.BussinesEntityType_;
 import org.eqaula.glue.model.BussinesEntity_;
 import org.eqaula.glue.model.GroupType;
 import org.eqaula.glue.model.Property;
+import org.eqaula.glue.model.management.Organization;
+import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.util.PersistenceUtil;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;

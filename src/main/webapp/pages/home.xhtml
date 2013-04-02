@@ -89,18 +89,24 @@
                                                 <h4>#{_organization.name}</h4>
                                                 <div class="btn-toolbar">
                                                     <div class="btn-group">
-                                                        <h:link outcome="/pages/management/organization/view.xhtml"
+                                                        <h:link outcome="/pages/management/owner/list.xhtml"
                                                                 title="#{messages['module.management']}"
                                                                 styleClass="icon-home">
                                                             <f:param name="organizationId" value="#{_organization.id}" />
                                                         </h:link>
-                                                        
+
                                                         <h:link outcome="/pages/management/balancedscorecard/list.xhtml"
                                                                 title="#{messages['module.balancedScorecard']}"
                                                                 styleClass="icon-tag">
                                                             <f:param name="organizationId" value="#{_organization.id}" />
                                                         </h:link>
                                                         
+                                                        <h:link outcome="/pages/management/organization/viewTreeThemes.xhtml"
+                                                                title="#{messages['module.theme']}"
+                                                                styleClass="icon-th-large">
+                                                            <f:param name="organizationId" value="#{_organization.id}" />
+                                                        </h:link>
+
                                                         <h:link outcome="/pages/accounting/home.xhtml"
                                                                 title="#{messages['module.accounting']}"
                                                                 styleClass=" icon-barcode">

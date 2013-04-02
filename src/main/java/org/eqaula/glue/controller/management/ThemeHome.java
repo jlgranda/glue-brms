@@ -22,6 +22,7 @@ import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -30,20 +31,24 @@ import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
+import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.management.BalancedScorecard;
-import org.eqaula.glue.model.management.Objetive;
+import org.eqaula.glue.model.management.Macroprocess;
+import org.eqaula.glue.model.management.Process;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.management.Perspective;
 import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BalancedScorecardService;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.OwnerService;
 import org.eqaula.glue.service.PerspectiveService;
 import org.eqaula.glue.util.Dates;
+import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 
 /*
  * @author dianita
@@ -66,11 +71,16 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     private Long ownerId;
     @Inject
     private OwnerService ownerService;
-    
     private Perspective perspective;
     private Long perspectiveId;
     @Inject
     private PerspectiveService perspectiveService;
+    private TreeNode themeNode;
+    private TreeNode selectedNode;
+    @Inject
+    private NavigationHandler navigation;
+    @Inject
+    private FacesContext context;
 
     public ThemeHome() {
     }
@@ -93,6 +103,25 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
 
     public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public TreeNode getThemeNode() {
+        if (themeNode == null) {
+            buildTree();
+        }
+        return themeNode;
+    }
+
+    public void setThemeNode(TreeNode themeNode) {
+        this.themeNode = themeNode;
+    }
+
+    public TreeNode getSelectedNode() {
+        return selectedNode;
+    }
+
+    public void setSelectedNode(TreeNode selectedNode) {
+        this.selectedNode = selectedNode;
     }
 
     @Transactional
@@ -119,14 +148,13 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         this.perspectiveId = perspectiveId;
     }
 
-    
     @Transactional
     public Perspective getPerspective() {
-        if(perspective==null){
-            if(perspectiveId==null){
-                perspective=null;
-            }else{
-                perspective= perspectiveService.find(getPerspectiveId());
+        if (perspective == null) {
+            if (perspectiveId == null) {
+                perspective = null;
+            } else {
+                perspective = perspectiveService.find(getPerspectiveId());
             }
         }
         return perspective;
@@ -136,7 +164,6 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         this.perspective = perspective;
     }
 
-    
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -181,12 +208,13 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         } else {
             getInstance().setAuthor(this.profile);
             getInstance().setPerspective(getPerspective());
+            getInstance().setOrganization(getPerspective().getBalancedScorecard().getOrganization());
             create(getInstance());
         }
-        if (getInstance().getPerspective().getId()!= null) {            
-            return getOutcome() + "?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId()+ "&faces-redirect=true&includeViewParams=true";
+        if (getInstance().getPerspective().getId() != null) {
+            return getOutcome() + "?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
-        return getOutcome() + "?faces-redirect=true&includeViewParams=true"; 
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
     public boolean isWired() {
@@ -219,9 +247,83 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getPerspectiveId()!= null) {            
-            return getOutcome() + "?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId()+ "&faces-redirect=true&includeViewParams=true";
+        
+        if (getInstance().getPerspective().getId() != null) {
+            return getOutcome() + "?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
-        return getOutcome() + "?faces-redirect=true&includeViewParams=true"; 
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
+    }
+
+    public TreeNode buildTree() {
+        themeNode = new DefaultTreeNode("theme", getInstance(), null);
+        TreeNode macroprocessNode = null;
+        TreeNode processNode = null;
+        themeNode.setExpanded(true);
+        for (Macroprocess macroprocess : getInstance().getMacroprocess()) {
+            macroprocessNode = new DefaultTreeNode("macroprocess", macroprocess, themeNode);
+            macroprocessNode.setExpanded(true);
+            for (Process process : macroprocess.getProcess()) {
+                processNode = new DefaultTreeNode("process", process, macroprocessNode);
+                processNode.setExpanded(true);
+            }
+        }
+        return themeNode;
+    }
+
+    public void onNodeSelect(NodeSelectEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), ((BussinesEntity) event.getTreeNode().getData()).getName());
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void redirecToAdd() {
+        StringBuilder outcomeBuilder = new StringBuilder();
+        BussinesEntity bussinesEntity = null;
+        if (selectedNode != null) {
+            bussinesEntity = (BussinesEntity) selectedNode.getData();
+            if ("theme".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/macroprocess/macroprocess.xhtml?");
+                outcomeBuilder.append("themeId=").append(getThemeId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/theme/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("macroprocess".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/process/process.xhtml?");
+                outcomeBuilder.append("&macroprocessId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/theme/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("process".equals(selectedNode.getType())) {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            } 
+        }
+    }
+
+    public void redirecToEdit() {
+
+        StringBuilder outcomeBuilder = new StringBuilder();
+        if (selectedNode != null) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            BussinesEntity bussinesEntity = (BussinesEntity) selectedNode.getData();
+            if ("theme".equals(selectedNode.getType())) {
+                FacesMessage messag = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
+                FacesContext.getCurrentInstance().addMessage(null, messag);
+                //outcomeBuilder.append("/pages/management/theme/theme.xhtml?");
+                //outcomeBuilder.append("themeId=").append(getThemeId());
+                //outcomeBuilder.append("&outcome=" + "/pages/management/theme/view");
+                //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("macroprocess".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/macroprocess/macroprocess.xhtml?");
+                outcomeBuilder.append("&macroprocessId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&themeId=").append(((Macroprocess)bussinesEntity).getTheme().getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/theme/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            } else if ("process".equals(selectedNode.getType())) {
+                outcomeBuilder.append("/pages/management/process/process.xhtml?");
+                outcomeBuilder.append("&processId=").append(bussinesEntity.getId());
+                outcomeBuilder.append("&macroprocessId=").append(((Process)bussinesEntity).getMacroprocess().getId());
+                outcomeBuilder.append("&outcome=" + "/pages/management/theme/view");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+            }
+        }
     }
 }

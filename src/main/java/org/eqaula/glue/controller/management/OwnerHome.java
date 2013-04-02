@@ -33,9 +33,12 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
+import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.OrganizationService;
+import org.eqaula.glue.service.ThemeService;
 import org.eqaula.glue.util.Dates;
+import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
 
@@ -54,6 +57,8 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     @Current
     @Inject
     private Profile profile;
+    @Inject
+    private ThemeService themeService;
 
     public OwnerHome() {
     }
@@ -116,7 +121,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
             create(getInstance());
         }
         //TODO idear una mejor forma de redireccionar
-        if (getOrganizationId() != null){
+        if (getOrganizationId() != null) {
             return getOutcome() + "?organizationId=" + getOrganizationId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
@@ -142,9 +147,14 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
                 throw new NullPointerException("Owner is Null");
             }
             if (getInstance().isPersistent()) {
-                delete(getInstance());
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
-                RequestContext.getCurrentInstance().execute("editDlg.hide()");
+                if (hasValuesBussinesEntity()) {
+                    delete(getInstance());
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
+                    RequestContext.getCurrentInstance().execute("editDlg.hide()");
+                } else {
+                    System.out.println("---------------------------- aqui");
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.property.hasValues")+" "+ getInstance().getName(), ""));
+                }
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un gerente para ser borrado!", ""));
             }
@@ -152,11 +162,15 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-         if (getOrganizationId() != null){
-            return getOutcome() + "?organizationId=" + getOrganizationId() + "&faces-redirect=true&includeViewParams=true";
+
+        if (getInstance().getOrganization() != null) {
+            return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
-    
+    public boolean hasValuesBussinesEntity() {
+        boolean ban = themeService.findByOwner(getInstance()).isEmpty();
+        return ban;
+    }
 }

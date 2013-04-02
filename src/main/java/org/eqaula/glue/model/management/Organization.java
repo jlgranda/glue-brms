@@ -47,6 +47,9 @@ public class Organization extends BussinesEntity implements Serializable {
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Owner> owners = new ArrayList<Owner>();
 
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    private List<Theme> themes = new ArrayList<Theme>();
+    
     public String getRuc() {
         return ruc;
     }
@@ -79,6 +82,14 @@ public class Organization extends BussinesEntity implements Serializable {
     public boolean removeOwner(Owner owner){
         owner.setOrganization(null);
         return getOwners().remove(owner);
+    }
+
+    public List<Theme> getThemes() {
+        return themes;
+    }
+
+    public void setThemes(List<Theme> themes) {
+        this.themes = themes;
     }
     
     @Override
