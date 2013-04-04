@@ -38,6 +38,13 @@ limitations under the License.
                         <h3>#{objetiveHome.objetiveId != null? messages['common.edit'] : messages['common.add']} 
                             #{messages['module.objetive']}</h3> 
                     </div>
+                    <div class="row" style="margin-top: 5px;" >
+                        <p>
+                            #{objetiveHome.instance.theme.name}
+                            #{objetiveHome.instance.theme.description}
+                        </p> 
+                    </div>
+
                 </div>  
             </div>
         </ui:define>
@@ -50,6 +57,8 @@ limitations under the License.
 
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{objetiveHome.saveObjetive()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
+                    #{' '}
+                   <!-- <p:commandButton id="saveanother" action="#{objetiveHome.saveObjetive()}" value="#{messages['common.save']} y agregar otro" styleClass="btn" rendered="#{empty objetiveHome.objetiveId}" /> -->
                     <!-- &nbsp;-->
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
                                      update=":cancel-dialog" rendered="#{objetiveHome.managed}">                        
@@ -59,7 +68,7 @@ limitations under the License.
                             value="#{messages['common.cancel']}" styleClass="btn">
                         <f:param name="balancedScorecardId" value="#{objetiveHome.theme.perspective.balancedScorecard.id}"/>
                     </h:link>
-                   
+
                 </div>  
             </h:form>
 
