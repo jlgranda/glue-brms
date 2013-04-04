@@ -30,6 +30,7 @@ import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
+import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
@@ -91,6 +92,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     public void init() {
         setEntityManager(em);
         organizationService.setEntityManager(em);
+        themeService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
 
@@ -121,7 +123,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
             create(getInstance());
         }
         //TODO idear una mejor forma de redireccionar
-        if (getOrganizationId() != null) {
+        if (getInstance().getOrganization() != null) {
             return getOutcome() + "?organizationId=" + getOrganizationId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
@@ -142,6 +144,8 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
 
     @Transactional
     public String deleteOwner() {
+         boolean band;
+         band=false;
         try {
             if (getInstance() == null) {
                 throw new NullPointerException("Owner is Null");
@@ -152,8 +156,11 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
                     RequestContext.getCurrentInstance().execute("editDlg.hide()");
                 } else {
-                    System.out.println("---------------------------- aqui");
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.property.hasValues")+" "+ getInstance().getName(), ""));
+                    //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.property.hasValues") + " " + getInstance().getName(), ""));
+                    //RequestContext.getCurrentInstance().execute("editDlg.hide()");
+                    band=true;
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,getInstance().getName() + " : "+ UI.getMessages("module.stocklist.delete.confirm"), "");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
                 }
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un gerente para ser borrado!", ""));
@@ -163,6 +170,9 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
 
+        if(band){
+            return null;
+        }
         if (getInstance().getOrganization() != null) {
             return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
