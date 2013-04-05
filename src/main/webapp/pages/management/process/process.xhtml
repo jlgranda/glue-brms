@@ -46,9 +46,11 @@ limitations under the License.
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <glue:input id="code" name="code" type="text" label="#{messages['common.code']}" value="#{processHome.instance.series}" required="true" inlinehelp="#{messages['common.code.inlinehelp']}" execute="@this save" render="code"/>
                 <glue:input id="name" name="name" type="textarea" label="#{messages['common.name']}" value="#{processHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" render="name" execute="@this save" />
-                
+
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{processHome.saveProcess()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
+                    <!-- &nbsp;-->
+                    <p:commandButton id="saveanother" action="#{processHome.saveAnotherProcess()}" value="#{messages['common.save.another']}" styleClass="btn btn-secundary" rendered="#{empty processHome.processId}"/>
                     <!-- &nbsp;-->
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
                                      update=":cancel-dialog" rendered="#{processHome.instance.persistent}">                        

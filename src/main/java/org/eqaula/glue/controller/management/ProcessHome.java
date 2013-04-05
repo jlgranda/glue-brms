@@ -65,26 +65,26 @@ public class ProcessHome extends BussinesEntityHome<Process> implements Serializ
     public ProcessHome() {
     }
 
-    public Long getProcessId(){
-        return (Long)getId();
-        
+    public Long getProcessId() {
+        return (Long) getId();
+
     }
-    
-    public void setProcessId(Long processId){
+
+    public void setProcessId(Long processId) {
         setId(processId);
     }
-    
-      public String getStructureName() {
+
+    public String getStructureName() {
         return getInstance().getName();
     }
 
-   @Transactional
+    @Transactional
     public Macroprocess getMacroprocess() {
         if (macroprocess == null) {
             if (macroprocessId == null) {
-                macroprocess= null;
-            }else{
-                macroprocess= macroprocessService.find(getMacroprocessId());
+                macroprocess = null;
+            } else {
+                macroprocess = macroprocessService.find(getMacroprocessId());
             }
         }
         return macroprocess;
@@ -101,7 +101,7 @@ public class ProcessHome extends BussinesEntityHome<Process> implements Serializ
     public void setMacroprocessId(Long macroprocessId) {
         this.macroprocessId = macroprocessId;
     }
-    
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -149,13 +149,35 @@ public class ProcessHome extends BussinesEntityHome<Process> implements Serializ
             System.out.println("--------------------------");
             System.out.println("--------------------------");
             System.out.println("--------------------------");
-            System.out.println("-----------"+getMacroprocess().getName()+"---------------");
+            System.out.println("-----------" + getMacroprocess().getName() + "---------------");
             create(getInstance());
         }
-        if (getMacroprocessId()!= null) {            
-            return getOutcome() + "?themeId=" + getMacroprocess().getTheme().getId()+ "&faces-redirect=true&includeViewParams=true";
+        if (getMacroprocessId() != null) {
+            return getOutcome() + "?organizationId=" + getMacroprocess().getTheme().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
-        return getOutcome() + "?faces-redirect=true&includeViewParams=true"; 
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
+    }
+
+    @TransactionAttribute
+    public String saveAnotherProcess() {
+        Date now = Calendar.getInstance().getTime();
+        getInstance().setLastUpdate(now);
+        getInstance().setAuthor(this.profile);
+        getInstance().setMacroprocess(getMacroprocess());
+        System.out.println("--------------------------");
+        System.out.println("--------------------------");
+        System.out.println("--------------------------");
+        System.out.println("--------------------------");
+        System.out.println("-----------" + getMacroprocess().getName() + "---------------");
+        create(getInstance());
+
+        if (getMacroprocessId() != null) {
+            log.info("el getOutcome: " + getOutcome());
+            log.info("el getOutcome: " + getOutcome());
+            log.info("el getOutcome: " + getOutcome());
+            return "/pages/management/process/process?" + "?macroprocessId=" + getMacroprocessId() + "&faces-redirect=true&includeViewParams=true";
+        }
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
     public boolean isWired() {
@@ -188,10 +210,9 @@ public class ProcessHome extends BussinesEntityHome<Process> implements Serializ
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getMacroprocessId()!= null) {            
-            return getOutcome() + "?themeId=" + getMacroprocess().getTheme().getId()+ "&faces-redirect=true&includeViewParams=true";
+        if (getMacroprocessId() != null) {
+            return getOutcome() + "?organizationId=" + getMacroprocess().getTheme().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
-        return getOutcome() + "?faces-redirect=true&includeViewParams=true"; 
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-    
 }
