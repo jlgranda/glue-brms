@@ -47,7 +47,7 @@ public class Initiative extends BussinesEntity implements Serializable {
     @ManyToOne
     private Resource resource;
     @ManyToOne
-    private Measure measure;
+    private Target target;
     public Date getStartDate() {
         return startDate;
     }
@@ -72,13 +72,14 @@ public class Initiative extends BussinesEntity implements Serializable {
         this.resource = resource;
     }
 
-    public Measure getMeasure() {
-        return measure;
+    public Target getTarget() {
+        return target;
     }
 
-    public void setMeasure(Measure measure) {
-        this.measure = measure;
+    public void setTarget(Target target) {
+        this.target = target;
     }
+
     
     
 

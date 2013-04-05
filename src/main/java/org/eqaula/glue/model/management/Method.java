@@ -43,17 +43,16 @@ public class Method extends BussinesEntity implements Serializable {
     private static final long serialVersionUID = -2099259320492517035L;
     
     @ManyToOne
-    private Measure measure;
+    private Target target;
+
+    public Target getTarget() {
+        return target;
+    }
+
+    public void setTarget(Target target) {
+        this.target = target;
+    }
     
-    public Measure getMeasure() {
-        return measure;
-    }
-
-    public void setMeasure(Measure measure) {
-        this.measure = measure;
-    }
-
- 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers

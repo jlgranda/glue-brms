@@ -16,6 +16,7 @@
 package org.eqaula.glue.controller.management;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,6 +35,7 @@ import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Measure;
+import org.eqaula.glue.model.management.Method;
 import org.eqaula.glue.model.management.Target;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
@@ -64,6 +66,10 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
     private Long measureId;
     @Inject
     private MeasureService measureService;
+    
+    private Method selectedMethod;
+    private List<Method> methods;
+    
 
     public TargetHome() {
     }
@@ -103,6 +109,26 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         this.measureId = measureId;
     }
 
+    public Method getSelectedMethod() {
+        return selectedMethod;
+    }
+
+    public void setSelectedMethod(Method selectedMethod) {
+        this.selectedMethod = selectedMethod;
+    }
+
+    public List<Method> getMethods() {
+        methods = new ArrayList<Method>();
+        methods= getInstance().getMethods();
+        return methods;
+    }
+
+    public void setMethods(List<Method> methods) {
+        this.methods = methods;
+    }
+
+    
+    
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {

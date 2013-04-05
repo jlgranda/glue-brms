@@ -46,6 +46,11 @@ limitations under the License.
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{targetHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{targetHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+                <glue:input id="sequence" name="sequence" type="decimal" label="#{messages['common.sequence']}" value="#{targetHome.instance.sequence}" required="true" inlinehelp="#{messages['common.sequence.inlinehelp']}" execute="@this save" render="sequence"/>
+                <glue:input id="periodFrom" name="periodFrom" type="calendar" label="#{messages['common.periodFrom']}" value="#{targetHome.instance.periodFrom}" required="true" inlinehelp="#{messages['common.periodFrom.inlinehelp']}" execute="@this save" render="periodFrom" />
+                <glue:input id="periodTo" name="periodTo" type="calendar" label="#{messages['common.periodTo']}" value="#{targetHome.instance.periodTo}" required="true" inlinehelp="#{messages['common.periodTo.inlinehelp']}" execute="@this save" render="periodTo" />
+               <!-- <glue:input id="duration" name="duration" type="text" label="#{messages['common.duration']}" value="#{periodHome.instance.duration}" required="true" inlinehelp="#{messages['common.duration.help']}" render="duration" execute="@this save" /> -->
+
                 <h:panelGroup layout="block" class="control-group">
                     <label for="targettype_" class="control-label">#{messages['Target.type']}</label>
                     <div class="controls">
@@ -56,6 +61,47 @@ limitations under the License.
                         </p:selectOneMenu>                     
                     </div>
                 </h:panelGroup> 
+
+                <p:dataTable var="_methods" value="#{targetHome.instance.methods}"   
+                             selection="#{targetHome.selectedMethod}" selectionMode="single" rowKey="#{_methods.id}" >
+                    <!-- 
+                        <p:dataTable var="_methods" value="#{targetHome.instance.methods}" 
+                                 
+                                 paginator="true" rows="10"
+                                 paginatorAlwaysVisible="false"
+                                 paginatorPosition="top"
+                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                                 rowsPerPageTemplate="5,10,15"
+                                 id="themeTable" lazy="true"
+                                 selection="#{targetHome.selectedMethod}"
+                                 rendered="true"
+                                 selectionMode="single">
+                    -->
+                    <f:facet name="header">  
+                        Methods
+                    </f:facet>  
+
+                    <p:column headerText="Name">  
+                        <h:outputText value="#{_methods.name}" />
+                    </p:column>  
+
+                    <p:column headerText="Description">  
+                        <h:outputText value="#{_methods.description}" />                        
+                    </p:column>  
+
+                    <p:column headerText="Deleted" >  
+                        <p:commandButton id="selectButton" icon="ui-icon-search" title="View">  
+                           <!-- <f:setPropertyActionListener value="#{car}" target="#{tableBean.selectedCar}" /> -->
+                         </p:commandButton>                       
+
+                    </p:column>  
+
+                    <f:facet name="footer">  
+                        <p:commandButton id="viewButton" value="View" icon="ui-icon-search" />  
+                        <!-- update=":form:display" oncomplete="carDialog.show()"  -->
+                    </f:facet>  
+
+                </p:dataTable>  
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{targetHome.saveTarget()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->

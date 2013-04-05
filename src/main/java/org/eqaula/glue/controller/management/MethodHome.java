@@ -35,9 +35,11 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Measure;
 import org.eqaula.glue.model.management.Method;
+import org.eqaula.glue.model.management.Target;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.MeasureService;
+import org.eqaula.glue.service.TargetService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
@@ -60,10 +62,10 @@ public class MethodHome extends BussinesEntityHome<Method> implements Serializab
     @Current
     @Inject
     private Profile profile;
-    private Measure measure;
-    private Long measureId;
+    private Target target;
+    private Long targetId;
     @Inject
-    private MeasureService measureService;
+    private TargetService targetService;
 
     public MethodHome() {
     }
@@ -75,32 +77,32 @@ public class MethodHome extends BussinesEntityHome<Method> implements Serializab
     public void setMethodId(Long methodId) {
         setId(methodId);
     }
-    
+
     public String getStructureName() {
         return getInstance().getName();
     }
 
-    public Measure getMeasure() {
-        if (measure == null) {
-            if (measureId == null) {
-                measure = null;
+    public Long getTargetId() {
+        return targetId;
+    }
+
+    public void setTargetId(Long targetId) {
+        this.targetId = targetId;
+    }
+
+    public Target getTarget() {
+        if (target == null) {
+            if (targetId == null) {
+                target = null;
             } else {
-                measure = measureService.find(getMeasureId());
+                target = targetService.find(getTargetId());
             }
         }
-        return measure;
+        return target;
     }
 
-    public void setMeasure(Measure measure) {
-        this.measure = measure;
-    }
-
-    public Long getMeasureId() {
-        return measureId;
-    }
-
-    public void setMeasureId(Long measureId) {
-        this.measureId = measureId;
+    public void setTarget(Target target) {
+        this.target = target;
     }
 
     @TransactionAttribute
@@ -118,7 +120,7 @@ public class MethodHome extends BussinesEntityHome<Method> implements Serializab
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        measureService.setEntityManager(em);
+        targetService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
 
@@ -146,11 +148,11 @@ public class MethodHome extends BussinesEntityHome<Method> implements Serializab
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setMeasure(getMeasure());
+            getInstance().setTarget(getTarget());
             create(getInstance());
         }
-        if (getMeasure() != null) {
-            return getOutcome() + "?balancedScorecardId=" + getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        if (getTarget()!= null) {
+            return getOutcome() + "?balancedScorecardId=" + getTarget().getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -185,8 +187,8 @@ public class MethodHome extends BussinesEntityHome<Method> implements Serializab
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getMeasure() != null) {
-            return getOutcome() + "?balancedScorecardId=" + getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        if (getTarget() != null) {
+            return getOutcome() + "?balancedScorecardId=" + getTarget().getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }

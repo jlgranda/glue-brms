@@ -33,10 +33,12 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Initiative;
 import org.eqaula.glue.model.management.Measure;
+import org.eqaula.glue.model.management.Target;
 
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.MeasureService;
+import org.eqaula.glue.service.TargetService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
@@ -59,10 +61,11 @@ public class InitiativeHome extends BussinesEntityHome<Initiative> implements Se
     @Current
     @Inject
     private Profile profile;
-    private Measure measure;
-    private Long measureId;
+    
+    private Target target;
+    private Long targetId;
     @Inject
-    private MeasureService measureService;
+    private TargetService targetService;
 
     public InitiativeHome() {
     }
@@ -78,29 +81,30 @@ public class InitiativeHome extends BussinesEntityHome<Initiative> implements Se
     public String getStructureName(){
         return getInstance().getName();
     }
-    
-    public Measure getMeasure() {
-         if (measure == null) {
-            if (measureId == null) {
-                measure = null;
-            } else {
-                measure = measureService.find(getMeasureId());
+
+    public Target getTarget() {
+        if(target==null){
+            if(targetId == null){
+                target=null;
+            }else{
+             target = targetService.find(getTargetId());
             }
         }
-        return measure;
+        return target;
     }
 
-    public void setMeasure(Measure measure) {
-        this.measure = measure;
+    public void setTarget(Target target) {
+        this.target = target;
     }
 
-    public Long getMeasureId() {
-        return measureId;
+    public Long getTargetId() {
+        return targetId;
     }
 
-    public void setMeasureId(Long measureId) {
-        this.measureId = measureId;
+    public void setTargetId(Long targetId) {
+        this.targetId = targetId;
     }
+    
     
     @TransactionAttribute
     public void load() {
@@ -117,7 +121,7 @@ public class InitiativeHome extends BussinesEntityHome<Initiative> implements Se
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        measureService.setEntityManager(em);
+        targetService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
     
@@ -145,11 +149,11 @@ public class InitiativeHome extends BussinesEntityHome<Initiative> implements Se
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setMeasure(getMeasure());
+            getInstance().setTarget(getTarget());
             create(getInstance());
         }
-        if (getMeasure() != null) {
-            return getOutcome() + "?balancedScorecardId=" + getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        if (getTarget()!= null) {
+            return getOutcome() + "?balancedScorecardId=" + getTarget().getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -184,8 +188,8 @@ public class InitiativeHome extends BussinesEntityHome<Initiative> implements Se
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getMeasure() != null) {
-            return getOutcome() + "?balancedScorecardId=" + getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        if (getTarget()!= null) {
+            return getOutcome() + "?balancedScorecardId=" + getTarget().getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }    

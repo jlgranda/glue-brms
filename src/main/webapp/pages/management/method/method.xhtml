@@ -25,7 +25,7 @@ limitations under the License.
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml" >
         <f:metadata>
             <f:viewParam name="methodId" value="#{methodHome.methodId}"/>
-            <f:viewParam name="measureId" value="#{methodHome.measureId}"/>
+            <f:viewParam name="targetId" value="#{methodHome.targetId}"/>
             <f:viewParam name="outcome" value="#{methodHome.outcome}"/>
             <s:viewAction action="#{methodHome.load}" if="#{conversation.transient}" />
         </f:metadata>
@@ -54,7 +54,7 @@ limitations under the License.
                     <!-- &nbsp;-->
                     <h:link outcome="/pages/management/balancedscorecard/view"
                             value="#{messages['common.cancel']}" styleClass="btn">
-                        <f:param name="balancedScorecardId" value="#{methodHome.measure.objetive.theme.perspective.balancedScorecard.id}"/>
+                        <f:param name="balancedScorecardId" value="#{methodHome.target.measure.objetive.theme.perspective.balancedScorecard.id}"/>
                     </h:link>
                 </div>  
             </h:form>

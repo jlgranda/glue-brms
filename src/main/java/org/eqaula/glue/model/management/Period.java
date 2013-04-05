@@ -55,9 +55,6 @@ public class Period extends BussinesEntity implements Serializable{
     @Column(nullable = false)
     private String duration;
     
-    @ManyToOne
-    private Measure measure;
-
     public Long getSequence() {
         return sequence;
     }
@@ -90,13 +87,7 @@ public class Period extends BussinesEntity implements Serializable{
         this.duration = duration;
     }
 
-    public Measure getMeasure() {
-        return measure;
-    }
-
-    public void setMeasure(Measure measure) {
-        this.measure = measure;
-    }
+   
     
         
     @Override

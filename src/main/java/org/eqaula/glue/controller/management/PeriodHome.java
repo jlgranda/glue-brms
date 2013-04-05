@@ -145,7 +145,7 @@ public class PeriodHome extends BussinesEntityHome<Period> implements Serializab
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setMeasure(getMeasure());
+            //getInstance().setMeasure(getMeasure());
             create(getInstance());
         }
         if (getMeasure() != null) {
