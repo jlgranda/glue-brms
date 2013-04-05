@@ -78,19 +78,20 @@
                         </p:treeNode>
                     </p:tree>
                 </p:panel>
-                <p:panel id="detail-panel" header="#{balancedScorecardHome.selectedNode.data.name}" toggleable="true">
+                <p:panel id="detail-panel" header="#{balancedScorecardHome.selectedNode.data.name!=null? balancedScorecardHome.selectedNode.data.name: balancedScorecardHome.bscNode.data.name}" toggleable="true">
 
                     <p:treeTable id="treetable" value="#{balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode}" var="node"  propagateSelectionUp="true">  
+                        
                         <p:column style="width:150px">  
-
-                            <h:outputText value="#{node}"/>                               
+                            <h:outputText value="#{balancedScorecardHome.getToHaveChildren(balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode) == true ? node: hola}"/>   <!--"{node}" messages['common.nothingToShow']-->                            
                         </p:column>  
 
+                        <!--
                         <p:column style="width:150px">  
 
                             <h:outputText value="#{node.class.name.equals('org.eqaula.glue.model.management.Measure.class')}"/>  
 
-                        </p:column>
+                        </p:column>-->
 
                     </p:treeTable>  
                 </p:panel>

@@ -84,6 +84,22 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     private NavigationHandler navigation;
     @Inject
     private FacesContext context;
+    
+    private boolean toHaveChildren;
+
+    public boolean getToHaveChildren(TreeNode node) {
+        if(node.getChildren().isEmpty()){
+            toHaveChildren= false;
+        }else{
+            toHaveChildren = true;
+        }
+        return toHaveChildren;
+    }
+
+    public void setToHaveChildren(boolean toHaveChildren) {
+        this.toHaveChildren = toHaveChildren;
+    }
+    
 
     public BalancedScorecardHome() {
     }
@@ -118,6 +134,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     public void setSelectedNode(TreeNode selectedNode) {
         this.selectedNode = selectedNode;
     }
+
 
     @TransactionAttribute
     public void load() {
