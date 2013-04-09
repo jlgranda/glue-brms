@@ -73,16 +73,20 @@ limitations under the License.
                         <p:treeNode expandedIcon="ui-icon-folder-open"  
                                     collapsedIcon="ui-icon-folder-collapsed">  
                         </p:treeNode>  
-                        <p:treeNode  type="organization" icon="ui-icon-home">    
+                        <p:treeNode  type="organization">  
+                             <i class="icon-home"/> #{' '}
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
-                        <p:treeNode  type="theme" icon="ui-icon-asterisk">    
+                        <p:treeNode  type="theme"> 
+                            <i class="icon-briefcase"/> #{' '}
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
-                        <p:treeNode  type="macroprocess" icon="ui-icon-screenshot">    
+                        <p:treeNode  type="macroprocess"> 
+                            <i class="icon-th"/> #{' '}
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
-                        <p:treeNode  type="process" icon="icon-asterisk">    
+                        <p:treeNode  type="process">   #{' '}
+                             <i class="icon-tasks"/> 
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
 

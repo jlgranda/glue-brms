@@ -64,18 +64,18 @@ public class MacroprocessHome extends BussinesEntityHome<Macroprocess> implement
 
     public MacroprocessHome() {
     }
-    
-    public Long getMacroprocessId(){
-        return (Long)getId();
+
+    public Long getMacroprocessId() {
+        return (Long) getId();
     }
-    
-    public void setMacroprocessId(Long macroprocessId){
+
+    public void setMacroprocessId(Long macroprocessId) {
         setId(macroprocessId);
     }
+
     public String getStructureName() {
         return getInstance().getName();
     }
-
 
     @Transactional
     public Theme getTheme() {
@@ -100,8 +100,8 @@ public class MacroprocessHome extends BussinesEntityHome<Macroprocess> implement
     public void setThemeId(Long themeId) {
         this.themeId = themeId;
     }
-    
-     @TransactionAttribute
+
+    @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
             wire();
@@ -146,10 +146,29 @@ public class MacroprocessHome extends BussinesEntityHome<Macroprocess> implement
             getInstance().setTheme(getTheme());
             create(getInstance());
         }
-        if (getThemeId()!= null) {            
-            return getOutcome() + "?themeId=" + getInstance().getTheme().getId()+ "&faces-redirect=true&includeViewParams=true";
+        if (getThemeId() != null) {
+            return getOutcome() + "?organizationId=" + getInstance().getTheme().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
-        return getOutcome() + "?faces-redirect=true&includeViewParams=true"; 
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
+    }
+
+    @TransactionAttribute
+    public String saveAnotherMacroprocess() {
+        Date now = Calendar.getInstance().getTime();
+        getInstance().setLastUpdate(now);
+
+        getInstance().setAuthor(this.profile);
+        getInstance().setTheme(getTheme());
+        create(getInstance());
+
+        if (getThemeId() != null) {
+            log.info("get outcome: " + getOutcome());
+            log.info("get outcome: " + getOutcome());
+            log.info("get outcome: " + getOutcome());
+            log.info("get outcome: " + getOutcome());
+            return "/pages/management/macroprocess/macroprocess" +"?themeId=" + getInstance().getTheme().getId() + "&faces-redirect=true&includeViewParams=true";
+        }
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
     public boolean isWired() {
@@ -182,10 +201,9 @@ public class MacroprocessHome extends BussinesEntityHome<Macroprocess> implement
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getThemeId()!= null) {            
-            return getOutcome() + "?themeId=" + getInstance().getTheme().getId()+ "&faces-redirect=true&includeViewParams=true";
+        if (getThemeId() != null) {
+            return getOutcome() + "?organizationId=" + getInstance().getTheme().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
-        return getOutcome() + "?faces-redirect=true&includeViewParams=true"; 
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-    
 }
