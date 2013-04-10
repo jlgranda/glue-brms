@@ -62,8 +62,7 @@ import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.MenuModel;
 import org.primefaces.model.TreeNode;
 
-/**
- *
+/*
  * @author dianita
  */
 @Named
@@ -343,11 +342,13 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             FacesContext.getCurrentInstance().addMessage(null, message);
             BussinesEntity bussinesEntity = (BussinesEntity) selectedNode.getData();
             if ("bsc".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/balancedscorecard/balancedscorecard.xhtml?");
-                outcomeBuilder.append("balancedScorecardId=").append(getBalancedScorecardId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
-
+                //outcomeBuilder.append("/pages/management/balancedscorecard/balancedscorecard.xhtml?");
+                //outcomeBuilder.append("balancedScorecardId=").append(getBalancedScorecardId());
+                //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
+                //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                FacesMessage messag = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
+                FacesContext.getCurrentInstance().addMessage(null, messag);
+                
             } else if ("perspective".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/perspective/perspective.xhtml?");
                 outcomeBuilder.append("&balancedscorecardId=").append(getBalancedScorecardId());

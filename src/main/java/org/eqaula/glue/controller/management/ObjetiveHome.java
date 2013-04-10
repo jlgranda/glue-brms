@@ -48,14 +48,12 @@ import org.primefaces.context.RequestContext;
 /*
  * @author dianita
  */
-
 @Named
 @ViewScoped
-public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serializable{
-    
+public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serializable {
+
     private static final long serialVersionUID = -4224903764118210792L;
     private static Logger log = Logger.getLogger(ObjetiveHome.class);
-       
     @Inject
     @Web
     private EntityManager em;
@@ -64,13 +62,12 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
     @Current
     @Inject
     private Profile profile;
-  
     private Theme theme;
     private Long themeId;
     @Inject
     private ThemeService themeService;
-    
-  
+    private String outcomeAnother;
+
     public ObjetiveHome() {
     }
 
@@ -86,13 +83,12 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         return getInstance().getName();
     }
 
-  
     @Transactional
     public Theme getTheme() {
-         if(theme==null){
-            if(themeId==null){
-                theme=null;
-            }else{
+        if (theme == null) {
+            if (themeId == null) {
+                theme = null;
+            } else {
                 theme = themeService.find(getThemeId());
             }
         }
@@ -111,7 +107,15 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         this.themeId = themeId;
     }
 
-    
+    public String getOutcomeAnother() {
+        return outcomeAnother;
+    }
+
+    public void setOutcomeAnother(String outcomeAnother) {
+        this.outcomeAnother = outcomeAnother;
+    }
+
+        
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -157,11 +161,21 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
             getInstance().setTheme(getTheme());
             create(getInstance());
         }
-         //TODO idear una mejor forma de redireccionar
-        if (getInstance().getTheme().getId()!= null){
-            return getOutcome() + "?balancedScorecardId=" + getInstance().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        //TODO idear una mejor forma de redireccionar
+        if (getInstance().getTheme().getId() != null) {
+            if (getOutcomeAnother().isEmpty()) {
+                return getOutcome() + "?balancedScorecardId=" + getInstance().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+            }else{
+                return getOutcomeAnother() + "?faces-redirect=true&includeViewParams=true";
+            }
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
+    }
+
+    @TransactionAttribute
+    public String saveAndAddOther() {
+       setOutcomeAnother("/pages/management/objetive/objetive");       
+       return saveObjetive();
     }
 
     public boolean isWired() {
@@ -195,10 +209,9 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
         //TODO idear una mejor forma de redireccionar
-        if (getInstance().getTheme().getId()!= null){
+        if (getInstance().getTheme().getId() != null) {
             return getOutcome() + "?balancedScorecardId=" + getInstance().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-
 }
