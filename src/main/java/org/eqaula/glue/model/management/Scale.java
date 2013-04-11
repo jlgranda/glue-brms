@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 jlgranda.
+ * Copyright 2013 dianita.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,10 @@
 package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -31,55 +29,38 @@ import org.eqaula.glue.model.BussinesEntity;
 
 /**
  *
- * @author jlgranda
+ * @author dianita
  */
+
 @Entity
-@Table(name = "Owner")
-@DiscriminatorValue(value = "OWN")
+@Table(name = "Scale")
+@DiscriminatorValue(value = "SCL")
 @PrimaryKeyJoinColumn(name = "id")
-public class Owner extends BussinesEntity implements Serializable {
-
-    private static final long serialVersionUID = 117029006983960496L;
-    @ManyToOne
-    private Organization organization;
-    @OneToMany(mappedBy = "owner")
-    private List<Theme> themes ;
-    @OneToMany(mappedBy = "owner")
-    private  List<Diagnostic> diagnostic;
+public class Scale extends BussinesEntity implements Serializable {
+    private static final long serialVersionUID = -135048321817423962L;
+    @OneToMany(mappedBy = "scale")
+    private List<RevisionItem> revisionItems;
     
-    public Owner() {
-        themes = new ArrayList<Theme>();
-    }
-        
-    public Organization getOrganization() {
-        return organization;
+    @OneToMany(mappedBy = "scale", cascade = CascadeType.ALL)
+    private List<Valuation> valuations;
+
+    public List<Valuation> getValuations() {
+        return valuations;
     }
 
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
+    public void setValuations(List<Valuation> valuations) {
+        this.valuations = valuations;
     }
 
-    public List<Theme> getThemes() {
-        return themes;
+    public List<RevisionItem> getRevisionItems() {
+        return revisionItems;
     }
 
-    public void setThemes(List<Theme> themes) {
-        this.themes = themes;
+    public void setRevisionItems(List<RevisionItem> revisionItems) {
+        this.revisionItems = revisionItems;
     }
-
-    public List<Diagnostic> getDiagnostic() {
-        return diagnostic;
-    }
-
-    public void setDiagnostic(List<Diagnostic> diagnostic) {
-        this.diagnostic = diagnostic;
-    }
-
     
-    public boolean addTheme(Theme theme){
-        theme.setOwner(this);
-        return getThemes().add(theme);
-    }
+    
     
     @Override
     public int hashCode() {
@@ -101,7 +82,7 @@ public class Owner extends BussinesEntity implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Owner other = (Owner) obj;
+        Scale other = (Scale) obj;
         return new EqualsBuilder().
                 // if deriving: appendSuper(super.equals(obj)).
                 append(getName(), other.getName()).
@@ -111,11 +92,11 @@ public class Owner extends BussinesEntity implements Serializable {
 
     @Override
     public String toString() {
-        /*return "org.eqaula.glue.model.management.Owner[ "
+        return "org.eqaula.glue.model.management.Scale[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
-                + " ]";*/
-        return getName();
+                + " ]";
     }
+    
 }

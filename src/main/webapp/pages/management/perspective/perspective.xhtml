@@ -69,7 +69,9 @@ limitations under the License.
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{perspectiveHome.savePerspective()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
 
-                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
+                    <p:commandButton id="saveanother" action="#{perspectiveHome.saveAndAddOther()}" value="#{messages['common.save']} y agregar más" styleClass="btn btn-inverse" rendered="#{empty perspectiveHome.perspectiveId}" /> 
+                    
+                  <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
                                      update=":cancel-dialog" rendered="#{perspectiveHome.managed}">                        
                     </p:commandButton>
 

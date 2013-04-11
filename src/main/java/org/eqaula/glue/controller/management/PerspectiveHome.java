@@ -63,6 +63,7 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
     private Long balancedScorecardId;
     @Inject
     private BalancedScorecardService balancedScorecardService;
+    private String outcomeOther = "";
 
     // agregar los atributos de theme service
     public PerspectiveHome() {
@@ -104,6 +105,15 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
         this.balancedScorecardId = balancedScorecardId;
     }
 
+    public String getOutcomeOther() {
+        return outcomeOther;
+    }
+
+    public void setOutcomeOther(String outcomeOther) {
+        this.outcomeOther = outcomeOther;
+    }
+
+    
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -150,12 +160,22 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
             create(getInstance());
         }
 
-        if (getInstance().getBalancedScorecard().getId()!= null) {
-            return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        if (getInstance().getBalancedScorecard().getId() != null) {
+            if (getOutcomeOther().isEmpty()) {
+                return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+            }else{
+                return getOutcomeOther() + "?faces-redirect=true&includeViewParams=true";
+            }
         }
-
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
+    
+    @TransactionAttribute
+    public String saveAndAddOther() {
+       setOutcomeOther("/pages/management/perspective/perspective");       
+       return savePerspective();
+    }
+
 
     public boolean isWired() {
         return true;
@@ -190,7 +210,7 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
 
-        if (getInstance().getBalancedScorecard().getId()!= null) {
+        if (getInstance().getBalancedScorecard().getId() != null) {
             return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";

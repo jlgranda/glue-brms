@@ -81,6 +81,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     private NavigationHandler navigation;
     @Inject
     private FacesContext context;
+    private String outcomeOther = "";
 
     public ThemeHome() {
     }
@@ -122,6 +123,14 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
 
     public void setSelectedNode(TreeNode selectedNode) {
         this.selectedNode = selectedNode;
+    }
+
+    public String getOutcomeOther() {
+        return outcomeOther;
+    }
+
+    public void setOutcomeOther(String outcomeOther) {
+        this.outcomeOther = outcomeOther;
     }
 
     @Transactional
@@ -212,9 +221,19 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             create(getInstance());
         }
         if (getInstance().getPerspective().getId() != null) {
-            return getOutcome() + "?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+            if (getOutcomeOther().isEmpty()) {
+                return getOutcome() + "?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+            }else{
+                return getOutcomeOther() + "?faces-redirect=true&includeViewParams=true";
+            }
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
+    }
+
+    @TransactionAttribute
+    public String saveAndAddOther() {
+        setOutcomeOther("/pages/management/theme/theme");
+        return saveTheme();
     }
 
     public boolean isWired() {
@@ -247,7 +266,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        
+
         if (getInstance().getPerspective().getId() != null) {
             return getOutcome() + "?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
@@ -293,7 +312,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             } else if ("process".equals(selectedNode.getType())) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, message);
-            } 
+            }
         }
     }
 
@@ -314,13 +333,13 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             } else if ("macroprocess".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/macroprocess/macroprocess.xhtml?");
                 outcomeBuilder.append("&macroprocessId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&themeId=").append(((Macroprocess)bussinesEntity).getTheme().getId());
+                outcomeBuilder.append("&themeId=").append(((Macroprocess) bussinesEntity).getTheme().getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/theme/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("process".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/process/process.xhtml?");
                 outcomeBuilder.append("&processId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&macroprocessId=").append(((Process)bussinesEntity).getMacroprocess().getId());
+                outcomeBuilder.append("&macroprocessId=").append(((Process) bussinesEntity).getMacroprocess().getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/theme/view");
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             }

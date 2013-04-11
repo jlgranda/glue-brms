@@ -66,7 +66,7 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
     private Long themeId;
     @Inject
     private ThemeService themeService;
-    private String outcomeAnother;
+    private String outcomeAnother="";
 
     public ObjetiveHome() {
     }

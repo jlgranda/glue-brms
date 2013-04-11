@@ -78,6 +78,8 @@ limitations under the License.
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{themeHome.saveTheme()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->
+                    <p:commandButton id="saveanother" action="#{themeHome.saveAndAddOther()}" value="#{messages['common.save']} y agregar más" styleClass="btn btn-inverse" rendered="#{empty themeHome.themeId}" /> 
+                    
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
                                      update=":cancel-dialog" rendered="#{themeHome.instance.persistent}">                        
                     </p:commandButton>
