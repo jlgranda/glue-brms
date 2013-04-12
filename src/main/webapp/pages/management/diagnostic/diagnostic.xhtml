@@ -45,10 +45,10 @@ limitations under the License.
         <ui:define name="content" >
             <h:form  id="form" acceptcharset="UTF-8" class="form-horizontal" >
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{diagnosticHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{diagnosticHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{diagnosticHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
                 <glue:input id="applicationDate" name="applicationDate" type="calendar" label="#{messages['common.applicationDate']}" value="#{diagnosticHome.instance.applicationDate}" required="true" inlinehelp="#{messages['common.applicationDate.inlinehelp']}" execute="@this save" render="applicationDate" />
-                
+
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{diagnosticHome.saveDiagnostic()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->
@@ -56,12 +56,12 @@ limitations under the License.
                                      update=":cancel-dialog" rendered="#{diagnosticHome.instance.persistent}">                        
                     </p:commandButton>
                     <!-- &nbsp;-->
-                    
-                  <!--  <h:link outcome="/pages/management/balancedscorecard/view"
+
+                    <h:link outcome="/pages/management/diagnostic/list"
                             value="#{messages['common.cancel']}" styleClass="btn">
-                        <f:param name="balancedScorecardId" value="#{diagnosticHome.target.measure.objetive.theme.perspective.balancedScorecard.id}"/>
-                    </h:link> -->
-                  
+                        <f:param name="ownerId" value="#{diagnosticHome.ownerId}"/>
+                    </h:link> 
+
                 </div>  
             </h:form>
 

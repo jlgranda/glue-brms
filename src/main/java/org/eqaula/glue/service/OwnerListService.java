@@ -63,10 +63,6 @@ public class OwnerListService extends ListService<Owner> {
         if (resultList.isEmpty()) {
             resultList = ownerService.getOwners();
         }
-        System.out.println("------------------------------");
-        System.out.println("------------------------------");
-        System.out.println("------------------------------");
-        System.out.println(getOrganizationId() + "------------- id inyectado");
         return resultList;
     }
 

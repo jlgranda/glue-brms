@@ -69,8 +69,14 @@ limitations under the License.
                     <f:param name="organizationId" value="#{ownerListService.organizationId}"></f:param>
                     <f:param name="outcome" value="list"></f:param>
                 </h:link> 
+             
+                #{' '}
+                <h:link id="button-admin" value="#{messages['module.diagnostics']}" rendered="true" outcome="/pages/management/diagnostic/list" styleClass="btn" 
+                        disabled="#{empty ownerListService.selectedOwner.id}">
+                    <f:param name="ownerId" value="#{ownerListService.selectedOwner.id}"></f:param>
+                </h:link> 
             </div>
-            
+
             <p:dataTable var="_owner" value="#{ownerListService}"
                          paginator="true" rows="10"
                          paginatorAlwaysVisible="false"
@@ -83,7 +89,7 @@ limitations under the License.
                          selectionMode="single">
 
                 <p:ajax event="rowSelect" listener="#{ownerListService.onRowSelect}"   
-                        update=":form:button-edit: :form:messages"/>                 
+                        update=":form:button-edit:  :form:button-admin: :form:messages"/>                 
                 <p:ajax event="rowUnselect" listener="#{ownerListService.onRowUnselect}" update=":form:button-edit :form:messages"/>
 
                 <p:column headerText="#{messages['common.name']}" sortBy="#{_owner.name}">
@@ -92,9 +98,9 @@ limitations under the License.
                 <p:column headerText="#{messages['common.description']}" sortBy="#{_owner.description}">
                     <h:outputText value="#{_owner.description}" />
                 </p:column>          
-                
+
             </p:dataTable>
-            </h:form>
+        </h:form>
 
     </ui:define>
 </ui:composition>
