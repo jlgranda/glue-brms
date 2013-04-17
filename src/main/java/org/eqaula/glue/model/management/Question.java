@@ -38,30 +38,8 @@ import org.eqaula.glue.model.BussinesEntity;
 public class Question extends BussinesEntity implements Serializable {
 
     private static final long serialVersionUID = -1127608865213234517L;
-    @ManyToOne
-    private Category category;
     
-    @OneToMany(mappedBy = "question")
-    private List<RevisionItem> revisionItems;
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public List<RevisionItem> getRevisionItems() {
-        return revisionItems;
-    }
-
-    public void setRevisionItems(List<RevisionItem> revisionItems) {
-        this.revisionItems = revisionItems;
-    }
-    
-    
-    
+         
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers

@@ -40,7 +40,7 @@ import org.eqaula.glue.model.BussinesEntity;
 public class RevisionItem extends BussinesEntity implements Serializable{
     private static final long serialVersionUID = -3953656266088765384L;
     @ManyToOne
-    private Diagnostic diagnostic;
+    private Section section;
     
     @ManyToOne
     private Question question;
@@ -51,14 +51,15 @@ public class RevisionItem extends BussinesEntity implements Serializable{
     @ManyToOne
     private RevisionItem revisionItem;
 
-    public Diagnostic getDiagnostic() {
-        return diagnostic;
+    public Section getSection() {
+        return section;
     }
 
-    public void setDiagnostic(Diagnostic diagnostic) {
-        this.diagnostic = diagnostic;
+    public void setSection(Section section) {
+        this.section = section;
     }
 
+    
     public Question getQuestion() {
         return question;
     }
@@ -116,13 +117,12 @@ public class RevisionItem extends BussinesEntity implements Serializable{
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.RevisionItem[ "
+        /*return "org.eqaula.glue.model.management.RevisionItem[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
-                + " ]";
+                + " ]";*/
+        return getQuestion().getName();
     }
-    
-    
     
 }

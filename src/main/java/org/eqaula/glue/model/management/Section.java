@@ -16,7 +16,9 @@
 package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -31,20 +33,18 @@ import org.eqaula.glue.model.BussinesEntity;
  *
  * @author dianita
  */
-
 @Entity
-@Table(name = "Category")
-@DiscriminatorValue(value = "CTGR")
+@Table(name = "Section")
+@DiscriminatorValue(value = "SCTN")
 @PrimaryKeyJoinColumn(name = "id")
-public class Category  extends BussinesEntity implements Serializable {
-         
+public class Section extends BussinesEntity implements Serializable {
+
     private static final long serialVersionUID = 7049522576163792111L;
-    
     @ManyToOne
     private Diagnostic diagnostic;
     
-    @OneToMany(mappedBy = "category")
-    private List<Question> questions;
+    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
+    private List<RevisionItem> revisionItems;
 
     public Diagnostic getDiagnostic() {
         return diagnostic;
@@ -54,16 +54,35 @@ public class Category  extends BussinesEntity implements Serializable {
         this.diagnostic = diagnostic;
     }
 
-    public List<Question> getQuestions() {
-        return questions;
+     public List<RevisionItem> getRevisionItems() {
+        return revisionItems;
+    }
+    
+     public List<RevisionItem> getRevisionItemsNulls() {
+        List<RevisionItem> items = new ArrayList<RevisionItem>();
+         for(RevisionItem revisionItem: revisionItems){
+             if(revisionItem.getRevisionItem()==null){
+                 items.add(revisionItem);
+             }
+         }
+        return items;
+    }
+     
+    public List<RevisionItem> getRevisionItemsNotNulls() {
+        List<RevisionItem> items = new ArrayList<RevisionItem>();
+         for(RevisionItem revisionItem: revisionItems){
+             if(revisionItem.getRevisionItem()!=null){
+                 items.add(revisionItem);
+             }
+         }
+        return items;
     }
 
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
+    public void setRevisionItems(List<RevisionItem> revisionItems) {
+        this.revisionItems = revisionItems;
     }
+
     
-    
-        
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -84,7 +103,7 @@ public class Category  extends BussinesEntity implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Category other = (Category) obj;
+        Section other = (Section) obj;
         return new EqualsBuilder().
                 // if deriving: appendSuper(super.equals(obj)).
                 append(getName(), other.getName()).
@@ -94,12 +113,10 @@ public class Category  extends BussinesEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Category[ "
+        return "org.eqaula.glue.model.management.Section[ "
                 + "id=" + getId() + ","
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
                 + " ]";
     }
-    
-    
 }

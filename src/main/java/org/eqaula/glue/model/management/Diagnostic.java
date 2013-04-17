@@ -52,11 +52,8 @@ public class Diagnostic extends BussinesEntity implements Serializable{
     private Owner owner;
     
     @OneToMany(mappedBy = "diagnostic", cascade = CascadeType.ALL)
-    private List<Category> categories;
+    private List<Section> sections;
 
-    @OneToMany(mappedBy = "diagnostic", cascade = CascadeType.ALL)
-    private List<RevisionItem> revisionItems;
-            
     public Owner getOwner() {
         return owner;
     }
@@ -73,24 +70,15 @@ public class Diagnostic extends BussinesEntity implements Serializable{
         this.applicationDate = applicationDate;
     }
 
-    public List<Category> getCategories() {
-        return categories;
+    public List<Section> getSections() {
+        return sections;
     }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
+    public void setSections(List<Section> sections) {
+        this.sections = sections;
     }
 
-    public List<RevisionItem> getRevisionItems() {
-        return revisionItems;
-    }
-
-    public void setRevisionItems(List<RevisionItem> revisionItems) {
-        this.revisionItems = revisionItems;
-    }
-    
-    
-    
+       
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers

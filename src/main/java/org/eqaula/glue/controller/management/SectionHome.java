@@ -18,7 +18,6 @@ package org.eqaula.glue.controller.management;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
@@ -34,26 +33,24 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Section;
 import org.eqaula.glue.model.management.Diagnostic;
-import org.eqaula.glue.model.management.Initiative;
 import org.eqaula.glue.model.management.Owner;
-import org.eqaula.glue.model.management.RevisionItem;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
+import org.eqaula.glue.service.DiagnosticService;
 import org.eqaula.glue.service.OwnerService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
-import org.primefaces.model.DefaultTreeNode;
-import org.primefaces.model.TreeNode;
+
 
 /*
  * @author dianita
  */
 @Named
 @ViewScoped
-public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Serializable {
+public class SectionHome extends BussinesEntityHome<Section> implements Serializable {
 
-    private static final long serialVersionUID = 1285521981921867012L;
+    private static final long serialVersionUID = 9048490549279855474L;
     @Inject
     @Web
     private EntityManager em;
@@ -62,57 +59,47 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
     @Current
     @Inject
     private Profile profile;
-    private Owner owner;
-    private Long ownerId;
+    private Diagnostic diagnostic;
+    private Long diagnosticId;
     @Inject
-    private OwnerService ownerService;
-    private TreeNode node;
+    private DiagnosticService diagnosticService;
 
-    public DiagnosticHome() {
+    public SectionHome() {
     }
 
-    public Long getDiagnosticId() {
+    public Long getSectionId() {
         return (Long) getId();
     }
 
-    public void setDiagnosticId(Long diagnosticId) {
-        setId(diagnosticId);
+    public void setSectionId(Long sectionId) {
+        setId(sectionId);
     }
 
     public String getStructureName() {
         return getInstance().getName();
     }
 
-    public Owner getOwner() {
-        if (owner == null) {
-            if (ownerId == null) {
-                owner = null;
+    public Diagnostic getDiagnostic() {
+        if (diagnostic == null) {
+            if (diagnosticId == null) {
+                diagnostic = null;
             } else {
-                owner = ownerService.find(getOwnerId());
+                diagnostic = diagnosticService.find(getDiagnosticId());
             }
         }
-        return owner;
+        return diagnostic;
     }
 
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public void setDiagnostic(Diagnostic diagnostic) {
+        this.diagnostic = diagnostic;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
+    public Long getDiagnosticId() {
+        return diagnosticId;
     }
 
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
-    }
-
-    public TreeNode getNode(Section section) {
-        buildTree(section);
-        return node;
-    }
-
-    public void setNode(TreeNode node) {
-        this.node = node;
+    public void setDiagnosticId(Long diagnosticId) {
+        this.diagnosticId = diagnosticId;
     }
 
     @TransactionAttribute
@@ -130,27 +117,27 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        ownerService.setEntityManager(em);
+        diagnosticService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
 
     @Override
-    protected Diagnostic createInstance() {
-        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Diagnostic.class.getName());
+    protected Section createInstance() {
+        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Section.class.getName());
         Date now = Calendar.getInstance().getTime();
-        Diagnostic diagnostic = new Diagnostic();
-        diagnostic.setCode(UUID.randomUUID().toString());
-        diagnostic.setCreatedOn(now);
-        diagnostic.setLastUpdate(now);
-        diagnostic.setActivationTime(now);
-        diagnostic.setExpirationTime(Dates.addDays(now, 364));
-        diagnostic.setType(_type);
-        diagnostic.buildAttributes(bussinesEntityService);
-        return diagnostic;
+        Section section = new Section();
+        section.setCode(UUID.randomUUID().toString());
+        section.setCreatedOn(now);
+        section.setLastUpdate(now);
+        section.setActivationTime(now);
+        section.setExpirationTime(Dates.addDays(now, 364));
+        section.setType(_type);
+        section.buildAttributes(bussinesEntityService);
+        return section;
     }
 
     @TransactionAttribute
-    public String saveDiagnostic() {
+    public String saveSection() {
 
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
@@ -158,11 +145,11 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setOwner(getOwner());
+            getInstance().setDiagnostic(getDiagnostic());
             create(getInstance());
         }
-        if (getOwnerId() != null) {
-            return getOutcome() + "?ownerId=" + getOwnerId() + "&faces-redirect=true&includeViewParams=true";
+        if (getDiagnosticId() != null) {
+            return getOutcome() + "?diagnosticId=" + getDiagnosticId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -171,57 +158,35 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
         return true;
     }
 
-    public Diagnostic getDefiniedInstance() {
+    public Section getDefiniedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
 
     @Override
-    public Class<Diagnostic> getEntityClass() {
-        return Diagnostic.class;
+    public Class<Section> getEntityClass() {
+        return Section.class;
     }
 
     @Transactional
-    public String deleteDiagnostic() {
+    public String deleteSection() {
         try {
             if (getInstance() == null) {
-                throw new NullPointerException("Diagnostic is Null");
+                throw new NullPointerException("Section is Null");
             }
             if (getInstance().isPersistent()) {
                 delete(getInstance());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
                 RequestContext.getCurrentInstance().execute("editDlg.hide()");
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un diagnostico para ser borrado!", ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una sección para ser borrada!", ""));
             }
         } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getOwnerId() != null) {
-            return getOutcome() + "?ownerId=" + getOwnerId() + "&faces-redirect=true&includeViewParams=true";
+        if (getDiagnosticId()!= null) {
+            return getOutcome() + "?diagnosticId=" + getDiagnosticId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
-    }
-
-    public List<Section> allCategories() {
-        return getInstance().getSections();
-    }
-
-    public TreeNode buildTree(Section section) {
-        TreeNode itemFatherNode = null;
-        TreeNode itemChildrenNode = null;
-        this.node = new DefaultTreeNode("node", section, null);
-        this.node.setExpanded(true);
-        for (RevisionItem item : section.getRevisionItemsNulls()) {
-            itemFatherNode = new DefaultTreeNode("father", item, node);
-            itemFatherNode.setExpanded(true);
-            for (RevisionItem itemChildren : section.getRevisionItemsNotNulls()) {
-                if (itemChildren.getRevisionItem().getId() == item.getId()) {
-                    itemChildrenNode = new DefaultTreeNode("children", itemChildren, itemFatherNode);
-                    itemChildrenNode.setExpanded(true);
-                }
-            }
-        }
-        return node;
     }
 }
