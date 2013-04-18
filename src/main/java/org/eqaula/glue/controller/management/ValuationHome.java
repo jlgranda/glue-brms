@@ -31,12 +31,10 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.management.Question;
+import org.eqaula.glue.model.management.Valuation;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
-import org.eqaula.glue.service.RevisionItemService;
 import org.eqaula.glue.util.Dates;
-import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
 
@@ -45,10 +43,10 @@ import org.primefaces.context.RequestContext;
  */
 @Named
 @ViewScoped
-public class QuestionHome extends BussinesEntityHome<Question> implements Serializable {
-
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(QuestionHome.class);
-    private static final long serialVersionUID = 6741764864014221924L;
+public class ValuationHome extends BussinesEntityHome<Valuation> implements Serializable  {
+    private static final long serialVersionUID = -3602603191668463707L;
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ValuationHome.class); 
+    
     @Inject
     @Web
     private EntityManager em;
@@ -57,18 +55,16 @@ public class QuestionHome extends BussinesEntityHome<Question> implements Serial
     @Current
     @Inject
     private Profile profile;
-    @Inject
-    private RevisionItemService revisionItemService;
             
-    public QuestionHome() {
+    public ValuationHome() {
     }
 
-    public Long getQuestionId() {
+    public Long getValuationId() {
         return (Long) getId();
     }
 
-    public void setQuestionId(Long questionId) {
-        setId(questionId);
+    public void setValuationId(Long valuationId) {
+        setId(valuationId);
     }
 
     public String getStructureName() {
@@ -90,27 +86,26 @@ public class QuestionHome extends BussinesEntityHome<Question> implements Serial
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        revisionItemService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
 
     @Override
-    protected Question createInstance() {
-        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Question.class.getName());
+    protected Valuation createInstance() {
+        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Valuation.class.getName());
         Date now = Calendar.getInstance().getTime();
-        Question question = new Question();
-        question.setCode(UUID.randomUUID().toString());
-        question.setCreatedOn(now);
-        question.setLastUpdate(now);
-        question.setActivationTime(now);
-        question.setExpirationTime(Dates.addDays(now, 364));
-        question.setType(_type);
-        question.buildAttributes(bussinesEntityService);
-        return question;
+        Valuation valuation = new Valuation();
+        valuation.setCode(UUID.randomUUID().toString());
+        valuation.setCreatedOn(now);
+        valuation.setLastUpdate(now);
+        valuation.setActivationTime(now);
+        valuation.setExpirationTime(Dates.addDays(now, 364));
+        valuation.setType(_type);
+        valuation.buildAttributes(bussinesEntityService);
+        return valuation;
     }
 
     @TransactionAttribute
-    public String saveQuestion() {
+    public String saveValuation() {
 
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
@@ -127,48 +122,32 @@ public class QuestionHome extends BussinesEntityHome<Question> implements Serial
         return true;
     }
 
-    public Question getDefiniedInstance() {
+    public Valuation getDefiniedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
 
     @Override
-    public Class<Question> getEntityClass() {
-        return Question.class;
+    public Class<Valuation> getEntityClass() {
+        return Valuation.class;
     }
 
     @Transactional
-    public String deleteQuestion() {
-        boolean band;
-        band = false;
+    public String deleteValuation() {
         try {
             if (getInstance() == null) {
-                throw new NullPointerException("Question is Null");
+                throw new NullPointerException("Valuation is Null");
             }
             if (getInstance().isPersistent()) {
-                if (hasValuesBussinesEntity()) {
-                    delete(getInstance());
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
-                    RequestContext.getCurrentInstance().execute("editDlg.hide()");
-                } else {
-                    band = true;
-                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, getInstance().getName() + " : " + UI.getMessages("module.stocklist.delete.confirm"), "");
-                    FacesContext.getCurrentInstance().addMessage(null, message);
-                }
+                delete(getInstance());
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
+                RequestContext.getCurrentInstance().execute("editDlg.hide()");
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una pregunta para ser borrada!", ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una valoración para ser borrada!", ""));
             }
         } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if(band){
-            return null;
-        }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
-    }
-    
-    public boolean hasValuesBussinesEntity() {
-        boolean ban =  revisionItemService.findByQuestion(getInstance()).isEmpty();
-        return ban;
-    }
+    }   
 }

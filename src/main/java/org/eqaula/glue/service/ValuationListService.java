@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
-import org.eqaula.glue.model.management.Question;
+import org.eqaula.glue.model.management.Valuation;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
 import org.eqaula.glue.util.UI;
@@ -36,32 +36,30 @@ import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
-/**
- *
+/*
  * @author dianita
  */
 @Named
 @RequestScoped
-public class QuestionListService extends LazyDataModel<Question> {
-    private static final long serialVersionUID = 6774547640960610920L;
+public class ValuationListService extends LazyDataModel<Valuation> {
+
     private static final int MAX_RESULTS = 5;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(QuestionListService.class);
-    
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ValuationListService.class);
+    private static final long serialVersionUID = 6057744436887704165L;
     @Inject
     @Web
     private EntityManager entityManager;
     @Inject
-    private QuestionService questionService;
-    private List<Question> resultList;
+    private ValuationService valuationService;
+    private List<Valuation> resultList;
     private int firstResult = 0;
-    private Question selectedQuestion;
+    private Valuation selectedValuation;
     
     private Long ownerId;
-
-   
-    public QuestionListService() {
+    
+    public ValuationListService() {
         setPageSize(MAX_RESULTS);
-        resultList = new ArrayList<Question>();
+        resultList = new ArrayList<Valuation>();
     }
 
     public Long getOwnerId() {
@@ -73,17 +71,14 @@ public class QuestionListService extends LazyDataModel<Question> {
     }
 
     
-    
-
-    
-    public List<Question> getResultList() {
+    public List<Valuation> getResultList() {
         if (resultList.isEmpty()) {
-            resultList = questionService.getQuestions();
+            resultList = valuationService.getValuations();
         }
         return resultList;
     }
 
-    public void setResultList(List<Question> resultList) {
+    public void setResultList(List<Valuation> resultList) {
         this.resultList = resultList;
     }
 
@@ -96,12 +91,12 @@ public class QuestionListService extends LazyDataModel<Question> {
         this.resultList = null;
     }
 
-    public Question getSelectedQuestion() {
-        return selectedQuestion;
+    public Valuation getSelectedValuation() {
+        return selectedValuation;
     }
 
-    public void setSelectedQuestion(Question selectedQuestion) {
-        this.selectedQuestion = selectedQuestion;
+    public void setSelectedValuation(Valuation selectedValuation) {
+        this.selectedValuation = selectedValuation;
     }
 
     public int getNextFirstResult() {
@@ -113,41 +108,41 @@ public class QuestionListService extends LazyDataModel<Question> {
     }
 
     @Override
-    public List<Question> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+    public List<Valuation> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
         int end = first + pageSize;
         QuerySortOrder order = QuerySortOrder.ASC;
         if (sortOrder == SortOrder.DESCENDING) {
             order = QuerySortOrder.DESC;
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
-        QueryData<Question> qData = questionService.find(first, end, sortField, order, _filters);
+        QueryData<Valuation> qData = valuationService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();
     }
 
     @PostConstruct
     public void init() {
-        questionService.setEntityManager(entityManager);
+        valuationService.setEntityManager(entityManager);
     }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.question") + " " + UI.getMessages("common.selected"), ((Question) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.management.valuation") + " " + UI.getMessages("common.selected"), ((Valuation) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("module.question") + " " + UI.getMessages("common.unselected"), ((Question) event.getObject()).getName());
+        FacesMessage msg = new FacesMessage(UI.getMessages("module.management.valuation") + " " + UI.getMessages("common.unselected"), ((Valuation) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        this.setSelectedQuestion(null);
+        this.setSelectedValuation(null);
     }
 
     @Override
-    public Question getRowData(String rowKey) {
-        return questionService.findByName(rowKey);
+    public Valuation getRowData(String rowKey) {
+        return valuationService.findByName(rowKey);
     }
 
     @Override
-    public Object getRowKey(Question entity) {
+    public Object getRowKey(Valuation entity) {
         return entity.getName();
     }
 }

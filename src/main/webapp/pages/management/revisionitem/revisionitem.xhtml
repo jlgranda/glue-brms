@@ -75,7 +75,21 @@ limitations under the License.
                         <span class="help-block"><br/>#{messages['question.inlinehelp']} <ocp:message forId="question" /></span>
                     </div>
                 </h:panelGroup>
+                <h:panelGroup id="scl" layout="block" class="control-group">
+                    <label for="scale" class="control-label required">#{messages['module.management.scale.scale']}</label>
+                    <div class="controls">
+                        <p:selectOneMenu id="scale" style="float: left" value="#{revisionItemHome.instance.scale}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="false" requiredMessage="#{messages['required.scale']}" rendered="true" label="#{messages['Scale']}" filter="true" filterMatchMode="contains">
 
+                            <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
+                            <f:selectItems value="#{scaleListService.resultList}" var="_s" itemLabel="#{_s.name}" itemValue="#{_s}"/>                          
+                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
+
+                        </p:selectOneMenu>                       
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-block"><br/>#{messages['scale.inlinehelp']} <ocp:message forId="scale" /></span>
+                    </div>
+                </h:panelGroup>
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{revisionItemHome.saveRevisionItem()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->

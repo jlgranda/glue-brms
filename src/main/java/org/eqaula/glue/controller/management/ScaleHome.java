@@ -31,7 +31,7 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.management.Question;
+import org.eqaula.glue.model.management.Scale;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.RevisionItemService;
@@ -43,12 +43,13 @@ import org.primefaces.context.RequestContext;
 /*
  * @author dianita
  */
+
 @Named
 @ViewScoped
-public class QuestionHome extends BussinesEntityHome<Question> implements Serializable {
-
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(QuestionHome.class);
-    private static final long serialVersionUID = 6741764864014221924L;
+public class ScaleHome extends BussinesEntityHome<Scale> implements Serializable  {
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ScaleHome.class); 
+    private static final long serialVersionUID = -2179287867008565066L;
+    
     @Inject
     @Web
     private EntityManager em;
@@ -60,15 +61,15 @@ public class QuestionHome extends BussinesEntityHome<Question> implements Serial
     @Inject
     private RevisionItemService revisionItemService;
             
-    public QuestionHome() {
+    public ScaleHome() {
     }
 
-    public Long getQuestionId() {
+    public Long getScaleId() {
         return (Long) getId();
     }
 
-    public void setQuestionId(Long questionId) {
-        setId(questionId);
+    public void setScaleId(Long scaleId) {
+        setId(scaleId);
     }
 
     public String getStructureName() {
@@ -95,22 +96,22 @@ public class QuestionHome extends BussinesEntityHome<Question> implements Serial
     }
 
     @Override
-    protected Question createInstance() {
-        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Question.class.getName());
+    protected Scale createInstance() {
+        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Scale.class.getName());
         Date now = Calendar.getInstance().getTime();
-        Question question = new Question();
-        question.setCode(UUID.randomUUID().toString());
-        question.setCreatedOn(now);
-        question.setLastUpdate(now);
-        question.setActivationTime(now);
-        question.setExpirationTime(Dates.addDays(now, 364));
-        question.setType(_type);
-        question.buildAttributes(bussinesEntityService);
-        return question;
+        Scale scale = new Scale();
+        scale.setCode(UUID.randomUUID().toString());
+        scale.setCreatedOn(now);
+        scale.setLastUpdate(now);
+        scale.setActivationTime(now);
+        scale.setExpirationTime(Dates.addDays(now, 364));
+        scale.setType(_type);
+        scale.buildAttributes(bussinesEntityService);
+        return scale;
     }
 
     @TransactionAttribute
-    public String saveQuestion() {
+    public String saveScale() {
 
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
@@ -127,22 +128,22 @@ public class QuestionHome extends BussinesEntityHome<Question> implements Serial
         return true;
     }
 
-    public Question getDefiniedInstance() {
+    public Scale getDefiniedInstance() {
         return isIdDefined() ? getInstance() : null;
     }
 
     @Override
-    public Class<Question> getEntityClass() {
-        return Question.class;
+    public Class<Scale> getEntityClass() {
+        return Scale.class;
     }
 
     @Transactional
-    public String deleteQuestion() {
+    public String deleteScale() {
         boolean band;
         band = false;
         try {
             if (getInstance() == null) {
-                throw new NullPointerException("Question is Null");
+                throw new NullPointerException("Scale is Null");
             }
             if (getInstance().isPersistent()) {
                 if (hasValuesBussinesEntity()) {
@@ -155,7 +156,7 @@ public class QuestionHome extends BussinesEntityHome<Question> implements Serial
                     FacesContext.getCurrentInstance().addMessage(null, message);
                 }
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una pregunta para ser borrada!", ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una escala para ser borrada!", ""));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -168,7 +169,7 @@ public class QuestionHome extends BussinesEntityHome<Question> implements Serial
     }
     
     public boolean hasValuesBussinesEntity() {
-        boolean ban =  revisionItemService.findByQuestion(getInstance()).isEmpty();
+        boolean ban =  revisionItemService.findByScale(getInstance()).isEmpty();
         return ban;
     }
 }

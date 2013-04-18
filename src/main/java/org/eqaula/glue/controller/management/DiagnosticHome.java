@@ -16,6 +16,7 @@
 package org.eqaula.glue.controller.management;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -32,15 +33,18 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
+import org.eqaula.glue.model.management.BalancedScorecard;
 import org.eqaula.glue.model.management.Section;
 import org.eqaula.glue.model.management.Diagnostic;
 import org.eqaula.glue.model.management.Initiative;
 import org.eqaula.glue.model.management.Owner;
+import org.eqaula.glue.model.management.Perspective;
 import org.eqaula.glue.model.management.RevisionItem;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.OwnerService;
 import org.eqaula.glue.util.Dates;
+import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultTreeNode;
@@ -160,13 +164,46 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
             getInstance().setAuthor(this.profile);
             getInstance().setOwner(getOwner());
             create(getInstance());
+            createDefaultSections(getInstance());
         }
         if (getOwnerId() != null) {
             return getOutcome() + "?ownerId=" + getOwnerId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
+    
+     public void createDefaultSections(Diagnostic diagnostic) {
 
+        ArrayList<String> messagesSections = new ArrayList();
+        messagesSections.add(UI.getMessages("common.diagnostic.strategic"));
+        messagesSections.add(UI.getMessages("common.diagnostic.administration"));
+        messagesSections.add(UI.getMessages("common.diagnostic.management.control"));
+        
+        for (String createSections : messagesSections) {
+            Date now = Calendar.getInstance().getTime();
+            Section section = createInstanceSection();
+            section.setName(createSections);
+            section.setLastUpdate(now);
+            section.setAuthor(profile);
+            section.setDiagnostic(diagnostic);
+            create(section);
+        }
+    }
+
+     protected Section createInstanceSection() {
+        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Section.class.getName());
+        Date now = Calendar.getInstance().getTime();
+        Section section = new Section();
+        section.setCode(UUID.randomUUID().toString());
+        section.setCreatedOn(now);
+        section.setLastUpdate(now);
+        section.setActivationTime(now);
+        section.setExpirationTime(Dates.addDays(now, 364));
+        section.setType(_type);
+        section.buildAttributes(bussinesEntityService);
+        return section;
+    }
+     
     public boolean isWired() {
         return true;
     }

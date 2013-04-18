@@ -85,7 +85,12 @@ limitations under the License.
                 
                 #{' '}
                 <h:link id="button-print" value="#{messages['module.management.diagnostic.questions']}" rendered="true" outcome="/pages/management/question/list" styleClass="btn" >
-                    <f:param name="outcome" value="/pages/management/diagnostic/list"></f:param>
+                    <f:param name="ownerId" value="#{diagnosticListService.ownerId}"></f:param>
+                </h:link> 
+                
+                #{' '}
+                <h:link id="button-view" value="#{messages['module.management.scale.scales']}" rendered="true" outcome="/pages/management/scale/list" styleClass="btn" >
+                    <f:param name="ownerId" value="#{diagnosticListService.ownerId}"></f:param>
                 </h:link> 
             </div>
             <p:dataTable var="_diagnostic" value="#{diagnosticListService}"

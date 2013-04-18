@@ -29,9 +29,9 @@ limitations under the License.
 
     <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-            <f:viewParam name="questionId" value="#{questionHome.questionId}" />
-            <f:viewParam name="outcome" value="#{questionHome.outcome}" />
-            <s:viewAction action="#{questionHome.load}" if="#{conversation.transient}"/>
+            <f:viewParam name="valuationId" value="#{valuationHome.valuationId}" />
+            <f:viewParam name="outcome" value="#{valuationHome.outcome}" />
+            <s:viewAction action="#{valuationHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
 
         <ui:define name="header-replace">
@@ -39,14 +39,14 @@ limitations under the License.
                 <div class="container">
                     <div class="row-fluid" style="margin-top: 5px;">
                         <div class="span9">
-                            <h3>#{questionHome.questionId!= null? messages['common.edit'] : messages['common.add']} 
-                                #{messages['module.question']}</h3>   
+                            <h3>#{valuationHome.valuationId!= null? messages['common.edit'] : messages['common.add']} 
+                                #{messages['module.management.valuation']}</h3>   
                                 <br/>
                                 
                         </div>
                         <div class="span3">
                             <br/>
-                            <h:link outcome="#{questionHome.outcome}" styleClass="btn btn-danger" value="#{messages['common.cancel']}">
+                            <h:link outcome="#{valuationHome.outcome}" styleClass="btn btn-danger" value="#{messages['common.cancel']}">
                             </h:link>
 
                             #{'   '}
@@ -62,19 +62,19 @@ limitations under the License.
         <ui:define name="content">
             <h:form id="form" class="form-horizontal" acceptcharset="UTF-8">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-                <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{questionHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
-                <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{questionHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+                <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{valuationHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                <glue:input id="value" name="value" type="decimal" label="#{messages['common.value']}" value="#{valuationHome.instance.value}" required="false" inlinehelp="#{messages['common.value.help']}" render="value" execute="@this save" />
 
                 <!-- Attributos personalizados -->
                 
                 <div class="form-actions">
-                    <p:commandButton id="save" action="#{questionHome.saveQuestion()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
+                    <p:commandButton id="save" action="#{valuationHome.saveValuation()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
 
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
-                                     update=":cancel-dialog" rendered="#{questionHome.managed}">                        
+                                     update=":cancel-dialog" rendered="#{valuationHome.managed}">                        
                     </p:commandButton>
 
-                    <h:link outcome="#{questionHome.outcome}"  value="#{messages['common.cancel']}" styleClass="btn">                        
+                    <h:link outcome="#{valuationHome.outcome}"  value="#{messages['common.cancel']}" styleClass="btn">                        
 
                     </h:link>    
 
@@ -86,7 +86,7 @@ limitations under the License.
                         <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                     </h:panelGroup>  
                     <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
-                                     action="#{questionHome.deleteQuestion()}"                                         
+                                     action="#{valuationHome.deleteValuation()}"                                         
                                      ajax="true" process="@this"  
                                      style="margin-top:10px;">  
                     </p:commandButton>  
@@ -97,3 +97,4 @@ limitations under the License.
         </ui:define>             
     </ui:composition>
 </html>
+
