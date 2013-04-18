@@ -77,7 +77,7 @@ limitations under the License.
                 </h:link> 
 
                 #{' '}
-                <h:link id="button-authorize" value="#{messages['common.design.Diagnostic']}" rendered="true" outcome="design" styleClass="btn" 
+                <h:link id="button-authorize" value="#{messages['common.design']}" rendered="true" outcome="design" styleClass="btn" 
                         disabled="#{empty diagnosticListService.selectedDiagnostic.id}">
                     <f:param name= "diagnosticId" value="#{diagnosticListService.selectedDiagnostic.id}"></f:param> 
                     <f:param name="outcome" value="/pages/management/diagnostic/list"></f:param>

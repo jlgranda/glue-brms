@@ -91,30 +91,32 @@
                                                     <div class="btn-group">
                                                         <h:link outcome="/pages/management/owner/list.xhtml"
                                                                 title="#{messages['module.management']}"
-                                                                styleClass="icon-home">
+                                                                styleClass="icon-th-large">
                                                             <f:param name="organizationId" value="#{_organization.id}" />
                                                         </h:link>
 
                                                         <h:link outcome="/pages/management/balancedscorecard/list.xhtml"
                                                                 title="#{messages['module.balancedScorecard']}"
-                                                                styleClass="icon-tag">
+                                                                styleClass="icon-road">
                                                             <f:param name="organizationId" value="#{_organization.id}" />
                                                         </h:link>
                                                         
                                                         <h:link outcome="/pages/management/organization/viewTreeThemes.xhtml"
                                                                 title="#{messages['module.theme']}"
-                                                                styleClass="icon-th-large">
+                                                                styleClass="icon-adjust">
                                                             <f:param name="organizationId" value="#{_organization.id}" />
                                                         </h:link>
 
                                                         <h:link outcome="/pages/accounting/home.xhtml"
                                                                 title="#{messages['module.accounting']}"
-                                                                styleClass=" icon-barcode">
+                                                                styleClass=" icon-barcode"
+                                                                rendered="false">
                                                             <f:param name="organizationId" value="#{_organization.id}" />
                                                         </h:link>
                                                         <h:link outcome="/pages/stocklist/warehouse/list.xhtml"
                                                                 title="#{messages['module.stocklist']}"
-                                                                styleClass=" icon-shopping-cart">
+                                                                styleClass=" icon-shopping-cart"
+                                                                rendered="false">
                                                             <f:param name="organizationId" value="#{_organization.id}" />
                                                         </h:link>
                                                     </div>

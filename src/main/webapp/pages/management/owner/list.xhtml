@@ -35,7 +35,7 @@ limitations under the License.
 
                 <div class="row-fluid" style="margin-top: 5px;">
                     <div class="span9">
-                        <h2>#{messages['module.owners']}</h2>   
+                        <h2>#{ownerListService.organization.name} - #{messages['module.owners']}</h2>   
                     </div>    
 
                     <div class="span3">
@@ -71,7 +71,7 @@ limitations under the License.
                 </h:link> 
              
                 #{' '}
-                <h:link id="button-admin" value="#{messages['module.diagnostics']}" rendered="true" outcome="/pages/management/diagnostic/list" styleClass="btn" 
+                <h:link id="button-admin" value="#{messages['module.diagnose']}" rendered="true" outcome="/pages/management/diagnostic/list" styleClass="btn" 
                         disabled="#{empty ownerListService.selectedOwner.id}">
                     <f:param name="ownerId" value="#{ownerListService.selectedOwner.id}"></f:param>
                 </h:link> 
