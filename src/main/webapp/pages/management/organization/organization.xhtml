@@ -87,7 +87,7 @@
                                      update=":cancel-dialog" rendered="#{organizationHome.managed}">                        
                     </p:commandButton>
                   
-                    <h:link outcome="#{organizationHome.outcome}"
+                    <h:link outcome="#{organizationHome.resolveOutcome()}"
                             rendered="#{organizationHome.managed}"
                             value="#{messages['common.cancel']}" styleClass="btn">
                         <f:param name="organizationId" value="#{organizationHome.organizationId}"/>

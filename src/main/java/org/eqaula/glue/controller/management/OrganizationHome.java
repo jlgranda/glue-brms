@@ -21,45 +21,28 @@ import java.util.Date;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
-import javax.el.ExpressionFactory;
-import javax.el.MethodExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ActionListener;
-import javax.faces.event.MethodExpressionActionListener;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import org.eclipse.jdt.internal.compiler.ast.MessageSend;
 import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.management.Initiative;
 import org.eqaula.glue.model.management.Macroprocess;
-import org.eqaula.glue.model.management.Measure;
-import org.eqaula.glue.model.management.Method;
-import org.eqaula.glue.model.management.Target;
-import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.management.Organization;
-import org.eqaula.glue.model.management.Owner;
-import org.eqaula.glue.model.management.Period;
-import org.eqaula.glue.model.management.Resource;
 import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
-import org.primefaces.component.menuitem.MenuItem;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.model.DefaultMenuModel;
 import org.primefaces.model.DefaultTreeNode;
-import org.primefaces.model.MenuModel;
 import org.primefaces.model.TreeNode;
 
 /**
@@ -164,7 +147,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             }
             create(getInstance());
         }
-        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
+        return resolveOutcome();
     }
 
     public boolean isWired() {
@@ -283,5 +266,18 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             }
         }
+    }
+
+    @Override
+    public String resolveOutcome() {
+        String _outcome = "";
+        //TODO build a dynamic mechanism
+        if ("owners".equalsIgnoreCase(getOutcome())){
+            _outcome = "/pages/management/owner/list.xhtml" + "?faces-redirect=true&organizationId=" + getOrganizationId();
+        } else {
+            _outcome = getOutcome() + "?faces-redirect=true&includeViewParams=true";
+        }
+        
+        return _outcome;
     }
 }

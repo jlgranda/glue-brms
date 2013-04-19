@@ -235,22 +235,22 @@ public class InitializeDatabase {
 
         }
 
-        if (session.getPersistenceManager().findUser("lflores") == null) {
-            User u = session.getPersistenceManager().createUser("lflores");
+        if (session.getPersistenceManager().findUser("ilituma") == null) {
+            User u = session.getPersistenceManager().createUser("ilituma");
             session.getAttributesManager().updatePassword(u, "password");
-            session.getAttributesManager().addAttribute(u, "email", "luchitoflores84@gmail.com");
+            session.getAttributesManager().addAttribute(u, "email", "manuelivancho@gmail.com");
 
             p = new Profile();
-            p.setEmail("luchitoflores84@gmail.com");
-            p.setUsername("lflores");
+            p.setEmail("manuelivancho@gmail.com");
+            p.setUsername("ilituma");
             p.setPassword("password");
             p.getIdentityKeys().add(u.getKey());
             p.setUsernameConfirmed(true);
             p.setShowBootcamp(true);
 
-            p.setName("Luis Alberto");
-            p.setFirstname("Luis Alberto");
-            p.setSurname("Flores");
+            p.setName("Iván Lituma");
+            p.setFirstname("Iván");
+            p.setSurname("Lituma");
             p.setCreatedOn(now);
             p.setLastUpdate(now);
             p.setActivationTime(now);

@@ -45,13 +45,13 @@ limitations under the License.
                     <div class="span3">
 
                         <br/>
-                        <h:link outcome="/pages/management/owner/list" styleClass="btn btn-danger" value="#{messages['common.cancel']}">
+                        <h:link outcome="/pages/management/owner/list" styleClass="btn btn-link" value="#{messages['common.cancel']}">
                             <f:param  name="organizationId" value="#{diagnosticListService.owner.organization.id}"></f:param>
                         </h:link>
 
                         #{'   '}
                         <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                outcome="/pages/home.xhtml?faces-redirect=true" styleClass="btn btn-inverse">                                
+                                outcome="/pages/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
                         </h:link>                            
 
                     </div>
@@ -77,19 +77,19 @@ limitations under the License.
                 </h:link> 
 
                 #{' '}
-                <h:link id="button-authorize" value="#{messages['common.design']}" rendered="true" outcome="design" styleClass="btn" 
+                <h:link id="button-design" value="#{messages['common.design']}" rendered="true" outcome="design" styleClass="btn" 
                         disabled="#{empty diagnosticListService.selectedDiagnostic.id}">
                     <f:param name= "diagnosticId" value="#{diagnosticListService.selectedDiagnostic.id}"></f:param> 
                     <f:param name="outcome" value="/pages/management/diagnostic/list"></f:param>
                 </h:link> 
                 
                 #{' '}
-                <h:link id="button-print" value="#{messages['module.management.diagnostic.questions']}" rendered="true" outcome="/pages/management/question/list" styleClass="btn" >
+                <h:link id="button-question" value="#{messages['module.management.diagnostic.questions']}" rendered="true" outcome="/pages/management/question/list" styleClass="btn" >
                     <f:param name="ownerId" value="#{diagnosticListService.ownerId}"></f:param>
                 </h:link> 
                 
                 #{' '}
-                <h:link id="button-view" value="#{messages['module.management.scale.scales']}" rendered="true" outcome="/pages/management/scale/list" styleClass="btn" >
+                <h:link id="button-scale" value="#{messages['module.management.scale.scales']}" rendered="true" outcome="/pages/management/scale/list" styleClass="btn" >
                     <f:param name="ownerId" value="#{diagnosticListService.ownerId}"></f:param>
                 </h:link> 
             </div>
@@ -105,7 +105,7 @@ limitations under the License.
                          selectionMode="single">
 
                 <p:ajax event="rowSelect" listener="#{diagnosticListService.onRowSelect}"   
-                        update=":form:button-edit: :form:button-authorize: :form:messages"/>                 
+                        update=":form:button-edit: :form:button-design: :form:messages"/>                 
                 <p:ajax event="rowUnselect" listener="#{diagnosticListService.onRowUnselect}" update=":form:button-edit :form:button-authorize: :form:messages "/>
 
                 <p:column headerText="#{messages['common.name']}" sortBy="#{_diagnostic.name}">

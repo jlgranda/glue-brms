@@ -34,8 +34,8 @@ limitations under the License.
                 <div class="container">
                     <div class="row fl" style="margin-top: 5px;" >
                         <div class="span9 ">
-                            <h3>#{balancedScorecardHome.balancedScorecardId!= null? messages['common.edit'] : messages['common.add']} 
-                                #{messages['module.balancedScorecard']}</h3> 
+                            <h2>#{balancedScorecardHome.managed ? balancedScorecardHome.instance.name : (messages['common.add'].concat(' ').concat(messages['module.balancedScorecard']))}</h2> 
+                            #{messages['common.in']} #{balancedScorecardHome.organization.name}
                         </div>
                     </div>
 
