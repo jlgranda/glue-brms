@@ -33,15 +33,11 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.management.BalancedScorecard;
 import org.eqaula.glue.model.management.Section;
 import org.eqaula.glue.model.management.Diagnostic;
-import org.eqaula.glue.model.management.Initiative;
 import org.eqaula.glue.model.management.Owner;
-import org.eqaula.glue.model.management.Perspective;
 import org.eqaula.glue.model.management.RevisionItem;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.OwnerService;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
@@ -61,8 +57,7 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
+   
     @Current
     @Inject
     private Profile profile;

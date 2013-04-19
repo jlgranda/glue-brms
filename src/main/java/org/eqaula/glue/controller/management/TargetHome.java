@@ -38,7 +38,6 @@ import org.eqaula.glue.model.management.Measure;
 import org.eqaula.glue.model.management.Method;
 import org.eqaula.glue.model.management.Target;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.MeasureService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
@@ -57,8 +56,6 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
     @Current
     @Inject
     private Profile profile;
@@ -66,10 +63,8 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
     private Long measureId;
     @Inject
     private MeasureService measureService;
-    
     private Method selectedMethod;
     private List<Method> methods;
-    
 
     public TargetHome() {
     }
@@ -119,7 +114,7 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
 
     public List<Method> getMethods() {
         methods = new ArrayList<Method>();
-        methods= getInstance().getMethods();
+        methods = getInstance().getMethods();
         return methods;
     }
 
@@ -127,8 +122,6 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         this.methods = methods;
     }
 
-    
-    
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -160,6 +153,7 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         target.setExpirationTime(Dates.addDays(now, 364));
         target.setType(_type);
         target.buildAttributes(bussinesEntityService);
+        target.setMeasure(getMeasure());
         return target;
     }
 
@@ -172,7 +166,6 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setMeasure(getMeasure());
             create(getInstance());
         }
         if (getMeasure() != null) {

@@ -34,7 +34,6 @@ import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Macroprocess;
 import org.eqaula.glue.model.management.Process;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.MacroprocessService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
@@ -52,8 +51,6 @@ public class ProcessHome extends BussinesEntityHome<Process> implements Serializ
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
     @Current
     @Inject
     private Profile profile;
@@ -132,6 +129,7 @@ public class ProcessHome extends BussinesEntityHome<Process> implements Serializ
         process.setActivationTime(now);
         process.setExpirationTime(Dates.addDays(now, 364));
         process.setType(_type);
+        process.setMacroprocess(getMacroprocess());
         process.buildAttributes(bussinesEntityService);
         return process;
     }
@@ -144,12 +142,6 @@ public class ProcessHome extends BussinesEntityHome<Process> implements Serializ
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setMacroprocess(getMacroprocess());
-            System.out.println("--------------------------");
-            System.out.println("--------------------------");
-            System.out.println("--------------------------");
-            System.out.println("--------------------------");
-            System.out.println("-----------" + getMacroprocess().getName() + "---------------");
             create(getInstance());
         }
         if (getMacroprocessId() != null) {
@@ -164,17 +156,9 @@ public class ProcessHome extends BussinesEntityHome<Process> implements Serializ
         getInstance().setLastUpdate(now);
         getInstance().setAuthor(this.profile);
         getInstance().setMacroprocess(getMacroprocess());
-        System.out.println("--------------------------");
-        System.out.println("--------------------------");
-        System.out.println("--------------------------");
-        System.out.println("--------------------------");
-        System.out.println("-----------" + getMacroprocess().getName() + "---------------");
         create(getInstance());
 
         if (getMacroprocessId() != null) {
-            log.info("el getOutcome: " + getOutcome());
-            log.info("el getOutcome: " + getOutcome());
-            log.info("el getOutcome: " + getOutcome());
             return "/pages/management/process/process?" + "?macroprocessId=" + getMacroprocessId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";

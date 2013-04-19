@@ -37,9 +37,6 @@ import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.management.Perspective;
 import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
-import org.eqaula.glue.service.OwnerService;
-import org.eqaula.glue.service.PerspectiveService;
 import org.eqaula.glue.service.ThemeService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
@@ -58,8 +55,6 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
     @Current
     @Inject
     private Profile profile;
@@ -155,6 +150,7 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         objetive.setActivationTime(now);
         objetive.setExpirationTime(Dates.addDays(now, 364));
         objetive.setType(_type);
+        objetive.setTheme(getTheme());
         objetive.buildAttributes(bussinesEntityService);
         return objetive;
     }
@@ -166,8 +162,7 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
-            getInstance().setAuthor(this.profile);
-            getInstance().setTheme(getTheme());
+            getInstance().setAuthor(this.profile);            
             create(getInstance());
         }
         //TODO idear una mejor forma de redireccionar

@@ -33,11 +33,8 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Section;
 import org.eqaula.glue.model.management.Diagnostic;
-import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.DiagnosticService;
-import org.eqaula.glue.service.OwnerService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
@@ -54,8 +51,6 @@ public class SectionHome extends BussinesEntityHome<Section> implements Serializ
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
     @Current
     @Inject
     private Profile profile;
@@ -132,6 +127,7 @@ public class SectionHome extends BussinesEntityHome<Section> implements Serializ
         section.setActivationTime(now);
         section.setExpirationTime(Dates.addDays(now, 364));
         section.setType(_type);
+        section.setDiagnostic(getDiagnostic());
         section.buildAttributes(bussinesEntityService);
         return section;
     }
@@ -145,7 +141,6 @@ public class SectionHome extends BussinesEntityHome<Section> implements Serializ
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setDiagnostic(getDiagnostic());
             create(getInstance());
         }
         if (getInstance().getDiagnostic().getId()!= null) {

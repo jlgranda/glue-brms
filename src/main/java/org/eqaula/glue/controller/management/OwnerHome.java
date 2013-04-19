@@ -30,13 +30,10 @@ import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
-import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
-import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.OrganizationService;
 import org.eqaula.glue.service.ThemeService;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
@@ -46,6 +43,7 @@ import org.primefaces.context.RequestContext;
 /*
  * @author dianita
  */
+
 @Named
 @ViewScoped
 public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable {

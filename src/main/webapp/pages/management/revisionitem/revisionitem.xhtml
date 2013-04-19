@@ -38,6 +38,12 @@ limitations under the License.
 
                         <h3>#{revisionItemHome.revisionItemId!= null? messages['common.edit'] : messages['common.add']} 
                             #{messages['module.revisionItem']}</h3> 
+
+                        <div class="span9">
+                            <h2>#{revisionItemHome.managed ? revisionItemHome.instance.name : (messages['common.add'].concat(' ').concat(messages['module.revisionItem']))} </h2> 
+                            <p><span style="">#{messages['common.in']} #{revisionItemHome.managed ? revisionItemHome.instance.section.diagnostic.owner.organization.initials: revisionItemHome.section.diagnostic.owner.organization.initials}/#{sectionHome.managed ? sectionHome.instance.diagnostic.owner.name : sectionHome.diagnostic.owner.name}/#{sectionHome.managed ? sectionHome.instance.diagnostic.name : sectionHome.diagnostic.name}</span>       
+                            </p>
+                        </div>
                     </div>    
                 </div>
             </div>
@@ -93,7 +99,7 @@ limitations under the License.
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{revisionItemHome.saveRevisionItem()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->
-                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
+                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn btn-danger" onclick="deletedDlg.show();" immediate="true"
                                      update=":cancel-dialog" rendered="#{revisionItemHome.instance.persistent}">                        
                     </p:commandButton>
                     <!-- &nbsp;-->
