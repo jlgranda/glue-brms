@@ -239,4 +239,10 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
     public String resolveOutcome() {
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
+    
+    /**
+     * Return for each BussinesEntity te canonical path ....
+     * @return 
+     */
+    public abstract String getCanonicalPath();
 }

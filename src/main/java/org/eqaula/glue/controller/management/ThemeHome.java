@@ -34,12 +34,12 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Macroprocess;
+import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Process;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.management.Perspective;
 import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.OwnerService;
 import org.eqaula.glue.service.PerspectiveService;
 import org.eqaula.glue.util.Dates;
@@ -62,8 +62,6 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
     @Current
     @Inject
     private Profile profile;
@@ -173,6 +171,14 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         this.perspective = perspective;
     }
 
+    @Override
+    public Organization getOrganization() {
+        if (getOrganizationId() == null && isManaged()) {
+            super.setOrganization(getInstance().getPerspective().getOrganization());
+        }
+        return super.getOrganization();
+    }
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -204,6 +210,8 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         theme.setActivationTime(now);
         theme.setExpirationTime(Dates.addDays(now, 364));
         theme.setType(_type);
+        theme.setPerspective(getPerspective());
+        theme.setOrganization(getPerspective().getBalancedScorecard().getOrganization());
         theme.buildAttributes(bussinesEntityService);
         return theme;
     }
@@ -216,14 +224,12 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setPerspective(getPerspective());
-            getInstance().setOrganization(getPerspective().getBalancedScorecard().getOrganization());
             create(getInstance());
         }
         if (getInstance().getPerspective().getId() != null) {
             if (getOutcomeOther().isEmpty()) {
                 return getOutcome() + "?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
-            }else{
+            } else {
                 return getOutcomeOther() + "?faces-redirect=true&includeViewParams=true";
             }
         }
@@ -344,5 +350,14 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             }
         }
+    }
+
+    @Override
+    public String getCanonicalPath() {
+        StringBuilder path = new StringBuilder();
+        path.append(getInstance().getOrganization().getName());
+        path.append("/");
+        path.append(getInstance().getPerspective().getName());
+        return path.toString();
     }
 }

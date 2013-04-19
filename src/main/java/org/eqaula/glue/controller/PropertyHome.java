@@ -18,7 +18,6 @@ package org.eqaula.glue.controller;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
@@ -28,10 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import org.apache.commons.lang.SerializationUtils;
 import org.eqaula.glue.cdi.Web;
-import org.eqaula.glue.controller.profile.ProfileHome;
 import org.eqaula.glue.model.Property;
 import org.eqaula.glue.model.Structure;
 import org.eqaula.glue.service.BussinesEntityService;
@@ -262,5 +258,10 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
         boolean ban = bussinesEntityService.findBussinesEntityForProperty(getInstance()).isEmpty() && bussinesEntityService.findBussinesEntityAttributeForProperty(getInstance()).isEmpty();
         //log.info("eqaula --> property tiene valores : " + ban);
         return ban;
+    }
+    
+    @Override
+    public String getCanonicalPath() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

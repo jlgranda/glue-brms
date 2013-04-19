@@ -224,4 +224,9 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
         FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setBussinesEntity(null);
     }
+
+    @Override
+    public String getCanonicalPath() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

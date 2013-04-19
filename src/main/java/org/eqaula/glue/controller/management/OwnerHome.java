@@ -190,4 +190,9 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         boolean ban = themeService.findByOwner(getInstance()).isEmpty();
         return ban;
     }
+
+    @Override
+    public String getCanonicalPath() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

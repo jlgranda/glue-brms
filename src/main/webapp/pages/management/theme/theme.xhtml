@@ -35,8 +35,8 @@ limitations under the License.
                 <div class="container">
                     <div class="row-fluid" style="margin-top: 5px;" >
                         <div class="span9">
-                            <h3>#{themeHome.themeId!= null? messages['common.edit'] : messages['common.add']} 
-                                #{messages['module.theme']}</h3> 
+                            <h2>#{themeHome.managed ? themeHome.instance.name : (messages['common.add'].concat(' ').concat(messages['module.theme']))}</h2> 
+                            <p><span style="">#{messages['common.in']} #{themeHome.canonicalPath}</span></p>
                         </div>
                         <div class="span3 ">
 

@@ -131,4 +131,9 @@ public class CustomizeProfileHome extends BussinesEntityHome<Profile> implements
         return "/pages/accounting/ledger/voucher.xhtml?organizationId=" + getOrganizationId() + "&profileId=" + getInstance().getId() + "&faces-redirect=true&includeViewParams=true";
 
     }
+
+    @Override
+    public String getCanonicalPath() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

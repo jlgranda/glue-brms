@@ -79,6 +79,15 @@ public class BalancedScorecard extends BussinesEntity implements Serializable {
     }
     
     @Override
+    public String getCanonicalPath(){
+        StringBuilder path = new StringBuilder();
+        path.append(getOrganization().getCanonicalPath());
+        path.append("/"); //TODO hacer que sea personalizable
+        path.append(getName());
+        return path.toString();
+    }
+    
+    @Override
     public String toString() {
        /* return "org.eqaula.glue.model.management.BalancedScorecard[ "
                 + "id=" + getId() + ","

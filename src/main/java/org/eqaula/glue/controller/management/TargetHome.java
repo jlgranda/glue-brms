@@ -215,4 +215,9 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         List<Target.Type> list = Arrays.asList(getInstance().getTargetType().values());
         return list;
     }
+
+    @Override
+    public String getCanonicalPath() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
