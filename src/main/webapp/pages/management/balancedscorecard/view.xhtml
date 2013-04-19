@@ -50,7 +50,7 @@
                     <p:menuitem value="#{messages['common.add']}" update=":messages" actionListener="#{balancedScorecardHome.redirecToAdd}" icon="ui-icon-plus" /> 
                     <p:menuitem value="#{messages['common.edit']}" update=":messages" actionListener="#{balancedScorecardHome.redirecToEdit}" icon="ui-icon-plus" /> 
                 </p:contextMenu>  
-                <p:panel id="explorer-panel" header="#{messages['common.overview']}" toggleable="true">
+                <p:panel id="explorer-panel" header="#{messages['common.explorer']}" toggleable="true">
                     <p:tree id="bscTree" value="#{balancedScorecardHome.bscNode}" var="node" orientation="horizontal" 
                             selectionMode="single" selection="#{balancedScorecardHome.selectedNode}"  dynamic="true">  
 
@@ -61,19 +61,19 @@
                         <p:treeNode  type="bsc" icon="ui-icon-home">    
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
-                        <p:treeNode  type="perspective" icon="ui-icon-screenshot">    
+                        <p:treeNode  type="perspective" icon="ui-icon-lightbulb">    
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
-                        <p:treeNode  type="theme" icon="icon-asterisk">    
+                        <p:treeNode  type="theme" icon="ui-icon-key">    
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>  
-                        <p:treeNode type="objetive" icon="ui-icon-document">  
+                        <p:treeNode type="objetive" icon="ui-icon-flag">  
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>
-                        <p:treeNode type="measure" icon="ui-icon-flag">  
+                        <p:treeNode type="measure" icon="ui-icon-volume-on">  
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>                        
-                        <p:treeNode type="target" icon="icon-hand-right">  
+                        <p:treeNode type="target" icon="ui-icon-check">  
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>
                     </p:tree>

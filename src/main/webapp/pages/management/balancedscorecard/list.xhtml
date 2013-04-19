@@ -20,7 +20,7 @@
 
                 <div class="row-fluid" style="margin-top: 5px;">
                     <div class="span9">
-                        <h2>#{messages['module.balancedScorecards']}</h2>   
+                        <h2>#{balancedScorecardListService.organization.name} - #{messages['module.balancedScorecards']}</h2>   
                     </div>    
 
                     <div class="span3">
@@ -56,7 +56,7 @@
                 </h:link> 
 
                 #{' '}
-                <h:link id="button-admin" value="#{messages['common.admin']}" rendered="#{true}" outcome="view" styleClass="btn" 
+                <h:link id="button-admin" value="#{messages['common.design']}" rendered="#{true}" outcome="view" styleClass="btn" 
                         disabled="#{empty balancedScorecardListService.selectedBalancedScorecard.id}">
                     <f:param name="balancedScorecardId" value="#{balancedScorecardListService.selectedBalancedScorecard.id}"></f:param>
                 </h:link> 

@@ -84,7 +84,7 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
     public void setEditionEnabled(boolean editionEnabled) {
         this.editionEnabled = editionEnabled;
     }
-    
+
     public Long getOrganizationId() {
         return organizationId;
     }
@@ -101,6 +101,7 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
             } else {
                 organization = organizationService.find(getOrganizationId());
             }
+
         }
         return organization;
     }
@@ -234,5 +235,8 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
 
         return temp;
     }
-    
+
+    public String resolveOutcome() {
+        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
+    }
 }

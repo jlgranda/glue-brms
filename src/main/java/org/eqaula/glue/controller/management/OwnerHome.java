@@ -96,6 +96,15 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         bussinesEntityService.setEntityManager(em);
     }
 
+    
+    @Override
+    public Organization getOrganization(){
+        if (getOrganizationId() == null && isManaged()){
+            super.setOrganization(getInstance().getOrganization());
+        }
+        return super.getOrganization();
+    }
+
     @Override
     protected Owner createInstance() {
         BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Owner.class.getName());
@@ -124,7 +133,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         }
         //TODO idear una mejor forma de redireccionar
         if (getInstance().getOrganization() != null) {
-            return getOutcome() + "?organizationId=" + getOrganizationId() + "&faces-redirect=true&includeViewParams=true";
+            return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }

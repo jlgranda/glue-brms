@@ -21,8 +21,8 @@
                 <div class="container">
                     <div class="row-fluid" style="margin-top: 5px;" >
                         <div class="span9">
-                            <h3>#{ownerHome.ownerId!= null? messages['common.edit'] : messages['common.add']} 
-                                #{messages['module.owner']}</h3> 
+                            <h2>#{ownerHome.managed ? ownerHome.instance.name : (messages['common.add'].concat(' ').concat(messages['module.owner']))}</h2> 
+                            #{messages['common.in']} #{ownerHome.organization.name}
                         </div>
                         <div class="span3">
                             <br/>
