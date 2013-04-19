@@ -52,7 +52,7 @@ limitations under the License.
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{diagnosticHome.saveDiagnostic()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->
-                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
+                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn btn-danger" onclick="deletedDlg.show();" immediate="true"
                                      update=":cancel-dialog" rendered="#{diagnosticHome.instance.persistent}">                        
                     </p:commandButton>
                     <!-- &nbsp;-->

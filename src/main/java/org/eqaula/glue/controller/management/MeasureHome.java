@@ -51,8 +51,6 @@ public class MeasureHome extends BussinesEntityHome<Measure> implements Serializ
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
     @Current
     @Inject
     private Profile profile;

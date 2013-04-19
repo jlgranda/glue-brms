@@ -31,12 +31,9 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.management.Diagnostic;
 import org.eqaula.glue.model.management.RevisionItem;
 import org.eqaula.glue.model.management.Section;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
-import org.eqaula.glue.service.DiagnosticService;
 import org.eqaula.glue.service.SectionService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
@@ -55,8 +52,6 @@ public class RevisionItemHome extends BussinesEntityHome<RevisionItem> implement
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
     @Current
     @Inject
     private Profile profile;
@@ -135,6 +130,7 @@ public class RevisionItemHome extends BussinesEntityHome<RevisionItem> implement
         revisionItem.setExpirationTime(Dates.addDays(now, 364));
         revisionItem.setType(_type);
         revisionItem.buildAttributes(bussinesEntityService);
+        revisionItem.setSection(getSection());
         return revisionItem;
     }
 
@@ -147,7 +143,6 @@ public class RevisionItemHome extends BussinesEntityHome<RevisionItem> implement
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setSection(getSection());
             create(getInstance());
         }
         if (getInstance().getSection().getId() != null) {

@@ -16,10 +16,9 @@
 package org.eqaula.glue.controller.management;
 
 import java.io.Serializable;
-import java.util.Arrays;
+
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
@@ -33,12 +32,9 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.management.Measure;
 import org.eqaula.glue.model.management.Method;
 import org.eqaula.glue.model.management.Target;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
-import org.eqaula.glue.service.MeasureService;
 import org.eqaula.glue.service.TargetService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
@@ -57,8 +53,6 @@ public class MethodHome extends BussinesEntityHome<Method> implements Serializab
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
     @Current
     @Inject
     private Profile profile;

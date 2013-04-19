@@ -33,7 +33,6 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Scale;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.RevisionItemService;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
@@ -53,8 +52,6 @@ public class ScaleHome extends BussinesEntityHome<Scale> implements Serializable
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
     @Current
     @Inject
     private Profile profile;
