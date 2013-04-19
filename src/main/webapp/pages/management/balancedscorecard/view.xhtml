@@ -21,7 +21,7 @@
                     <div class="row fluid" style="margin-top: 5px;">
                         <div class="span9 ">
                             <h2>#{balancedScorecardHome.managed ? balancedScorecardHome.instance.name : ""}</h2>
-                            <p><span style="">#{messages['common.description']}:#{balancedScorecardHome.instance.description}</span>                                
+                            <p><span style="">#{messages['common.in']} #{balancedScorecardHome.organization.name}</span>                                
 
                             </p>
                         </div>
@@ -70,7 +70,7 @@
                         <p:treeNode type="objetive" icon="ui-icon-flag">  
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>
-                        <p:treeNode type="measure" icon="ui-icon-volume-on">  
+                        <p:treeNode type="measure" icon="ui-icon-battery-2">  
                             <h:outputText value="#{node.name}" />  
                         </p:treeNode>                        
                         <p:treeNode type="target" icon="ui-icon-check">  

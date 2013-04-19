@@ -126,6 +126,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         this.bscNode = bscNode;
     }
 
+    
     public TreeNode getSelectedNode() {
         return selectedNode;
     }
@@ -134,7 +135,14 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         this.selectedNode = selectedNode;
     }
 
-
+     @Override
+    public Organization getOrganization(){
+        if (getOrganizationId() == null && isManaged()){
+            super.setOrganization(getInstance().getOrganization());
+        }
+        return super.getOrganization();
+    }
+     
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
