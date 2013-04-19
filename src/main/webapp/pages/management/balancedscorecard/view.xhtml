@@ -80,8 +80,9 @@
 
                     <p:treeTable id="treetable" value="#{balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode}" var="node"  propagateSelectionUp="true">  
                         
-                        <p:column style="width:150px">  
-                            <h:outputText value="#{balancedScorecardHome.getToHaveChildren(balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode) == true ? node: hola}"/>   <!--"{node}" messages['common.nothingToShow']-->                            
+                        
+                        <p:column headerText="#{messages['module.balancedscorecard.dimention']}">  
+                            <h:outputText value="#{balancedScorecardHome.getToHaveChildren(balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode) == true ? node: hola}"/>                        
                         </p:column>  
 
                         <!--
