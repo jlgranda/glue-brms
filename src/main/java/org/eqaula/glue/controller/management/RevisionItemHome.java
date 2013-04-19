@@ -150,8 +150,8 @@ public class RevisionItemHome extends BussinesEntityHome<RevisionItem> implement
             getInstance().setSection(getSection());
             create(getInstance());
         }
-        if (getSectionId() != null) {
-            return getOutcome() + "?diagnosticId=" + getSection().getDiagnostic().getId() + "&faces-redirect=true&includeViewParams=true";
+        if (getInstance().getSection().getId() != null) {
+            return getOutcome() + "?diagnosticId=" + getInstance().getSection().getDiagnostic().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }

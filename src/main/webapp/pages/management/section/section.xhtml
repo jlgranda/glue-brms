@@ -55,10 +55,12 @@ limitations under the License.
                     </p:commandButton>
                     <!-- &nbsp;-->
 
-                    <h:link outcome="/pages/management/section/list"
+                    <h:link outcome="#{sectionHome.outcome}"
                             value="#{messages['common.cancel']}" styleClass="btn">
-                        <f:param name="diagnosticId" value="#{sectionHome.diagnosticId}"/>
+                        <f:param name="diagnosticId" value="#{sectionHome.diagnosticId!=null? sectionHome.diagnosticId : sectionHome.instance.diagnostic.id}"/>
                     </h:link> 
+                
+     
 
                 </div>  
             </h:form>

@@ -148,8 +148,8 @@ public class SectionHome extends BussinesEntityHome<Section> implements Serializ
             getInstance().setDiagnostic(getDiagnostic());
             create(getInstance());
         }
-        if (getDiagnosticId() != null) {
-            return getOutcome() + "?diagnosticId=" + getDiagnosticId() + "&faces-redirect=true&includeViewParams=true";
+        if (getInstance().getDiagnostic().getId()!= null) {
+            return getOutcome() + "?diagnosticId=" + getInstance().getDiagnostic().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -184,8 +184,8 @@ public class SectionHome extends BussinesEntityHome<Section> implements Serializ
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getDiagnosticId()!= null) {
-            return getOutcome() + "?diagnosticId=" + getDiagnosticId() + "&faces-redirect=true&includeViewParams=true";
+        if (getInstance().getDiagnostic().getId()!= null) {
+            return getOutcome() + "?diagnosticId=" +getInstance().getDiagnostic().getId()+ "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
