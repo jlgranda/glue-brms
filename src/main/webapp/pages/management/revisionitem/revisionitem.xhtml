@@ -98,9 +98,9 @@ limitations under the License.
                     </p:commandButton>
                     <!-- &nbsp;-->
 
-                    <h:link outcome="/pages/management/diagnostic/design"
+                    <h:link outcome="#{revisionItemHome.outcome}"
                             value="#{messages['common.cancel']}" styleClass="btn">
-                        <f:param name="ownerId" value="#{revisionItemHome.section.diagnostic.owner.id}"/>
+                        <f:param name="diagnosticId" value="#{revisionItemHome.section.diagnostic.id}"/>
                     </h:link>
                 </div>  
             </h:form>
