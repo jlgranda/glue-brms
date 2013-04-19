@@ -16,7 +16,6 @@
 package org.eqaula.glue.controller;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -28,17 +27,11 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import org.eqaula.glue.cdi.Web;
-import org.eqaula.glue.controller.BussinesEntityHome;
-import org.eqaula.glue.controller.profile.ProfileHome;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.Property;
 import org.eqaula.glue.model.Structure;
-import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.security.InitializeDatabase;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.BussinesEntityTypeListService;
 import org.eqaula.glue.service.BussinesEntityTypeService;
@@ -240,6 +233,11 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
             }            
         }        
         return false;
+    }
+
+    @Override
+    public String getCanonicalPath() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

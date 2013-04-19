@@ -280,4 +280,10 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         
         return _outcome;
     }
+
+    @Override
+    public String getCanonicalPath() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

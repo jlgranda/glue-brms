@@ -206,4 +206,9 @@ public class MacroprocessHome extends BussinesEntityHome<Macroprocess> implement
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
+
+    @Override
+    public String getCanonicalPath() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

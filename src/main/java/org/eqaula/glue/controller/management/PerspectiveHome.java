@@ -36,7 +36,6 @@ import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Perspective;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.BalancedScorecardService;
-import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 import org.jboss.solder.logging.Logger;
@@ -54,8 +53,6 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
     @Current
     @Inject
     private Profile profile;
@@ -113,6 +110,13 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
         this.outcomeOther = outcomeOther;
     }
 
+    @Override
+    public Organization getOrganization(){
+        if (getOrganizationId() == null && isManaged()){
+            super.setOrganization(getInstance().getOrganization());
+        }
+        return super.getOrganization();
+    }
     
     @TransactionAttribute
     public void load() {
@@ -144,6 +148,7 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
         perspective.setActivationTime(now);
         perspective.setExpirationTime(Dates.addDays(now, 364));
         perspective.setType(_type);
+        perspective.setBalancedScorecard(getBalancedScorecard());
         perspective.buildAttributes(bussinesEntityService);
         return perspective;
     }
@@ -156,7 +161,6 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setBalancedScorecard(getBalancedScorecard());
             create(getInstance());
         }
 
@@ -215,4 +219,10 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
+
+    @Override
+    public String getCanonicalPath() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

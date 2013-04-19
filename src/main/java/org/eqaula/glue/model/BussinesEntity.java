@@ -49,6 +49,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eqaula.glue.model.management.Organization;
@@ -258,6 +259,15 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
 
     public void setProperty(Property property) {
         this.property = property;
+    }
+    
+    /**
+     * Return for each BussinesEntity te canonical path ....
+     * @return 
+     */
+    @Transient
+    public String getCanonicalPath(){
+        return getName();
     }
 
     @Override

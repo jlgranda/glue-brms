@@ -32,6 +32,7 @@ import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Objetive;
+import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.management.Perspective;
 import org.eqaula.glue.model.management.Theme;
@@ -115,6 +116,14 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         this.outcomeAnother = outcomeAnother;
     }
 
+    @Override
+    public Organization getOrganization(){
+        if (getOrganizationId() == null && isManaged()){
+            //TODO prevenir null
+            super.setOrganization(getInstance().getTheme().getPerspective().getOrganization());
+        }
+        return super.getOrganization();
+    }
         
     @TransactionAttribute
     public void load() {
@@ -213,5 +222,10 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
             return getOutcome() + "?balancedScorecardId=" + getInstance().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
+    }
+
+    @Override
+    public String getCanonicalPath() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

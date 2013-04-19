@@ -40,13 +40,9 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.BalancedScorecard;
-import org.eqaula.glue.model.management.Initiative;
 import org.eqaula.glue.model.management.Measure;
-import org.eqaula.glue.model.management.Method;
 import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.management.Organization;
-import org.eqaula.glue.model.management.Owner;
-import org.eqaula.glue.model.management.Period;
 import org.eqaula.glue.model.management.Perspective;
 import org.eqaula.glue.model.management.Target;
 import org.eqaula.glue.model.management.Theme;
@@ -173,6 +169,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         balancedScorecard.setActivationTime(now);
         balancedScorecard.setExpirationTime(Dates.addDays(now, 364));
         balancedScorecard.setType(_type);
+        balancedScorecard.setOrganization(getOrganization());
         balancedScorecard.buildAttributes(bussinesEntityService);
         return balancedScorecard;
     }
@@ -420,5 +417,9 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         return actionListener;
     }
 
+    @Override
+    public String getCanonicalPath() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
    
 }

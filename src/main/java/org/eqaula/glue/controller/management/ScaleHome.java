@@ -172,4 +172,9 @@ public class ScaleHome extends BussinesEntityHome<Scale> implements Serializable
         boolean ban =  revisionItemService.findByScale(getInstance()).isEmpty();
         return ban;
     }
+
+    @Override
+    public String getCanonicalPath() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

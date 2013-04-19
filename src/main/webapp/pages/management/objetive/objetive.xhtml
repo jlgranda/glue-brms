@@ -36,8 +36,10 @@ limitations under the License.
                 <div class="container">
                     <div class="row fl" style="margin-top: 5px;" >
                         <div class="span9">
-                            <h3>#{objetiveHome.objetiveId != null? messages['common.edit'] : messages['common.add']} 
-                                #{messages['module.objetive']}</h3> 
+                            <div class="span9">
+                            <h2>#{objetiveHome.managed ? objetiveHome.instance.name : (messages['common.add'].concat(' ').concat(messages['module.objetive']))}</h2> 
+                            <p><span style="">#{messages['common.in']} #{objetiveHome.organization.name}/#{objetiveHome.instance.theme.perspective.name}/#{objetiveHome.instance.theme.name}</span></p>
+                        </div>
                         </div>
                         <div class="span3 ">
                             <h:form id="control">                                
@@ -53,13 +55,6 @@ limitations under the License.
                         </div>
 
                     </div>
-                    <div class="row" style="margin-top: 5px;" >
-                        <p>
-                            <b> #{messages['module.theme']}: </b> <i>#{objetiveHome.theme.name}</i> 
-                            <br/>
-                            <b> #{messages['common.description']} :</b> <i> #{objetiveHome.theme.description} </i>
-                        </p> 
-                    </div> 
                 </div>  
             </div>
         </ui:define>
