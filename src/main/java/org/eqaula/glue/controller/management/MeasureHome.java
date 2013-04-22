@@ -130,6 +130,7 @@ public class MeasureHome extends BussinesEntityHome<Measure> implements Serializ
         measure.setActivationTime(now);
         measure.setExpirationTime(Dates.addDays(now, 364));
         measure.setType(_type);
+        measure.setObjetive(getObjetive());
         measure.buildAttributes(bussinesEntityService);
         return measure;
     }
@@ -142,7 +143,7 @@ public class MeasureHome extends BussinesEntityHome<Measure> implements Serializ
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setObjetive(getObjetive());
+            
             create(getInstance());
         }
         //TODO idear una mejor forma de redireccionar

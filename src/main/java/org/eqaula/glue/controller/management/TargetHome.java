@@ -152,8 +152,8 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         target.setActivationTime(now);
         target.setExpirationTime(Dates.addDays(now, 364));
         target.setType(_type);
-        target.buildAttributes(bussinesEntityService);
         target.setMeasure(getMeasure());
+        target.buildAttributes(bussinesEntityService);
         return target;
     }
 
@@ -215,6 +215,4 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         List<Target.Type> list = Arrays.asList(getInstance().getTargetType().values());
         return list;
     }
-
-   
 }
