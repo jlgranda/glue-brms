@@ -115,7 +115,8 @@ public class Organizations implements Serializable
 
    public long getCount()
    {
-      return organizationService.count();
+      return organizationService.findByProfile(profile).size();
+      //count();
    }
 
    public List<Organization> getAll()

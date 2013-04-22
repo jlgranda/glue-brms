@@ -34,21 +34,21 @@ import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.RevisionItem;
 import org.eqaula.glue.model.management.Section;
 import org.eqaula.glue.model.profile.Profile;
+import org.eqaula.glue.service.RevisionItemService;
 import org.eqaula.glue.service.SectionService;
 import org.eqaula.glue.util.Dates;
+import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
 
 /*
  * @author dianita
  */
-
-
 @Named
 @ViewScoped
-public class RevisionItemHome extends BussinesEntityHome<RevisionItem> implements Serializable{
+public class RevisionItemHome extends BussinesEntityHome<RevisionItem> implements Serializable {
+
     private static final long serialVersionUID = 2761195215890197804L;
-    
     @Inject
     @Web
     private EntityManager em;
@@ -59,6 +59,8 @@ public class RevisionItemHome extends BussinesEntityHome<RevisionItem> implement
     private Long sectionId;
     @Inject
     private SectionService sectionService;
+    @Inject
+    private RevisionItemService revisionService;
 
     public RevisionItemHome() {
     }
@@ -98,7 +100,6 @@ public class RevisionItemHome extends BussinesEntityHome<RevisionItem> implement
         this.sectionId = sectionId;
     }
 
-    
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -115,6 +116,7 @@ public class RevisionItemHome extends BussinesEntityHome<RevisionItem> implement
     public void init() {
         setEntityManager(em);
         sectionService.setEntityManager(em);
+        revisionService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
 
@@ -129,8 +131,8 @@ public class RevisionItemHome extends BussinesEntityHome<RevisionItem> implement
         revisionItem.setActivationTime(now);
         revisionItem.setExpirationTime(Dates.addDays(now, 364));
         revisionItem.setType(_type);
-        revisionItem.buildAttributes(bussinesEntityService);
         revisionItem.setSection(getSection());
+        revisionItem.buildAttributes(bussinesEntityService);
         return revisionItem;
     }
 
@@ -166,14 +168,23 @@ public class RevisionItemHome extends BussinesEntityHome<RevisionItem> implement
 
     @Transactional
     public String deleteRevisionItem() {
+        boolean band;
+        band = false;
         try {
             if (getInstance() == null) {
                 throw new NullPointerException("RevisionItem is Null");
             }
             if (getInstance().isPersistent()) {
-                delete(getInstance());
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
-                RequestContext.getCurrentInstance().execute("editDlg.hide()");
+                if (hasValuesBussinesEntity()) {
+                    delete(getInstance());
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
+                    RequestContext.getCurrentInstance().execute("editDlg.hide()");
+                } else {
+                    band = true;
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("module.revisionItem") + " : " + UI.getMessages("module.stocklist.delete.confirm"), "");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                }
+
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un item para ser borrado!", ""));
             }
@@ -181,12 +192,17 @@ public class RevisionItemHome extends BussinesEntityHome<RevisionItem> implement
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        //if (getDiagnosticId()!= null) {
-        //    return getOutcome() + "?diagnosticId=" + getDiagnosticId() + "&faces-redirect=true&includeViewParams=true";
-        //}
+        if (band) {
+            return null;
+        }
+        if (getInstance().getSection().getId() != null) {
+            return getOutcome() + "?diagnosticId=" + getInstance().getSection().getDiagnostic().getId() + "&faces-redirect=true&includeViewParams=true";
+        }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
-    
-    
+    public boolean hasValuesBussinesEntity() {
+        boolean ban = revisionService.findByRevisionItem(getInstance()).isEmpty();
+        return ban;
+    }
 }

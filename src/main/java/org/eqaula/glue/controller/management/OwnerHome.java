@@ -190,6 +190,5 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         boolean ban = themeService.findByOwner(getInstance()).isEmpty();
         return ban;
     }
-
-   
+    
 }

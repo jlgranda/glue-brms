@@ -49,6 +49,7 @@ import org.primefaces.model.TreeNode;
 /*
  * @author dianita
  */
+
 @Named
 @ViewScoped
 public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Serializable {
@@ -256,6 +257,4 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
         }
         return node;
     }
-
-
 }

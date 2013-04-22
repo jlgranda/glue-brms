@@ -48,11 +48,11 @@ public class RevisionItemService extends PersistenceUtil<RevisionItem> implement
     public void setEntityManager(EntityManager em) {
         this.em = em;
     }
-    
+
     public long count() {
         return count(RevisionItem.class);
     }
-    
+
     public List<RevisionItem> getRevisionItems() {
         return findAll(RevisionItem.class);
     }
@@ -76,7 +76,9 @@ public class RevisionItemService extends PersistenceUtil<RevisionItem> implement
 
     public List<RevisionItem> findByProfile(Profile profile) {
         log.info("find RevisionItem with profile " + profile);
-        if (profile == null) return new ArrayList<RevisionItem>(0);
+        if (profile == null) {
+            return new ArrayList<RevisionItem>(0);
+        }
 
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<RevisionItem> query = builder.createQuery(RevisionItem.class);
@@ -94,26 +96,32 @@ public class RevisionItemService extends PersistenceUtil<RevisionItem> implement
         return getSingleResult(query);
     }
 
-   
     public List<RevisionItem> findByQuestion(Question question) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<RevisionItem> query = builder.createQuery(RevisionItem.class);
         Root<RevisionItem> bussinesEntityType = query.from(RevisionItem.class);
-        query.where(builder.equal(bussinesEntityType.get(RevisionItem_.question),question));
+        query.where(builder.equal(bussinesEntityType.get(RevisionItem_.question), question));
         return getResultList(query);
     }
-    
-     public List<RevisionItem> findByScale(Scale scale) {
+
+    public List<RevisionItem> findByRevisionItem(RevisionItem revisionItem) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<RevisionItem> query = builder.createQuery(RevisionItem.class);
         Root<RevisionItem> bussinesEntityType = query.from(RevisionItem.class);
-        query.where(builder.equal(bussinesEntityType.get(RevisionItem_.scale),scale));
+        query.where(builder.equal(bussinesEntityType.get(RevisionItem_.revisionItem), revisionItem));
         return getResultList(query);
     }
-    
-     public void create(Profile loggedIn, RevisionItem current) {
+
+    public List<RevisionItem> findByScale(Scale scale) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<RevisionItem> query = builder.createQuery(RevisionItem.class);
+        Root<RevisionItem> bussinesEntityType = query.from(RevisionItem.class);
+        query.where(builder.equal(bussinesEntityType.get(RevisionItem_.scale), scale));
+        return getResultList(query);
+    }
+
+    public void create(Profile loggedIn, RevisionItem current) {
         current.setAuthor(loggedIn);
         create(current);
     }
-    
 }
