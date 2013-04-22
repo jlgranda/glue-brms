@@ -195,8 +195,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
-            getInstance().setAuthor(this.profile);
-            getInstance().setOrganization(getOrganization());
+            getInstance().setAuthor(this.profile); 
             create(getInstance());
             createDefaultPerspectives(getInstance());
             return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";

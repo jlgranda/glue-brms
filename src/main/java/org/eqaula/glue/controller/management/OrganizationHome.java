@@ -16,6 +16,7 @@
 package org.eqaula.glue.controller.management;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -35,6 +36,8 @@ import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Macroprocess;
 import org.eqaula.glue.model.management.Organization;
+import org.eqaula.glue.model.management.Owner;
+import org.eqaula.glue.model.management.Perspective;
 import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.Dates;
@@ -135,6 +138,20 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         return organization;
     }
 
+    protected Owner createInstanceOwner() {
+        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Perspective.class.getName());
+        Date now = Calendar.getInstance().getTime();
+        Owner owner = new Owner();
+        owner.setCode(UUID.randomUUID().toString());
+        owner.setCreatedOn(now);
+        owner.setLastUpdate(now);
+        owner.setActivationTime(now);
+        owner.setExpirationTime(Dates.addDays(now, 364));
+        owner.setType(_type);
+        owner.buildAttributes(bussinesEntityService);
+        return owner;
+    }
+    
     @TransactionAttribute
     public String saveOrganization() {
         Date now = Calendar.getInstance().getTime();
@@ -146,8 +163,25 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                 getInstance().setAuthor(this.profile);
             }
             create(getInstance());
+            createDefaultOwner(getInstance());
         }
         return resolveOutcome();
+    }
+    
+    public void createDefaultOwner(Organization organization) {
+
+        ArrayList<String> messagesOwners = new ArrayList();
+        messagesOwners.add(UI.getMessages("common.Owner.General"));
+        
+        for (String createOwners : messagesOwners) {
+            Date now = Calendar.getInstance().getTime();
+            Owner owner = createInstanceOwner();
+            owner.setName(createOwners);
+            owner.setLastUpdate(now);
+            owner.setAuthor(profile);
+            owner.setOrganization(organization);
+            create(owner);
+        }
     }
 
     public boolean isWired() {
@@ -280,7 +314,4 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         
         return _outcome;
     }
-
-  
-
 }
