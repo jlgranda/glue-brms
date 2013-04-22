@@ -32,12 +32,8 @@ import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Initiative;
-import org.eqaula.glue.model.management.Measure;
 import org.eqaula.glue.model.management.Target;
-
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
-import org.eqaula.glue.service.MeasureService;
 import org.eqaula.glue.service.TargetService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
@@ -56,8 +52,6 @@ public class InitiativeHome extends BussinesEntityHome<Initiative> implements Se
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
     @Current
     @Inject
     private Profile profile;
@@ -194,8 +188,5 @@ public class InitiativeHome extends BussinesEntityHome<Initiative> implements Se
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }    
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 }

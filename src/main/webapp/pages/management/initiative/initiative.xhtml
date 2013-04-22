@@ -21,7 +21,7 @@ limitations under the License.
       xmlns:s="http://jboss.org/seam/faces"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:glue ="http://eqaula.org/jsf/facelets"
+      xmlns:glue ="http://eqaula.org/jsf/facelets"     
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml" >
         <f:metadata>
@@ -65,7 +65,7 @@ limitations under the License.
                         
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
                                         styleClass="validation-status" />
-                        <span class="help-block"><br/>#{messages['perspective.inlinehelp']} <ocp:message forId="perspective" /></span>
+                        <span class="help-block"><br/>#{messages['perspective.inlinehelp']} <ocp:message forId="perspective"/></span>
 
                     </div>
                 </h:panelGroup>

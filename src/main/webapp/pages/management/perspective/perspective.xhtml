@@ -40,8 +40,8 @@ limitations under the License.
                 <div class="container">
                     <div class="row-fluid" style="margin-top: 5px;">
                         <div class="span9 ">
-                            <h3>#{perspectiveHome.perspectiveId!= null? messages['common.edit'] : messages['common.add']}
-                                #{messages['module.perspective']}</h3>          
+                            <h2>#{perspectiveHome.managed ? perspectiveHome.instance.name : (messages['common.add'].concat(' ').concat(messages['module.perspective']))}</h2> 
+                            <p><span style="">#{messages['common.in']} #{perspectiveHome.instance.getCanonicalPath}</span></p>
                         </div>
                         <div class="span3 ">
                             <h:form id="control">                                
@@ -70,8 +70,8 @@ limitations under the License.
                     <p:commandButton id="save" action="#{perspectiveHome.savePerspective()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
 
                     <p:commandButton id="saveanother" action="#{perspectiveHome.saveAndAddOther()}" value="#{messages['common.save']} y agregar más" styleClass="btn btn-inverse" rendered="#{empty perspectiveHome.perspectiveId}" /> 
-                    
-                  <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
+
+                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
                                      update=":cancel-dialog" rendered="#{perspectiveHome.managed}">                        
                     </p:commandButton>
 

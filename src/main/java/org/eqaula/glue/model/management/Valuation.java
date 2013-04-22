@@ -85,6 +85,15 @@ public class Valuation extends BussinesEntity implements Serializable {
                 isEquals();
     }
 
+     @Override
+    public String getCanonicalPath(){
+        StringBuilder path = new StringBuilder();
+        path.append(getScale().getCanonicalPath());
+        path.append(BussinesEntity.SEPARATOR); //TODO hacer que sea personalizable
+        path.append(getName());
+        return path.toString();
+    }
+     
     @Override
     public String toString() {
         return "org.eqaula.glue.model.management.Valuation[ "

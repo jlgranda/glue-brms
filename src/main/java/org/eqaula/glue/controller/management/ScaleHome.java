@@ -170,8 +170,5 @@ public class ScaleHome extends BussinesEntityHome<Scale> implements Serializable
         return ban;
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 }

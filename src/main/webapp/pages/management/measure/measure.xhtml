@@ -35,8 +35,24 @@ limitations under the License.
                 <div class="container">
                     <div class="row-fluid" style="margin-top: 5px;" >
 
-                        <h3>#{measureHome.measureId!= null? messages['common.edit'] : messages['common.add']} 
-                            #{messages['module.measure']}</h3> 
+                        <div class="span9 ">
+                            <h2>#{measureHome.managed ? measureHome.instance.name : (messages['common.add'].concat(' ').concat(messages['module.measure']))}</h2> 
+                            <p><span style="">#{messages['common.in']} #{measureHome.instance.getCanonicalPath}</span></p>
+
+                        </div>
+
+                        <div class="span3 ">
+                            <h:form id="control">                                
+                                <br/>
+                                <h:link outcome="/pages/management/balancedscorecard/view" styleClass="link" value="#{messages['common.cancel']}">
+                                    <f:param  name="balancedScorecardId" value="#{measureHome.objetive.theme.perspective.balancedScorecard.id}"></f:param>   
+                                </h:link>
+                                <br/>
+                                <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                                        outcome="/pages/home.xhtml?faces-redirect=true" styleClass="link">                                
+                                </h:link>
+                            </h:form>
+                        </div>
                     </div>    
                 </div>
             </div>

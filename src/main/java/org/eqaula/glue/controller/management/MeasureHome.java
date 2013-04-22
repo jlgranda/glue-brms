@@ -34,7 +34,6 @@ import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Measure;
 import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.ObjetiveService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
@@ -189,9 +188,6 @@ public class MeasureHome extends BussinesEntityHome<Measure> implements Serializ
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 
 }

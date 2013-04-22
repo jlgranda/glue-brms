@@ -34,7 +34,6 @@ import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Macroprocess;
 import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.service.ThemeService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
@@ -52,8 +51,6 @@ public class MacroprocessHome extends BussinesEntityHome<Macroprocess> implement
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private BussinesEntityService bussinesEntityService;
     @Current
     @Inject
     private Profile profile;
@@ -207,8 +204,5 @@ public class MacroprocessHome extends BussinesEntityHome<Macroprocess> implement
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 }

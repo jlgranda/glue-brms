@@ -350,14 +350,5 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             }
         }
-    }
-
-    @Override
-    public String getCanonicalPath() {
-        StringBuilder path = new StringBuilder();
-        path.append(getInstance().getOrganization().getName());
-        path.append("/");
-        path.append(getInstance().getPerspective().getName());
-        return path.toString();
-    }
+    }   
 }

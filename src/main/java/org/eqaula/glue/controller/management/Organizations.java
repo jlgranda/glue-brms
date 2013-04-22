@@ -34,10 +34,7 @@
 package org.eqaula.glue.controller.management;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.TransactionAttribute;
-
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
@@ -47,14 +44,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
-import org.eqaula.glue.controller.profile.ProfileHome;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.security.Account;
-import org.eqaula.glue.security.Profiles;
-
 import org.jboss.seam.international.status.Messages;
-
 import org.eqaula.glue.service.OrganizationListService;
 import org.eqaula.glue.service.OrganizationService;
 import org.eqaula.glue.web.ParamsBean;

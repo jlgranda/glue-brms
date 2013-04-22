@@ -18,26 +18,17 @@ package org.eqaula.glue.controller.profile;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.profile.ProfileService;
 import org.eqaula.glue.util.Dates;
-import org.jboss.seam.security.Credentials;
-import org.jboss.seam.security.Identity;
-import org.picketlink.idm.api.IdentitySession;
-import org.picketlink.idm.common.exception.IdentityException;
 
 /**
  *
@@ -132,8 +123,5 @@ public class CustomizeProfileHome extends BussinesEntityHome<Profile> implements
 
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
 }

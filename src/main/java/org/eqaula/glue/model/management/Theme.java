@@ -22,7 +22,6 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -124,6 +123,15 @@ public class Theme extends BussinesEntity implements Serializable {
                 append(getName(), other.getName()).
                 append(getType(), other.getType()).
                 isEquals();
+    }
+    
+     @Override
+    public String getCanonicalPath(){
+        StringBuilder path = new StringBuilder();
+        path.append(getPerspective().getCanonicalPath());
+        path.append(BussinesEntity.SEPARATOR); //TODO hacer que sea personalizable
+        path.append(getPerspective().getName());
+        return path.toString();
     }
     
     @Override

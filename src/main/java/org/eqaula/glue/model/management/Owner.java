@@ -108,6 +108,13 @@ public class Owner extends BussinesEntity implements Serializable {
                 append(getType(), other.getType()).
                 isEquals();
     }
+    
+     @Override
+    public String getCanonicalPath(){
+        StringBuilder path = new StringBuilder();       
+        path.append(getOrganization().getCanonicalPath());
+        return path.toString();
+    }
 
     @Override
     public String toString() {

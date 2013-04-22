@@ -216,8 +216,5 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         return list;
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 }

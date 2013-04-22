@@ -200,8 +200,5 @@ public class ProcessHome extends BussinesEntityHome<Process> implements Serializ
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 }

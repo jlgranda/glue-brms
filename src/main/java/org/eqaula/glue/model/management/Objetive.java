@@ -90,6 +90,15 @@ public class Objetive extends BussinesEntity implements Serializable {
     }
     
     @Override
+    public String getCanonicalPath(){
+        StringBuilder path = new StringBuilder();
+        path.append(getTheme().getCanonicalPath());
+        path.append(BussinesEntity.SEPARATOR); //TODO hacer que sea personalizable
+        path.append(getTheme().getName());
+        return path.toString();
+    }
+    
+    @Override
     public String toString() {
         /*return "org.eqaula.glue.model.management.Objetive[ "
                 + "id=" + getId() + ","

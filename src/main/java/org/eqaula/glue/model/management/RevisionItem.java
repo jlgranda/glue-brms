@@ -16,12 +16,9 @@
 package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -32,22 +29,19 @@ import org.eqaula.glue.model.BussinesEntity;
  *
  * @author dianita
  */
-
 @Entity
 @Table(name = "RevisionItem")
 @DiscriminatorValue(value = "RVSNTM")
 @PrimaryKeyJoinColumn(name = "id")
-public class RevisionItem extends BussinesEntity implements Serializable{
+public class RevisionItem extends BussinesEntity implements Serializable {
+
     private static final long serialVersionUID = -3953656266088765384L;
     @ManyToOne
     private Section section;
-    
     @ManyToOne
     private Question question;
-    
     @ManyToOne
     private Scale scale;
-    
     @ManyToOne
     private RevisionItem revisionItem;
 
@@ -59,7 +53,6 @@ public class RevisionItem extends BussinesEntity implements Serializable{
         this.section = section;
     }
 
-    
     public Question getQuestion() {
         return question;
     }
@@ -84,9 +77,6 @@ public class RevisionItem extends BussinesEntity implements Serializable{
         this.revisionItem = revisionItem;
     }
 
-   
-    
-    
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -116,13 +106,21 @@ public class RevisionItem extends BussinesEntity implements Serializable{
     }
 
     @Override
+    public String getCanonicalPath() {
+        StringBuilder path = new StringBuilder();
+        path.append(getSection().getCanonicalPath());
+        path.append(BussinesEntity.SEPARATOR); //TODO hacer que sea personalizable
+        path.append(getSection().getName());
+        return path.toString();
+    }
+
+    @Override
     public String toString() {
         /*return "org.eqaula.glue.model.management.RevisionItem[ "
-                + "id=" + getId() + ","
-                + "name=" + getName() + ","
-                + "type=" + getType() + ","
-                + " ]";*/
+         + "id=" + getId() + ","
+         + "name=" + getName() + ","
+         + "type=" + getType() + ","
+         + " ]";*/
         return getQuestion().getName();
     }
-    
 }

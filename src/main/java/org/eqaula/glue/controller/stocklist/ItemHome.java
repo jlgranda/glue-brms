@@ -17,28 +17,22 @@ package org.eqaula.glue.controller.stocklist;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.stocklist.Item;
-import org.eqaula.glue.model.stocklist.Warehouse;
 import org.eqaula.glue.service.ItemService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
-import org.primefaces.component.commandbutton.CommandButton;
-import org.primefaces.component.selectonemenu.SelectOneMenu;
 
 /**
  *
@@ -237,8 +231,5 @@ public class ItemHome extends BussinesEntityHome<Item> implements Serializable {
         }
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 }

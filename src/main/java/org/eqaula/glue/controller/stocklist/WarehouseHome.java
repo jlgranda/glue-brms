@@ -19,11 +19,9 @@ import org.eqaula.glue.service.WarehouseService;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -32,11 +30,7 @@ import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
-import org.eqaula.glue.controller.accounting.PostingHome;
-import org.eqaula.glue.model.accounting.Account;
-import org.eqaula.glue.model.accounting.Posting;
 import org.eqaula.glue.model.profile.Profile;
-import org.eqaula.glue.model.stocklist.Item;
 import org.eqaula.glue.model.stocklist.Warehouse;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
@@ -198,8 +192,5 @@ public class WarehouseHome extends BussinesEntityHome<Warehouse> implements Seri
         }
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 }

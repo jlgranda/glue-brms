@@ -38,8 +38,7 @@ import org.eqaula.glue.model.BussinesEntity;
 public class Question extends BussinesEntity implements Serializable {
 
     private static final long serialVersionUID = -1127608865213234517L;
-    
-         
+
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -69,6 +68,13 @@ public class Question extends BussinesEntity implements Serializable {
     }
 
     @Override
+    public String getCanonicalPath() {
+        StringBuilder path = new StringBuilder();
+        path.append(getName());
+        return path.toString();
+    }
+
+    @Override
     public String toString() {
         return "org.eqaula.glue.model.management.Question[ "
                 + "id=" + getId() + ","
@@ -76,5 +82,4 @@ public class Question extends BussinesEntity implements Serializable {
                 + "type=" + getType() + ","
                 + " ]";
     }
-    
 }

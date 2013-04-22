@@ -31,16 +31,15 @@ import org.eqaula.glue.model.BussinesEntity;
  *
  * @author dianita
  */
-
 @Entity
 @Table(name = "Scale")
 @DiscriminatorValue(value = "SCL")
 @PrimaryKeyJoinColumn(name = "id")
 public class Scale extends BussinesEntity implements Serializable {
+
     private static final long serialVersionUID = -135048321817423962L;
     @OneToMany(mappedBy = "scale")
     private List<RevisionItem> revisionItems;
-    
     @OneToMany(mappedBy = "scale", cascade = CascadeType.ALL)
     private List<Valuation> valuations;
 
@@ -59,9 +58,7 @@ public class Scale extends BussinesEntity implements Serializable {
     public void setRevisionItems(List<RevisionItem> revisionItems) {
         this.revisionItems = revisionItems;
     }
-    
-    
-    
+
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -91,6 +88,13 @@ public class Scale extends BussinesEntity implements Serializable {
     }
 
     @Override
+    public String getCanonicalPath() {
+        StringBuilder path = new StringBuilder();
+        path.append(getName());
+        return path.toString();
+    }
+
+    @Override
     public String toString() {
         return "org.eqaula.glue.model.management.Scale[ "
                 + "id=" + getId() + ","
@@ -98,5 +102,4 @@ public class Scale extends BussinesEntity implements Serializable {
                 + "type=" + getType() + ","
                 + " ]";
     }
-    
 }

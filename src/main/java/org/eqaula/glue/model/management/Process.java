@@ -28,16 +28,14 @@ import org.eqaula.glue.model.BussinesEntity;
 /*
  * @author dianita
  */
-
 @Entity
 @Table(name = "Process")
 @DiscriminatorValue(value = "PCSS")
 @PrimaryKeyJoinColumn(name = "id")
-public class Process extends BussinesEntity implements Serializable{
+public class Process extends BussinesEntity implements Serializable {
+
     private static final long serialVersionUID = 8891572386502333388L;
-    
     private String series;
-            
     @ManyToOne
     private Macroprocess macroprocess;
 
@@ -56,7 +54,7 @@ public class Process extends BussinesEntity implements Serializable{
     public void setSeries(String series) {
         this.series = series;
     }
-    
+
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -86,14 +84,22 @@ public class Process extends BussinesEntity implements Serializable{
     }
 
     @Override
-    public String toString() {
-       /* return "org.eqaula.glue.model.management.Process[ "
-                + "id=" + getId() + ","
-                + "name=" + getName() + ","
-                + "type=" + getType() + ","
-                + " ]";        */
-        
-         return getName();
+    public String getCanonicalPath() {
+        StringBuilder path = new StringBuilder();
+        path.append(getMacroprocess().getCanonicalPath());
+        path.append(BussinesEntity.SEPARATOR); //TODO hacer que sea personalizable
+        path.append(getName());
+        return path.toString();
     }
-    
+
+    @Override
+    public String toString() {
+        /* return "org.eqaula.glue.model.management.Process[ "
+         + "id=" + getId() + ","
+         + "name=" + getName() + ","
+         + "type=" + getType() + ","
+         + " ]";        */
+
+        return getName();
+    }
 }

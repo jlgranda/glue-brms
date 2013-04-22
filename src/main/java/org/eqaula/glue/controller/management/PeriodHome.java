@@ -186,11 +186,6 @@ public class PeriodHome extends BussinesEntityHome<Period> implements Serializab
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-
+   
     
 }

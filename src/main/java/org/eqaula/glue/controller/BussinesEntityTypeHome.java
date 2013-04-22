@@ -235,10 +235,7 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
         return false;
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
     
     
 }

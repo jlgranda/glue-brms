@@ -144,6 +144,7 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
         diagnostic.setActivationTime(now);
         diagnostic.setExpirationTime(Dates.addDays(now, 364));
         diagnostic.setType(_type);
+        diagnostic.setOwner(getOwner());
         diagnostic.buildAttributes(bussinesEntityService);
         return diagnostic;
     }
@@ -156,8 +157,7 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
         if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
-            getInstance().setAuthor(this.profile);
-            getInstance().setOwner(getOwner());
+            getInstance().setAuthor(this.profile); 
             create(getInstance());
             createDefaultSections(getInstance());
         }
@@ -257,8 +257,5 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
         return node;
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
 }

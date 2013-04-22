@@ -100,7 +100,7 @@ public class Linkage extends BussinesEntity implements Serializable {
                 append(getType(), other.getType()).
                 isEquals();
     }
-
+    
     @Override
     public String toString() {
         return "org.eqaula.glue.model.management.Linkage[ "

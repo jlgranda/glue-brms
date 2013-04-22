@@ -35,7 +35,7 @@ limitations under the License.
                     <div class="row fl" style="margin-top: 5px;" >
                         <div class="span9 ">
                             <h2>#{balancedScorecardHome.managed ? balancedScorecardHome.instance.name : (messages['common.add'].concat(' ').concat(messages['module.balancedScorecard']))}</h2> 
-                            <p><span style="">#{messages['common.in']} #{balancedScorecardHome.organization.name}</span></p>
+                            <p><span style="">#{messages['common.in']} #{balancedScorecardHome.instance.getCanonicalPath}</span></p>
                         </div>
                     </div>
 
@@ -71,7 +71,6 @@ limitations under the License.
                         <f:param name="balancedScorecardId" value="#{balancedScorecardHome.balancedScorecardId}"/>
                         <f:param name="organizationId" value="#{balancedScorecardHome.organizationId}"/>
                     </h:link>   
-
                 </div>  
             </h:form>
 

@@ -35,8 +35,24 @@ limitations under the License.
                 <div class="container">
                     <div class="row-fluid" style="margin-top: 5px;" >
 
-                        <h3>#{targetHome.targetId!= null? messages['common.edit'] : messages['common.add']} 
-                            #{messages['module.target']}</h3> 
+                        <div class="span9 ">
+                            <h2>#{targetHome.managed ? targetHome.instance.name : (messages['common.add'].concat(' ').concat(messages['module.target']))}</h2> 
+                            <p><span style="">#{messages['common.in']} #{targetHome.instance.getCanonicalPath}</span></p>
+
+                        </div>
+
+                        <div class="span3 ">
+                            <h:form id="control">                                
+                                <br/>
+                                <h:link outcome="/pages/management/balancedscorecard/view" styleClass="link" value="#{messages['common.cancel']}">
+                                    <f:param  name="balancedScorecardId" value="#{targetHome.measure.objetive.theme.perspective.balancedScorecard.id}"></f:param>   
+                                </h:link>
+                                <br/>
+                                <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                                        outcome="/pages/home.xhtml?faces-redirect=true" styleClass="link">                                
+                                </h:link>
+                            </h:form>
+                        </div>
                     </div>    
                 </div>
             </div>
@@ -62,46 +78,6 @@ limitations under the License.
                     </div>
                 </h:panelGroup> 
 
-                <p:dataTable var="_methods" value="#{targetHome.instance.methods}"   
-                             selection="#{targetHome.selectedMethod}" selectionMode="single" rowKey="#{_methods.id}" >
-                    <!-- 
-                        <p:dataTable var="_methods" value="#{targetHome.instance.methods}" 
-                                 
-                                 paginator="true" rows="10"
-                                 paginatorAlwaysVisible="false"
-                                 paginatorPosition="top"
-                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
-                                 rowsPerPageTemplate="5,10,15"
-                                 id="themeTable" lazy="true"
-                                 selection="#{targetHome.selectedMethod}"
-                                 rendered="true"
-                                 selectionMode="single">
-                    -->
-                    <f:facet name="header">  
-                        Methods
-                    </f:facet>  
-
-                    <p:column headerText="Name">  
-                        <h:outputText value="#{_methods.name}" />
-                    </p:column>  
-
-                    <p:column headerText="Description">  
-                        <h:outputText value="#{_methods.description}" />                        
-                    </p:column>  
-
-                    <p:column headerText="Deleted" >  
-                        <p:commandButton id="selectButton" icon="ui-icon-search" title="View">  
-                           <!-- <f:setPropertyActionListener value="#{car}" target="#{tableBean.selectedCar}" /> -->
-                         </p:commandButton>                       
-
-                    </p:column>  
-
-                    <f:facet name="footer">  
-                        <p:commandButton id="viewButton" value="View" icon="ui-icon-search" />  
-                        <!-- update=":form:display" oncomplete="carDialog.show()"  -->
-                    </f:facet>  
-
-                </p:dataTable>  
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{targetHome.saveTarget()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->

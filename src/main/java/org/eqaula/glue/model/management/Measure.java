@@ -97,6 +97,15 @@ public class Measure extends BussinesEntity implements Serializable {
                 append(getType(), other.getType()).
                 isEquals();
     }
+    
+    @Override
+    public String getCanonicalPath(){
+        StringBuilder path = new StringBuilder();
+        path.append(getObjetive().getCanonicalPath());
+        path.append(BussinesEntity.SEPARATOR); //TODO hacer que sea personalizable
+        path.append(getObjetive().getName());
+        return path.toString();
+    }
 
     @Override
     public String toString() {

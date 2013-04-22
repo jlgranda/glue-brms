@@ -20,7 +20,6 @@ import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
@@ -33,8 +32,6 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.accounting.Ledger;
-import org.eqaula.glue.model.management.Organization;
-import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.LedgerService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
@@ -163,8 +160,5 @@ public class LedgerHome extends BussinesEntityHome<Ledger> implements Serializab
         return Ledger.class;
     }
     
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 }

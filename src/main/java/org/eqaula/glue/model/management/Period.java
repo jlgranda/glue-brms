@@ -119,6 +119,13 @@ public class Period extends BussinesEntity implements Serializable{
     }
 
     @Override
+    public String getCanonicalPath(){
+        StringBuilder path = new StringBuilder();
+        path.append(getName());
+        return path.toString();
+    }
+     
+    @Override
     public String toString() {
         /*return "org.eqaula.glue.model.management.Period[ "
                 + "id=" + getId() + ","

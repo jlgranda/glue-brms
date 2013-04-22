@@ -167,8 +167,5 @@ public class SettingHome extends BussinesEntityHome<Setting> implements Serializ
         return Setting.class;
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
 }

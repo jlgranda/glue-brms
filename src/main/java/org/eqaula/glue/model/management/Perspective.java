@@ -106,8 +106,8 @@ public class Perspective extends BussinesEntity implements Serializable {
     public String getCanonicalPath(){
         StringBuilder path = new StringBuilder();
         path.append(getBalancedScorecard().getCanonicalPath());
-        path.append("/"); //TODO hacer que sea personalizable
-        path.append(getName());
+        path.append(BussinesEntity.SEPARATOR); //TODO hacer que sea personalizable
+        path.append(getBalancedScorecard().getName());
         return path.toString();
     }
     

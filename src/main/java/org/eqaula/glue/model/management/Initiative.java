@@ -112,6 +112,15 @@ public class Initiative extends BussinesEntity implements Serializable {
     }
 
     @Override
+    public String getCanonicalPath(){
+        StringBuilder path = new StringBuilder();
+        path.append(getTarget().getCanonicalPath());
+        path.append(BussinesEntity.SEPARATOR); //TODO hacer que sea personalizable
+        path.append(getName());
+        return path.toString();
+    }
+    
+    @Override
     public String toString() {
         /*return "org.eqaula.glue.model.management.Initiative[ "
                 + "id=" + getId() + ","

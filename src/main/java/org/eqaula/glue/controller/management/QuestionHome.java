@@ -168,9 +168,4 @@ public class QuestionHome extends BussinesEntityHome<Question> implements Serial
         boolean ban =  revisionItemService.findByQuestion(getInstance()).isEmpty();
         return ban;
     }
-
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

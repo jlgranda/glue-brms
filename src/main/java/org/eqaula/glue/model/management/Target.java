@@ -37,7 +37,6 @@ import org.eqaula.glue.model.BussinesEntity;
 /*
  * @author dianita
  */
-
 @Entity
 @Table(name = "Target")
 @DiscriminatorValue(value = "TGT")
@@ -47,31 +46,26 @@ public class Target extends BussinesEntity implements Serializable {
     private static final long serialVersionUID = 449175027015485864L;
 
     public enum Type {
-        CAUSE, 
+
+        CAUSE,
         EFECT; //Esquema contable         
+
         private Type() {
         }
     }
-    
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Target.Type targetType;
-    
     @ManyToOne
     private Measure measure;
-    
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
     private List<Initiative> initiatives;
-    
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
     private List<Method> methods;
-    
     private Long sequence;
-    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "periodFrom", nullable = false)
     private Date periodFrom;
-    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "periodTo", nullable = false)
     private Date periodTo;
@@ -108,7 +102,6 @@ public class Target extends BussinesEntity implements Serializable {
         this.methods = methods;
     }
 
-    
     public Long getSequence() {
         return sequence;
     }
@@ -162,12 +155,21 @@ public class Target extends BussinesEntity implements Serializable {
     }
 
     @Override
+    public String getCanonicalPath() {
+        StringBuilder path = new StringBuilder();
+        path.append(getMeasure().getCanonicalPath());
+        path.append(BussinesEntity.SEPARATOR); //TODO hacer que sea personalizable
+        path.append(getMeasure().getName());
+        return path.toString();
+    }
+
+    @Override
     public String toString() {
         /*return "org.eqaula.glue.model.management.Target[ "
-                + "id=" + getId() + ","
-                + "name=" + getName() + ","
-                + "type=" + getType() + ","
-                + " ]";*/
+         + "id=" + getId() + ","
+         + "name=" + getName() + ","
+         + "type=" + getType() + ","
+         + " ]";*/
         return getName();
     }
 }

@@ -42,7 +42,6 @@ public class Section extends BussinesEntity implements Serializable {
     private static final long serialVersionUID = 7049522576163792111L;
     @ManyToOne
     private Diagnostic diagnostic;
-    
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
     private List<RevisionItem> revisionItems;
 
@@ -54,27 +53,27 @@ public class Section extends BussinesEntity implements Serializable {
         this.diagnostic = diagnostic;
     }
 
-     public List<RevisionItem> getRevisionItems() {
+    public List<RevisionItem> getRevisionItems() {
         return revisionItems;
     }
-    
-     public List<RevisionItem> getRevisionItemsNulls() {
+
+    public List<RevisionItem> getRevisionItemsNulls() {
         List<RevisionItem> items = new ArrayList<RevisionItem>();
-         for(RevisionItem revisionItem: revisionItems){
-             if(revisionItem.getRevisionItem()==null){
-                 items.add(revisionItem);
-             }
-         }
+        for (RevisionItem revisionItem : revisionItems) {
+            if (revisionItem.getRevisionItem() == null) {
+                items.add(revisionItem);
+            }
+        }
         return items;
     }
-     
+
     public List<RevisionItem> getRevisionItemsNotNulls() {
         List<RevisionItem> items = new ArrayList<RevisionItem>();
-         for(RevisionItem revisionItem: revisionItems){
-             if(revisionItem.getRevisionItem()!=null){
-                 items.add(revisionItem);
-             }
-         }
+        for (RevisionItem revisionItem : revisionItems) {
+            if (revisionItem.getRevisionItem() != null) {
+                items.add(revisionItem);
+            }
+        }
         return items;
     }
 
@@ -82,7 +81,6 @@ public class Section extends BussinesEntity implements Serializable {
         this.revisionItems = revisionItems;
     }
 
-    
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -109,6 +107,15 @@ public class Section extends BussinesEntity implements Serializable {
                 append(getName(), other.getName()).
                 append(getType(), other.getType()).
                 isEquals();
+    }
+
+    @Override
+    public String getCanonicalPath() {
+        StringBuilder path = new StringBuilder();
+        path.append(getDiagnostic().getCanonicalPath());
+        path.append(BussinesEntity.SEPARATOR); //TODO hacer que sea personalizable
+        path.append(getDiagnostic().getName());
+        return path.toString();
     }
 
     @Override

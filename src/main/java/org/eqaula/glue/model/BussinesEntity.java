@@ -71,6 +71,8 @@ import org.eqaula.glue.util.Lists;
  + "g JOIN g.members m WHERE g.id=:id and m.type=:type ORDER BY g.name")*/})
 public class BussinesEntity extends DeletableObject<BussinesEntity> {
 
+    public static final String SEPARATOR= "/";
+    
     private static final long serialVersionUID = -3282665873474370357L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntity.class);
     @ManyToOne(optional = true)
@@ -92,6 +94,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     @ManyToOne
     private Organization organization;
 
+    
     public Organization getOrganization() {
         return organization;
     }

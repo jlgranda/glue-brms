@@ -33,20 +33,19 @@ limitations under the License.
                 <div class="container">
                     <div class="row-fluid" style="margin-top: 5px;" >
                         <div class="span9 ">
-                            <h2>#{diagnosticHome.managed ? diagnosticHome.instance.name : ""}</h2>
-                            <p><span style="">#{diagnosticHome.instance.owner.organization.initials}/#{diagnosticHome.instance.owner.name}</span>                                
+                            <h2>#{diagnosticHome.managed ? diagnosticHome.instance.name : ""}</h2> 
+                            <p><span style="">#{messages['common.in']} #{diagnosticHome.instance.getCanonicalPath}</span></p>
 
-                            </p>
                         </div>
                         <div class="span3">
                             <h:form id="control">                                
                                 <br/>
-                                <h:link outcome="/pages/management/diagnostic/list" styleClass="btn btn-link" value="#{messages['common.cancel']}">
+                                <h:link outcome="/pages/management/diagnostic/list" styleClass="link" value="#{messages['common.cancel']}">
                                     <f:param  name="ownerId" value="#{diagnosticHome.instance.owner.id}"></f:param> 
                                 </h:link>
-                           <br/>
+                                <br/>
                                 <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                        outcome="/pages/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
+                                        outcome="/pages/home.xhtml?faces-redirect=true" styleClass="link">                                
                                 </h:link>
                             </h:form>
                         </div>

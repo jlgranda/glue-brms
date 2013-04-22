@@ -114,6 +114,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         owner.setActivationTime(now);
         owner.setExpirationTime(Dates.addDays(now, 364));
         owner.setType(_type);
+        owner.setOrganization(getOrganization());
         owner.buildAttributes(bussinesEntityService);
         return owner;
     }
@@ -126,7 +127,6 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setOrganization(getOrganization());
             create(getInstance());
         }
         //TODO idear una mejor forma de redireccionar
@@ -191,8 +191,5 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         return ban;
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 }

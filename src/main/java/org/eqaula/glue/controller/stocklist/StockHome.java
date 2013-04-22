@@ -28,9 +28,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
-import org.eqaula.glue.model.stocklist.Item;
 import org.eqaula.glue.model.stocklist.Stock;
-import org.eqaula.glue.model.stocklist.Warehouse;
 import org.eqaula.glue.service.ItemService;
 import org.eqaula.glue.service.StockService;
 import org.eqaula.glue.service.WarehouseService;
@@ -225,8 +223,5 @@ public class StockHome extends BussinesEntityHome<Stock> implements Serializable
         this.setBussinesEntity(null);
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  
 }

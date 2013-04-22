@@ -25,7 +25,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -293,10 +292,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
         
     }
 
-    @Override
-    public String getCanonicalPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  
 
     static public class ColumnModel implements Serializable {
         private static final long serialVersionUID = -2978153523510149782L;
