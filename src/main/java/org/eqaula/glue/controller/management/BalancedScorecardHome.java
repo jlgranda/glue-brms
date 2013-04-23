@@ -50,15 +50,11 @@ import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
-import org.primefaces.component.menuitem.UIMenuItem;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.model.menu.BaseMenuModel;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.menu.MenuModel;
 import org.primefaces.model.TreeNode;
-import org.primefaces.model.menu.DefaultMenuModel;
-import org.primefaces.model.menu.MenuItem;
 
 /*
  * @author dianita
