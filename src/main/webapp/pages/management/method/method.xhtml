@@ -45,6 +45,18 @@ limitations under the License.
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{methodHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{methodHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />                
+                <glue:input id="minimumValue" name="minimumValue" type="decimal" label="#{messages['common.minimumValue']}" value="#{methodHome.instance.minimumValue}" required="false" inlinehelp="#{messages['common.minimumValue.help']}" render="minimumValue" execute="@this save" />                
+                <glue:input id="maximumValue" name="maximumValue" type="decimal" label="#{messages['common.maximumValue']}" value="#{methodHome.instance.maximumValue}" required="false" inlinehelp="#{messages['common.maximumValue.help']}" render="maximumValue" execute="@this save" />                
+                <h:panelGroup layout="block" class="control-group">
+                    <label for="methodtype_" class="control-label">#{messages['Method.type']}</label>
+                    <div class="controls">
+                        <p:selectOneMenu id="methodtype_" value="#{methodHome.instance.methodType}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.method']}" rendered="true" label="#{messages['module.method']}" filter="true" filterMatchMode="contains">
+                            <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
+                            <f:selectItems value="#{methodHome.methodTypes}" var="_t" itemLabel="#{messages[_t.name]}" itemValue="#{_t}"/>                          
+                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                        </p:selectOneMenu>                     
+                    </div>
+                </h:panelGroup> 
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{methodHome.saveMethod()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->

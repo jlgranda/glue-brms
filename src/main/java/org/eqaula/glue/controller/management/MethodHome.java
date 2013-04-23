@@ -16,9 +16,11 @@
 package org.eqaula.glue.controller.management;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
@@ -185,5 +187,11 @@ public class MethodHome extends BussinesEntityHome<Method> implements Serializab
             return getOutcome() + "?targetId=" + getInstance().getTarget().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
+    }
+    
+      public List<Method.Type> getMethodTypes() {
+        wire();
+        List<Method.Type> list = Arrays.asList(getInstance().getMethodType().values());
+        return list;
     }
 }
