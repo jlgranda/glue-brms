@@ -39,6 +39,7 @@ public class Measure extends BussinesEntity implements Serializable {
 
     private static final long serialVersionUID = -6935266135527132362L;
     private Long frequency;
+    private String unit;
     @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL)
     private List<Target> targets;
     @ManyToOne
@@ -51,6 +52,15 @@ public class Measure extends BussinesEntity implements Serializable {
     public void setFrequency(Long frequency) {
         this.frequency = frequency;
     }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+    
 
     public List<Target> getTargets() {
         return targets;

@@ -16,6 +16,8 @@
 package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -30,6 +32,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eqaula.glue.model.BussinesEntity;
@@ -46,29 +49,34 @@ public class Target extends BussinesEntity implements Serializable {
     private static final long serialVersionUID = 449175027015485864L;
 
     public enum Type {
-
         CAUSE,
-        EFECT; //Esquema contable         
-
+        EFFECT;         
         private Type() {
         }
     }
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Target.Type targetType;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "periodFrom", nullable = false)
+    private Date from;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "periodTo", nullable = false)
+    private Date to;
+    private String unit;
+    private BigDecimal value;
+    private Long sequence;
+    
     @ManyToOne
     private Measure measure;
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
     private List<Initiative> initiatives;
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
     private List<Method> methods;
-    private Long sequence;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "periodFrom", nullable = false)
-    private Date periodFrom;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "periodTo", nullable = false)
-    private Date periodTo;
+    
+    @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
+    private List<TargetValue> values;
 
     public Type getTargetType() {
         return targetType;
@@ -77,6 +85,22 @@ public class Target extends BussinesEntity implements Serializable {
     public void setTargetType(Type targetType) {
         this.targetType = targetType;
     }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public BigDecimal getValue() {
+        return value;
+    }
+
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }    
 
     public Measure getMeasure() {
         return measure;
@@ -102,6 +126,25 @@ public class Target extends BussinesEntity implements Serializable {
         this.methods = methods;
     }
 
+    public List<TargetValue> getValues() {
+        return values;
+    }
+
+    public void setValues(List<TargetValue> values) {
+        this.values = values;
+    }
+
+    @Transient
+    public BigDecimal getCurrentValue(){
+        BigDecimal _value = new BigDecimal(0);
+        for (TargetValue tv : getValues()){
+            if (Boolean.TRUE.equals(tv.getCurrent())){
+                _value = tv.getValue();
+                break;
+            }
+        }
+        return _value;
+    }
     public Long getSequence() {
         return sequence;
     }
@@ -109,21 +152,21 @@ public class Target extends BussinesEntity implements Serializable {
     public void setSequence(Long sequence) {
         this.sequence = sequence;
     }
-
-    public Date getPeriodFrom() {
-        return periodFrom;
+    
+    public Date getFrom() {
+        return from;
     }
 
-    public void setPeriodFrom(Date periodFrom) {
-        this.periodFrom = periodFrom;
+    public void setFrom(Date from) {
+        this.from = from;
     }
 
-    public Date getPeriodTo() {
-        return periodTo;
+    public Date getTo() {
+        return to;
     }
 
-    public void setPeriodTo(Date periodTo) {
-        this.periodTo = periodTo;
+    public void setTo(Date to) {
+        this.to = to;
     }
 
     @Override

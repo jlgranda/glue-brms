@@ -60,24 +60,39 @@ limitations under the License.
         <ui:define name="content" >
             <h:form  id="form" acceptcharset="UTF-8" class="form-horizontal" >
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{targetHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
-                <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{targetHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
-                <glue:input id="sequence" name="sequence" type="decimal" label="#{messages['common.sequence']}" value="#{targetHome.instance.sequence}" required="true" inlinehelp="#{messages['common.sequence.inlinehelp']}" execute="@this save" render="sequence"/>
-                <glue:input id="periodFrom" name="periodFrom" type="calendar" label="#{messages['common.periodFrom']}" value="#{targetHome.instance.periodFrom}" required="true" inlinehelp="#{messages['common.periodFrom.inlinehelp']}" execute="@this save" render="periodFrom" />
-                <glue:input id="periodTo" name="periodTo" type="calendar" label="#{messages['common.periodTo']}" value="#{targetHome.instance.periodTo}" required="true" inlinehelp="#{messages['common.periodTo.inlinehelp']}" execute="@this save" render="periodTo" />
-               <!-- <glue:input id="duration" name="duration" type="text" label="#{messages['common.duration']}" value="#{periodHome.instance.duration}" required="true" inlinehelp="#{messages['common.duration.help']}" render="duration" execute="@this save" /> -->
+                <p:panel id="edit-panel" header="#{targetHome.managed ? targetHome.instance.name : (messages['common.add'].concat(' ').concat(messages['module.target']))}" toggleable="true">
 
-                <h:panelGroup layout="block" class="control-group">
-                    <label for="targettype_" class="control-label">#{messages['Target.type']}</label>
-                    <div class="controls">
-                        <p:selectOneMenu id="targettype_" value="#{targetHome.instance.targetType}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.target']}" rendered="true" label="#{messages['module.target']}" filter="true" filterMatchMode="contains">
-                            <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
-                            <f:selectItems value="#{targetHome.targetTypes}" var="_t" itemLabel="#{_t.name}" itemValue="#{_t}"/>                          
-                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
-                        </p:selectOneMenu>                     
-                    </div>
-                </h:panelGroup> 
-
+                    <h:panelGroup layout="block" class="control-group">
+                        <label for="targettype_" class="control-label">#{messages['Target.type']}</label>
+                        <div class="controls">
+                            <p:selectOneMenu id="targettype_" value="#{targetHome.instance.targetType}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.target']}" rendered="true" label="#{messages['module.target']}" filter="true" filterMatchMode="contains">
+                                <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
+                                <f:selectItems value="#{targetHome.targetTypes}" var="_t" itemLabel="#{messages[_t.name]}" itemValue="#{_t}"/>                          
+                                <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                            </p:selectOneMenu>                     
+                        </div>
+                    </h:panelGroup> 
+                    <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{targetHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                    <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{targetHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+                    <glue:input id="periodFrom" name="periodFrom" type="calendar" label="#{messages['common.period.from']}" value="#{targetHome.instance.from}" required="true" inlinehelp="#{messages['common.period.from.inlinehelp']}" execute="@this save" render="periodFrom" />
+                    <glue:input id="periodTo" name="periodTo" type="calendar" label="#{messages['common.period.to']}" value="#{targetHome.instance.to}" required="true" inlinehelp="#{messages['common.period.to.inlinehelp']}" execute="@this save" render="periodTo" />
+                    <glue:input id="value" name="value" type="decimal" label="#{messages['common.expectedValue']}" value="#{targetHome.instance.value}" required="true" inlinehelp="#{messages['common.value.inlinehelp']}" execute="@this save" render="value"/>
+                    <glue:input id="sequence" name="sequence" type="decimal" label="#{messages['common.sequence']}" value="#{targetHome.instance.sequence}" required="true" inlinehelp="#{messages['common.sequence.inlinehelp']}" execute="@this save" render="sequence"/>
+                </p:panel>
+                <p:panel id="method-panel" toggleable="true">
+                    <f:facet name="header"> 
+                        <h:outputText value="#{messages['module.target.methods']}"/>
+                        #{' '}
+                        <p:commandButton value="#{messages['common.add']} #{messages['module.target.method']}" icon="ui-icon-extlink" action="#{targetHome.showEditMethod()}"/>  
+                    </f:facet>
+                    <p:dataTable var="_method" value="#{targetHome.instance.methods}">
+                        <p:column>
+                            <h:outputText value="#{_method.name}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                <p:panel id="initiative-panel" header="#{messages['module.target.initiatives']}" toggleable="true">
+                </p:panel>
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{targetHome.saveTarget()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->
@@ -90,7 +105,9 @@ limitations under the License.
                         <f:param name="balancedScorecardId" value="#{targetHome.measure.objetive.theme.perspective.balancedScorecard.id}"/>
                     </h:link>
                 </div>  
+
             </h:form>
+
 
             <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">   
                 <h:form id="form-dialog-confirm-delete">

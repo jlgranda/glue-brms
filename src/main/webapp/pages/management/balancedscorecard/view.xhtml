@@ -79,19 +79,39 @@
                 <p:panel id="detail-panel" header="#{balancedScorecardHome.selectedNode.data.name!=null? balancedScorecardHome.selectedNode.data.name: balancedScorecardHome.bscNode.data.name}" toggleable="true">
 
                     <p:treeTable id="treetable" value="#{balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode}" var="node"  propagateSelectionUp="true">  
-                        
-                        
+
                         <p:column headerText="#{messages['module.balancedscorecard.dimention']}">  
                             <h:outputText value="#{balancedScorecardHome.getToHaveChildren(balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode) == true ? node: hola}"/>                        
                         </p:column>  
-
-                        <!--
-                        <p:column style="width:150px">  
-
-                            <h:outputText value="#{node.class.name.equals('org.eqaula.glue.model.management.Measure.class')}"/>  
-
-                        </p:column>-->
-
+                        <p:column headerText="#{messages['common.from']}">  
+                            <h:outputText value="#{node.from}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
+                                <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                            </h:outputText>
+                            
+                        </p:column>
+                        <p:column headerText="#{messages['common.to']}">  
+                            <h:outputText value="#{node.to}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
+                                <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                            </h:outputText>  
+                        </p:column>
+                        <p:column headerText="#{messages['common.type']}">  
+                            <h:outputText value="#{messages[node.targetType]}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
+                        </p:column>
+                        <p:column headerText="#{messages['common.expectedValue']}">  
+                            <h:outputText value="#{node.value}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
+                        </p:column>
+                        <p:column headerText="#{messages['common.currentValue']}">  
+                            <h:outputText value="#{node.currentValue}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
+                        </p:column>
+                        <p:column headerText="#{messages['common.variance']}">  
+                            <h:outputText value="#{node.currentValue - node.value}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
+                        </p:column>
+                        <p:column headerText="#{messages['common.currentValue']}">  
+                            <h:outputText value="#{node.currentValue}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
+                        </p:column>
+                        <p:column headerText="#{messages['common.unit']}">  
+                            <h:outputText value="#{node.measure.unit}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
+                        </p:column>
                     </p:treeTable>  
                 </p:panel>
 

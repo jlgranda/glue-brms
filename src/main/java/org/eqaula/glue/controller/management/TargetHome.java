@@ -215,4 +215,9 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         List<Target.Type> list = Arrays.asList(getInstance().getTargetType().values());
         return list;
     }
+    
+    public String showEditMethod(){
+        System.out.println("-----> showEditMethod");
+        return "dialog:method";
+    }
 }

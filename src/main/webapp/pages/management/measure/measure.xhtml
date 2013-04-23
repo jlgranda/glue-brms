@@ -62,6 +62,7 @@ limitations under the License.
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{measureHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{measureHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+                <glue:input id="unit" name="unit" type="text" label="#{messages['common.unit']}" value="#{measureHome.instance.unit}" required="false" inlinehelp="#{messages['common.unit.inlinehelp']}" execute="@this save" render="unit"/>
                 <glue:input id="frequency" name="frequency" type="text" label="#{messages['common.frequency']}" value="#{measureHome.instance.frequency}" required="false" inlinehelp="#{messages['common.frequency.inlinehelp']}" execute="@this save" render="frequency"/>
 
                 <div class="form-actions">

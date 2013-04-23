@@ -50,13 +50,15 @@ import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
-import org.primefaces.component.menuitem.MenuItem;
+import org.primefaces.component.menuitem.UIMenuItem;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.model.DefaultMenuModel;
+import org.primefaces.model.menu.BaseMenuModel;
 import org.primefaces.model.DefaultTreeNode;
-import org.primefaces.model.MenuModel;
+import org.primefaces.model.menu.MenuModel;
 import org.primefaces.model.TreeNode;
+import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.MenuItem;
 
 /*
  * @author dianita
@@ -392,14 +394,14 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     private MenuModel model = null;
     private String lastNodeType = "";
 
-    public MenuModel getMenuModel() {
+   /* public MenuModel getMenuModel() {
         model = new DefaultMenuModel();
 
         log.debug("node=<" + selectedNode + ">");
         if (selectedNode != null && !lastNodeType.equalsIgnoreCase(selectedNode.getType())) {
             lastNodeType = selectedNode.getType();
             BussinesEntity info = (BussinesEntity) selectedNode.getData();
-            MenuItem item = new MenuItem();
+            MenuItem item = new BaseMenuModel();
             item.setValue(UI.getMessages("common.add") + " " + UI.getMessages("common.in") + " " + info.getName());
             item.setIcon("ui-icon-plus");
             item.setUpdate(":messages");
@@ -407,7 +409,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             model.addMenuItem(item);
         }
         return model;
-    }
+    }*/
 
     public ActionListener createMethodActionListener(String menuAction) {
         ExpressionFactory factory = FacesContext.getCurrentInstance().getApplication().getExpressionFactory();
