@@ -45,7 +45,7 @@ limitations under the License.
                             <h:form id="control">                                
                                 <br/>
                                 <h:link outcome="/pages/management/balancedscorecard/view" styleClass="link" value="#{messages['common.cancel']}">
-                                    <f:param  name="balancedScorecardId" value="#{targetHome.measure.objetive.theme.perspective.balancedScorecard.id}"></f:param>   
+                                    <f:param  name="balancedScorecardId" value="#{empty targetHome.instance.id ? targetHome.measure.objetive.theme.perspective.balancedScorecard.id: targetHome.instance.measure.objetive.theme.perspective.balancedScorecard.id}"></f:param>   
                                 </h:link>
                                 <br/>
                                 <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
@@ -79,30 +79,73 @@ limitations under the License.
                     <glue:input id="value" name="value" type="decimal" label="#{messages['common.expectedValue']}" value="#{targetHome.instance.value}" required="true" inlinehelp="#{messages['common.value.inlinehelp']}" execute="@this save" render="value"/>
                     <glue:input id="sequence" name="sequence" type="decimal" label="#{messages['common.sequence']}" value="#{targetHome.instance.sequence}" required="true" inlinehelp="#{messages['common.sequence.inlinehelp']}" execute="@this save" render="sequence"/>
                 </p:panel>
-                <p:panel id="method-panel" toggleable="true">
+                <p:panel id="method-panel" toggleable="true" rendered="#{not empty targetHome.instance.id}" >
                     <f:facet name="header"> 
-                        <h:outputText value="#{messages['module.target.methods']}"/>
+                        <h:outputText value="#{messages['common.methods']}"/>
                         #{' '}
-                        <p:commandButton value="#{messages['common.add']} #{messages['module.target.method']}" icon="ui-icon-extlink" action="#{targetHome.showEditMethod()}"/>  
+                       <!-- <p:commandButton value="icon="ui-icon-extlink" action="#{targetHome.showEditMethod()}"/>  -->
+                        <h:link value="#{messages['common.add']} #{messages['module.method']}" outcome="/pages/management/method/method" class="btn btn-mini" rendered="true">
+                            <f:param name="targetId" value="#{targetHome.instance.id}"></f:param>
+                            <f:param name="outcome" value="/pages/management/targets/target"></f:param>
+                        </h:link>    
                     </f:facet>
                     <p:dataTable var="_method" value="#{targetHome.instance.methods}">
-                        <p:column>
+                        <p:column headerText="#{messages['common.name']}" style="width:150px">
                             <h:outputText value="#{_method.name}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['common.description']}" style="width:150px">
+                            <h:outputText value="#{_method.description}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['common.edit']}" style="width:4%">
+                            <h:link value="#{messages['common.edit']} #{messages['module.method']}" rendered="#{true}" outcome="/pages/management/method/method" styleClass="btn btn-mini">                                                        
+                                <f:param name="methodId" value="#{_method.id}"></f:param>
+                                <f:param name="targetId" value="#{_method.target.id}"></f:param>
+                                <f:param name="outcome" value="/pages/management/targets/target"></f:param>
+                            </h:link>
                         </p:column>
                     </p:dataTable>
                 </p:panel>
-                <p:panel id="initiative-panel" header="#{messages['module.target.initiatives']}" toggleable="true">
+                
+                <p:panel id="iniciative-panel" toggleable="true" rendered="#{not empty targetHome.instance.id}" >
+                    <f:facet name="header"> 
+                        <h:outputText value="#{messages['common.initiatives']}"/>
+                        #{' '}
+                       <!-- <p:commandButton value="icon="ui-icon-extlink" action="#{targetHome.showEditMethod()}"/>  -->
+                        <h:link value="#{messages['common.add']} #{messages['module.initiative']}" outcome="/pages/management/initiative/initiative" class="btn btn-mini" rendered="true">
+                            <f:param name="targetId" value="#{targetHome.instance.id}"></f:param>
+                            <f:param name="outcome" value="/pages/management/targets/target"></f:param>
+                        </h:link>    
+                    </f:facet>
+                    <p:dataTable var="_initiative" value="#{targetHome.instance.initiatives}">
+                        <p:column headerText="#{messages['common.name']}" style="width:150px">
+                            <h:outputText value="#{_initiative.name}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['common.description']}" style="width:150px">
+                            <h:outputText value="#{_initiative.description}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['module.resource']}" style="width:150px">
+                            <h:outputText value="#{_initiative.resource.name}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['common.edit']}" style="width:4%">
+                            <h:link value="#{messages['common.edit']} #{messages['module.initiative']}" rendered="#{true}" outcome="/pages/management/initiative/initiative" styleClass="btn btn-mini">                                                        
+                                <f:param name="initiativeId" value="#{_initiative.id}"></f:param>
+                                <f:param name="targetId" value="#{_initiative.target.id}"></f:param>
+                                <f:param name="outcome" value="/pages/management/targets/target"></f:param>
+                            </h:link>
+                        </p:column>
+                    </p:dataTable>
                 </p:panel>
+                
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{targetHome.saveTarget()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
                                      update=":cancel-dialog" rendered="#{targetHome.instance.persistent}">                        
                     </p:commandButton>
-                    <!-- &nbsp;-->
+                    <!-- &nbsp;-->       
                     <h:link outcome="/pages/management/balancedscorecard/view"
                             value="#{messages['common.cancel']}" styleClass="btn">
-                        <f:param name="balancedScorecardId" value="#{targetHome.measure.objetive.theme.perspective.balancedScorecard.id}"/>
+                        <f:param name="balancedScorecardId" value="#{empty targetHome.targetId ? targetHome.measure.objetive.theme.perspective.balancedScorecard.id : targetHome.instance.measure.objetive.theme.perspective.balancedScorecard.id}"/>
                     </h:link>
                 </div>  
 

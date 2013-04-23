@@ -60,7 +60,7 @@ limitations under the License.
                         </p:selectOneMenu>
                         <h:link styleClass="btn" outcome="/pages/management/resource/resource">
                             <i class="icon-plus"></i>
-                            <f:param name="outcome" value="/pages/management/objetive/objetive"/>
+                            <f:param name="outcome" value="/pages/management/targets/target"/>
                         </h:link>
                         
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
@@ -78,9 +78,9 @@ limitations under the License.
                     </p:commandButton>
                     <!-- &nbsp;-->
                     
-                    <h:link outcome="/pages/management/balancedscorecard/view"
+                    <h:link outcome="/pages/management/targets/target"
                             value="#{messages['common.cancel']}" styleClass="btn">
-                        <f:param name="balancedScorecardId" value="#{initiativeHome.target.measure.objetive.theme.perspective.balancedScorecard.id}"/>
+                        <f:param name="targetId" value="#{initiativeHome.targetId}"/>
                     </h:link>
                 </div>  
             </h:form>

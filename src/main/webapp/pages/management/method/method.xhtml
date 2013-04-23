@@ -52,9 +52,9 @@ limitations under the License.
                                      update=":cancel-dialog" rendered="#{methodHome.managed}">                        
                     </p:commandButton>
                     <!-- &nbsp;-->
-                    <h:link outcome="/pages/management/balancedscorecard/view"
+                    <h:link outcome="/pages/management/targets/target"
                             value="#{messages['common.cancel']}" styleClass="btn">
-                        <f:param name="balancedScorecardId" value="#{methodHome.target.measure.objetive.theme.perspective.balancedScorecard.id}"/>
+                        <f:param name="targetId" value="#{empty methodHome.targetId ? methodHome.instance.target.id : methodHome.targetId}"/>
                     </h:link>
                 </div>  
             </h:form>

@@ -46,7 +46,7 @@ limitations under the License.
                                 <h:link outcome="/pages/management/diagnostic/design" styleClass="link" value="#{messages['common.cancel']}">
                                     <f:param name="diagnosticId" value="#{revisionItemHome.instance.section.diagnostic.id}"/>
                                 </h:link>
-                                  
+
                                 <br/>
                                 <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
                                         outcome="/pages/home.xhtml?faces-redirect=true" styleClass="link">                                
@@ -63,13 +63,15 @@ limitations under the License.
                 <h:panelGroup id="rvtm" layout="block" class="control-group">
                     <label for="revisionItem" class="control-label required">#{messages['module.revisionItem']}</label>
                     <div class="controls">
-                        <p:selectOneMenu id="revisionItem"  value="#{revisionItemHome.instance.revisionItem}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="false" requiredMessage="#{messages['required.revisionItem']}" rendered="true" label="#{messages['RevisionItem']}" filter="true" filterMatchMode="contains">
+                        <p:selectOneMenu id="revisionItem" value="#{revisionItemHome.instance.revisionItem}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="false" requiredMessage="#{messages['required.revisionItem']}" rendered="true" label="#{messages['RevisionItem']}" filter="true" filterMatchMode="contains">
 
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
                             <f:selectItems value="#{revisionItemHome.section.revisionItemsNulls}" var="_q" itemLabel="#{_q.name}" itemValue="#{_q}"/>                          
                             <p:ajax event="change" update="@parent " partialSubmit="true"/>
 
-                        </p:selectOneMenu>                       
+                        </p:selectOneMenu>  
+
+
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
                                         styleClass="validation-status" />
                         <span class="help-block"><br/>#{messages['revisionItem.inlinehelp']} <ocp:message forId="revisionItem" /></span>
@@ -78,13 +80,17 @@ limitations under the License.
                 <h:panelGroup id="qstn" layout="block" class="control-group">
                     <label for="question" class="control-label required">#{messages['module.question']}</label>
                     <div class="controls">
-                        <p:selectOneMenu id="question" value="#{revisionItemHome.instance.question}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.question']}" rendered="true" label="#{messages['Question']}" filter="true" filterMatchMode="contains">
+                        <p:selectOneMenu id="question"  style="float: left"  value="#{revisionItemHome.instance.question}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.question']}" rendered="true" label="#{messages['Question']}" filter="true" filterMatchMode="contains">
 
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
                             <f:selectItems value="#{questionListService.resultList}" var="_q" itemLabel="#{_q.name}" itemValue="#{_q}"/>                          
                             <p:ajax event="change" update="@parent " partialSubmit="true"/>
 
-                        </p:selectOneMenu>                       
+                        </p:selectOneMenu>   
+                        <h:link styleClass="btn" outcome="/pages/management/question/question">
+                            <i class="icon-plus"></i>
+                            <f:param name="outcome" value="/pages/management/revisionitem/revisionitem"/>
+                        </h:link>
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
                                         styleClass="validation-status" />
                         <span class="help-block"><br/>#{messages['question.inlinehelp']} <ocp:message forId="question" /></span>
@@ -93,13 +99,17 @@ limitations under the License.
                 <h:panelGroup id="scl" layout="block" class="control-group">
                     <label for="scale" class="control-label required">#{messages['module.management.scale.scale']}</label>
                     <div class="controls">
-                        <p:selectOneMenu id="scale" value="#{revisionItemHome.instance.scale}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="false" requiredMessage="#{messages['required.scale']}" rendered="true" label="#{messages['Scale']}" filter="true" filterMatchMode="contains">
+                        <p:selectOneMenu id="scale"  style="float: left" value="#{revisionItemHome.instance.scale}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="false" requiredMessage="#{messages['required.scale']}" rendered="true" label="#{messages['Scale']}" filter="true" filterMatchMode="contains">
 
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
                             <f:selectItems value="#{scaleListService.resultList}" var="_s" itemLabel="#{_s.name}" itemValue="#{_s}"/>                          
                             <p:ajax event="change" update="@parent " partialSubmit="true"/>
 
                         </p:selectOneMenu>                       
+                        <h:link styleClass="btn" outcome="/pages/management/scale/scale">
+                            <i class="icon-plus"></i>
+                            <f:param name="outcome" value="/pages/management/revisionitem/revisionitem"/>
+                        </h:link>
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
                                         styleClass="validation-status" />
                         <span class="help-block"><br/>#{messages['scale.inlinehelp']} <ocp:message forId="scale" /></span>
