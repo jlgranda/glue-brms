@@ -83,13 +83,13 @@
                         <p:column headerText="#{messages['module.balancedscorecard.dimention']}">  
                             <h:outputText value="#{balancedScorecardHome.getToHaveChildren(balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode) == true ? node: hola}"/>                        
                         </p:column>  
-                        <p:column headerText="#{messages['common.from']}">  
+                        <p:column headerText="#{messages['common.period.from']}">  
                             <h:outputText value="#{node.from}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
                                 <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
                             </h:outputText>
                             
                         </p:column>
-                        <p:column headerText="#{messages['common.to']}">  
+                        <p:column headerText="#{messages['common.period.to']}">  
                             <h:outputText value="#{node.to}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
                                 <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
                             </h:outputText>  
