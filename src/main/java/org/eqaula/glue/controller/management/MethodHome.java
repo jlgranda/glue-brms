@@ -129,6 +129,7 @@ public class MethodHome extends BussinesEntityHome<Method> implements Serializab
         method.setActivationTime(now);
         method.setExpirationTime(Dates.addDays(now, 364));
         method.setType(_type);
+        method.setTarget(getTarget());
         method.buildAttributes(bussinesEntityService);
         return method;
     }
@@ -142,11 +143,10 @@ public class MethodHome extends BussinesEntityHome<Method> implements Serializab
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setTarget(getTarget());
             create(getInstance());
         }
-        if (getTarget()!= null) {
-            return getOutcome() + "?balancedScorecardId=" + getTarget().getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        if (getInstance().getTarget().getId() != null) {
+            return getOutcome() + "?targetId=" + getInstance().getTarget().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -181,10 +181,9 @@ public class MethodHome extends BussinesEntityHome<Method> implements Serializab
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getTarget() != null) {
-            return getOutcome() + "?balancedScorecardId=" + getTarget().getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        if (getInstance().getTarget().getId() != null) {
+            return getOutcome() + "?targetId=" + getInstance().getTarget().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-
 }

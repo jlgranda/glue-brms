@@ -146,8 +146,8 @@ public class InitiativeHome extends BussinesEntityHome<Initiative> implements Se
             getInstance().setTarget(getTarget());
             create(getInstance());
         }
-        if (getTarget()!= null) {
-            return getOutcome() + "?balancedScorecardId=" + getTarget().getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        if (getInstance().getTarget().getId()!= null) {
+            return getOutcome() + "?targetId=" +  getInstance().getTarget().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -182,8 +182,8 @@ public class InitiativeHome extends BussinesEntityHome<Initiative> implements Se
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getTarget()!= null) {
-            return getOutcome() + "?balancedScorecardId=" + getTarget().getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        if (getInstance().getTarget().getId()!= null) {
+            return getOutcome() + "?targetId=" + getInstance().getTarget().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }    
