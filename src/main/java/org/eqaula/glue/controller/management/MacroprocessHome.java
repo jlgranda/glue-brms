@@ -42,7 +42,7 @@ import org.primefaces.context.RequestContext;
 /*
  * @author dianita
  */
-@Named
+@Named("MacroprocessHome_")
 @ViewScoped
 public class MacroprocessHome extends BussinesEntityHome<Macroprocess> implements Serializable {
 
