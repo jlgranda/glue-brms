@@ -100,7 +100,6 @@ limitations under the License.
                     <label for="scale" class="control-label required">#{messages['module.management.scale.scale']}</label>
                     <div class="controls">
                         <p:selectOneMenu id="scale"  style="float: left" value="#{revisionItemHome.instance.scale}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="false" requiredMessage="#{messages['required.scale']}" rendered="true" label="#{messages['Scale']}" filter="true" filterMatchMode="contains">
-
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
                             <f:selectItems value="#{scaleListService.resultList}" var="_s" itemLabel="#{_s.name}" itemValue="#{_s}"/>                          
                             <p:ajax event="change" update="@parent " partialSubmit="true"/>
