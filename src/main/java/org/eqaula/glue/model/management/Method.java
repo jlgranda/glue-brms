@@ -16,8 +16,12 @@
 package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -35,7 +39,21 @@ import org.eqaula.glue.model.BussinesEntity;
 public class Method extends BussinesEntity implements Serializable {
 
     private static final long serialVersionUID = -2099259320492517035L;
-    
+
+    public enum Type {
+
+        TYPE,
+        EFFECT;
+
+        private Type() {
+        }
+    }
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Method.Type methodType;
+   
+    private BigDecimal minimumValue;
+    private BigDecimal maximumValue;
     @ManyToOne
     private Target target;
 
@@ -46,7 +64,7 @@ public class Method extends BussinesEntity implements Serializable {
     public void setTarget(Target target) {
         this.target = target;
     }
-    
+
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -54,6 +72,30 @@ public class Method extends BussinesEntity implements Serializable {
                 append(getName()).
                 append(getType()).
                 toHashCode();
+    }
+
+    public BigDecimal getMinimumValue() {
+        return minimumValue;
+    }
+
+    public void setMinimumValue(BigDecimal minimumValue) {
+        this.minimumValue = minimumValue;
+    }
+
+    public BigDecimal getMaximumValue() {
+        return maximumValue;
+    }
+
+    public void setMaximumValue(BigDecimal maximumValue) {
+        this.maximumValue = maximumValue;
+    }
+
+    public Type getMethodType() {
+        return methodType;
+    }
+
+    public void setMethodType(Type methodType) {
+        this.methodType = methodType;
     }
 
     @Override
@@ -76,21 +118,21 @@ public class Method extends BussinesEntity implements Serializable {
     }
 
     @Override
-    public String getCanonicalPath(){
+    public String getCanonicalPath() {
         StringBuilder path = new StringBuilder();
         path.append(getTarget().getCanonicalPath());
         path.append(BussinesEntity.SEPARATOR); //TODO hacer que sea personalizable
         path.append(getName());
         return path.toString();
     }
-    
+
     @Override
     public String toString() {
         /*return "org.eqaula.glue.model.management.Method[ "
-                + "id=" + getId() + ","
-                + "name=" + getName() + ","
-                + "type=" + getType() + ","
-                + " ]";*/
+         + "id=" + getId() + ","
+         + "name=" + getName() + ","
+         + "type=" + getType() + ","
+         + " ]";*/
         return getName();
     }
 }

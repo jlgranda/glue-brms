@@ -93,9 +93,15 @@ limitations under the License.
                         <p:column headerText="#{messages['common.name']}" style="width:150px">
                             <h:outputText value="#{_method.name}"/>
                         </p:column>
-                        <p:column headerText="#{messages['common.description']}" style="width:150px">
-                            <h:outputText value="#{_method.description}"/>
+                        <p:column headerText="#{messages['Method.type']}" style="width:150px">
+                            <h:outputText value="#{_method.methodType}"/>
+                         </p:column>     
+                        <p:column headerText="#{messages['common.minimumValue']}" style="width:150px">
+                            <h:outputText value="#{_method.minimumValue}"/>
                         </p:column>
+                         <p:column headerText="#{messages['common.maximumValue']}" style="width:150px">
+                            <h:outputText value="#{_method.maximumValue}"/>
+                         </p:column>                       
                         <p:column headerText="#{messages['common.edit']}" style="width:4%">
                             <h:link value="#{messages['common.edit']} #{messages['module.method']}" rendered="#{true}" outcome="/pages/management/method/method" styleClass="btn btn-mini">                                                        
                                 <f:param name="methodId" value="#{_method.id}"></f:param>
