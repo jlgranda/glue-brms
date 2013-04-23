@@ -411,6 +411,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         return model;
     }*/
 
+    
     public ActionListener createMethodActionListener(String menuAction) {
         ExpressionFactory factory = FacesContext.getCurrentInstance().getApplication().getExpressionFactory();
         MethodExpression methodsexpression = factory.createMethodExpression(FacesContext.getCurrentInstance().getELContext(), menuAction, null, new Class[]{ActionEvent.class});
