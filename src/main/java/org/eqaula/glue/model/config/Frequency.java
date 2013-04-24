@@ -16,13 +16,13 @@
 package org.eqaula.glue.model.config;
 
 import java.io.Serializable;
-import java.util.concurrent.TimeUnit;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import org.eqaula.glue.model.PersistentObject;
+import org.eqaula.glue.util.TimeUnit;
 
 /**
  *
