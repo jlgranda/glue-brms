@@ -45,18 +45,32 @@ public class Method extends BussinesEntity implements Serializable {
     public enum Type {
 
         SEMAPHORE,
-        GRAPH,
-        SIGNAL;
+        GRAPH;
 
         private Type() {
+        }
+    }
+    
+    public enum ContentType {
+        GLUE,
+        RULE,
+        SCRIPT;
+
+        private ContentType() {
         }
     }
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Method.Type methodType;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Method.ContentType contentType;
+    
+    @Column(length = 1024)
+    private String content;
    
-    private BigDecimal minimumValue;
-    private BigDecimal maximumValue;
+    
     @ManyToOne
     private Target target;
 
@@ -67,6 +81,31 @@ public class Method extends BussinesEntity implements Serializable {
     public void setTarget(Target target) {
         this.target = target;
     }
+    
+    
+    public Type getMethodType() {
+        return methodType;
+    }
+
+    public void setMethodType(Type methodType) {
+        this.methodType = methodType;
+    }
+
+    public ContentType getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(ContentType contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     @Override
     public int hashCode() {
@@ -75,30 +114,6 @@ public class Method extends BussinesEntity implements Serializable {
                 append(getName()).
                 append(getType()).
                 toHashCode();
-    }
-
-    public BigDecimal getMinimumValue() {
-        return minimumValue;
-    }
-
-    public void setMinimumValue(BigDecimal minimumValue) {
-        this.minimumValue = minimumValue;
-    }
-
-    public BigDecimal getMaximumValue() {
-        return maximumValue;
-    }
-
-    public void setMaximumValue(BigDecimal maximumValue) {
-        this.maximumValue = maximumValue;
-    }
-
-    public Type getMethodType() {
-        return methodType;
-    }
-
-    public void setMethodType(Type methodType) {
-        this.methodType = methodType;
     }
 
     @Override
