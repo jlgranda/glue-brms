@@ -63,7 +63,17 @@ limitations under the License.
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{measureHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{measureHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
                 <glue:input id="unit" name="unit" type="text" label="#{messages['common.unit']}" value="#{measureHome.instance.unit}" required="false" inlinehelp="#{messages['common.unit.inlinehelp']}" execute="@this save" render="unit"/>
-                <glue:input id="frequency" name="frequency" type="text" label="#{messages['common.frequency']}" value="#{measureHome.instance.frequency}" required="false" inlinehelp="#{messages['common.frequency.inlinehelp']}" execute="@this save" render="frequency"/>
+                <h:panelGroup layout="block" class="control-group">
+                    <label for="frequency" class="control-label">#{messages['common.frequency']}</label>
+                    <div class="controls">
+                        <p:selectOneMenu id="frequency" value="#{measureHome.instance.frequency}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="false"  var="f"
+                                         rendered="true" label="#{messages['common.frequency']}" filter="true" filterMatchMode="contains">
+                            <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue = ""/>  
+                            <f:selectItems value="#{frequencyService.resultList}" var="f" itemLabel="#{f.name} [#{f.value} - #{f.unitTime.name}]" itemValue="#{parentItem}"/>
+                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                        </p:selectOneMenu>                    
+                    </div>
+                </h:panelGroup>
 
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{measureHome.saveMeasure()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>

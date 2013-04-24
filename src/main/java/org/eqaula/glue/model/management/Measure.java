@@ -27,6 +27,7 @@ import javax.persistence.Table;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eqaula.glue.model.BussinesEntity;
+import org.eqaula.glue.model.config.Frequency;
 
 /*
  * @author dianita
@@ -38,20 +39,23 @@ import org.eqaula.glue.model.BussinesEntity;
 public class Measure extends BussinesEntity implements Serializable {
 
     private static final long serialVersionUID = -6935266135527132362L;
-    private Long frequency;
+        
+    //private Long frequency;
     private String unit;
     @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL)
     private List<Target> targets;
     @ManyToOne
     private Objetive objetive;
+    @ManyToOne
+    private Frequency frequency;
     
-    public Long getFrequency() {
+    /*public Long getFrequency() {
         return frequency;
     }
 
     public void setFrequency(Long frequency) {
         this.frequency = frequency;
-    }
+    }*/
 
     public String getUnit() {
         return unit;
@@ -59,6 +63,14 @@ public class Measure extends BussinesEntity implements Serializable {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public Frequency getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(Frequency frequency) {
+        this.frequency = frequency;
     }
     
 
