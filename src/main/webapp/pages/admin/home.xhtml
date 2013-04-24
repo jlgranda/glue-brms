@@ -31,6 +31,17 @@ limitations under the License.
         </div>             
     </ui:define>
     <ui:define name="content">
+        <p:panel header="#{messages['panel.admin.settings']}" toggleable="true" toggleOrientation="vertical">
+            <h:link value="#{messages['module.setting']}" rendered="#{true}" 
+                    outcome="/pages/admin/setting/list">
+                <f:param name="result"></f:param>
+            </h:link>
+            <br />
+            <h:link value="#{messages['module.frecuency']}" rendered="#{true}" 
+                    outcome="/pages/admin/frecuency/list">
+                <f:param name="result"></f:param>
+            </h:link>
+        </p:panel>
         <p:panel header="#{messages['panel.tools']}" toggleable="true" toggleOrientation="vertical">
             <h:link value="#{messages['panel.admin.hql']}" rendered="#{true}" 
                     outcome="/pages/admin/query">
@@ -51,21 +62,18 @@ limitations under the License.
                 <f:param name="result"></f:param>
             </h:link>
             <br />
-            <h:link value="#{messages['module.balancedScorecard']}" rendered="#{true}" 
-                    outcome="/pages/management/balancedScorecard/list">
+        </p:panel>
+        <p:panel header="#{messages['panel.admin.profiles']}" toggleable="true" toggleOrientation="vertical">
+            <h:link value="#{messages['module.profile.profiles']}" rendered="#{true}" 
+                    outcome="/pages/profile/list">
                 <f:param name="result"></f:param>
             </h:link>
             <br />
-        </p:panel>
-
-        <p:panel header="#{messages['panel.admin.settings']}" toggleable="true" toggleOrientation="vertical">
-            <h:link value="#{messages['module.setting']}" rendered="#{true}" 
-                    outcome="/pages/admin/setting/list">
-                <f:param name="result"></f:param>
+            <h:link value="#{messages['security.group']}" rendered="#{true}" 
+                    outcome="/pages/admin/security/list">
+                <f:param name="result"></f:param>                
             </h:link>
-            <br />
         </p:panel>
-        
         <p:panel header="#{messages['panel.admin.accounting']}" toggleable="true" toggleOrientation="vertical">
             <h:link value="#{messages['module.accounting']}" rendered="#{true}" 
                     outcome="/pages/accounting/list">
@@ -78,7 +86,7 @@ limitations under the License.
             </h:link>
             <br />
         </p:panel>
-        
+
         <p:panel header="#{messages['panel.admin.stocks']}" toggleable="true" toggleOrientation="vertical">
             <h:link value="#{messages['module.stocklist']}" rendered="#{true}" 
                     outcome="/pages/stocklist/warehouse/list">
@@ -92,18 +100,6 @@ limitations under the License.
                 <f:param name="result"></f:param>
             </h:link>
             <br />
-        </p:panel>
-
-        <p:panel header="#{messages['panel.admin.profiles']}" toggleable="true" toggleOrientation="vertical">
-            <h:link value="#{messages['module.profile.profiles']}" rendered="#{true}" 
-                    outcome="/pages/profile/list">
-                <f:param name="result"></f:param>
-            </h:link>
-            <br />
-            <h:link value="#{messages['security.group']}" rendered="#{true}" 
-                    outcome="/pages/admin/security/list">
-                <f:param name="result"></f:param>                
-            </h:link>
         </p:panel>
     </ui:define>
 </ui:composition>
