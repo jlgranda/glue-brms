@@ -56,5 +56,9 @@ public class Frequency extends PersistentObject<Frequency>  implements Serializa
     public void setTimeUnit(TimeUnit timeUnit) {
         this.timeUnit = timeUnit;
     }
+    
+    public List<TimeUnit> getTimeUnits() {
+        return Arrays.asList(TimeUnit.values());
+    }
 
 }
