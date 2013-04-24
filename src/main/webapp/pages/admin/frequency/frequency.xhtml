@@ -50,12 +50,23 @@ limitations under the License.
                 </div>
             </div>             
         </ui:define>
-        
+
         <ui:define name="content">
             <h:form id="form" acceptcharset="UTF-8" class="form-horizontal">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{frequencyHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name" validator="wordAvailabilityValidator" />
-                <glue:input id="value" name="value" type="text" label="#{messages['common.value']}" value="#{frequencyHome.instance.value}" inlinehelp="#{messages['module.frequency.value.inlinehelp']}" execute="@this save" render="value"/>
+                <glue:input id="value" name="value" type="decimal" label="#{messages['common.value']}" value="#{frequencyHome.instance.value}" inlinehelp="#{messages['module.frequency.value.inlinehelp']}" execute="@this save" render="value"/>
+
+                <h:panelGroup layout="block" class="control-group">
+                    <label for="timeunittype_" class="control-label">#{messages['TimeUnit.type']}</label>
+                    <div class="controls">
+                        <p:selectOneMenu id="timeunittype_" value="#{frequencyHome.instance.timeUnit}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.target']}" rendered="true" label="#{messages['module.target']}" filter="true" filterMatchMode="contains">
+                            <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
+                            <f:selectItems value="#{frequencyHome.instance.timeUnits}" var="_t" itemLabel="#{messages[_t.name]}" itemValue="#{_t}"/>                          
+                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                        </p:selectOneMenu>                     
+                    </div>
+                </h:panelGroup>
 
                 <div class="form-actions">
                     <p:commandButton id="save" action="#{frequencyHome.saveFrequency()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
@@ -77,7 +88,7 @@ limitations under the License.
                     <h:panelGroup layout="block" style="padding:5px;">  
                         <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                     </h:panelGroup>  
-                   
+
                     <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
                                      action="#{frequencyHome.deleteFrequency()}"                                          
                                      ajax="true" process="@this"  
