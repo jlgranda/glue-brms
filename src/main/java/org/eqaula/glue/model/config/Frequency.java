@@ -16,8 +16,8 @@
 package org.eqaula.glue.model.config;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
