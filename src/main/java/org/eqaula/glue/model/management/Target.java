@@ -18,6 +18,7 @@ package org.eqaula.glue.model.management;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -117,13 +118,22 @@ public class Target extends BussinesEntity implements Serializable {
     public void setInitiatives(List<Initiative> initiatives) {
         this.initiatives = initiatives;
     }
-
+    
     public List<Method> getMethods() {
         return methods;
     }
 
     public void setMethods(List<Method> methods) {
         this.methods = methods;
+    }
+    
+    public boolean addMethod(Method method){
+        method.setTarget(this);
+        return this.getMethods().add(method);
+    }
+    
+    public boolean removeMethod(Method method){
+        return this.getMethods().remove(method);
     }
 
     public List<TargetValue> getValues() {
@@ -214,5 +224,9 @@ public class Target extends BussinesEntity implements Serializable {
          + "type=" + getType() + ","
          + " ]";*/
         return getName();
+    }
+    
+    public List<Target.Type> getTargetTypes() {
+        return Arrays.asList(Target.Type.values());
     }
 }

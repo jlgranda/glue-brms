@@ -19,8 +19,6 @@ import org.eqaula.glue.model.BussinesEntityType_;
 import org.eqaula.glue.model.BussinesEntity_;
 import org.eqaula.glue.model.GroupType;
 import org.eqaula.glue.model.Property;
-import org.eqaula.glue.model.management.Organization;
-import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.util.PersistenceUtil;
 import org.eqaula.glue.util.QueryData;
 import org.eqaula.glue.util.QuerySortOrder;
@@ -145,9 +143,6 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
 
     public BussinesEntityType findBussinesEntityTypeByName(String name) {
 
-
-        log.info("find BussinesEntityType with name " + name);
-
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<BussinesEntityType> query = builder.createQuery(BussinesEntityType.class);
 
@@ -199,7 +194,7 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
         query.where(builder.equal(bussinesEntity.get(BussinesEntity_.property), property));
         return getResultList(query);
     }
-    
+
     public List<BussinesEntityAttribute> findBussinesEntityAttributeForProperty(Property property) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<BussinesEntityAttribute> query = builder.createQuery(BussinesEntityAttribute.class);
@@ -207,12 +202,12 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
         query.where(builder.equal(bussinesEntity.get(BussinesEntityAttribute_.property), property));
         return getResultList(query);
     }
-    
-    public BussinesEntity findBussinesEntityByCode(final String code){
+
+    public BussinesEntity findBussinesEntityByCode(final String code) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<BussinesEntity> query = builder.createQuery(BussinesEntity.class);
         Root<BussinesEntity> bussinesEntity = query.from(BussinesEntity.class);
-        query.where(builder.equal(bussinesEntity.get(BussinesEntity_.code), code));        
+        query.where(builder.equal(bussinesEntity.get(BussinesEntity_.code), code));
         return getSingleResult(query);
     }
 }

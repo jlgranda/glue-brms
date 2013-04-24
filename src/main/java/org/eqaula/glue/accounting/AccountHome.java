@@ -222,7 +222,6 @@ public class AccountHome extends BussinesEntityHome<Account> implements Serializ
     public List<Account.Type> getAccountTypes() {
         wire();
         List<Account.Type> list = Arrays.asList(getInstance().getAccountType().values());
-        log.info("eqaula --> AccountHome Account Type: " + list.toString());
         return list;
     }
 

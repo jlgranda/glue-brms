@@ -188,10 +188,5 @@ public class MethodHome extends BussinesEntityHome<Method> implements Serializab
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-    
-      public List<Method.Type> getMethodTypes() {
-        wire();
-        List<Method.Type> list = Arrays.asList(getInstance().getMethodType().values());
-        return list;
-    }
+
 }

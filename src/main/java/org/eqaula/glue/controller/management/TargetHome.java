@@ -65,6 +65,7 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
     private MeasureService measureService;
     private Method selectedMethod;
     private List<Method> methods;
+  
 
     public TargetHome() {
     }
@@ -173,7 +174,7 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-
+    
     public boolean isWired() {
         return true;
     }
@@ -209,15 +210,23 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-
-    public List<Target.Type> getTargetTypes() {
-        wire();
-        List<Target.Type> list = Arrays.asList(getInstance().getTargetType().values());
-        return list;
+    
+    @Inject
+    private MethodHome methodHome;
+    public void wireMethod(Method method){
+        if (method == null){
+            selectedMethod = methodHome.createInstance();
+            getInstance().addMethod(selectedMethod);
+        } else {
+            //TODO load selected method
+        }
     }
     
-    public String showEditMethod(){
-        System.out.println("-----> showEditMethod");
-        return "dialog:method";
+    public void addMethod(){
+        wireMethod(null);
+    }
+    
+    public void clearMethod(){
+        setSelectedMethod(null);
     }
 }

@@ -106,9 +106,6 @@
                         <p:column headerText="#{messages['common.variance']}">  
                             <h:outputText value="#{node.currentValue - node.value}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
                         </p:column>
-                        <p:column headerText="#{messages['common.currentValue']}">  
-                            <h:outputText value="#{node.currentValue}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
-                        </p:column>
                         <p:column headerText="#{messages['common.unit']}">  
                             <h:outputText value="#{node.measure.unit}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
                         </p:column>

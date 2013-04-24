@@ -52,7 +52,7 @@ limitations under the License.
                     <div class="controls">
                         <p:selectOneMenu id="methodtype_" value="#{methodHome.instance.methodType}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.method']}" rendered="true" label="#{messages['module.method']}" filter="true" filterMatchMode="contains">
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
-                            <f:selectItems value="#{methodHome.methodTypes}" var="_t" itemLabel="#{messages[_t.name]}" itemValue="#{_t}"/>                          
+                            <f:selectItems value="#{methodHome.instance.methodTypes}" var="_t" itemLabel="#{messages[_t.name]}" itemValue="#{_t}"/>                          
                             <p:ajax event="change" update="@parent " partialSubmit="true"/>
                         </p:selectOneMenu>                     
                     </div>

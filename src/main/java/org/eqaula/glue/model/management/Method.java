@@ -17,6 +17,8 @@ package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -42,8 +44,9 @@ public class Method extends BussinesEntity implements Serializable {
 
     public enum Type {
 
-        TYPE,
-        EFFECT;
+        SEMAPHORE,
+        GRAPH,
+        SIGNAL;
 
         private Type() {
         }
@@ -134,5 +137,9 @@ public class Method extends BussinesEntity implements Serializable {
          + "type=" + getType() + ","
          + " ]";*/
         return getName();
+    }
+    
+    public List<Method.Type> getMethodTypes() {
+        return Arrays.asList(Method.Type.values());
     }
 }
