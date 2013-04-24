@@ -34,6 +34,7 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.BussinesEntityType;
+import org.eqaula.glue.model.management.Initiative;
 import org.eqaula.glue.model.management.Measure;
 import org.eqaula.glue.model.management.Method;
 import org.eqaula.glue.model.management.Target;
@@ -65,7 +66,7 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
     private MeasureService measureService;
     private Method selectedMethod;
     private List<Method> methods;
-  
+    private Initiative selectedInitiative;
 
     public TargetHome() {
     }
@@ -111,6 +112,14 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
 
     public void setSelectedMethod(Method selectedMethod) {
         this.selectedMethod = selectedMethod;
+    }
+
+    public Initiative getSelectedInitiative() {
+        return selectedInitiative;
+    }
+
+    public void setSelectedInitiative(Initiative selectedInitiative) {
+        this.selectedInitiative = selectedInitiative;
     }
 
     public List<Method> getMethods() {
@@ -174,7 +183,7 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-    
+
     public boolean isWired() {
         return true;
     }
@@ -210,23 +219,52 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-    
     @Inject
     private MethodHome methodHome;
-    public void wireMethod(Method method){
-        if (method == null){
-            selectedMethod = methodHome.createInstance();
-            getInstance().addMethod(selectedMethod);
+
+    public void wireMethod(Method method) {
+        if (method == null) {
+            setSelectedMethod(methodHome.createInstance());
         } else {
-            //TODO load selected method
+            setSelectedMethod(method);
         }
     }
-    
-    public void addMethod(){
+
+    public void createMethod() {
         wireMethod(null);
     }
-    
-    public void clearMethod(){
+
+    public void addMethod() {
+        if (!getSelectedMethod().isPersistent()) {
+            getInstance().addMethod(getSelectedMethod());
+        }
+    }
+
+    public void clearMethod() {
         setSelectedMethod(null);
+    }
+
+    public void createInitiative() {
+        wireInitiative(null);
+    }
+    @Inject
+    private InitiativeHome initiativeHome;
+
+    public void wireInitiative(Initiative initiative) {
+        if (initiative == null) {
+            setSelectedInitiative(initiativeHome.createInstance());
+        } else {
+            setSelectedInitiative(initiative);
+        }
+    }
+
+    public void addInitiative() {
+        if (!getSelectedInitiative().isPersistent()) {
+            getInstance().addInitiative(getSelectedInitiative());
+        }
+    }
+
+    public void clearInitiative() {
+        setSelectedInitiative(null);
     }
 }

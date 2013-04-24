@@ -50,15 +50,16 @@ public class Target extends BussinesEntity implements Serializable {
     private static final long serialVersionUID = 449175027015485864L;
 
     public enum Type {
+
         CAUSE,
-        EFFECT;         
+        EFFECT;
+
         private Type() {
         }
     }
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Target.Type targetType;
-    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "periodFrom", nullable = false)
     private Date from;
@@ -68,14 +69,12 @@ public class Target extends BussinesEntity implements Serializable {
     private String unit;
     private BigDecimal value;
     private Long sequence;
-    
     @ManyToOne
     private Measure measure;
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
     private List<Initiative> initiatives;
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
     private List<Method> methods;
-    
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
     private List<TargetValue> values;
 
@@ -101,7 +100,7 @@ public class Target extends BussinesEntity implements Serializable {
 
     public void setValue(BigDecimal value) {
         this.value = value;
-    }    
+    }
 
     public Measure getMeasure() {
         return measure;
@@ -118,7 +117,7 @@ public class Target extends BussinesEntity implements Serializable {
     public void setInitiatives(List<Initiative> initiatives) {
         this.initiatives = initiatives;
     }
-    
+
     public List<Method> getMethods() {
         return methods;
     }
@@ -126,14 +125,29 @@ public class Target extends BussinesEntity implements Serializable {
     public void setMethods(List<Method> methods) {
         this.methods = methods;
     }
-    
-    public boolean addMethod(Method method){
-        method.setTarget(this);
-        return this.getMethods().add(method);
+
+    public boolean addMethod(Method method) {
+        if (!this.getMethods().contains(method)) {
+            method.setTarget(this);
+            return this.getMethods().add(method);
+        }
+        return false;
     }
-    
-    public boolean removeMethod(Method method){
+
+    public boolean removeMethod(Method method) {
         return this.getMethods().remove(method);
+    }
+
+    public boolean addInitiative(Initiative initiative) {
+        if (!this.getInitiatives().contains(initiative)) {
+            initiative.setTarget(this);
+            return this.getInitiatives().add(initiative);
+        }
+        return false;
+    }
+
+    public boolean removeInitiative(Initiative initiative) {
+        return this.getInitiatives().remove(initiative);
     }
 
     public List<TargetValue> getValues() {
@@ -145,16 +159,17 @@ public class Target extends BussinesEntity implements Serializable {
     }
 
     @Transient
-    public BigDecimal getCurrentValue(){
+    public BigDecimal getCurrentValue() {
         BigDecimal _value = new BigDecimal(0);
-        for (TargetValue tv : getValues()){
-            if (Boolean.TRUE.equals(tv.getCurrent())){
+        for (TargetValue tv : getValues()) {
+            if (Boolean.TRUE.equals(tv.getCurrent())) {
                 _value = tv.getValue();
                 break;
             }
         }
         return _value;
     }
+
     public Long getSequence() {
         return sequence;
     }
@@ -162,7 +177,7 @@ public class Target extends BussinesEntity implements Serializable {
     public void setSequence(Long sequence) {
         this.sequence = sequence;
     }
-    
+
     public Date getFrom() {
         return from;
     }
@@ -225,7 +240,7 @@ public class Target extends BussinesEntity implements Serializable {
          + " ]";*/
         return getName();
     }
-    
+
     public List<Target.Type> getTargetTypes() {
         return Arrays.asList(Target.Type.values());
     }
