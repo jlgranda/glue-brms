@@ -165,6 +165,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             create(getInstance());
             createDefaultOwner(getInstance());
         }
+        prepareForNew();
         return resolveOutcome();
     }
     
@@ -313,5 +314,11 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         }
         
         return _outcome;
+    }
+    
+    
+    public void prepareForNew(){
+        setOrganizationId(null);
+        wire();
     }
 }

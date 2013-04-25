@@ -6,7 +6,8 @@
       xmlns:fn="http://java.sun.com/jsp/jstl/functions"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:glue ="http://eqaula.org/jsf/facelets">
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <ui:param name="title" value="#{messages['common.home']}" />
@@ -66,65 +67,72 @@
         </ui:define>
 
         <ui:define name="content">
-            <div class="row">
-                <div class="span4">
-                    <div class="marketing">
-                        <h2>#{messages['common.welcome']}</h2>
-                        <b></b>
+            <h:form id="home-form">
+                <div class="row">
+                    <div class="span4">
+                        <div class="marketing">
+                            <h2>#{messages['common.welcome']}</h2>
+                            <b></b>
+                        </div>
                     </div>
-                </div>
-                <div class="span8">
-                    <div class="well bs-docs-sidebar" style="padding-top: 7px; padding-bottom: 10px;">
-                        <h:link value="#{messages['module.management.organization.create']}" outcome="/pages/management/organization/organization.xhtml" class="btn btn-small btn-primary fr" rendered="true">
-                            <f:param name="organizationId"></f:param>
-                            <f:param name="outcome" value="/pages/home"></f:param>
-                        </h:link>        
-                        <h3>#{messages['module.management.organizations']} (#{organizations.count})</h3>
-                        <ul class="nav nav-tabs nav-stacked">
-                            <ui:repeat var="_organization" value="#{organizations.all}" varStatus="i">
-                                <li>
-                                    <div class="box" style="margin-bottom: 8px;">
-                                        <div class="row">
-                                            <div class="span6 columns">
-                                                <h4>#{_organization.name}</h4>
-                                                <div class="btn-toolbar">
-                                                    <div class="btn-group">
-                                                        <h:link outcome="/pages/management/owner/list.xhtml"
-                                                                title="#{messages['module.management']}"
-                                                                styleClass="icon-th-large">
-                                                            <f:param name="organizationId" value="#{_organization.id}" />
-                                                        </h:link>
+                    <div class="span8">
+                        <div class="well bs-docs-sidebar" style="padding-top: 7px; padding-bottom: 10px;">
+                            <h:link   value="#{messages['module.management.organization.create']}" outcome="/pages/management/organization/organization.xhtml" class="btn btn-small btn-primary fr" rendered="true">
+                                <f:param name="organizationId"></f:param>
+                                <f:param name="outcome" value="/pages/home"></f:param>
+                            </h:link>        
 
-                                                        <h:link outcome="/pages/management/balancedscorecard/list.xhtml"
-                                                                title="#{messages['module.balancedScorecard']}"
-                                                                styleClass="icon-road">
-                                                            <f:param name="organizationId" value="#{_organization.id}" />
-                                                        </h:link>
-                                                        
-                                                        <h:link outcome="/pages/management/organization/viewTreeThemes.xhtml"
-                                                                title="#{messages['module.theme']}"
-                                                                styleClass="icon-adjust">
-                                                            <f:param name="organizationId" value="#{_organization.id}" />
-                                                        </h:link>
+                            <p:commandLink id="organization-add-button" value="#{messages['common.add']} #{messages['module.management.organization.create']}" action="#{organizationHome.prepareForNew()}" oncomplete="organizationEditDlg.show();" immediate="true"
+                                           styleClass="btn btn-mini btn-primary" style="color:#fff; font-size: 0.75em;"
+                                           update=":organization-edit-dialog">
+                            </p:commandLink>
 
-                                                        <h:link outcome="/pages/accounting/home.xhtml"
-                                                                title="#{messages['module.accounting']}"
-                                                                styleClass=" icon-barcode"
-                                                                rendered="false">
-                                                            <f:param name="organizationId" value="#{_organization.id}" />
-                                                        </h:link>
-                                                        <h:link outcome="/pages/stocklist/warehouse/list.xhtml"
-                                                                title="#{messages['module.stocklist']}"
-                                                                styleClass=" icon-shopping-cart"
-                                                                rendered="false">
-                                                            <f:param name="organizationId" value="#{_organization.id}" />
-                                                        </h:link>
+                            <h3>#{messages['module.management.organizations']} (#{organizations.count})</h3>
+                            <ul class="nav nav-tabs nav-stacked">
+                                <ui:repeat var="_organization" value="#{organizations.all}" varStatus="i">
+                                    <li>
+                                        <div class="box" style="margin-bottom: 8px;">
+                                            <div class="row">
+                                                <div class="span6 columns">
+                                                    <h4>#{_organization.name}</h4>
+                                                    <div class="btn-toolbar">
+                                                        <div class="btn-group">
+                                                            <h:link outcome="/pages/management/owner/list.xhtml"
+                                                                    title="#{messages['module.management']}"
+                                                                    styleClass="icon-th-large">
+                                                                <f:param name="organizationId" value="#{_organization.id}" />
+                                                            </h:link>
+
+                                                            <h:link outcome="/pages/management/balancedscorecard/list.xhtml"
+                                                                    title="#{messages['module.balancedScorecard']}"
+                                                                    styleClass="icon-road">
+                                                                <f:param name="organizationId" value="#{_organization.id}" />
+                                                            </h:link>
+
+                                                            <h:link outcome="/pages/management/organization/viewTreeThemes.xhtml"
+                                                                    title="#{messages['module.theme']}"
+                                                                    styleClass="icon-adjust">
+                                                                <f:param name="organizationId" value="#{_organization.id}" />
+                                                            </h:link>
+
+                                                            <h:link outcome="/pages/accounting/home.xhtml"
+                                                                    title="#{messages['module.accounting']}"
+                                                                    styleClass=" icon-barcode"
+                                                                    rendered="false">
+                                                                <f:param name="organizationId" value="#{_organization.id}" />
+                                                            </h:link>
+                                                            <h:link outcome="/pages/stocklist/warehouse/list.xhtml"
+                                                                    title="#{messages['module.stocklist']}"
+                                                                    styleClass=" icon-shopping-cart"
+                                                                    rendered="false">
+                                                                <f:param name="organizationId" value="#{_organization.id}" />
+                                                            </h:link>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <div class="span1 columns">
+                                                </div>
                                             </div>
-                                            <div class="span1 columns">
-                                            </div>
-                                        </div>
 
                                         <!--p>Your assignments: <ocp:tooltip placement="right" title="over #{projects.getAssignedStoryCount(userProfile, p)} stories" trigger="hover">
                                                 <h:link id="assignments" value="#{projects.getAssignedTaskCount(userProfile, p)} tasks" 
@@ -135,22 +143,48 @@
                                             </ocp:tooltip>
                                         </p-->
 
-                                    </div>
-                                </li>
-                            </ui:repeat>
+                                        </div>
+                                    </li>
+                                </ui:repeat>
 
-                            <h:panelGroup layout="block" rendered="${projects.count == 0}" styleClass="box">
-                                Looks like you aren't working on anything right now. You can <h:link outcome="/pages/project/create" value="start a new project" /> to get going.
-                            </h:panelGroup>
-                        </ul>
+                                <h:panelGroup layout="block" rendered="${projects.count == 0}" styleClass="box">
+                                    Looks like you aren't working on anything right now. You can <h:link outcome="/pages/project/create" value="start a new project" /> to get going.
+                                </h:panelGroup>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <p:growl/>
+
+                <p:growl/>
+
+           </h:form>
+            <p:dialog id="organization-edit-dialog" header="#{messages['common.add']} #{messages['module.organization']}" styleClass="atf-header" widgetVar="organizationEditDlg" appendToBody="true">
+                <h:form  id="form-organization" acceptcharset="UTF-8" class="form-horizontal" >
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <glue:input id="initials" name="initials" type="text" label="#{messages['common.initials']}" value="#{organizationHome.instance.initials}" required="true" inlinehelp="#{messages['common.initials.inlinehelp']}" execute="@this save"/> 
+                    <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{organizationHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                    <glue:input id="ruc" name="ruc" type="text" label="#{messages['common.ruc']}" value="#{organizationHome.instance.ruc}" required="true" inlinehelp="#{messages['common.ruc.inlinehelp']}" execute="@this save"/> 
+                    <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{organizationHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+
+                    <div class="form-actions">
+                        <p:commandButton id="save" value="#{messages['common.done']}" 
+                                         action="#{organizationHome.saveOrganization()}"
+                                         oncomplete="organizationEditDlg.hide();" 
+                                         update=":home-form"
+                                         ajax="true" process="@this" styleClass="btn btn-primary"/>
+                        <!-- &nbsp;-->
+                        <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                                         oncomplete="organizationEditDlg.hide();"  
+                                         ajax="true" process="@this" styleClass="btn"/>
+
+                    </div>  
+                </h:form>
+            </p:dialog>
         </ui:define>
 
         <ui:define name="sidebar">
-        </ui:define>
 
+
+        </ui:define>
     </ui:composition>
 </html>
