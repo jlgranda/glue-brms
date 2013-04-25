@@ -157,4 +157,8 @@ public class Method extends BussinesEntity implements Serializable {
     public List<Method.Type> getMethodTypes() {
         return Arrays.asList(Method.Type.values());
     }
+    
+    public List<Method.ContentType> getContentTypes() {
+        return Arrays.asList(Method.ContentType.values());
+    }
 }
