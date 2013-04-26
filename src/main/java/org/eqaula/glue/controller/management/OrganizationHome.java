@@ -151,7 +151,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         owner.buildAttributes(bussinesEntityService);
         return owner;
     }
-    
+
     @TransactionAttribute
     public String saveOrganization() {
         Date now = Calendar.getInstance().getTime();
@@ -165,18 +165,17 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             create(getInstance());
             createDefaultOwner(getInstance());
         }
-        prepareForNew();
-        if(getOutcome()==null){
+        if (getOutcome() == null) {
             return null;
         }
         return resolveOutcome();
     }
-    
+
     public void createDefaultOwner(Organization organization) {
 
         ArrayList<String> messagesOwners = new ArrayList();
         messagesOwners.add(UI.getMessages("common.Owner.General"));
-        
+
         for (String createOwners : messagesOwners) {
             Date now = Calendar.getInstance().getTime();
             Owner owner = createInstanceOwner();
@@ -231,7 +230,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         TreeNode macroprocessNode = null;
         TreeNode processNode = null;
         TreeNode themeNode = null;
-        
+
         for (Theme theme : getInstance().getThemes()) {
             themeNode = new DefaultTreeNode("theme", theme, organizationNode);
             themeNode.setExpanded(true);
@@ -310,18 +309,16 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public String resolveOutcome() {
         String _outcome = "";
         //TODO build a dynamic mechanism
-        if ("owners".equalsIgnoreCase(getOutcome())){
+        if ("owners".equalsIgnoreCase(getOutcome())) {
             _outcome = "/pages/management/owner/list.xhtml" + "?faces-redirect=true&organizationId=" + getOrganizationId();
         } else {
             _outcome = getOutcome() + "?faces-redirect=true&includeViewParams=true";
         }
-        
+
         return _outcome;
     }
-    
-    
-    public void prepareForNew(){
-        setOrganizationId(null);
-        wire();
+
+    public void createNew() {
+        setInstance(null);     
     }
 }
