@@ -33,7 +33,7 @@
         <ocpsoft.logging.version>1.0.2.Final</ocpsoft.logging.version>
         <rewrite.version>1.1.0.Final</rewrite.version>
         <prettytime.version>2.0.0-SNAPSHOT</prettytime.version>
-        <drools.version>5.5.0.Beta1</drools.version>
+        <drools.version>6.0.0.Beta1</drools.version>
         <javaee6.web.spec.version>3.0.1.Final</javaee6.web.spec.version>
         <jboss-javaee-6.0.version>2.0.0.Final</jboss-javaee-6.0.version>
         <primefaces.version>4.0-SNAPSHOT</primefaces.version>
@@ -351,6 +351,12 @@
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.8.3</version>
+        </dependency>
+        
+        <dependency>    
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.9</version>
         </dependency>
             
         <dependency>
