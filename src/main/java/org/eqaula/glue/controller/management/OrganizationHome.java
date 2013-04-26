@@ -166,6 +166,9 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             createDefaultOwner(getInstance());
         }
         prepareForNew();
+        if(getOutcome()==null){
+            return null;
+        }
         return resolveOutcome();
     }
     
