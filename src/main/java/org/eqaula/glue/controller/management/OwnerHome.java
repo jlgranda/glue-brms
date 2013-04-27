@@ -34,6 +34,8 @@ import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.profile.Profile;
+import org.eqaula.glue.service.OwnerListService;
+import org.eqaula.glue.service.OwnerService;
 import org.eqaula.glue.service.ThemeService;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
@@ -43,7 +45,6 @@ import org.primefaces.context.RequestContext;
 /*
  * @author dianita
  */
-
 @Named
 @ViewScoped
 public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable {
@@ -94,10 +95,9 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         bussinesEntityService.setEntityManager(em);
     }
 
-    
     @Override
-    public Organization getOrganization(){
-        if (getOrganizationId() == null && isManaged()){
+    public Organization getOrganization() {
+        if (getOrganizationId() == null && isManaged()) {
             super.setOrganization(getInstance().getOrganization());
         }
         return super.getOrganization();
@@ -130,7 +130,8 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
             create(getInstance());
         }
         //TODO idear una mejor forma de redireccionar
-        if(getOutcome()==null){
+        if (getOutcome() == null) {
+
             return null;
         }
         if (getInstance().getOrganization() != null) {
@@ -154,8 +155,8 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
 
     @Transactional
     public String deleteOwner() {
-         boolean band;
-         band=false;
+        boolean band;
+        band = false;
         try {
             if (getInstance() == null) {
                 throw new NullPointerException("Owner is Null");
@@ -168,8 +169,8 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
                 } else {
                     //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.property.hasValues") + " " + getInstance().getName(), ""));
                     //RequestContext.getCurrentInstance().execute("editDlg.hide()");
-                    band=true;
-                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,getInstance().getName() + " : "+ UI.getMessages("module.stocklist.delete.confirm"), "");
+                    band = true;
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, getInstance().getName() + " : " + UI.getMessages("module.stocklist.delete.confirm"), "");
                     FacesContext.getCurrentInstance().addMessage(null, message);
                 }
             } else {
@@ -180,7 +181,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
 
-        if(band){
+        if (band) {
             return null;
         }
         if (getInstance().getOrganization() != null) {
@@ -193,28 +194,21 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         boolean ban = themeService.findByOwner(getInstance()).isEmpty();
         return ban;
     }
-      
-    private Owner selectedOwner;
     
-    public Owner getSelectedOwner() {
-        return selectedOwner;
+    public void createNewOwner() {
+        setInstance(null);
+        load();
     }
 
-    public void setSelectedOwner(Owner selectedOwner) {
-        this.selectedOwner = selectedOwner;
+    public void editOwner(Long id) {
+        setId(id);        
+        load();        
     }
-          
-    public void createNewOwner(){
-        setSelectedOwner(null);
-        setInstance(getSelectedOwner());
-        wire();
-    }
-    
-    public void getEditOwner(Owner owner){
-        System.out.println("-----------entra----------");
-        System.out.println("..................... "+owner.getName()+ "..................");
-        setInstance(owner);
-        wire();
+     
+    @Transactional
+    public String saveOwnerDialog() {
+        saveOwner();
+        return null;
     }
     
 }
