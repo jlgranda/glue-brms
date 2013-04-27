@@ -82,7 +82,7 @@
                                 <f:param name="outcome" value="/pages/home"></f:param>
                             </h:link> -->
 
-                            <p:commandLink id="organization-add-button" style="padding-top: 7px; padding-bottom: 10px;" value="#{messages['module.management.organization.create']}" action="#{organizationHome.createNew()}" oncomplete="organizationEditDlg.show();" immediate="true"
+                            <p:commandLink id="organization-add-button" style="padding-top: 7px; padding-bottom: 10px;" value="#{messages['module.management.organization.create']}"  oncomplete="organizationEditDlg.show();" immediate="true"
                                            styleClass="btn-primary btn-small fr"
                                            update=":organization-edit-dialog">
                             </p:commandLink>
@@ -158,7 +158,7 @@
                 <p:growl/>
 
            </h:form>
-            <p:dialog id="organization-edit-dialog" header="#{messages['common.add']} #{messages['module.organization']}" styleClass="atf-header" widgetVar="organizationEditDlg" appendToBody="true">
+            <p:dialog id="organization-edit-dialog" header="#{messages['common.add']} #{messages['module.organization']}" styleClass="atf-header" widgetVar="organizationEditDlg" appendToBody="true" closeOnEscape="true">
                 <h:form  id="form-organization" acceptcharset="UTF-8" class="form-horizontal" >
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                     <glue:input id="initials" name="initials" type="text" label="#{messages['common.initials']}" value="#{organizationHome.instance.initials}" required="true" inlinehelp="#{messages['common.initials.inlinehelp']}" execute="@this save"/> 
@@ -168,7 +168,7 @@
 
                     <div class="form-actions">
                         <p:commandButton id="save" value="#{messages['common.done']}" 
-                                         action="#{organizationHome.saveOrganization()}"
+                                         action="#{organizationHome.createNew()}"                                         
                                          oncomplete="organizationEditDlg.hide();" 
                                          update=":home-form"
                                          ajax="true" process="@this" styleClass="btn btn-primary"/>

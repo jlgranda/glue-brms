@@ -318,7 +318,9 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         return _outcome;
     }
 
+    @TransactionAttribute
     public void createNew() {
-        setInstance(null);     
+        saveOrganization();
+        setInstance(null);
     }
 }

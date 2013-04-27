@@ -104,7 +104,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     }
 
     @Override
-    protected Owner createInstance() {
+    public Owner createInstance() {
         BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Owner.class.getName());
         Date now = Calendar.getInstance().getTime();
         Owner owner = new Owner();
@@ -130,6 +130,9 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
             create(getInstance());
         }
         //TODO idear una mejor forma de redireccionar
+        if(getOutcome()==null){
+            return null;
+        }
         if (getInstance().getOrganization() != null) {
             return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true";
         }
@@ -189,6 +192,29 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     public boolean hasValuesBussinesEntity() {
         boolean ban = themeService.findByOwner(getInstance()).isEmpty();
         return ban;
+    }
+      
+    private Owner selectedOwner;
+    
+    public Owner getSelectedOwner() {
+        return selectedOwner;
+    }
+
+    public void setSelectedOwner(Owner selectedOwner) {
+        this.selectedOwner = selectedOwner;
+    }
+          
+    public void createNewOwner(){
+        setSelectedOwner(null);
+        setInstance(getSelectedOwner());
+        wire();
+    }
+    
+    public void getEditOwner(Owner owner){
+        System.out.println("-----------entra----------");
+        System.out.println("..................... "+owner.getName()+ "..................");
+        setInstance(owner);
+        wire();
     }
     
 }

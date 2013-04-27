@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.ejb.TransactionAttribute;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -27,6 +28,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Web;
+import org.eqaula.glue.controller.management.OwnerHome;
 import org.eqaula.glue.model.BussinesEntity_;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.management.Owner_;
@@ -94,6 +96,8 @@ public class OwnerListService extends ListService<Owner> {
     public int getPreviousFirstResult() {
         return this.getPageSize() >= firstResult ? 0 : firstResult - this.getPageSize();
     }
+    
+    
 
     @Override
     public List<Owner> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
@@ -117,6 +121,7 @@ public class OwnerListService extends ListService<Owner> {
     public void init() {
         super.init();
         ownerService.setEntityManager(getEntityManager());
+      
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -139,4 +144,18 @@ public class OwnerListService extends ListService<Owner> {
     public Object getRowKey(Owner entity) {
         return entity.getName();
     }
+
+      
+  /*  
+    @Inject
+    private OwnerHome ownerHome;
+    public void createOwner(){
+        if(getSelectedOwner()==null){
+            ownerHome.createInstance();
+            ownerHome.saveOwner();
+        }else{
+            ownerHome.setInstance(getSelectedOwner());
+            ownerHome.saveOwner();
+        }
+    }*/
 }

@@ -21,11 +21,13 @@ limitations under the License.
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/view/templates/glue.xhtml">
+                template="/WEB-INF/view/templates/glue.xhtml"
+                xmlns:glue ="http://eqaula.org/jsf/facelets">
 
     <f:metadata>
         <f:viewParam name="result" value="#{ownerListService.firstResult}" />
-        <f:viewParam name="organizationId" value="#{ownerListService.organizationId}" />
+        <f:viewParam name="organizationId" value="#{ownerListService.organizationId}"/>
+        <f:viewParam name="organizationId" value="#{ownerHome.organizationId}"/>
     </f:metadata>
 
     <ui:param name="title" value="#{ownerListService.organization.name} - #{messages['module.owners']}" />
@@ -73,12 +75,25 @@ limitations under the License.
                     <f:param name="organizationId" value="#{ownerListService.organizationId}"></f:param>
                     <f:param name="outcome" value="list"></f:param>
                 </h:link> 
-             
+
                 #{' '}
                 <h:link id="button-admin" value="#{messages['module.diagnose']}" rendered="true" outcome="/pages/management/diagnostic/list" styleClass="btn" 
                         disabled="#{empty ownerListService.selectedOwner.id}">
                     <f:param name="ownerId" value="#{ownerListService.selectedOwner.id}"></f:param>
                 </h:link> 
+                #{' '}
+                <p:commandLink id="owner-add-button" style="padding-top: 7px; padding-bottom: 10px;" value="#{messages['common.create']} #{messages['common.owner']}" action="#{ownerHome.createNewOwner()}" oncomplete="ownerEditDlg.show();" immediate="true"
+                               styleClass="btn-primary btn-small fr"
+                               update=":owner-edit-dialog">
+                </p:commandLink>
+
+                
+              
+                <p:commandLink id="owner-edit-button" style="padding-top: 7px; padding-bottom: 10px;" value="#{messages['common.edit']} #{messages['common.owner']}" action="#{ownerHome.getEditOwner(ownerListService.selectedOwner)}" oncomplete="ownerEditDlg.show();" immediate="true"
+                               styleClass="btn-primary btn-small fr"
+                               update=":owner-edit-dialog"
+                               disabled="#{empty ownerListService.selectedOwner.id}">
+                </p:commandLink>
             </div>
 
             <p:dataTable var="_owner" value="#{ownerListService}"
@@ -93,7 +108,7 @@ limitations under the License.
                          selectionMode="single">
 
                 <p:ajax event="rowSelect" listener="#{ownerListService.onRowSelect}"   
-                        update=":form:button-edit:  :form:button-admin: :form:messages"/>                 
+                        update=":form:button-edit:  :form:button-admin: :form:owner-edit-button: :form:messages"/>                 
                 <p:ajax event="rowUnselect" listener="#{ownerListService.onRowUnselect}" update=":form:button-edit :form:messages"/>
 
                 <p:column headerText="#{messages['common.name']}" sortBy="#{_owner.name}">
@@ -106,5 +121,27 @@ limitations under the License.
             </p:dataTable>
         </h:form>
 
+
+        <p:dialog id="owner-edit-dialog" header="#{messages['common.add']} #{messages['module.owner']}" styleClass="atf-header" widgetVar="ownerEditDlg" appendToBody="true" closeOnEscape="true">
+            <h:form  id="form-owner" acceptcharset="UTF-8" class="form-horizontal" >
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                
+                <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{ownerHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{ownerHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+
+                <div class="form-actions">
+                    <p:commandButton id="save" value="#{messages['common.done']}" 
+                                     action="#{ownerHome.saveOwner()}"
+                                     oncomplete="ownerEditDlg.hide();" 
+                                     update=":form:ownerTable:"
+                                     ajax="true" process="@this" styleClass="btn btn-primary"/>
+                    <!-- &nbsp;-->
+                    <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                                     oncomplete="ownerEditDlg.hide();"  
+                                     ajax="true" process="@this" styleClass="btn"/>
+
+                </div>  
+            </h:form>
+        </p:dialog>
     </ui:define>
 </ui:composition>
