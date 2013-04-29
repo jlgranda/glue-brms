@@ -123,10 +123,10 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     public String saveOwner() {
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
-        if (getInstance().isPersistent()) {
+        if (getInstance().isPersistent()) {          
             save(getInstance());
         } else {
-            getInstance().setAuthor(this.profile);
+            getInstance().setAuthor(this.profile);  
             create(getInstance());
         }
         //TODO idear una mejor forma de redireccionar
@@ -196,6 +196,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     }
     
     public void createNewOwner() {
+        setId(null);
         setInstance(null);
         load();
     }
@@ -208,6 +209,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     @Transactional
     public String saveOwnerDialog() {
         saveOwner();
+        //return "/pages/management/owner/list.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         return null;
     }
     
