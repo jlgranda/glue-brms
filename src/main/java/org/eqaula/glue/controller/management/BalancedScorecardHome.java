@@ -37,10 +37,12 @@ import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
+import org.eqaula.glue.drools.RuleRunner;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.BalancedScorecard;
 import org.eqaula.glue.model.management.Measure;
+import org.eqaula.glue.model.management.Method;
 import org.eqaula.glue.model.management.Objetive;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Perspective;
@@ -77,13 +79,12 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     private NavigationHandler navigation;
     @Inject
     private FacesContext context;
-    
     private boolean toHaveChildren;
 
     public boolean getToHaveChildren(TreeNode node) {
-        if(node.getChildren().isEmpty()){
-            toHaveChildren= false;
-        }else{
+        if (node.getChildren().isEmpty()) {
+            toHaveChildren = false;
+        } else {
             toHaveChildren = true;
         }
         return toHaveChildren;
@@ -92,7 +93,6 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     public void setToHaveChildren(boolean toHaveChildren) {
         this.toHaveChildren = toHaveChildren;
     }
-    
 
     public BalancedScorecardHome() {
     }
@@ -120,7 +120,6 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         this.bscNode = bscNode;
     }
 
-    
     public TreeNode getSelectedNode() {
         return selectedNode;
     }
@@ -129,14 +128,14 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         this.selectedNode = selectedNode;
     }
 
-     @Override
-    public Organization getOrganization(){
-        if (getOrganizationId() == null && isManaged()){
+    @Override
+    public Organization getOrganization() {
+        if (getOrganizationId() == null && isManaged()) {
             super.setOrganization(getInstance().getOrganization());
         }
         return super.getOrganization();
     }
-     
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -193,7 +192,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
-            getInstance().setAuthor(this.profile); 
+            getInstance().setAuthor(this.profile);
             create(getInstance());
             createDefaultPerspectives(getInstance());
             return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
@@ -350,7 +349,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
                 FacesMessage messag = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, messag);
-                
+
             } else if ("perspective".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/perspective/perspective.xhtml?");
                 outcomeBuilder.append("&balancedscorecardId=").append(getBalancedScorecardId());
@@ -390,24 +389,22 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     private MenuModel model = null;
     private String lastNodeType = "";
 
-   /* public MenuModel getMenuModel() {
-        model = new DefaultMenuModel();
+    /* public MenuModel getMenuModel() {
+     model = new DefaultMenuModel();
 
-        log.debug("node=<" + selectedNode + ">");
-        if (selectedNode != null && !lastNodeType.equalsIgnoreCase(selectedNode.getType())) {
-            lastNodeType = selectedNode.getType();
-            BussinesEntity info = (BussinesEntity) selectedNode.getData();
-            MenuItem item = new BaseMenuModel();
-            item.setValue(UI.getMessages("common.add") + " " + UI.getMessages("common.in") + " " + info.getName());
-            item.setIcon("ui-icon-plus");
-            item.setUpdate(":messages");
-            item.addActionListener(createMethodActionListener("#{balancedScorecardHome.redirecToAdd}"));
-            model.addMenuItem(item);
-        }
-        return model;
-    }*/
-
-    
+     log.debug("node=<" + selectedNode + ">");
+     if (selectedNode != null && !lastNodeType.equalsIgnoreCase(selectedNode.getType())) {
+     lastNodeType = selectedNode.getType();
+     BussinesEntity info = (BussinesEntity) selectedNode.getData();
+     MenuItem item = new BaseMenuModel();
+     item.setValue(UI.getMessages("common.add") + " " + UI.getMessages("common.in") + " " + info.getName());
+     item.setIcon("ui-icon-plus");
+     item.setUpdate(":messages");
+     item.addActionListener(createMethodActionListener("#{balancedScorecardHome.redirecToAdd}"));
+     model.addMenuItem(item);
+     }
+     return model;
+     }*/
     public ActionListener createMethodActionListener(String menuAction) {
         ExpressionFactory factory = FacesContext.getCurrentInstance().getApplication().getExpressionFactory();
         MethodExpression methodsexpression = factory.createMethodExpression(FacesContext.getCurrentInstance().getELContext(), menuAction, null, new Class[]{ActionEvent.class});
@@ -415,6 +412,9 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         return actionListener;
     }
 
-   
-   
+    public Method runMethod(Method method) throws Exception {
+        RuleRunner runner = new RuleRunner();
+        runner.runRules(method);
+        return method;
+    }
 }

@@ -15,6 +15,7 @@
  */
 package org.eqaula.glue.faces.converter;
 
+import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import org.eqaula.glue.model.BussinesEntity;
@@ -25,6 +26,7 @@ import org.picketlink.idm.impl.api.model.SimpleGroup;
  *
  * @author jlgranda
  */
+@RequestScoped
 public class BussinesEntityConverter extends SelectItemsConverter {
 
     @Override
