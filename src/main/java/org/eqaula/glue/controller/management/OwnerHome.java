@@ -45,6 +45,8 @@ import org.primefaces.context.RequestContext;
 /*
  * @author dianita
  */
+
+
 @Named
 @ViewScoped
 public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable {

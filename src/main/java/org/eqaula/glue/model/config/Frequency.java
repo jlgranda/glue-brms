@@ -31,7 +31,7 @@ import org.eqaula.glue.util.TimeUnit;
  * @author jlgranda
  */
 @Entity
-@Table(name = "Frecuency")
+@Table(name = "Frequency")
 public class Frequency extends PersistentObject<Frequency>  implements Serializable {
     private static final long serialVersionUID = -6323079576938239690L;
     private Long value;

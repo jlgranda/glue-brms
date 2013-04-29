@@ -40,7 +40,7 @@ import org.primefaces.model.SortOrder;
 /*
  * @author dianita
  */
-@Named
+@Named(value = "frequencyListService")
 @ViewScoped
 public class FrequencyListService extends LazyDataModel<Frequency> implements Serializable {
 

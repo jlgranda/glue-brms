@@ -31,7 +31,6 @@ import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.model.config.Frequency;
-import org.eqaula.glue.service.FrequencyService;
 import org.eqaula.glue.util.Dates;
 import org.jboss.seam.transaction.Transactional;
 
@@ -47,9 +46,7 @@ public class FrequencyHome extends BussinesEntityHome<Frequency> implements Seri
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private FrequencyService frequencyService;
-    
+
     public FrequencyHome() {
     }
 
@@ -74,7 +71,6 @@ public class FrequencyHome extends BussinesEntityHome<Frequency> implements Seri
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        frequencyService.setEntityManager(em);
     }
 
     @TransactionAttribute
@@ -92,8 +88,8 @@ public class FrequencyHome extends BussinesEntityHome<Frequency> implements Seri
         frequency.setExpirationTime(Dates.addDays(now, 364));
         return frequency;
     }
-    
-     @TransactionAttribute
+
+    @TransactionAttribute
     public String saveFrequency() {
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
@@ -105,8 +101,8 @@ public class FrequencyHome extends BussinesEntityHome<Frequency> implements Seri
             return "/pages/admin/frequency/list";
         }
     }
-     
-       @Transactional
+
+    @Transactional
     public String deleteFrequency() {
         try {
             if (getInstance() == null) {
