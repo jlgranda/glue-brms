@@ -16,7 +16,7 @@
 package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.persistence.Column;
@@ -27,6 +27,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eqaula.glue.model.BussinesEntity;
@@ -54,7 +55,9 @@ public class Method extends BussinesEntity implements Serializable {
     public enum ContentType {
         GLUE,
         RULE,
-        SCRIPT;
+        SCRIPT,
+        SOAP,
+        REST;
 
         private ContentType() {
         }
@@ -67,7 +70,7 @@ public class Method extends BussinesEntity implements Serializable {
     @Column(nullable = false)
     private Method.ContentType contentType;
     
-    @Column(length = 1024)
+    @Column(length = 4096)
     private String content;
    
     
@@ -160,5 +163,53 @@ public class Method extends BussinesEntity implements Serializable {
     
     public List<Method.ContentType> getContentTypes() {
         return Arrays.asList(Method.ContentType.values());
+    }
+    
+    @Transient
+    private List<Wrap> wrappers = new ArrayList<Wrap>();
+    
+    public List<Wrap> getWrappers() {
+        return wrappers;
+    }
+    
+    public void addWrap(Wrap wrap){
+        this.wrappers.add(wrap);
+    }
+    
+    public static class Wrap {
+        
+        private int  sequence;
+
+        private String value;
+
+        public Wrap() {
+
+        }
+
+        public Wrap(final int sequence) {
+            this.sequence = sequence;
+            this.value = "";
+        }
+        
+        public Wrap(final String value) {
+            this.value = value;
+        }
+
+        public int getSequence() {
+            return this.sequence;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+
+        public String toString() {
+            return "Wrap(" + this.sequence + "/" + this.value + ")";
+        }
     }
 }

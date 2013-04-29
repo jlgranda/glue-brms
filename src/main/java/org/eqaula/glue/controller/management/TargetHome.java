@@ -239,6 +239,12 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
             getInstance().addMethod(getSelectedMethod());
         }
     }
+    
+    public void removeMethod() {
+        if (getInstance().getMethods().contains(getSelectedMethod())) {
+            getInstance().removeMethod(getSelectedMethod());
+        }
+    }
 
     public void clearMethod() {
         setSelectedMethod(null);
@@ -264,6 +270,12 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         }
     }
 
+    public void removeInitiative() {
+        if (getInstance().getInitiatives().contains(getSelectedInitiative())) {
+            getInstance().removeInitiative(getSelectedInitiative());
+        }
+    }
+    
     public void clearInitiative() {
         setSelectedInitiative(null);
     }

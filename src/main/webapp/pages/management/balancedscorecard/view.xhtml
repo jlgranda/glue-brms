@@ -109,6 +109,13 @@
                         <p:column headerText="#{messages['common.unit']}">  
                             <h:outputText value="#{node.measure.unit}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
                         </p:column>
+                        <p:column headerText="#{messages['module.method']}">  
+                            <p:dataTable var="method" value="#{node.methods}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
+                                <p:column>
+                                    <p:graphicImage value="/MethodPrinter?methodId=#{methodPrinter.printToDownload(balancedScorecardHome.runMethod(method)).id}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:column>
                     </p:treeTable>  
                 </p:panel>
 

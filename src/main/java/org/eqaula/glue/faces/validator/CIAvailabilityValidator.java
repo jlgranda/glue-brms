@@ -25,7 +25,6 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Current;
-import org.eqaula.glue.cdi.LoggedIn;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.profile.ProfileService;
 import org.eqaula.glue.util.UI;

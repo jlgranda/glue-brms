@@ -18,6 +18,7 @@ package org.eqaula.glue.model.management;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -74,9 +75,9 @@ public class Target extends BussinesEntity implements Serializable {
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
     private List<Initiative> initiatives;
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
-    private List<Method> methods;
+    private List<Method> methods = new ArrayList<Method>();
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
-    private List<TargetValue> values;
+    private List<TargetValue> values = new ArrayList<TargetValue>();
 
     public Type getTargetType() {
         return targetType;
@@ -160,7 +161,7 @@ public class Target extends BussinesEntity implements Serializable {
 
     @Transient
     public BigDecimal getCurrentValue() {
-        BigDecimal _value = new BigDecimal(0);
+        BigDecimal _value = new BigDecimal(110);
         for (TargetValue tv : getValues()) {
             if (Boolean.TRUE.equals(tv.getCurrent())) {
                 _value = tv.getValue();

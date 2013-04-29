@@ -16,6 +16,7 @@
 package org.eqaula.glue.faces.validator;
 
 import java.util.Date;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -27,6 +28,7 @@ import org.eqaula.glue.util.UI;
 /*
  * @author dianita
  */
+@RequestScoped
 @FacesValidator("validator.dateRangeValidator")
 public class DateRangeValidator implements Validator{
 

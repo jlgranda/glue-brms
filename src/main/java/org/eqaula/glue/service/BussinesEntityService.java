@@ -58,8 +58,6 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
 
     public BussinesEntity findByName(final String name) {
 
-        log.info("find BussinesEntity with name " + name);
-
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<BussinesEntity> query = builder.createQuery(BussinesEntity.class);
 
@@ -72,8 +70,6 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
 
     public BussinesEntity findByNameAndProfile(final String name, final Long profile) {
 
-        log.info("find BussinesEntity with name " + name + " and profile " + profile);
-
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<BussinesEntity> query = builder.createQuery(BussinesEntity.class);
 
@@ -85,7 +81,6 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
     }
 
     public List<BussinesEntity> find(int maxresults, int firstresult) {
-        log.info("find BussinesEntity, max results " + maxresults + " next result " + firstresult);
 
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<BussinesEntity> query = builder.createQuery(BussinesEntity.class);

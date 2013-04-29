@@ -23,6 +23,7 @@ limitations under the License.
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:o="http://omnifaces.org/ui"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
       xmlns:glue ="http://eqaula.org/jsf/facelets">
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml" >
         <f:metadata>
@@ -91,7 +92,7 @@ limitations under the License.
                                        styleClass="btn btn-mini btn-primary" style="color:#fff; font-size: 0.75em;"
                                        update=":method-edit-dialog">
                         </p:commandLink>
-                        
+
                     </f:facet>
                     <p:dataTable var="_method" value="#{targetHome.instance.methods}">
                         <p:column headerText="#{messages['common.name']}" style="width:150px">
@@ -99,6 +100,12 @@ limitations under the License.
                         </p:column>
                         <p:column headerText="#{messages['common.description']}" style="width:150px">
                             <h:outputText value="#{_method.description}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['common.type']}" style="width:150px">
+                            <h:outputText value="#{messages[_method.methodType]}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['common.content.type']}" style="width:150px">
+                            <h:outputText value="#{messages[_method.contentType]}"/>
                         </p:column>
                         <p:column headerText="#{messages['common.edit']}" style="width:4%">
                             <!--<h:link value="#{messages['common.edit']} #{messages['module.method']}" rendered="#{true}" outcome="/pages/management/method/method" styleClass="btn btn-mini">                                                        
@@ -176,8 +183,8 @@ limitations under the License.
                                      style="margin-top:10px;"/>  
                 </h:form>
             </p:dialog> 
-            
-            <p:dialog id="method-edit-dialog" header="#{targetHome.selectedMethod.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.method']}" styleClass="atf-header" widgetVar="methodEditDlg" appendToBody="true">
+
+            <p:dialog id="method-edit-dialog" header="#{targetHome.selectedMethod.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.method']}" styleClass="atf-header" widgetVar="methodEditDlg" appendToBody="true" closeOnEscape="true">
                 <h:form  id="form-method" acceptcharset="UTF-8" class="form-horizontal" >
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                     <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{targetHome.selectedMethod.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
@@ -185,33 +192,46 @@ limitations under the License.
                     <h:panelGroup layout="block" class="control-group">
                         <label for="methodtype_" class="control-label">#{messages['common.type']}</label>
                         <div class="controls">
-                            <p:selectOneMenu id="methodtype_" value="#{targetHome.selectedMethod.methodType}" effect="fade"  converter="omnifaces.GenericEnumConverter" required="true" requiredMessage="#{messages['required.method']}" rendered="true" label="#{messages['module.method']}" filter="true" filterMatchMode="contains">
+                            <p:selectOneMenu id="methodtype_" value="#{targetHome.selectedMethod.methodType}" effect="fade"  converter="omnifaces.GenericEnumConverter" required="true" requiredMessage="#{messages['required.method']}" rendered="true" label="#{messages['common.type']}" filter="true" filterMatchMode="contains">
                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
                                 <f:selectItems value="#{targetHome.selectedMethod.methodTypes}" var="_t" itemLabel="#{messages[_t.name]}" itemValue="#{_t}"/>                          
                                 <p:ajax event="change" update="@parent " partialSubmit="true"/>
-                            </p:selectOneMenu>                     
+                            </p:selectOneMenu>   
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{targetHome.selectedMethod.methodType != null}"
+                                            styleClass="validation-status" />
+                            <span class="help-block"><br/>#{messages['common.type.inlinehelp']} <ocp:message forId="methodtype_" /></span>
                         </div>
+
                     </h:panelGroup>
                     <h:panelGroup layout="block" class="control-group">
-                        <label for="contentype_" class="control-label">#{messages['common.content.type']}</label>
+                        <label for="contenttype_" class="control-label">#{messages['common.content.type']}</label>
                         <div class="controls">
-                            <p:selectOneMenu id="contentype_" value="#{targetHome.selectedMethod.contentType}" effect="fade"  converter="omnifaces.GenericEnumConverter" required="true" requiredMessage="#{messages['required.method']}" rendered="true" label="#{messages['module.method']}" filter="true" filterMatchMode="contains">
+                            <p:selectOneMenu id="contenttype_" value="#{targetHome.selectedMethod.contentType}" effect="fade"  converter="omnifaces.GenericEnumConverter" required="true" requiredMessage="#{messages['required.method']}" rendered="true" label="#{messages['module.method']}" filter="true" filterMatchMode="contains">
                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
                                 <f:selectItems value="#{targetHome.selectedMethod.contentTypes}" var="_t" itemLabel="#{messages[_t.name]}" itemValue="#{_t}"/>                          
                                 <p:ajax event="change" update="@parent " partialSubmit="true"/>
-                            </p:selectOneMenu>                     
+                            </p:selectOneMenu>  
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{targetHome.selectedMethod.contentType != null}"
+                                            styleClass="validation-status" />
+                            <span class="help-block"><br/>#{messages['common.contentType.inlinehelp']} <ocp:message forId="contenttype_" /></span>
                         </div>
                     </h:panelGroup>
                     <glue:input id="content" name="content" type="textarea" label="#{messages['common.content']}" value="#{targetHome.selectedMethod.content}" required="false" inlinehelp="#{messages['common.description.help']}" render="content" execute="@this save" />                
                     <div class="form-actions">
-                        <p:commandButton id="save" value="#{messages['common.done']}" 
-                                         action="#{targetHome.addMethod()}"
+                        <p:commandButton id="method-save" value="#{messages['common.done']}"
+                                         type="submit"
+                                         actionListener="#{targetHome.addMethod()}"
                                          update=":target-form:method-panel" 
-                                         oncomplete="methodEditDlg.hide();"  
-                                         ajax="true" process="@this" styleClass="btn btn-primary"/>
+                                         oncomplete="if (#{facesContext.maximumSeverity == null}) methodEditDlg.hide()"
+                                         ajax="true" process="@this" styleClass="btn btn-primary"
+                                         immediate="false"/>
                         <!-- &nbsp;-->
-                        <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
-                                         update=":method-cancel-delete-dialog" rendered="#{true}">                        
+                        <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="methodDeletedDlg.show();" immediate="true"
+                                         update=":method-cancel-delete-dialog" rendered="#{targetHome.selectedMethod.target != null}">                        
+                        </p:commandButton>
+                        <!-- &nbsp;-->
+                        <p:commandButton type="button" value="#{messages['common.cancel']}" styleClass="btn" onclick="methodEditDlg.hide();" immediate="true"
+                                         update=":target-form:method-panel"  rendered="#{true}">                        
                         </p:commandButton>
                     </div>  
                 </h:form>
@@ -221,19 +241,19 @@ limitations under the License.
                     <h:panelGroup layout="block" style="padding:5px;">  
                         <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                     </h:panelGroup>  
-                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
-                                     action="#{targetHome.methodHome.deleteMethod()}"                                         
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="methodDeletedDlg.hide(); methodEditDlg.hide();"  
+                                     action="#{targetHome.removeMethod()}"                                         
                                      ajax="true" process="@this"  
                                      style="margin-top:10px;">  
                     </p:commandButton>  
-                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="methodDeletedDlg.hide();"  
                                      style="margin-top:10px;"/>  
                 </h:form>
             </p:dialog> 
 
 
 
-            <p:dialog id="initiative-edit-dialog" header="#{targetHome.selectedInitiative.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.initiative']}" styleClass="atf-header" widgetVar="initiativeEditDlg" appendToBody="true">
+            <p:dialog id="initiative-edit-dialog" header="#{targetHome.selectedInitiative.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.initiative']}" styleClass="atf-header" widgetVar="initiativeEditDlg" appendToBody="true" closeOnEscape="true">
                 <h:form  id="form-initiative" acceptcharset="UTF-8" class="form-horizontal" >
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                     <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{targetHome.selectedInitiative.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
@@ -251,12 +271,16 @@ limitations under the License.
                         </div>
                     </h:panelGroup>
                     <div class="form-actions">
-                        <p:commandButton id="save" value="#{messages['common.done']}" update=":target-form:initiative-panel" 
-                                         oncomplete="initiativeEditDlg.hide();"  
+                        <p:commandButton id="initiative-save" value="#{messages['common.done']}" update=":target-form:initiative-panel" 
+                                         onsuccess="if (#{not facesContext.validationFailed}) initiativeEditDlg.hide();"
                                          ajax="true" process="@this" styleClass="btn btn-primary"/>
                         <!-- &nbsp;-->
-                        <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
-                                         update=":initiative-cancel-delete-dialog" rendered="#{true}">                        
+                        <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="initiativeDeletedDlg.show();" immediate="true"
+                                         update=":initiative-cancel-delete-dialog" rendered="#{targetHome.selectedInitiative.target != nul}">                        
+                        </p:commandButton>
+                        <!-- &nbsp;-->
+                        <p:commandButton type="button" value="#{messages['common.cancel']}" styleClass="btn" onclick="initiativeEditDlg.hide();" immediate="true"
+                                         update=":target-form:initiative-panel"   rendered="#{true}">                        
                         </p:commandButton>
                     </div>  
                 </h:form>
@@ -267,12 +291,12 @@ limitations under the License.
                     <h:panelGroup layout="block" style="padding:5px;">  
                         <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                     </h:panelGroup>  
-                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
-                                     action="#{targetHome.initiativeHome.deleteInitiative()}"                                         
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="initiativeDeletedDlg.hide(); initiativeEditDlg.hide();"   
+                                     action="#{targetHome.removeInitiative()}"                                         
                                      ajax="true" process="@this"  
                                      style="margin-top:10px;">  
                     </p:commandButton>  
-                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="initiativeDeletedDlg.hide();"  
                                      style="margin-top:10px;"/>  
                 </h:form>
             </p:dialog> 
