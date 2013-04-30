@@ -41,14 +41,14 @@
                 </div></div>             
         </ui:define>
         <div class="row-fluid">             
-            <ui:define name="sidebar" >
+            <ui:define name="sidebar">
                 <h:form id="view"> 
-                    <p:contextMenu for="bscTree" >  
+                    <!--<p:contextMenu for="bscTree" >  
                         <p:menuitem value="#{messages['common.add']}" update=":viewtable:messages" actionListener="#{balancedScorecardHome.redirecToAdd}" icon="ui-icon-plus" /> 
                         <p:menuitem value="#{messages['common.edit']}" update=":viewtable:messages" actionListener="#{balancedScorecardHome.redirecToEdit}" icon="ui-icon-plus" /> 
-                    </p:contextMenu>  
-                    <p:panel id="explorer-panel" header="#{messages['common.explorer']}" toggleable="true">
-                        <p:tree id="bscTree" value="#{balancedScorecardHome.bscNode}" var="node"
+                    </p:contextMenu>  -->
+                    <p:panel id="explorer-panel"  header="#{messages['common.explorer']}" toggleable="true" >
+                        <p:tree id="bscTree"  value="#{balancedScorecardHome.bscNode}" var="node"
                                 selectionMode="single" selection="#{balancedScorecardHome.selectedNode}">  
 
                             <p:ajax event="select" update=":viewtable:messages :viewtable:button-add :viewtable:button-edit :viewtable:detail-panel" listener="#{balancedScorecardHome.onNodeSelect}" /> 
@@ -74,7 +74,7 @@
                                 <h:outputText value="#{node.name}" />  
                             </p:treeNode>
                         </p:tree>
-                    </p:panel>
+                   </p:panel> 
                 </h:form>
 
             </ui:define>
