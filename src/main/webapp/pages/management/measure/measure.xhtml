@@ -21,7 +21,8 @@ limitations under the License.
       xmlns:s="http://jboss.org/seam/faces"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:glue ="http://eqaula.org/jsf/facelets">
+      xmlns:glue ="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml" >
         <f:metadata>
             <f:viewParam name="measureId" value="#{measureHome.measureId}"/>
@@ -62,16 +63,19 @@ limitations under the License.
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{measureHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{measureHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
-                <glue:input id="unit" name="unit" type="text" label="#{messages['common.unit']}" value="#{measureHome.instance.unit}" required="false" inlinehelp="#{messages['common.unit.inlinehelp']}" execute="@this save" render="unit"/>
+                <glue:input id="unit" name="unit" type="text" label="#{messages['common.unit']}" value="#{measureHome.instance.unit}" required="true" inlinehelp="#{messages['common.unit.inlinehelp']}" execute="@this save" render="unit"/>
                 <h:panelGroup layout="block" class="control-group">
-                    <label for="frequency" class="control-label">#{messages['common.frequency']}</label>
+                    <label for="frequency" class="control-label required">#{messages['common.frequency']}</label>
                     <div class="controls">
-                        <p:selectOneMenu id="frequency" value="#{measureHome.instance.frequency}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="false"  var="f"
-                                         rendered="true" label="#{messages['common.frequency']}" filter="true" filterMatchMode="contains">
-                            <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue = ""/>  
-                            <f:selectItems value="#{frequencyService.resultList}" var="f" itemLabel="#{f.name} [#{f.value} - #{f.unitTime.name}]" itemValue="#{parentItem}"/>
+                        <p:selectOneMenu id="frequency" style="float: left" value="#{measureHome.instance.frequency}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" 
+                                          rendered="true" label="#{messages['common.frequency']}" filter="true" filterMatchMode="contains"> 
+                            <f:selectItem  itemLabel = "#{messages['common.choice']}"  />  
+                            <f:selectItems value="#{frequencyListService.resultList}" var="_f" itemLabel="#{_f.name} [#{_f.value} - #{_f.timeUnit.name}]" itemValue="#{_f}"/>
                             <p:ajax event="change" update="@parent " partialSubmit="true"/>
-                        </p:selectOneMenu>                    
+                        </p:selectOneMenu>      
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-block"><br/>#{messages['frequency.inlinehelp']} <ocp:message forId="frequency"/></span>
                     </div>
                 </h:panelGroup>
 

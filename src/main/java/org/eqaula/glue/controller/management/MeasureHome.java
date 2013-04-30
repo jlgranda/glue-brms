@@ -44,7 +44,8 @@ import org.primefaces.context.RequestContext;
  */
 @Named
 @ViewScoped
-public class MeasureHome extends BussinesEntityHome<Measure> implements Serializable{
+public class MeasureHome extends BussinesEntityHome<Measure> implements Serializable {
+
     private static final long serialVersionUID = -6935266135527132362L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(OwnerHome.class);
     @Inject
@@ -53,25 +54,23 @@ public class MeasureHome extends BussinesEntityHome<Measure> implements Serializ
     @Current
     @Inject
     private Profile profile;
-
     private Objetive objetive;
     private Long objetiveId;
     @Inject
     private ObjetiveService objetiveService;
-    
-   
+
     public MeasureHome() {
     }
-    
-    public Long getMeasureId(){
-        return (Long)getId();
+
+    public Long getMeasureId() {
+        return (Long) getId();
     }
-    
-    public void setMeasureId(Long measureId){
+
+    public void setMeasureId(Long measureId) {
         setId(measureId);
     }
-    
-    public String getMeasureName(){
+
+    public String getMeasureName() {
         return getInstance().getName();
     }
 
@@ -85,10 +84,10 @@ public class MeasureHome extends BussinesEntityHome<Measure> implements Serializ
 
     @Transactional
     public Objetive getObjetive() {
-        if(objetive==null){
-            if(objetiveId==null){
-                objetive=null;
-            }else{
+        if (objetive == null) {
+            if (objetiveId == null) {
+                objetive = null;
+            } else {
                 objetive = objetiveService.find(getObjetiveId());
             }
         }
@@ -98,15 +97,14 @@ public class MeasureHome extends BussinesEntityHome<Measure> implements Serializ
     public void setObjetive(Objetive objetive) {
         this.objetive = objetive;
     }
-    
-    
-    
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
             wire();
         }
     }
+
     @TransactionAttribute
     public void wire() {
         getInstance();
@@ -118,7 +116,7 @@ public class MeasureHome extends BussinesEntityHome<Measure> implements Serializ
         objetiveService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
-    
+
     @Override
     protected Measure createInstance() {
         BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Measure.class.getName());
@@ -143,11 +141,11 @@ public class MeasureHome extends BussinesEntityHome<Measure> implements Serializ
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            
+
             create(getInstance());
         }
         //TODO idear una mejor forma de redireccionar
-        if (getObjetive()!= null){
+        if (getObjetive() != null) {
             return getOutcome() + "?balancedScorecardId=" + getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
@@ -183,12 +181,9 @@ public class MeasureHome extends BussinesEntityHome<Measure> implements Serializ
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getObjetive()!= null){
+        if (getObjetive() != null) {
             return getOutcome() + "?balancedScorecardId=" + getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-
-   
-
 }

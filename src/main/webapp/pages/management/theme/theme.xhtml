@@ -63,7 +63,8 @@ limitations under the License.
                     <label for="owner" class="control-label required">#{messages['module.owner']}</label>
                     <div class="controls">
 
-                        <p:selectOneMenu id="owner" value="#{themeHome.instance.owner}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['common.property.required.help']}" rendered="true" label="#{messages['module.owner']}" filter="true" filterMatchMode="contains">
+                        <p:selectOneMenu id="owner" value="#{themeHome.instance.owner}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" 
+                                         requiredMessage="#{messages['common.property.required.help']}" rendered="true" label="#{messages['module.owner']}" filter="true" filterMatchMode="contains">
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
                             <f:selectItems value="#{themeHome.instance.id==null ? themeHome.perspective.balancedScorecard.organization.owners : themeHome.instance.perspective.balancedScorecard.organization.owners}" var="_o" itemLabel="#{_o.name}" itemValue="#{_o}"/>                          
                             <p:ajax event="change" update="@parent " partialSubmit="true"/>

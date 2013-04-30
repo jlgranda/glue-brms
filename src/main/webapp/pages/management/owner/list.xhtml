@@ -57,38 +57,42 @@ limitations under the License.
         </div>             
     </ui:define>
     <ui:define name="content">
-     <h:form id="form">
+        <h:form id="form">
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
             <div class="form-actions" style="padding-left: 20px">
-                <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="owner" styleClass="btn btn-primary">
-                    <f:param name="ownerId"></f:param>
-                    <f:param name="organizationId" value="#{ownerListService.organizationId}"></f:param>
-                    <f:param name="outcome" value="list"></f:param>
-                </h:link>                
+
+<!--<h:link value="#{messages['common.add']}" rendered="#{true}" outcome="owner" styleClass="btn btn-primary">
+    <f:param name="ownerId"></f:param>
+    <f:param name="organizationId" value="#{ownerListService.organizationId}"></f:param>
+    <f:param name="outcome" value="list"></f:param>
+</h:link>                
                 #{' '}
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="true" outcome="owner" styleClass="btn" 
                         disabled="#{empty ownerListService.selectedOwner.id}">
                     <f:param name="ownerId" value="#{ownerListService.selectedOwner.id}"></f:param>
                     <f:param name="organizationId" value="#{ownerListService.organizationId}"></f:param>
                     <f:param name="outcome" value="list"></f:param>
-                </h:link> 
+                </h:link> -->
+
+                <p:commandLink id="owner-add-button" value="#{messages['common.add']}" action="#{ownerHome.createNewOwner()}" oncomplete="ownerEditDlg.show();"
+                               styleClass="btn btn-primary"
+                               update=":owner-edit-dialog">
+                </p:commandLink>
+
+                #{' '}
+
+                <p:commandLink id="owner-edit-button"  value="#{messages['common.edit']}" oncomplete="ownerEditDlg.show();"  action="#{ownerHome.editOwner(ownerListService.selectedOwner.id)}" 
+                               styleClass="btn btn-secondary"
+                               update=":owner-edit-dialog"
+                               disabled="#{empty ownerListService.selectedOwner.id}" 
+                               > 
+                </p:commandLink>
 
                 #{' '}
                 <h:link id="button-admin" value="#{messages['module.diagnose']}" rendered="true" outcome="/pages/management/diagnostic/list" styleClass="btn" 
                         disabled="#{empty ownerListService.selectedOwner.id}">
                     <f:param name="ownerId" value="#{ownerListService.selectedOwner.id}"></f:param>
                 </h:link> 
-                #{' '}
-                <p:commandLink id="owner-add-button" style="padding-top: 7px; padding-bottom: 10px;" value="#{messages['common.add']}" action="#{ownerHome.createNewOwner()}" oncomplete="ownerEditDlg.show();"
-                               styleClass="btn-primary btn-small fr"
-                               update=":owner-edit-dialog:">
-                </p:commandLink>
-
-                <p:commandLink id="owner-edit-button" style="padding-top: 7px; padding-bottom: 10px;" value="#{messages['common.edit']}" oncomplete="ownerEditDlg.show();"  action="#{ownerHome.editOwner(ownerListService.selectedOwner.id)}" 
-                               styleClass="btn-primary btn-small fr"
-                               update=":owner-edit-dialog:"
-                               > <!-- disabled="#{empty ownerListService.selectedOwner.id}" -->
-                </p:commandLink>
             </div>
             <p:dataTable var="_owner" value="#{ownerListService}"
                          paginator="true" rows="20"
@@ -100,13 +104,13 @@ limitations under the License.
                          selection="#{ownerListService.selectedOwner}"
                          rendered="true"
                          selectionMode="single"
-                         
+
                          >
 
                 <p:ajax event="rowSelect" listener="#{ownerListService.onRowSelect}"   
-                       update=":form:button-edit: :form:owner-edit-button: :form:button-admin: :form:messages:"/>                 
+                        update=":form:owner-edit-button: :form:button-admin: :form:messages:"/>                 
                 <p:ajax event="rowUnselect" listener="#{ownerListService.onRowUnselect}"
-                       update=":form:button-edit: :form:owner-edit-button: :form:messages:"/>
+                        update=":form:owner-edit-button: :form:messages:"/>
 
                 <p:column headerText="#{messages['common.name']}" sortBy="#{_owner.name}">
                     <h:outputText value="#{_owner.name}" />
@@ -129,15 +133,39 @@ limitations under the License.
                     <p:commandButton id="save" value="#{messages['common.done']}" 
                                      action="#{ownerHome.saveOwnerDialog()}"
                                      oncomplete="ownerEditDlg.hide();" 
-                                     update=":form:"
+                                     update=":form"
                                      styleClass="btn btn-primary"/>
                     <!-- &nbsp;-->
+                    #{'  '}
+                    <p:commandButton type="button" value="#{messages['common.delete']}" 
+                                     styleClass="btn-danger"
+                                     onclick="deletedDlg.show()"
+                                     immediate="true"
+                                     update=":cancel-dialog"
+                                     rendered="#{ownerHome.managed}"
+                                     />
+                    #{'  '}
                     <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
                                      oncomplete="ownerEditDlg.hide();"  
                                      ajax="true" process="@this" styleClass="btn"/>
 
                 </div>  
             </h:form>
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">   
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                     action="#{ownerHome.deleteOwner()}"                                         
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;"
+                                     update=":form">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
         </p:dialog>
     </ui:define>
 </ui:composition>

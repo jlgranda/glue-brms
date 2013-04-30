@@ -198,6 +198,9 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
 
+        if(getOutcome()==null){
+            return null;
+        }
         if (getOrganizationId() != null) {
             return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
@@ -416,5 +419,22 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         RuleRunner runner = new RuleRunner();
         runner.runRules(method);
         return method;
+    }
+    
+    public void createNewBalancedScoreCard() {
+        setId(null);
+        setInstance(null);
+        load();
+    }
+
+    public void editBalancedScoreCard(Long id) {
+        setId(id);        
+        load();        
+    }
+     
+    @Transactional
+    public String saveBalancedScoreCardDialog() {
+        saveBalancedScorecard();
+        return null;
     }
 }

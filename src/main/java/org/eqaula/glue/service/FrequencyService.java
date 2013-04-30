@@ -46,7 +46,7 @@ public class FrequencyService extends PersistenceUtil<Frequency>{
         return (Frequency) findById(Frequency.class, id);
     }
 
-    public List<Frequency> getFrequencies(final int limit, final int offset) {
+    public List<Frequency> getFrequencies() {
         return findAll(Frequency.class);
     }
 
