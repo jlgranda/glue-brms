@@ -23,6 +23,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eqaula.glue.model.PersistentObject;
 import org.eqaula.glue.util.TimeUnit;
 
@@ -32,10 +34,10 @@ import org.eqaula.glue.util.TimeUnit;
  */
 @Entity
 @Table(name = "Frequency")
-public class Frequency extends PersistentObject<Frequency>  implements Serializable {
+public class Frequency extends PersistentObject<Frequency> implements Serializable {
+
     private static final long serialVersionUID = -6323079576938239690L;
     private Long value;
-    
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TimeUnit timeUnit;
@@ -58,9 +60,39 @@ public class Frequency extends PersistentObject<Frequency>  implements Serializa
     public void setTimeUnit(TimeUnit timeUnit) {
         this.timeUnit = timeUnit;
     }
-    
+
     public List<TimeUnit> getTimeUnits() {
         return Arrays.asList(TimeUnit.values());
     }
 
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+                // if deriving: appendSuper(super.hashCode()).
+                append(getName()).
+                toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Frequency other = (Frequency) obj;
+        return new EqualsBuilder().
+                // if deriving: appendSuper(super.equals(obj)).
+                append(getName(), other.getName()).
+                isEquals();
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

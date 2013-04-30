@@ -62,10 +62,8 @@ public class FrequencyListService extends LazyDataModel<Frequency> implements Se
     }
 
     public List<Frequency> getResultList() {
-        log.info("load BussinesEntityType");
         if (resultList.isEmpty()) {
-            resultList = frequencyService.getFrequencies(this.getPageSize(), firstResult);
-            log.info("eqaula --> resultlist " + resultList);
+            resultList = frequencyService.getFrequencies();
         }
         return resultList;
     }
