@@ -7,7 +7,14 @@
     <div>
         <ul class="nav nav-tabs nav-stacked">
             <li>
-                <h:link outcome="/pages/management/owner/list.xhtml"
+                <h:link outcome="/pages/management/organization/home"
+                        title="#{messages['common.dashboard']}"
+                        value="#{messages['common.dashboard']}">
+                    <f:param name="organizationId" value="#{organizationHome.instance.id}" />
+                </h:link>
+            </li>
+            <li>
+                <h:link outcome="/pages/management/organization/philosophical"
                         title="#{messages['module.management.philosophical']}"
                         value="#{messages['module.management.philosophical']}">
                     <f:param name="organizationId" value="#{organizationHome.instance.id}" />

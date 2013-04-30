@@ -70,7 +70,7 @@ limitations under the License.
                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
                                 <f:selectItems value="#{targetHome.instance.targetTypes}" var="_t" itemLabel="#{messages[_t.name]}" itemValue="#{_t}"/>                          
                                 <p:ajax event="change" update="@parent " partialSubmit="true"/>
-                            </p:selectOneMenu>                     
+                            </p:selectOneMenu>                 <h:link    
                         </div>
                     </h:panelGroup> 
                     <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{targetHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>

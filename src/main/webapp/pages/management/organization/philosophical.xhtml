@@ -63,7 +63,66 @@
         </ui:define>
 
         <ui:define name="content">
-            <h:form id="organization-home-form">
+            <h:form id="organization-philosophical-form">
+                <c:forEach items="#{ui.getProperties(organizationHome.instance)}" var="p" >
+                    <p:panel styleClass="form-horizontal" header="#{p.label}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{p.name}">
+                        <f:facet name="header">
+                            <h5>#{p.label}
+                                <h:link outcome="#{p.customForm != null ? p.customForm : '/pages/profile/data/structure'}" styleClass="btn" value="#{messages['common.edit']}" 
+                                        rendered="#{organizationHome.editionEnabled and p.type == 'org.eqaula.glue.model.Structure'}">
+                                    <f:param name="organizationId" value="#{organizationHome.instance.id}"/>
+                                    <f:param name="structureName" value="#{p.name}"/>
+                                </h:link>
+                                <h:link outcome="/pages/profile/data/group" styleClass="btn" value="#{messages['common.edit']}" 
+                                        rendered="#{organizationHome.editionEnabled and p.type == 'org.eqaula.glue.model.Group'}">
+                                    <f:param name="organizationId" value="#{organizationHome.instance.id}"/>
+                                    <f:param name="groupId" value="#{ui.getGroup(organizationHome.instance, p).getId()}"/>
+                                </h:link>
+                                <p:commandLink id="group-edit-button" 
+                                               value="#{messages['common.add']}"  oncomplete="groupEditDlg.show();" immediate="true"
+                                               styleClass="btn btn-mini btn-primary"
+                                               style="color:#fff; font-size: 0.75em;"
+                                               update=":organization-philosophical-form">
+                                </p:commandLink>
+                            </h5>
+                        </f:facet>
+                        <c:choose>                        
+                            <c:when test="#{p.type == 'org.eqaula.glue.model.Structure'}">
+                                <!-- Mostrar los datos de estructure-->
+                                <h:panelGroup id="attributes" layout="block" class="control-group">
+                                    <ui:repeat value="#{organizationHome.instance.findBussinesEntityAttribute(p.name)}" var="a" varStatus="status">
+                                        <h:panelGroup layout="block" class="form" rendered="#{a.property.survey}">
+                                            <span style="font-weight: bold; color: rgb(105,105,105)" class="#{(not empty a.property.required and a.property.required) ? 'required' : 'required'}">#{a.property.label}</span>
+                                            <div>
+                                                <h:outputText value="#{a.value}"/>
+                                            </div>
+                                            <br/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block" class=" control-group" rendered="#{not a.property.survey}">
+                                            <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'control-label required' : 'control-label'}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</strong></label>
+                                            <div class="output">                                     
+                                                <h:outputText value="#{a.value}"/>
+                                            </div>
+                                        </h:panelGroup>  
+                                    </ui:repeat>
+                                </h:panelGroup>
+                            </c:when>
+                            <c:when test="#{p.type == 'org.eqaula.glue.model.Group'}">
+                                <p:dataTable id="groups" var="m" value="#{ui.getGroup(organizationHome.instance, p).findOtherMembers(organizationHome.instance)}" 
+                                             editable="false" 
+                                             emptyMessage="#{messages['common.emptyList']}">  
+
+                                    <p:columns value="#{ui.findColumnsTemplate(ui.getGroup(organizationHome.instance, p))}" var="column" columnIndexVar="colIndex">  
+                                        <f:facet name="header">  
+                                            #{column.header}  
+                                        </f:facet>  
+                                        #{m.findAttributeValue(column.property)}  
+                                    </p:columns>
+                                </p:dataTable>
+                            </c:when>
+                        </c:choose>
+                    </p:panel>
+                </c:forEach>
                 <p:growl/>
             </h:form>
             <p:dialog id="organization-edit-dialog" header="#{messages['common.add']} #{messages['module.organization']}" styleClass="atf-header" widgetVar="organizationEditDlg" appendToBody="true" closeOnEscape="true">
