@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -44,7 +45,7 @@ import org.primefaces.model.SortOrder;
  * @author dianita
  */
 @Named
-@RequestScoped
+@ViewScoped
 public class BalancedScorecardListService extends ListService<BalancedScorecard> {
 
     private static final long serialVersionUID = 1229207884508672223L;

@@ -133,7 +133,6 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         }
         //TODO idear una mejor forma de redireccionar
         if (getOutcome() == null) {
-
             return null;
         }
         if (getInstance().getOrganization() != null) {
@@ -182,8 +181,11 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-
-        if (band) {
+        
+        if(getOutcome()==null){
+            return "/pages/management/owner/list.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+        }
+        if (band) {            
             return null;
         }
         if (getInstance().getOrganization() != null) {
