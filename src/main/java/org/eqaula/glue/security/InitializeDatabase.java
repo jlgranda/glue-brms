@@ -283,9 +283,9 @@ public class InitializeDatabase {
         
         //Estructuras para organización
         validateStructureForOrganization();
-        validateStructureFor("Mission");
-        validateStructureFor("Visión");
-        validateStructureFor("Valores");
+        validateStructureFor("Mission", "Misión");
+        validateStructureFor("Vision", "Visión");
+        validateStructureFor("Principle", "Valor institucional");
     }
 
     private void validateStructureForProfile() {
@@ -359,7 +359,6 @@ public class InitializeDatabase {
 
             //Lista de atributos de Perfiles
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildProperty("email", "java.lang.String", null, false, "Misión", "Ingrese la misión de la Organización", true, 0L));
             attributes.add(buildGroupTypeProperty("Mission", "Misión", false, null, 1L, 1L, "Misión de la organización", 1L));
             attributes.add(buildGroupTypeProperty("Vision", "Visión", false, null, 1L, 1L, "Visión de la organización", 2L));
             attributes.add(buildGroupTypeProperty("Principle", "Valores", false, null, 1L, 1L, "Valores de la organización", 3L));
@@ -1161,7 +1160,7 @@ public class InitializeDatabase {
     /**
      * Estructuras para organización
      */
-    private void validateStructureFor(String name) {
+    private void validateStructureFor(String name, String label) {
         BussinesEntityType bussinesEntityType = null;
         try {
             TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
@@ -1185,8 +1184,8 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
 
-            attributes.add(buildProperty("summary", "java.lang.String", null, false, "Código", "Código de misión", 1L));
-            attributes.add(buildProperty("summary", "java.lang.MultiLineString", null, false, "Misión", "Detalle de la misión institucional", 1L));
+            attributes.add(buildProperty("serial", "java.lang.String", null, false, "Código", "Código de " + label, true, 1L));
+            attributes.add(buildProperty("summary", "java.lang.MultiLineString", null, false, label, "Descripción del item de " + label, true, 2L));
 
             //Agregar atributos
             structure.setProperties(attributes);
