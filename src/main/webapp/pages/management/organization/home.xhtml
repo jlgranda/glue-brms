@@ -77,53 +77,7 @@
         </ui:define>
 
         <ui:define name="sidebar">
-            <ul class="nav nav-tabs nav-stacked">
-                <li>
-                    <h:link outcome="/pages/management/owner/list.xhtml"
-                            title="#{messages['module.management.philosophical']}"
-                            value="#{messages['module.management.philosophical']}">
-                        <f:param name="organizationId" value="#{organizationHome.instance.id}" />
-                    </h:link>
-                </li>
-                <li>
-                    <h:link outcome="/pages/management/owner/list.xhtml"
-                            title="#{messages['module.management.analytical']}"
-                            value="#{messages['module.management.analytical']}">
-                        <f:param name="organizationId" value="#{organizationHome.instance.id}" />
-                    </h:link>
-                </li>
-                <li>
-                    <h:link outcome="/pages/management/organization/viewTreeThemes.xhtml"
-                            value="#{messages['module.management.philosophical.processmap']}"
-                            title="#{messages['module.management.philosophical.processmap']}">
-                        <f:param name="organizationId" value="#{organizationHome.instance.id}" />
-                    </h:link>
-                </li>
-                <li>
-
-                    <h:link outcome="/pages/management/balancedscorecard/list.xhtml"
-                            value="#{messages['module.management.balancedccorecard']}"
-                            title="#{messages['module.management.balancedccorecard']}">
-                        <f:param name="organizationId" value="#{organizationHome.instance.id}" />
-                    </h:link>
-                </li>
-                <li>
-                    <!-- Hidden modules -->
-                    <h:link outcome="/pages/accounting/home.xhtml"
-                            value="#{messages['module.accounting']}"
-                            title="#{messages['module.accounting']}"
-                            rendered="false">
-                        <f:param name="organizationId" value="#{organizationHome.instance.id}" />
-                    </h:link>
-                </li>
-                <li>
-                    <h:link outcome="/pages/stocklist/warehouse/list.xhtml"
-                            title="#{messages['module.stocklist']}"
-                            rendered="false">
-                        <f:param name="organizationId" value="#{organizationHome.instance.id}" />
-                    </h:link>
-                </li>
-            </ul>
+             <ui:include src="/pages/management/navigator.xhtml" />
         </ui:define>
     </ui:composition>
 </html>
