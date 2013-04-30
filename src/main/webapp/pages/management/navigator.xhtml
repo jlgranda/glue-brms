@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+    <div>
+        <ul class="nav nav-tabs nav-stacked">
+            <li>
+                <h:link outcome="/pages/management/owner/list.xhtml"
+                        title="#{messages['module.management.philosophical']}"
+                        value="#{messages['module.management.philosophical']}">
+                    <f:param name="organizationId" value="#{organizationHome.instance.id}" />
+                </h:link>
+            </li>
+            <li>
+                <h:link outcome="/pages/management/owner/list.xhtml"
+                        title="#{messages['module.management.analytical']}"
+                        value="#{messages['module.management.analytical']}">
+                    <f:param name="organizationId" value="#{organizationHome.instance.id}" />
+                </h:link>
+            </li>
+            <li>
+                <h:link outcome="/pages/management/organization/viewTreeThemes.xhtml"
+                        value="#{messages['module.management.philosophical.processmap']}"
+                        title="#{messages['module.management.philosophical.processmap']}">
+                    <f:param name="organizationId" value="#{organizationHome.instance.id}" />
+                </h:link>
+            </li>
+            <li>
+
+                <h:link outcome="/pages/management/balancedscorecard/list.xhtml"
+                        value="#{messages['module.management.balancedccorecard']}"
+                        title="#{messages['module.management.balancedccorecard']}">
+                    <f:param name="organizationId" value="#{organizationHome.instance.id}" />
+                </h:link>
+            </li>
+            <li>
+                <!-- Hidden modules -->
+                <h:link outcome="/pages/accounting/home.xhtml"
+                        value="#{messages['module.accounting']}"
+                        title="#{messages['module.accounting']}"
+                        rendered="false">
+                    <f:param name="organizationId" value="#{organizationHome.instance.id}" />
+                </h:link>
+            </li>
+            <li>
+                <h:link outcome="/pages/stocklist/warehouse/list.xhtml"
+                        title="#{messages['module.stocklist']}"
+                        rendered="false">
+                    <f:param name="organizationId" value="#{organizationHome.instance.id}" />
+                </h:link>
+            </li>
+        </ul>
+    </div>
+</ui:composition>
