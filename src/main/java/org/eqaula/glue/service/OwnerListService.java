@@ -20,16 +20,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.ejb.TransactionAttribute;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import org.eqaula.glue.cdi.Web;
-import org.eqaula.glue.controller.management.OwnerHome;
-import org.eqaula.glue.model.BussinesEntity_;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.management.Owner_;
 import org.eqaula.glue.util.QueryData;
@@ -44,7 +39,7 @@ import org.primefaces.model.SortOrder;
  * @author dianita
  */
 @Named
-@RequestScoped
+@ViewScoped
 public class OwnerListService extends ListService<Owner> {
 
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(OwnerListService.class);

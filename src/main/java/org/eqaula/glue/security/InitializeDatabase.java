@@ -57,7 +57,6 @@ import org.eqaula.glue.model.accounting.Posting;
 import org.eqaula.glue.model.config.Setting;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
-import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.model.security.IdentityObjectCredentialType;
 import org.eqaula.glue.model.security.IdentityObjectType;
@@ -275,11 +274,18 @@ public class InitializeDatabase {
         validateStructureForTasks();
         validateStructureForCapacitacion();
         validateStructureForTrayectoriaLaboral();
-        validateStructureForOrganization();
+        
+        //Other bussines entities
         validateStructureForOwner();
         validateDataForAccont();
         validateStructureForWareHouse();
         validateStructureForPosting();
+        
+        //Estructuras para organización
+        validateStructureForOrganization();
+        validateStructureFor("Mission");
+        validateStructureFor("Visión");
+        validateStructureFor("Valores");
     }
 
     private void validateStructureForProfile() {
@@ -353,41 +359,18 @@ public class InitializeDatabase {
 
             //Lista de atributos de Perfiles
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildProperty("mision", "java.lang.MultiLineString", null, false, "Misión", "Ingrese la misión de la Organización", true, 0L));
-            attributes.add(buildProperty("vision", "java.lang.MultiLineString", null, false, "Visión", "Ingrese la vision de la Organización", true, 1L));
+            attributes.add(buildProperty("email", "java.lang.String", null, false, "Misión", "Ingrese la misión de la Organización", true, 0L));
+            attributes.add(buildGroupTypeProperty("Mission", "Misión", false, null, 1L, 1L, "Misión de la organización", 1L));
+            attributes.add(buildGroupTypeProperty("Vision", "Visión", false, null, 1L, 1L, "Visión de la organización", 2L));
+            attributes.add(buildGroupTypeProperty("Principle", "Valores", false, null, 1L, 1L, "Valores de la organización", 3L));
+            /*attributes.add(buildProperty("mision", "java.lang.MultiLineString", null, false, "Misión", "Ingrese la misión de la Organización", true, 0L));
+            attributes.add(buildProperty("vision", "java.lang.MultiLineString", null, false, "Visión", "Ingrese la vision de la Organización", true, 1L));*/
 
             structure.setProperties(attributes);
             bussinesEntityType.addStructure(structure);
 
             entityManager.persist(bussinesEntityType);
 
-            /*Organization org = new Organization();
-             org.setCreatedOn(now);
-             org.setLastUpdate(now);
-             org.setName("UNL");
-             org.setCode("001");
-             org.setType(bussinesEntityType);
-             //org.buildAttributes(bussinesEntityService);
-
-             Theme t = new Theme();
-             t.setCreatedOn(now);
-             t.setLastUpdate(now);
-             t.setName("tema 1");
-             t.setCode("t01");
-            
-             Owner o = new Owner();
-             o.setCreatedOn(now);
-             o.setLastUpdate(now);
-             o.setName("Administrador 1");
-             o.setCode("Admin01");
-             o.addTheme(t);
-            
-             org.addOwner(o);
-             org.setDescription("Universiad");
-            
-             entityManager.persist(t);
-             entityManager.persist(o);
-             entityManager.persist(org);*/
             entityManager.flush();
         }
     }
@@ -1174,6 +1157,48 @@ public class InitializeDatabase {
         property.setSurvey(true);
         return property;
     }
+    
+    /**
+     * Estructuras para organización
+     */
+    private void validateStructureFor(String name) {
+        BussinesEntityType bussinesEntityType = null;
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", name);
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(name);
+
+            //Agrupaciones de propiedades
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = null;
+            structure = new Structure();
+            structure.setName("Data for " + name);
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+
+            //Lista de atributos de entidad de negocios
+            List<Property> attributes = new ArrayList<Property>();
+
+            attributes.add(buildProperty("summary", "java.lang.String", null, false, "Código", "Código de misión", 1L));
+            attributes.add(buildProperty("summary", "java.lang.MultiLineString", null, false, "Misión", "Detalle de la misión institucional", 1L));
+
+            //Agregar atributos
+            structure.setProperties(attributes);
+
+            bussinesEntityType.addStructure(structure);
+
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+        }
+
+    }
+    
     private static final String[][] DATA = {
         {"0", "PLAN DE CUENTAS SEGUN NIIF COMPLETAS Y NIIF PARA PYMES", "SCHEMA", "Plan de cuentas según NIIF Completas y NIIF para PYMES"},
         {"1", "ACTIVO", "GENDER", "Conforman el estado de situación financiera, de flujo de efectivo y de evolución patrimonio"},
