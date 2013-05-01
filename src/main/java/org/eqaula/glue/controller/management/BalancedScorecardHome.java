@@ -75,6 +75,8 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     private Profile profile;
     private TreeNode bscNode;
     private TreeNode selectedNode;
+    private TreeNode rootNode;
+    
     @Inject
     private NavigationHandler navigation;
     @Inject
@@ -119,6 +121,19 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     public void setBscNode(TreeNode bscNode) {
         this.bscNode = bscNode;
     }
+
+    public TreeNode getRootNode() {
+        if(rootNode==null){
+            buildTree();
+        }
+        return rootNode;
+    }
+
+    public void setRootNode(TreeNode rootNode) {
+        this.rootNode = rootNode;
+    }
+    
+    
 
     public TreeNode getSelectedNode() {
         return selectedNode;
@@ -262,7 +277,8 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     }
 
     public TreeNode buildTree() {
-        bscNode = new DefaultTreeNode("bsc", getInstance(), null);
+        rootNode = new DefaultTreeNode("rootNode", "", null);
+        bscNode = new DefaultTreeNode("bsc", getInstance(), rootNode);
         TreeNode perspectiveNode = null;
         TreeNode themeNode = null;
         TreeNode objetiveNode = null;
@@ -292,7 +308,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             }
         }
 
-        return bscNode;
+        return rootNode;
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
