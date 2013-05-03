@@ -76,7 +76,6 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     private TreeNode bscNode;
     private TreeNode selectedNode;
     private TreeNode rootNode;
-    
     @Inject
     private NavigationHandler navigation;
     @Inject
@@ -123,7 +122,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     }
 
     public TreeNode getRootNode() {
-        if(rootNode==null){
+        if (rootNode == null) {
             buildTree();
         }
         return rootNode;
@@ -132,8 +131,6 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     public void setRootNode(TreeNode rootNode) {
         this.rootNode = rootNode;
     }
-    
-    
 
     public TreeNode getSelectedNode() {
         return selectedNode;
@@ -213,7 +210,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
 
-        if(getOutcome()==null){
+        if (getOutcome() == null) {
             return null;
         }
         if (getOrganizationId() != null) {
@@ -315,33 +312,53 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), ((BussinesEntity) event.getTreeNode().getData()).getName());
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+    @Inject
+    private ThemeHome themeHome;
+    @Inject
+    private PerspectiveHome perspectiveHome;
+    @Inject
+    private ObjetiveHome objetiveHome;
+    @Inject
+    private MeasureHome measureHome;
 
     public void redirecToAdd() {
         StringBuilder outcomeBuilder = new StringBuilder();
         BussinesEntity bussinesEntity = null;
         if (selectedNode != null) {
             bussinesEntity = (BussinesEntity) selectedNode.getData();
-
             if ("bsc".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/perspective/perspective.xhtml?");
-                outcomeBuilder.append("balancedScorecardId=").append(getBalancedScorecardId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                perspectiveHome.setBalancedScorecardId(getBalancedScorecardId());
+                perspectiveHome.createNewPerspective();
+                RequestContext.getCurrentInstance().execute("perspectiveEditDlg.show()");
+                //dialogBean.showDialog();
+                //outcomeBuilder.append("/pages/management/perspective/perspective.xhtml?");
+                //outcomeBuilder.append("balancedScorecardId=").append(getBalancedScorecardId());
+                //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
+                //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("perspective".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/theme/theme.xhtml?");
-                outcomeBuilder.append("&perspectiveId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                themeHome.setPerspectiveId(bussinesEntity.getId());
+                themeHome.createNewTheme();
+                RequestContext.getCurrentInstance().execute("themeEditDlg.show()");
+                //outcomeBuilder.append("/pages/management/theme/theme.xhtml?");
+                //outcomeBuilder.append("&perspectiveId=").append(bussinesEntity.getId());
+                //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
+                //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("theme".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
-                outcomeBuilder.append("&themeId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                objetiveHome.setThemeId(bussinesEntity.getId());
+                objetiveHome.createNewObjetive();
+                RequestContext.getCurrentInstance().execute("objetiveEditDlg.show()");
+                //outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
+                //outcomeBuilder.append("&themeId=").append(bussinesEntity.getId());
+                //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
+                //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("objetive".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/measure/measure.xhtml?");
-                outcomeBuilder.append("&objetiveId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                measureHome.setObjetiveId(bussinesEntity.getId());
+                measureHome.createNewMeasure();
+                RequestContext.getCurrentInstance().execute("measureEditDlg.show()");
+                //outcomeBuilder.append("/pages/management/measure/measure.xhtml?");
+                //outcomeBuilder.append("&objetiveId=").append(bussinesEntity.getId());
+                //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
+                //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("measure".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/targets/target.xhtml?");
                 outcomeBuilder.append("&measureId=").append(bussinesEntity.getId());
@@ -370,29 +387,37 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 FacesContext.getCurrentInstance().addMessage(null, messag);
 
             } else if ("perspective".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/perspective/perspective.xhtml?");
-                outcomeBuilder.append("&balancedscorecardId=").append(getBalancedScorecardId());
-                outcomeBuilder.append("&perspectiveId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                perspectiveHome.editPerspective(bussinesEntity.getId());
+                RequestContext.getCurrentInstance().execute("perspectiveEditDlg.show()");
+                //outcomeBuilder.append("/pages/management/perspective/perspective.xhtml");
+                //outcomeBuilder.append("&balancedscorecardId=").append(getBalancedScorecardId());
+                //outcomeBuilder.append("&perspectiveId=").append(bussinesEntity.getId());
+                //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
+                //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("theme".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/theme/theme.xhtml?");
-                outcomeBuilder.append("&perspectiveId=").append(((Theme) bussinesEntity).getPerspective().getId());
-                outcomeBuilder.append("&themeId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                themeHome.editTheme(bussinesEntity.getId());
+                RequestContext.getCurrentInstance().execute("themeEditDlg.show()");
+                //outcomeBuilder.append("/pages/management/theme/theme.xhtml?");
+                //outcomeBuilder.append("&perspectiveId=").append(((Theme) bussinesEntity).getPerspective().getId());
+                //outcomeBuilder.append("&themeId=").append(bussinesEntity.getId());
+                //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
+                //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("objetive".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
-                outcomeBuilder.append("&objetiveId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&themeId=").append(((Objetive) bussinesEntity).getTheme().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                objetiveHome.editObjetive(bussinesEntity.getId());
+                RequestContext.getCurrentInstance().execute("objetiveEditDlg.show()");
+                //outcomeBuilder.append("/pages/management/objetive/objetive.xhtml?");
+                //outcomeBuilder.append("&objetiveId=").append(bussinesEntity.getId());
+                //outcomeBuilder.append("&themeId=").append(((Objetive) bussinesEntity).getTheme().getId());
+                //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
+                //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("measure".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/measure/measure.xhtml?");
-                outcomeBuilder.append("&measureId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&objetiveId=").append(((Measure) bussinesEntity).getObjetive().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                measureHome.editMeasure(bussinesEntity.getId());
+                RequestContext.getCurrentInstance().execute("measureEditDlg.show()");
+                //outcomeBuilder.append("/pages/management/measure/measure.xhtml?");
+                //outcomeBuilder.append("&measureId=").append(bussinesEntity.getId());
+                //outcomeBuilder.append("&objetiveId=").append(((Measure) bussinesEntity).getObjetive().getId());
+                //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
+                //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("target".equals(selectedNode.getType())) {
                 outcomeBuilder.append("/pages/management/targets/target.xhtml?");
                 outcomeBuilder.append("&targetId=").append(bussinesEntity.getId());
@@ -436,7 +461,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         runner.runRules(method);
         return method;
     }
-    
+
     public void createNewBalancedScoreCard() {
         setId(null);
         setInstance(null);
@@ -444,10 +469,10 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     }
 
     public void editBalancedScoreCard(Long id) {
-        setId(id);        
-        load();        
+        setId(id);
+        load();
     }
-     
+
     @Transactional
     public String saveBalancedScoreCardDialog() {
         saveBalancedScorecard();

@@ -145,7 +145,7 @@ limitations under the License.
                             <h:outputText value="#{_initiative.resource.name}"/>
                         </p:column>
                         <p:column headerText="#{messages['common.edit']}" style="width:4%">
-                            <p:commandLink id="initiative-edit-button" value="#{messages['common.edit']}" action="#{targetHome.wireInitiative(_initiative)}" oncomplete="methodEditDlg.show();" immediate="true"
+                            <p:commandLink id="initiative-edit-button" value="#{messages['common.edit']}" action="#{targetHome.wireInitiative(_initiative)}" oncomplete="initiativeEditDlg.show();" immediate="true"
                                            styleClass="btn btn-mini" style="font-size: 0.75em;"
                                            update=":initiative-edit-dialog">
                             </p:commandLink>
@@ -260,20 +260,30 @@ limitations under the License.
                     <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{targetHome.selectedInitiative.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
                     <glue:input id="startDate" name="startDate" type="calendar" label="#{messages['common.startDate']}" value="#{targetHome.selectedInitiative.startDate}" required="true" inlinehelp="#{messages['common.startDate.inlinehelp']}" execute="@this save" render="startDate" />
                     <glue:input id="endDate" name="endDate" type="calendar" label="#{messages['common.endDate']}" value="#{targetHome.selectedInitiative.endDate}" required="true" inlinehelp="#{messages['common.endDate.inlinehelp']}" execute="@this save" render="endDate" />
-                    <h:panelGroup layout="block" class="control-group">
+                    <h:panelGroup id="combo" layout="block" class="control-group">
                         <label for="resource" class="control-label">#{messages['module.resource']}</label>
                         <div class="controls">
-                            <p:selectOneMenu id="resource" style="float: left" value="#{targetHome.selectedInitiative.resource}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.resource']}" rendered="true" label="#{messages['module.resource']}" filter="true" filterMatchMode="contains">
+                            <p:selectOneMenu id="resource" style="float: left" value="#{targetHome.selectedInitiative.resource}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="false" requiredMessage="#{messages['required.resource']}" rendered="true" label="#{messages['module.resource']}" filter="true" filterMatchMode="contains">
                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
                                 <f:selectItems value="#{resourceListService.resultList}" var="_r" itemLabel="#{_r.name}" itemValue="#{_r}"/>                          
                                 <p:ajax event="change" update="@parent " partialSubmit="true"/>
                             </p:selectOneMenu>
+
+                            <p:commandLink id="button-add" update=":resource-edit-dialog" 
+                                           styleClass="btn" onclick="resourceEditDlg.show()"
+                                           actionListener="#{resourceHome.createNewResource}">
+                                <i class="icon-plus"></i>
+                            </p:commandLink> 
                         </div>
                     </h:panelGroup>
                     <div class="form-actions">
-                        <p:commandButton id="initiative-save" value="#{messages['common.done']}" update=":target-form:initiative-panel" 
+                        <p:commandButton id="initiative-save" value="#{messages['common.done']}"
+                                         type="submit" 
+                                         actionListener="#{targetHome.addInitiative()}"
+                                         update=":target-form:initiative-panel" 
                                          onsuccess="if (#{not facesContext.validationFailed}) initiativeEditDlg.hide();"
-                                         ajax="true" process="@this" styleClass="btn btn-primary"/>
+                                         ajax="true" process="@this" styleClass="btn btn-primary"
+                                         immediate="false"/>
                         <!-- &nbsp;-->
                         <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="initiativeDeletedDlg.show();" immediate="true"
                                          update=":initiative-cancel-delete-dialog" rendered="#{targetHome.selectedInitiative.target != nul}">                        
@@ -300,6 +310,29 @@ limitations under the License.
                                      style="margin-top:10px;"/>  
                 </h:form>
             </p:dialog> 
+
+            <p:dialog id="resource-edit-dialog" header="#{messages['common.add']} #{messages['module.resource']}" styleClass="atf-header" widgetVar="resourceEditDlg" appendToBody="true" closeOnEscape="true">
+                <h:form  id="form-resource" acceptcharset="UTF-8" class="form-horizontal" >
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{resourceHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                    <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{resourceHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+                    <glue:input id="amount" name="amount" type="decimal" label="#{messages['common.amount']}" value="#{resourceHome.instance.amount}" required="false" inlinehelp="#{messages['common.amount.help']}" render="amount" execute="@this save" />
+                    <div class="form-actions">
+                        <p:commandButton id="save" value="#{messages['common.done']}" 
+                                         action="#{resourceHome.saveResource()}"
+                                         oncomplete="resourceEditDlg.hide();" 
+                                         styleClass="btn btn-primary"
+                                         update=":form-initiative:combo :form-initiative:button-add"/>
+                        <!-- &nbsp;-->
+                        #{'  '}
+
+                        <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                                         oncomplete="resourceEditDlg.hide();"  
+                                         ajax="true" process="@this" styleClass="btn"/>
+                    </div>  
+                </h:form>
+            </p:dialog>
+
         </ui:define>
     </ui:composition>  
 </html>

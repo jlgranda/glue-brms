@@ -60,7 +60,7 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
     private Long themeId;
     @Inject
     private ThemeService themeService;
-    private String outcomeAnother="";
+    private String outcomeAnother = "";
 
     public ObjetiveHome() {
     }
@@ -110,14 +110,14 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
     }
 
     @Override
-    public Organization getOrganization(){
-        if (getOrganizationId() == null && isManaged()){
+    public Organization getOrganization() {
+        if (getOrganizationId() == null && isManaged()) {
             //TODO prevenir null
             super.setOrganization(getInstance().getTheme().getPerspective().getOrganization());
         }
         return super.getOrganization();
     }
-        
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -160,14 +160,14 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
-            getInstance().setAuthor(this.profile);            
+            getInstance().setAuthor(this.profile);
             create(getInstance());
         }
         //TODO idear una mejor forma de redireccionar
         if (getInstance().getTheme().getId() != null) {
             if (getOutcomeAnother().isEmpty()) {
                 return getOutcome() + "?balancedScorecardId=" + getInstance().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
-            }else{
+            } else {
                 return getOutcomeAnother() + "?faces-redirect=true&includeViewParams=true";
             }
         }
@@ -176,8 +176,8 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
 
     @TransactionAttribute
     public String saveAndAddOther() {
-       setOutcomeAnother("/pages/management/objetive/objetive");       
-       return saveObjetive();
+        setOutcomeAnother("/pages/management/objetive/objetive");
+        return saveObjetive();
     }
 
     public boolean isWired() {
@@ -210,6 +210,9 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
+        if (getOutcome() == null) {
+            return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        }
         //TODO idear una mejor forma de redireccionar
         if (getInstance().getTheme().getId() != null) {
             return getOutcome() + "?balancedScorecardId=" + getInstance().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
@@ -217,5 +220,20 @@ public class ObjetiveHome extends BussinesEntityHome<Objetive> implements Serial
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
-    
+    public void createNewObjetive() {
+        setId(null);
+        setInstance(null);
+        wire();
+    }
+
+    public void editObjetive(Long id) {
+        setId(id);
+        load();
+    }
+
+    @TransactionAttribute
+    public String saveObjetiveDialog() {
+        saveObjetive();
+        return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+    }
 }

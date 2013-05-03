@@ -181,9 +181,30 @@ public class MeasureHome extends BussinesEntityHome<Measure> implements Serializ
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
+        
+        if (getOutcome() == null) {
+            return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        }
         if (getObjetive() != null) {
             return getOutcome() + "?balancedScorecardId=" + getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
+    }
+    
+    public void createNewMeasure() {
+        setId(null);
+        setInstance(null);
+        wire();
+    }
+
+    public void editMeasure(Long id) {
+        setId(id);
+        load();
+    }
+
+    @TransactionAttribute
+    public String saveMeasureDialog() {
+        saveMeasure();
+        return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
     }
 }
