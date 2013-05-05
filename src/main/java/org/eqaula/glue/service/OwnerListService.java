@@ -141,16 +141,5 @@ public class OwnerListService extends ListService<Owner> {
     }
 
       
-  /*  
-    @Inject
-    private OwnerHome ownerHome;
-    public void createOwner(){
-        if(getSelectedOwner()==null){
-            ownerHome.createInstance();
-            ownerHome.saveOwner();
-        }else{
-            ownerHome.setInstance(getSelectedOwner());
-            ownerHome.saveOwner();
-        }
-    }*/
+ 
 }

@@ -127,23 +127,25 @@ public class SectionHome extends BussinesEntityHome<Section> implements Serializ
         section.setActivationTime(now);
         section.setExpirationTime(Dates.addDays(now, 364));
         section.setType(_type);
-        section.setDiagnostic(getDiagnostic());
         section.buildAttributes(bussinesEntityService);
         return section;
     }
 
     @TransactionAttribute
     public String saveSection() {
-
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            create(getInstance());
+            getInstance().setDiagnostic(getDiagnostic());
+            create(getInstance()); 
         }
-        if (getInstance().getDiagnostic().getId()!= null) {
+        if(getOutcome()==null){
+            return null;
+        }
+        if (getInstance().getDiagnostic().getId() != null) {
             return getOutcome() + "?diagnosticId=" + getInstance().getDiagnostic().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
@@ -179,11 +181,31 @@ public class SectionHome extends BussinesEntityHome<Section> implements Serializ
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if (getInstance().getDiagnostic().getId()!= null) {
-            return getOutcome() + "?diagnosticId=" +getInstance().getDiagnostic().getId()+ "&faces-redirect=true&includeViewParams=true";
+        
+        if(getOutcome()==null){
+            return null;
+        }
+        if (getInstance().getDiagnostic().getId() != null) {
+            return getOutcome() + "?diagnosticId=" + getInstance().getDiagnostic().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
-   
+    public void createNewSection(Long diagnosticId) {
+        setId(null);
+        setInstance(null);
+        wire();       
+        setDiagnosticId(diagnosticId);
+    }
+
+    public void editSection(Long id) {
+        setId(id);
+        load();
+    }
+
+    @TransactionAttribute
+    public String saveSectionDialog() {
+        saveSection();
+        return "/pages/management/diagnostic/design.xhtml?diagnosticId=" + getInstance().getDiagnostic().getId() + "&faces-redirect=true&includeViewParams=true";
+    }
 }

@@ -8,7 +8,8 @@
       xmlns:s="http://jboss.org/seam/faces"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions">
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:glue ="http://eqaula.org/jsf/facelets">
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
@@ -36,45 +37,42 @@
                                 </h:link>
                             </h:form>
                         </div>
-
                     </div>
                 </div></div>             
         </ui:define>
         <div class="row-fluid">             
-            <ui:define name="sidebar" >
+            <ui:define name="sidebar">
                 <h:form id="view"> 
-                    <p:contextMenu for="bscTree" >  
-                        <p:menuitem value="#{messages['common.add']}" update=":viewtable:messages" actionListener="#{balancedScorecardHome.redirecToAdd}" icon="ui-icon-plus" /> 
-                        <p:menuitem value="#{messages['common.edit']}" update=":viewtable:messages" actionListener="#{balancedScorecardHome.redirecToEdit}" icon="ui-icon-plus" /> 
-                    </p:contextMenu>  
-                    <p:panel id="explorer-panel" header="#{messages['common.explorer']}" toggleable="true">
-                        <p:tree id="bscTree" value="#{balancedScorecardHome.bscNode}" var="node"
-                                selectionMode="single" selection="#{balancedScorecardHome.selectedNode}">  
+                    <p:scrollPanel>
+                        <p:panel id="explorer-panel"  header="#{messages['common.explorer']}" toggleable="true" >
+                            <p:tree id="bscTree"  value="#{balancedScorecardHome.rootNode}" var="node"
+                                    selectionMode="single" selection="#{balancedScorecardHome.selectedNode}">  
 
-                            <p:ajax event="select" update=":viewtable:messages :viewtable:button-add :viewtable:button-edit :viewtable:detail-panel" listener="#{balancedScorecardHome.onNodeSelect}" /> 
-                            <p:treeNode expandedIcon="ui-icon-folder-open"  
-                                        collapsedIcon="ui-icon-folder-collapsed">  
-                            </p:treeNode>  
-                            <p:treeNode  type="bsc" icon="ui-icon-home">    
-                                <h:outputText value="#{node.name}" />  
-                            </p:treeNode>  
-                            <p:treeNode  type="perspective" icon="ui-icon-lightbulb">    
-                                <h:outputText value="#{node.name}" />  
-                            </p:treeNode>  
-                            <p:treeNode  type="theme" icon="ui-icon-key">    
-                                <h:outputText value="#{node.name}" />  
-                            </p:treeNode>  
-                            <p:treeNode type="objetive" icon="ui-icon-flag">  
-                                <h:outputText value="#{node.name}" />  
-                            </p:treeNode>
-                            <p:treeNode type="measure" icon="ui-icon-battery-2">  
-                                <h:outputText value="#{node.name}" />  
-                            </p:treeNode>                        
-                            <p:treeNode type="target" icon="ui-icon-check">  
-                                <h:outputText value="#{node.name}" />  
-                            </p:treeNode>
-                        </p:tree>
-                    </p:panel>
+                                <p:ajax event="select" update=":viewtable:messages :viewtable:button-add :viewtable:button-edit :viewtable:detail-panel" listener="#{balancedScorecardHome.onNodeSelect}" /> 
+                                <p:treeNode expandedIcon="ui-icon-folder-open"  
+                                            collapsedIcon="ui-icon-folder-collapsed">  
+                                </p:treeNode>  
+                                <p:treeNode  type="bsc" icon="ui-icon-home">    
+                                    <h:outputText value="#{node.name}" />  
+                                </p:treeNode>  
+                                <p:treeNode  type="perspective" icon="ui-icon-lightbulb">    
+                                    <h:outputText value="#{node.name}" />  
+                                </p:treeNode>  
+                                <p:treeNode  type="theme" icon="ui-icon-key">    
+                                    <h:outputText value="#{node.name}" />  
+                                </p:treeNode>  
+                                <p:treeNode type="objetive" icon="ui-icon-flag">  
+                                    <h:outputText value="#{node.name}" />  
+                                </p:treeNode>
+                                <p:treeNode type="measure" icon="ui-icon-battery-2">  
+                                    <h:outputText value="#{node.name}" />  
+                                </p:treeNode>                        
+                                <p:treeNode type="target" icon="ui-icon-check">  
+                                    <h:outputText value="#{node.name}" />  
+                                </p:treeNode>
+                            </p:tree>
+                        </p:panel> 
+                    </p:scrollPanel>
                 </h:form>
 
             </ui:define>
@@ -82,12 +80,11 @@
                 <h:form id="viewtable" >
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"/>
                     <div class="form-actions" style="padding-left: 20px">                            
-                        <p:commandLink id="button-add" value="#{messages['common.add']}" update=":viewtable:messages" actionListener="#{balancedScorecardHome.redirecToAdd}" styleClass="btn btn-primary" disabled="#{empty balancedScorecardHome.selectedNode}"/>
+                        <p:commandLink id="button-add" value="#{messages['common.add']}" update=":viewtable:messages :perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" actionListener="#{balancedScorecardHome.redirecToAdd}" styleClass="btn btn-primary" disabled="#{empty balancedScorecardHome.selectedNode}"/>
                         #{'  '}
-                        <p:commandLink id="button-edit" value="#{messages['common.edit']}" update=":viewtable:messages" actionListener="#{balancedScorecardHome.redirecToEdit}" disabled="#{empty balancedScorecardHome.selectedNode}" styleClass="btn btn-secondary"/>
+                        <p:commandLink id="button-edit" value="#{messages['common.edit']}" update=":viewtable:messages :perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" actionListener="#{balancedScorecardHome.redirecToEdit}" disabled="#{empty balancedScorecardHome.selectedNode}" styleClass="btn btn-secondary"/>
                     </div>
                     <p:panel id="detail-panel" header="#{balancedScorecardHome.selectedNode.data.name!=null? balancedScorecardHome.selectedNode.data.name: balancedScorecardHome.bscNode.data.name}" toggleable="true">
-
                         <p:treeTable id="treetable" value="#{balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode}" var="node"  propagateSelectionUp="true">  
 
                             <p:column headerText="#{messages['module.balancedscorecard.dimention']}">  
@@ -97,7 +94,6 @@
                                 <h:outputText value="#{node.from}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
                                     <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
                                 </h:outputText>
-
                             </p:column>
                             <p:column headerText="#{messages['common.period.to']}">  
                                 <h:outputText value="#{node.to}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
@@ -124,11 +120,224 @@
                                     <p:column>
                                         <p:graphicImage value="/MethodPrinter?methodId=#{methodPrinter.printToDownload(balancedScorecardHome.runMethod(method)).id}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>
                                     </p:column>
-                                </p:dataTable>
+                                </p:dataTable>                                
                             </p:column>
                         </p:treeTable>  
                     </p:panel>    
                 </h:form>
+
+                <!--PERSPECTIVE DIALOG -->
+                <p:dialog id="perspective-edit-dialog" header="#{messages['common.add']} #{messages['module.perspective']}" styleClass="atf-header" widgetVar="perspectiveEditDlg" appendToBody="true" closeOnEscape="true">
+                    <h:form  id="form-perspective" acceptcharset="UTF-8" class="form-horizontal" >
+                        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                        <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{perspectiveHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                        <glue:input id="sequence" name="sequence" type="decimal" label="#{messages['common.sequence']}" value="#{perspectiveHome.instance.sequence}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                        <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{perspectiveHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+
+                        <div class="form-actions">
+                            <p:commandButton id="save" value="#{messages['common.done']}" 
+                                             action="#{perspectiveHome.savePerspectiveDialog()}"
+                                             oncomplete="perspectiveEditDlg.hide();" 
+                                             styleClass="btn btn-primary"/>
+                            <!-- &nbsp;-->
+                            #{'  '}
+                            <p:commandButton type="button" value="#{messages['common.delete']}" 
+                                             styleClass="btn-danger"
+                                             onclick="deletedDlg.show()"
+                                             immediate="true"
+                                             update=":cancel-dialog"
+                                             rendered="#{perspectiveHome.managed}"
+                                             />
+                            #{'  '}
+                            <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                                             oncomplete="perspectiveEditDlg.hide();"  
+                                             ajax="true" process="@this" styleClass="btn"/>
+
+                        </div>  
+                    </h:form>
+
+                    <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">   
+
+                        <h:form id="form-dialog-confirm-delete">
+                            <h:panelGroup layout="block" style="padding:5px;">  
+                                <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                            </h:panelGroup>  
+                            <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                             action="#{perspectiveHome.deletePerspective()}"                                         
+                                             ajax="true" process="@this"  
+                                             style="margin-top:10px;"
+                                             >  
+                            </p:commandButton>  
+                            <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                             style="margin-top:10px;"/>  
+                        </h:form>
+                    </p:dialog> 
+                </p:dialog>
+
+                <!-- DIALOG THEME  -->             
+                <p:dialog id="theme-edit-dialog" header="#{messages['common.add']} #{messages['module.theme']}" styleClass="atf-header" widgetVar="themeEditDlg" appendToBody="true" closeOnEscape="true">
+                    <h:form  id="form-theme" acceptcharset="UTF-8" class="form-horizontal" >
+                        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                        <h:panelGroup id="onr" layout="block" class="control-group">
+                            <label for="owner" class="control-label required">#{messages['module.owner']}</label>
+                            <div class="controls">
+
+                                <p:selectOneMenu id="owner" value="#{themeHome.instance.owner}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" 
+                                                 requiredMessage="#{messages['common.property.required.help']}" rendered="true" label="#{messages['module.owner']}" filter="true" filterMatchMode="contains">
+                                    <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
+                                    <f:selectItems value="#{themeHome.instance.id==null ? themeHome.perspective.balancedScorecard.organization.owners : themeHome.instance.perspective.balancedScorecard.organization.owners}" var="_o" itemLabel="#{_o.name}" itemValue="#{_o}"/>                          
+                                    <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                                </p:selectOneMenu> 
+                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
+                                                styleClass="validation-status" />
+                                <span class="help-block"><br/>#{messages['owner.inlinehelp']} <ocp:message forId="owner"/></span>
+                            </div>
+                        </h:panelGroup>
+
+                        <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{themeHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                        <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{themeHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+
+                        <div class="form-actions">
+                            <p:commandButton id="save" value="#{messages['common.done']}" 
+                                             action="#{themeHome.saveThemeDialog()}"
+                                             oncomplete="themeEditDlg.hide();" 
+                                             styleClass="btn btn-primary"/>
+                            #{'  '}
+                            <p:commandButton type="button" value="#{messages['common.delete']}" 
+                                             styleClass="btn-danger"
+                                             onclick="deletedDlg.show()"
+                                             immediate="true"
+                                             update=":cancel-dialog-theme"
+                                             rendered="#{themeHome.managed}"
+                                             />
+                            #{'  '}
+                            <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                                             oncomplete="themeEditDlg.hide();"  
+                                             ajax="true" process="@this" styleClass="btn"/>
+
+                        </div>  
+                    </h:form>
+                    <p:dialog id="cancel-dialog-theme" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">   
+
+                        <h:form id="form-dialog-confirm-delete-theme">
+                            <h:panelGroup layout="block" style="padding:5px;">  
+                                <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                            </h:panelGroup>  
+                            <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                             action="#{themeHome.deleteTheme()}"                                         
+                                             ajax="true" process="@this"  
+                                             style="margin-top:10px;"
+                                             >  
+                            </p:commandButton>  
+                            <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                             style="margin-top:10px;"/>  
+                        </h:form>
+                    </p:dialog> 
+                </p:dialog>          
+
+                <!-- OBJETIVE DIALOG-->
+                <p:dialog id="objetive-edit-dialog" header="#{messages['common.add']} #{messages['module.objetive']}" styleClass="atf-header" widgetVar="objetiveEditDlg" appendToBody="true" closeOnEscape="true">
+                    <h:form  id="form-objetive" acceptcharset="UTF-8" class="form-horizontal" >
+                        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                        <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{objetiveHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                        <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{objetiveHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+                        <div class="form-actions">
+                            <p:commandButton id="save" value="#{messages['common.done']}" 
+                                             action="#{objetiveHome.saveObjetiveDialog()}"
+                                             oncomplete="objetiveEditDlg.hide();" 
+                                             styleClass="btn btn-primary"/>
+                            #{'  '}
+                            <p:commandButton type="button" value="#{messages['common.delete']}" 
+                                             styleClass="btn-danger"
+                                             onclick="deletedDlg.show()"
+                                             immediate="true"
+                                             update=":cancel-dialog-objetive"
+                                             rendered="#{objetiveHome.managed}"
+                                             />
+                            #{'  '}
+                            <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                                             oncomplete="objetiveEditDlg.hide();"  
+                                             ajax="true" process="@this" styleClass="btn"/>
+
+                        </div>  
+                    </h:form>
+                    <p:dialog id="cancel-dialog-objetive" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">   
+
+                        <h:form id="form-dialog-confirm-delete-objetive">
+                            <h:panelGroup layout="block" style="padding:5px;">  
+                                <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                            </h:panelGroup>  
+                            <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                             action="#{objetiveHome.deleteObjetive()}"                                         
+                                             ajax="true" process="@this"  
+                                             style="margin-top:10px;"
+                                             >  
+                            </p:commandButton>  
+                            <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                             style="margin-top:10px;"/>  
+                        </h:form>
+                    </p:dialog> 
+                </p:dialog>
+
+                <!-- MEASURE DIALOG-->
+
+                <p:dialog id="measure-edit-dialog" header="#{messages['common.add']} #{messages['module.measure']}" styleClass="atf-header" widgetVar="measureEditDlg" appendToBody="true" closeOnEscape="true">
+                    <h:form  id="form-measure" acceptcharset="UTF-8" class="form-horizontal" >
+                        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                        <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{measureHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                        <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{measureHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+                        <glue:input id="unit" name="unit" type="text" label="#{messages['common.unit']}" value="#{measureHome.instance.unit}" required="true" inlinehelp="#{messages['common.unit.inlinehelp']}" execute="@this save" render="unit"/>
+                        <h:panelGroup layout="block" class="control-group">
+                            <label for="frequency" class="control-label required">#{messages['common.frequency']}</label>
+                            <div class="controls">
+                                <p:selectOneMenu id="frequency" style="float: left" value="#{measureHome.instance.frequency}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" 
+                                                 rendered="true" label="#{messages['common.frequency']}" filter="true" filterMatchMode="contains"> 
+                                    <f:selectItem  itemLabel = "#{messages['common.choice']}"  />  
+                                    <f:selectItems value="#{frequencyListService.resultList}" var="_f" itemLabel="#{_f.name} [#{_f.value} - #{_f.timeUnit.name}]" itemValue="#{_f}"/>
+                                    <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                                </p:selectOneMenu>      
+                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
+                                                styleClass="validation-status" />
+                                <span class="help-block"><br/>#{messages['frequency.inlinehelp']} <ocp:message forId="frequency"/></span>
+                            </div>
+                        </h:panelGroup>
+                        <div class="form-actions">
+                            <p:commandButton id="save" value="#{messages['common.done']}" 
+                                             action="#{measureHome.saveMeasureDialog()}"
+                                             oncomplete="measureEditDlg.hide();" 
+                                             styleClass="btn btn-primary"/>
+                            #{'  '}
+                            <p:commandButton type="button" value="#{messages['common.delete']}" 
+                                             styleClass="btn-danger"
+                                             onclick="deletedDlg.show()"
+                                             immediate="true"
+                                             update=":cancel-dialog-measure"
+                                             rendered="#{measureHome.managed}"
+                                             />
+                            #{'  '}
+                            <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                                             oncomplete="measureEditDlg.hide();"  
+                                             ajax="true" process="@this" styleClass="btn"/>
+
+                        </div>  
+                    </h:form>
+                    <p:dialog id="cancel-dialog-measure" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">   
+
+                        <h:form id="form-dialog-confirm-delete-measure">
+                            <h:panelGroup layout="block" style="padding:5px;">  
+                                <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                            </h:panelGroup>  
+                            <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                             action="#{measureHome.deleteMeasure()}"                                         
+                                             ajax="true" process="@this"  
+                                             style="margin-top:10px;"
+                                             >  
+                            </p:commandButton>  
+                            <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                             style="margin-top:10px;"/>  
+                        </h:form>
+                    </p:dialog> 
+                </p:dialog>
             </ui:define>
         </div>
     </ui:composition>

@@ -115,6 +115,9 @@ public class ResourceHome extends BussinesEntityHome<Resource> implements Serial
             }
             create(getInstance());
         }
+        if(getOutcome()==null){
+            return null;
+        }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
@@ -154,4 +157,10 @@ public class ResourceHome extends BussinesEntityHome<Resource> implements Serial
     }
 
  
+    public void createNewResource(){
+        setId(null);
+        setInstance(null);
+        load();
+        System.out.println("entraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    }
 }

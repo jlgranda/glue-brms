@@ -19,6 +19,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import org.eqaula.glue.model.BussinesEntity;
+import org.eqaula.glue.model.PersistentObject;
 import org.omnifaces.converter.SelectItemsConverter;
 import org.picketlink.idm.impl.api.model.SimpleGroup;
 
@@ -34,8 +35,13 @@ public class BussinesEntityConverter extends SelectItemsConverter {
         String key = null;
         if (value instanceof SimpleGroup) {
             key = ((SimpleGroup) value).getName();
-        } else if (value instanceof BussinesEntity) {
-            Long id = ((BussinesEntity) value).getId() ;
+        } else {
+            Long id = null;
+            if (value instanceof BussinesEntity) {
+                id = ((BussinesEntity) value).getId();
+            } else if (value instanceof PersistentObject) {
+                id = ((PersistentObject) value).getId();
+            }
             key = (id != null) ? String.valueOf(id) : null;
         }
         return key;

@@ -230,6 +230,9 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
+        if(getOutcome()==null){
+            return null;
+        }
         if (getOwnerId() != null) {
             return getOutcome() + "?ownerId=" + getOwnerId() + "&faces-redirect=true&includeViewParams=true";
         }
@@ -256,5 +259,22 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
             }
         }
         return node;
+    }
+    
+    public void createNewDiagnostic() {
+        setId(null);
+        setInstance(null);
+        load();        
+    }
+
+    public void editDiagnostic(Long id) {
+        setId(id);        
+        load();        
+    }
+     
+    @Transactional
+    public String saveDiagnosticDialog() {
+        saveDiagnostic();
+        return null;
     }
 }

@@ -22,11 +22,13 @@ limitations under the License.
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/view/templates/glue.xhtml">
+                template="/WEB-INF/view/templates/glue.xhtml"
+                xmlns:glue ="http://eqaula.org/jsf/facelets">
 
     <f:metadata>
         <f:viewParam name="result" value="#{diagnosticListService.firstResult}" />
         <f:viewParam name="ownerId" value="#{diagnosticListService.ownerId}" />
+        <f:viewParam name="ownerId" value="#{diagnosticHome.ownerId}" />
     </f:metadata>
 
     <ui:param name="title" value="#{diagnosticListService.owner.name} - #{messages['module.diagnostics']}"/>
@@ -38,7 +40,7 @@ limitations under the License.
                     <div class="span9">
                         <h2>#{messages['module.diagnostics']}</h2>   
                         <p><span style="">#{messages['common.in']} #{diagnosticListService.owner.getCanonicalPath}</span></p>                                                 
-                       
+
                     </div>    
                     <div class="span3">
 
@@ -61,7 +63,7 @@ limitations under the License.
         <h:form id="form">
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
             <div class="form-actions" style="padding-left: 20px">
-                <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="diagnostic" styleClass="btn btn-primary">
+                <!--<h:link value="#{messages['common.add']}" rendered="#{true}" outcome="diagnostic" styleClass="btn btn-primary">
                     <f:param name="ownerId" value="#{diagnosticListService.ownerId}" ></f:param>
                     <f:param name="outcome" value="/pages/management/diagnostic/list"></f:param>
                 </h:link>                
@@ -71,7 +73,21 @@ limitations under the License.
                     <f:param name= "diagnosticId" value="#{diagnosticListService.selectedDiagnostic.id}"></f:param>
                     <f:param name="ownerId" value="#{diagnosticListService.selectedDiagnostic.owner.id}" ></f:param>
                     <f:param name="outcome" value="/pages/management/diagnostic/list"></f:param>
-                </h:link> 
+                </h:link> -->
+
+                <p:commandLink id="diagnostic-add-button" value="#{messages['common.add']}" action="#{diagnosticHome.createNewDiagnostic()}" oncomplete="diagnosticEditDlg.show();"
+                               styleClass="btn btn-primary"
+                               update=":diagnostic-edit-dialog">
+                </p:commandLink>
+
+                #{' '}
+
+                <p:commandLink id="diagnostic-edit-button"  value="#{messages['common.edit']}" oncomplete="diagnosticEditDlg.show();"  action="#{diagnosticHome.editDiagnostic(diagnosticListService.selectedDiagnostic.id)}" 
+                               styleClass="btn btn-secondary"
+                               update=":diagnostic-edit-dialog"
+                               disabled="#{empty diagnosticListService.selectedDiagnostic.id}" 
+                               > 
+                </p:commandLink>
 
                 #{' '}
                 <h:link id="button-design" value="#{messages['common.design']}" rendered="true" outcome="design" styleClass="btn" 
@@ -102,8 +118,8 @@ limitations under the License.
                          selectionMode="single">
 
                 <p:ajax event="rowSelect" listener="#{diagnosticListService.onRowSelect}"   
-                        update=":form:button-edit: :form:button-design: :form:messages"/>                 
-                <p:ajax event="rowUnselect" listener="#{diagnosticListService.onRowUnselect}" update=":form:button-edit :form:button-design: :form:messages "/>
+                        update=":form:diagnostic-edit-button :form:button-design :form:messages"/>                 
+                <p:ajax event="rowUnselect" listener="#{diagnosticListService.onRowUnselect}" update=":form:diagnostic-edit-button :form:button-design :form:messages "/>
 
                 <p:column headerText="#{messages['common.name']}" sortBy="#{_diagnostic.name}">
                     <h:outputText value="#{_diagnostic.name}" />
@@ -116,6 +132,50 @@ limitations under the License.
                 </p:column>                
             </p:dataTable>
         </h:form>
+        <p:dialog id="diagnostic-edit-dialog" header="#{messages['common.add']} #{messages['module.diagnostic']}" styleClass="atf-header" widgetVar="diagnosticEditDlg" appendToBody="true" closeOnEscape="true">
+            <h:form  id="form-diagnostic" acceptcharset="UTF-8" class="form-horizontal" >
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{diagnosticHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{diagnosticHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+                <glue:input id="applicationDate" name="applicationDate" type="calendar" label="#{messages['common.applicationDate']}" value="#{diagnosticHome.instance.applicationDate}" required="true" inlinehelp="#{messages['common.applicationDate.inlinehelp']}" execute="@this save" render="applicationDate" />
 
+                <div class="form-actions">
+                    <p:commandButton id="save" value="#{messages['common.done']}" 
+                                     action="#{diagnosticHome.saveDiagnosticDialog()}"
+                                     oncomplete="diagnosticEditDlg.hide();" 
+                                     update=":form"
+                                     styleClass="btn btn-primary"/>
+                    <!-- &nbsp;-->
+                    #{'  '}
+                    <p:commandButton type="button" value="#{messages['common.delete']}" 
+                                     styleClass="btn-danger"
+                                     onclick="deletedDlg.show()"
+                                     immediate="true"
+                                     update=":cancel-dialog"
+                                     rendered="#{diagnosticHome.managed}"
+                                     />
+                    #{'  '}
+                    <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                                     oncomplete="diagnosticEditDlg.hide();"  
+                                     ajax="true" process="@this" styleClass="btn"/>
+
+                </div>  
+            </h:form>
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">   
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                     action="#{diagnosticHome.deleteDiagnostic()}"                                         
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;"
+                                     update=":form">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
+        </p:dialog>
     </ui:define>
 </ui:composition>

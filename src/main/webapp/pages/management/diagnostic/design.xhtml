@@ -53,51 +53,67 @@ limitations under the License.
                 </div>
             </div>
         </ui:define>
-        <ui:define name="content" >
+        <ui:define  name="content">
             <div class="row">
                 <div class="span12">
                     <div class="well bs-docs-sidebar" style="padding-top: 7px; padding-bottom: 10px;">
                         <br/>
-                        <h:link value="#{messages['module.management.section.add']}" outcome="/pages/management/section/section" class="btn btn-info fr" rendered="true">
-                            <f:param name="diagnosticId" value="#{diagnosticHome.diagnosticId}"></f:param>
-                            <f:param name="outcome" value="/pages/management/diagnostic/design"></f:param>
-                        </h:link>    
+                        <h:form>
+                            <!--<h:link value="#{messages['module.management.section.add']}" outcome="/pages/management/section/section" class="btn btn-info fr" rendered="true">
+                                <f:param name="diagnosticId" value="#{diagnosticHome.diagnosticId}"></f:param>
+                                <f:param name="outcome" value="/pages/management/diagnostic/design"></f:param>
+                            </h:link>    -->
+                            <p:commandLink  id="button-add" value="#{messages['module.management.section.add']}" 
+                                            styleClass="btn btn-info fr" 
+                                            onclick="sectionEditDlg.show()"
+                                            actionListener="#{sectionHome.createNewSection(diagnosticHome.diagnosticId)}"
+                                            />
+                        </h:form>
                         <h3>#{messages['module.sections']}</h3>
                         <ul class="nav nav-tabs nav-stacked">
                             <ui:repeat var="_section" value="#{diagnosticHome.instance.sections}" varStatus="i">
                                 <li>
                                     <div class="box" style="margin-bottom: 8px;">
                                         <div class="row">
-                                            <div class="span11 columns">
-                                                <h5>#{_section.name}
-                                                    <h:link value="#{messages['common.edit']}" outcome="/pages/management/section/section" class="btn btn-mini" rendered="true">
-                                                        <f:param name="sectionId" value="#{_section.id}"></f:param>
-                                                        <f:param name="outcome" value="/pages/management/diagnostic/design"></f:param>
-                                                    </h:link>    
-                                                    #{' '}
-                                                    <h:link value="#{messages['common.add']} #{messages['common.item']}" rendered="#{true}" outcome="/pages/management/revisionitem/revisionitem" styleClass="btn btn-mini btn-primary">                                                        
-                                                        <f:param name="sectionId" value="#{_section.id}"></f:param>
-                                                        <f:param name="outcome" value="/pages/management/diagnostic/design"></f:param>
-                                                    </h:link></h5>
-                                                <div class="form-actions" style="padding-left: 20px">
-                                                    <p:treeTable id="treetable" value="#{_section!=null?diagnosticHome.getNode(_section):null}" var="node"  propagateSelectionUp="true">  
-                                                        <p:column headerText="#{messages['module.question']}" style="width:150px">  
-                                                            <h:outputText value="#{node.question.name}"/>  
-                                                        </p:column>  
-                                                        <p:column headerText="#{messages['module.scale']}" style="width:150px">  
-                                                            <h:outputText value="#{node.scale.name}"/>  
-                                                        </p:column>
-                                              
-                                                        <p:column headerText="#{messages['common.edit']}" style="width:4%">  
-                                                            <h:link value="#{messages['common.edit']} #{messages['common.item']}" rendered="#{true}" outcome="/pages/management/revisionitem/revisionitem" styleClass="btn btn-mini">                                                        
-                                                                <f:param name="revisionItemId" value="#{node.id}"></f:param>
-                                                                <f:param name="sectionId" value="#{node.section.id}"></f:param>
-                                                                <f:param name="outcome" value="/pages/management/diagnostic/design"></f:param>
-                                                            </h:link>
-                                                        </p:column>  
-                                                    </p:treeTable> 
+                                            <h:form>
+                                                <div class="span11 columns">
+
+                                                    <h5>#{_section.name}
+                                                        <!--<h:link value="#{messages['common.edit']}" outcome="/pages/management/section/section" class="btn btn-mini" rendered="true">
+                                                            <f:param name="sectionId" value="#{_section.id}"></f:param>
+                                                            <f:param name="outcome" value="/pages/management/diagnostic/design"></f:param>
+                                                        </h:link>  --> 
+
+                                                        <p:commandLink id="button-edit"  value="#{messages['common.edit']}" actionListener="#{sectionHome.editSection(_section.id)}" oncomplete="sectionEditDlg.show()" update=":section-dialog" styleClass="btn btn-mini btn-secondary" />
+
+                                                        #{' '}
+                                                        <h:link value="#{messages['common.add']} #{messages['common.item']}" rendered="#{true}" outcome="/pages/management/revisionitem/revisionitem" styleClass="btn btn-mini btn-primary">                                                        
+                                                            <f:param name="sectionId" value="#{_section.id}"></f:param>
+                                                            <f:param name="outcome" value="/pages/management/diagnostic/design"></f:param>
+                                                        </h:link>    
+
+                                                    </h5>
+
+                                                    <div class="form-actions" style="padding-left: 20px">
+                                                        <p:treeTable id="treetable" value="#{_section!=null?diagnosticHome.getNode(_section):null}" var="node"  propagateSelectionUp="true">  
+                                                            <p:column headerText="#{messages['module.question']}" style="width:150px">  
+                                                                <h:outputText value="#{node.question.name}"/>  
+                                                            </p:column>  
+                                                            <p:column headerText="#{messages['module.scale']}" style="width:150px">  
+                                                                <h:outputText value="#{node.scale.name}"/>  
+                                                            </p:column>
+
+                                                            <p:column headerText="#{messages['common.edit']}" style="width:4%">  
+                                                                <h:link value="#{messages['common.edit']} #{messages['common.item']}" rendered="#{true}" outcome="/pages/management/revisionitem/revisionitem" styleClass="btn btn-mini">                                                        
+                                                                    <f:param name="revisionItemId" value="#{node.id}"></f:param>
+                                                                    <f:param name="sectionId" value="#{node.section.id}"></f:param>
+                                                                    <f:param name="outcome" value="/pages/management/diagnostic/design"></f:param>
+                                                                </h:link>
+                                                            </p:column>  
+                                                        </p:treeTable> 
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </h:form>
                                         </div>       
                                     </div> 
                                 </li>
@@ -106,6 +122,50 @@ limitations under the License.
                     </div>          
                 </div> 
             </div>
+            <p:dialog id="section-dialog" header="#{messages['common.add']} #{messages['module.section']}" styleClass="atf-header" widgetVar="sectionEditDlg" appendToBody="true" closeOnEscape="true">
+                <h:form  id="form-section" acceptcharset="UTF-8" class="form-horizontal" >
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{sectionHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                    <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{sectionHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+
+                    <div class="form-actions">
+                        <p:commandButton id="save" value="#{messages['common.done']}" 
+                                         action="#{sectionHome.saveSectionDialog()}"
+                                         oncomplete="sectionEditDlg.hide();" 
+                                         styleClass="btn btn-primary"
+                                         />
+                        #{'  '}
+                        <p:commandButton type="button" value="#{messages['common.delete']}" 
+                                         styleClass="btn-danger"
+                                         onclick="deletedDlg.show()"
+                                         immediate="true"
+                                         update=":cancel-dialog-section"
+                                         rendered="#{sectionHome.managed}"
+                                         />
+                        #{'  '}
+                        <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                                         oncomplete="sectionEditDlg.hide();"  
+                                         ajax="true" process="@this" styleClass="btn"/>
+
+                    </div>  
+                </h:form>
+                <p:dialog id="cancel-dialog-section" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">   
+
+                    <h:form id="form-dialog-confirm-delete-section">
+                        <h:panelGroup layout="block" style="padding:5px;">  
+                            <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                        </h:panelGroup>  
+                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                         action="#{sectionHome.deleteSection()}"                                         
+                                         ajax="true" process="@this"  
+                                         style="margin-top:10px;"
+                                         >  
+                        </p:commandButton>  
+                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                         style="margin-top:10px;"/>  
+                    </h:form>
+                </p:dialog> 
+            </p:dialog>
         </ui:define>
     </ui:composition>
 </html>

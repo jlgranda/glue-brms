@@ -111,13 +111,13 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
     }
 
     @Override
-    public Organization getOrganization(){
-        if (getOrganizationId() == null && isManaged()){
+    public Organization getOrganization() {
+        if (getOrganizationId() == null && isManaged()) {
             super.setOrganization(getInstance().getOrganization());
         }
         return super.getOrganization();
     }
-    
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -163,23 +163,24 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
             getInstance().setAuthor(this.profile);
             create(getInstance());
         }
-
+        if (getOutcome() == null) {
+            return null;
+        }
         if (getInstance().getBalancedScorecard().getId() != null) {
             if (getOutcomeOther().isEmpty()) {
                 return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
-            }else{
+            } else {
                 return getOutcomeOther() + "?faces-redirect=true&includeViewParams=true";
             }
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-    
+
     @TransactionAttribute
     public String saveAndAddOther() {
-       setOutcomeOther("/pages/management/perspective/perspective");       
-       return savePerspective();
+        setOutcomeOther("/pages/management/perspective/perspective");
+        return savePerspective();
     }
-
 
     public boolean isWired() {
         return true;
@@ -214,11 +215,29 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
 
+        if (getOutcome() == null) {
+            return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        }
         if (getInstance().getBalancedScorecard().getId() != null) {
             return getOutcome() + "?balancedScorecardId=" + getInstance().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
-   
+    public void createNewPerspective() {
+        setId(null);
+        setInstance(null);
+        wire();
+    }
+
+    public void editPerspective(Long id) {
+        setId(id);
+        load();
+    }
+
+    @TransactionAttribute
+    public String savePerspectiveDialog() {
+        savePerspective();
+        return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+    }
 }
