@@ -114,6 +114,18 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
         log.info("eqaula --> Loaded instance" + getInstance());
     }
 
+    @Transactional
+    public void plug(Group g) {
+
+        log.info("eqaula --> plugin instance from GroupHome for " + getGroupId());
+        log.info("eqaula --> Required profile " + getProfileId());
+        setInstance(g);
+        addBussinesEntity(getInstance());
+        //loadProfileHome(); //Cargar el objeto BussinesEntityHome relacionado al grupo
+        //makeColumnsTemplate(); //Establecer las columnas a mostrar en la tabla
+        log.info("eqaula --> pluged instance" + getInstance());
+    }
+
     @TransactionAttribute
     public void wire() {
         getInstance();
@@ -156,31 +168,31 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
         if (group.getProperty().getMaximumMembers() == 0L || group.getMembers().size() < group.getProperty().getMaximumMembers()) {
             BussinesEntity entity = makeBussinessEntity(group);
             setBussinesEntity(entity); //Establecer para edición
-            RequestContext.getCurrentInstance().execute("editDlg.show()"); //abrir el popup si se añadió correctamente
+           // RequestContext.getCurrentInstance().execute(dailog + ".show()"); //abrir el popup si se añadió correctamente
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No es posible agregar más " + group.getProperty().getLabel() + ". El número máximo es " + group.getProperty().getMaximumMembers(), ""));
         }
     }
-    
-    private BussinesEntity makeBussinessEntity(Group g){
+
+    private BussinesEntity makeBussinessEntity(Group g) {
         Date now = Calendar.getInstance().getTime();
-            //TODO internacionalizar cadenas estáticas
-            String name = "Nuevo " + (g.getProperty() != null ? g.getProperty().getLabel() : "elemento") + " " + (g.findOtherMembers(getProfile()).size() + 1);
-            BussinesEntity entity = new BussinesEntity();
-            entity.setName(name);
-            //TODO implementar generador de códigos para entidad de negocio
-            entity.setCode(UUID.randomUUID().toString());
-            entity.setCreatedOn(now);
-            entity.setLastUpdate(now);
-            entity.setActivationTime(now);
-            entity.setExpirationTime(Dates.addDays(now, 364));
-            entity.setAuthor(null); //Establecer al usuario actual
-            entity.buildAttributes(g.getName(), bussinesEntityService); //Construir atributos de grupos
-            return entity;
+        //TODO internacionalizar cadenas estáticas
+        String name = "Nuevo " + (g.getProperty() != null ? g.getProperty().getLabel() : "elemento") + " " + (g.findOtherMembers(getProfile()).size() + 1);
+        BussinesEntity entity = new BussinesEntity();
+        entity.setName(name);
+        //TODO implementar generador de códigos para entidad de negocio
+        entity.setCode(UUID.randomUUID().toString());
+        entity.setCreatedOn(now);
+        entity.setLastUpdate(now);
+        entity.setActivationTime(now);
+        entity.setExpirationTime(Dates.addDays(now, 364));
+        entity.setAuthor(null); //Establecer al usuario actual
+        entity.buildAttributes(g.getName(), bussinesEntityService); //Construir atributos de grupos
+        return entity;
     }
 
     @Transactional
-    public void saveBussinesEntity() {
+    public void saveBussinesEntity(String dialog) {
 
         try {
             if (getBussinesEntity() == null) {
@@ -201,16 +213,14 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
                 }
                 //overwrite defaults attributes
                 //if (!getInstance().getProperty().isShowDefaultBussinesEntityProperties()){
-                    //TODO idear mecanismo para que sea configurable
-                    //getInstance().setName(getInstance().getBussinessEntityAttribute("nombres").getValue().toString() + getInstance().getBussinessEntityAttribute("apellidos").getValue().toString());
-                    //getInstance().setCode(getInstance().getBussinessEntityAttribute("cedula").getValue().toString());
+                //TODO idear mecanismo para que sea configurable
+                //getInstance().setName(getInstance().getBussinessEntityAttribute("nombres").getValue().toString() + getInstance().getBussinessEntityAttribute("apellidos").getValue().toString());
+                //getInstance().setCode(getInstance().getBussinessEntityAttribute("cedula").getValue().toString());
                 //}
                 if (validate) {
-                    //save(getBussinesEntity());
                     this.getInstance().add(getBussinesEntity());
-                    //save(this.getInstance()); //Guardar cambios en relaciones
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se agregó con exito " + getInstance().getProperty().getLabel() + ": " + getBussinesEntity().getName(), ". No olvide guardar al final!"));
-                    RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
+                    RequestContext.getCurrentInstance().execute(dialog + ".hide()"); //cerrar el popup si se grabo correctamente
                     setBussinesEntity(null); //liberar de memoria el objeto seleccionado
                 } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hay algunos valores requeridos vacios para " + bussinesEntity.getName() + ". Recuerde los campos con (*) son obligatorios", ""));
@@ -236,12 +246,12 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
                 getInstance().remove(this.getBussinesEntity());
                 //save(getInstance());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + bussinesEntity.getName(), ". No olvide guardar al final!"));
-                RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
+                //RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
                 setBussinesEntity(null); //liberar de memoria el objeto seleccionado
             } else {
                 //remover de la lista, si aún no esta persistido
                 getInstance().remove(this.getBussinesEntity());
-                RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
+                //RequestContext.getCurrentInstance().execute("editDlg.hide()"); //cerrar el popup si se grabo correctamente
             }
 
         } catch (Exception e) {
@@ -278,25 +288,23 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
     private void makeColumnsTemplate() {
         BussinesEntity template = makeBussinessEntity(getInstance());
         //List<ColumnModel> _columns = new ArrayList<ColumnModel>();
-        for (BussinesEntityAttribute a : template.getAttributes()){
-            if (a.getProperty().isShowInColumns()){
+        for (BussinesEntityAttribute a : template.getAttributes()) {
+            if (a.getProperty().isShowInColumns()) {
                 this.columns.add(new ColumnModel(a.getProperty().getLabel(), a.getProperty().getName()));
             }
         }
-        if (this.columns.isEmpty() || getInstance().getProperty().isShowDefaultBussinesEntityProperties()){
+        if (this.columns.isEmpty() || getInstance().getProperty().isShowDefaultBussinesEntityProperties()) {
             //TODO aplicar internacionalización
             this.columns.add(new ColumnModel("name", "name"));
             this.columns.add(new ColumnModel("code", "code"));
         }
-        
-        
+
+
     }
 
-  
-
     static public class ColumnModel implements Serializable {
-        private static final long serialVersionUID = -2978153523510149782L;
 
+        private static final long serialVersionUID = -2978153523510149782L;
         private String header;
         private String property;
 
@@ -314,9 +322,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
         }
     }
 
-
-    
-    public List<ColumnModel> getColumns() {  
-        return columns;  
-    }  
+    public List<ColumnModel> getColumns() {
+        return columns;
+    }
 }

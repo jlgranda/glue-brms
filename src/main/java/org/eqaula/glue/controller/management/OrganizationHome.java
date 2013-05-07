@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
@@ -32,8 +33,11 @@ import javax.persistence.EntityManager;
 import org.eqaula.glue.cdi.Current;
 import org.eqaula.glue.cdi.Web;
 import org.eqaula.glue.controller.BussinesEntityHome;
+import org.eqaula.glue.controller.profile.GroupHome;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
+import org.eqaula.glue.model.Group;
+import org.eqaula.glue.model.Property;
 import org.eqaula.glue.model.management.Macroprocess;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
@@ -70,6 +74,10 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     private NavigationHandler navigation;
     @Inject
     private FacesContext context;
+    private Group groupSelected;
+    
+    @Inject
+    private GroupHome groupHome;
 
     public OrganizationHome() {
     }
@@ -103,6 +111,22 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
 
     public void setSelectedNode(TreeNode selectedNode) {
         this.selectedNode = selectedNode;
+    }
+
+    public Group getGroupSelected() {
+        return groupSelected;
+    }
+
+    public void setGroupSelected(Group groupSelected) {
+        this.groupSelected = groupSelected;
+    }
+
+    public GroupHome getGroupHome() {
+        return groupHome;
+    }
+
+    public void setGroupHome(GroupHome groupHome) {
+        this.groupHome = groupHome;
     }
 
     @TransactionAttribute
@@ -322,5 +346,22 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public void createNew() {
         saveOrganization();
         setInstance(null);
+    }
+    /**
+     * CRUD for groups
+     */
+    @Inject
+    private UI ui;
+    private List<Group> groups = new ArrayList<Group>();
+
+    public List<Group> getGroups() {
+        if (groups.isEmpty()) {
+            for (Property p : ui.getProperties(getInstance())) {
+                if ("org.eqaula.glue.model.Group".equals(p.getType())){
+                    groups.add(ui.getGroup(getInstance(), p));
+                }
+            }
+        }
+        return groups;
     }
 }

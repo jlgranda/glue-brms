@@ -201,7 +201,7 @@
                         <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
                                          action="#{groupHome.deleteBussinessEntity()}" 
                                          update=":form-table:dataTable :form-dialog:messages-dialog"
-                                         ajax="true" pbarocess="@this"  
+                                         ajax="true" process="@this"  
                                          style="margin-top:10px;">  
                         </p:commandButton>  
                         <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  

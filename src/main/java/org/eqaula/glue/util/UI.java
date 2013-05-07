@@ -32,7 +32,6 @@
 package org.eqaula.glue.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -76,10 +75,12 @@ public class UI {
 
     public List<Property> getProperties(BussinesEntity entity) {
         if (entity == null) {
+            System.out.println("--> entity null");
             return new ArrayList<Property>();
         }
 
         if (entity.getType() == null) {
+            System.out.println("--> type null");
             return new ArrayList<Property>();
         }
 
@@ -136,6 +137,7 @@ public class UI {
     }
 
     public Group getGroup(BussinesEntity entity, Property p) {
+        System.out.println("--> " + entity.getId() + " - " + p.getId());
         Query q = em.createNamedQuery("Group.findByBussinesEntityIdAndPropertyId");
         q.setParameter("bussinesEntityId", entity.getId());
         q.setParameter("propertyId", p.getId());

@@ -76,8 +76,11 @@
                                 <f:param name="outcome" value="/pages/home"></f:param>
                             </h:link> -->
 
-                            <p:commandLink id="organization-add-button" style="padding-top: 7px; padding-bottom: 10px;" value="#{messages['module.management.organization.create']}"  oncomplete="organizationEditDlg.show();" immediate="true"
-                                           styleClass="btn btn-primary fr"
+                            <p:commandLink id="organization-add-button" 
+                                           value="#{messages['module.management.organization.create']}"  
+                                           oncomplete="organizationEditDlg.show();" 
+                                           immediate="true"
+                                           styleClass="btn btn-primary btn-large fr"
                                            update=":organization-edit-dialog">
                             </p:commandLink>
 

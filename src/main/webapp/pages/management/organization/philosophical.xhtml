@@ -63,67 +63,42 @@
         </ui:define>
 
         <ui:define name="content">
-            <h:form id="organization-philosophical-form">
-                <c:forEach items="#{ui.getProperties(organizationHome.instance)}" var="p" >
-                    <p:panel styleClass="form-horizontal" header="#{p.label}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{p.name}">
-                        <f:facet name="header">
-                            <h5>#{p.label}
-                                <h:link outcome="#{p.customForm != null ? p.customForm : '/pages/profile/data/structure'}" styleClass="btn" value="#{messages['common.edit']}" 
-                                        rendered="#{organizationHome.editionEnabled and p.type == 'org.eqaula.glue.model.Structure'}">
-                                    <f:param name="organizationId" value="#{organizationHome.instance.id}"/>
-                                    <f:param name="structureName" value="#{p.name}"/>
-                                </h:link>
-                                <h:link outcome="/pages/profile/data/group" styleClass="btn" value="#{messages['common.edit']}" 
-                                        rendered="#{organizationHome.editionEnabled and p.type == 'org.eqaula.glue.model.Group'}">
-                                    <f:param name="organizationId" value="#{organizationHome.instance.id}"/>
-                                    <f:param name="groupId" value="#{ui.getGroup(organizationHome.instance, p).getId()}"/>
-                                </h:link>
-                                <p:commandLink id="group-edit-button" 
-                                               value="#{messages['common.add']}"  oncomplete="groupEditDlg.show();" immediate="true"
-                                               styleClass="btn btn-mini btn-primary"
-                                               style="color:#fff; font-size: 0.75em;"
-                                               update=":organization-philosophical-form">
-                                </p:commandLink>
-                            </h5>
-                        </f:facet>
-                        <c:choose>                        
-                            <c:when test="#{p.type == 'org.eqaula.glue.model.Structure'}">
-                                <!-- Mostrar los datos de estructure-->
-                                <h:panelGroup id="attributes" layout="block" class="control-group">
-                                    <ui:repeat value="#{organizationHome.instance.findBussinesEntityAttribute(p.name)}" var="a" varStatus="status">
-                                        <h:panelGroup layout="block" class="form" rendered="#{a.property.survey}">
-                                            <span style="font-weight: bold; color: rgb(105,105,105)" class="#{(not empty a.property.required and a.property.required) ? 'required' : 'required'}">#{a.property.label}</span>
-                                            <div>
-                                                <h:outputText value="#{a.value}"/>
-                                            </div>
-                                            <br/>
-                                        </h:panelGroup>
-                                        <h:panelGroup layout="block" class=" control-group" rendered="#{not a.property.survey}">
-                                            <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'control-label required' : 'control-label'}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</strong></label>
-                                            <div class="output">                                     
-                                                <h:outputText value="#{a.value}"/>
-                                            </div>
-                                        </h:panelGroup>  
-                                    </ui:repeat>
-                                </h:panelGroup>
-                            </c:when>
-                            <c:when test="#{p.type == 'org.eqaula.glue.model.Group'}">
-                                <p:dataTable id="groups" var="m" value="#{ui.getGroup(organizationHome.instance, p).findOtherMembers(organizationHome.instance)}" 
-                                             editable="false" 
-                                             emptyMessage="#{messages['common.emptyList']}">  
 
-                                    <p:columns value="#{ui.findColumnsTemplate(ui.getGroup(organizationHome.instance, p))}" var="column" columnIndexVar="colIndex">  
-                                        <f:facet name="header">  
-                                            #{column.header}  
-                                        </f:facet>  
-                                        #{m.findAttributeValue(column.property)}  
-                                    </p:columns>
-                                </p:dataTable>
-                            </c:when>
-                        </c:choose>
-                    </p:panel>
-                </c:forEach>
+            <h:form id="organization-philosophical-form">
+                <ui:repeat var="g" value="#{organizationHome.groups}"> 
+                    <p:dataTable id="groups" var="m" value="#{g.findOtherMembers(organizationHome.instance)}" 
+                                 editable="false" 
+                                 emptyMessage="#{mesages['common.emptyList']}"
+                                 rendered="#{true}">  
+
+                        <f:facet name="header"> 
+                            #{g.property.label}
+                            <p:commandLink value="#{messages['common.add']}"  oncomplete="philosophicalGroupEditDlg.show();" 
+                                           immediate="true"
+                                           styleClass="btn btn-mini btn-primary"
+                                           style="color:#fff; font-size: 0.75em;"
+                                           action="#{groupHome.plug(g)}"
+                                           update=":organization-philosophical-group-edit-dialog">
+                            </p:commandLink>
+                        </f:facet>  
+                        <p:columns value="#{ui.findColumnsTemplate(g)}" var="column" columnIndexVar="colIndex">  
+                            <f:facet name="header">  
+                                #{column.header}  
+                            </f:facet>  
+                            #{m.findAttributeValue(column.property)}  
+                        </p:columns>
+                    </p:dataTable>
+                </ui:repeat>
                 <p:growl/>
+                <div class="form-actions">
+                    <p:commandButton id="save" value="#{messages['common.done']}" 
+                                     action="#{organizationHome.saveOrganization()}"                                         
+                                     ajax="true" process="@this" styleClass="btn btn-primary"/>
+                    <!-- &nbsp;-->
+                    <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                                     ajax="true" process="@this" styleClass="btn"/>
+
+                </div>  
             </h:form>
             <p:dialog id="organization-edit-dialog" header="#{messages['common.add']} #{messages['module.organization']}" styleClass="atf-header" widgetVar="organizationEditDlg" appendToBody="true" closeOnEscape="true">
                 <h:form  id="form-organization" acceptcharset="UTF-8" class="form-horizontal" >
@@ -145,6 +120,107 @@
 
                     </div>  
                 </h:form>
+            </p:dialog>
+            <!--Edit group dialog -->
+            <p:dialog id="organization-philosophical-group-edit-dialog"
+                      header="#{messages['common.add']} #{groupHome.instance.name}" 
+                      styleClass="atf-header" 
+                      widgetVar="philosophicalGroupEditDlg" 
+                      appendToBody="true"
+                      closeOnEscape="true"
+                      dynamic="false">
+                <p:scrollPanel style="width:600px;height:300px">
+                    <h:form id="organization-philosophical-group-edit-form" class="form-horizontal">
+                        <p:messages id="messages-dialog" showDetail="true" autoUpdate="true" closable="true" />  
+                        <!-- Attributos de clase, siempre mostrar, almacena nombre y código único -->
+                        <h:panelGroup layout="block" class="control-group" rendered="#{organizationHome.groupHome.instance.property.showDefaultBussinesEntityProperties}">
+                            <h:panelGroup layout="block" class="control-group">
+                                <!-- class="required" -->
+                                <label for="name" class="control-label">#{messages['common.name']}*</label>
+                                <div class="controls">
+                                    <p:inputText value="#{organizationHome.groupHome.bussinesEntity.name}" styleClass="xLarge span4" required="true" label="#{messages['common.name']}" 
+                                                 rendered="true">
+                                        <f:validator validatorId="safeTextUTF8Validator"/>
+                                        <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                    </p:inputText>
+                                    <h:graphicImage value="#{resource['success.gif']}" rendered="#{groupHome.bussinesEntity.name != null}"
+                                                    styleClass="validation-status" />
+                                    <span class="help-block"><br/>#{messages['common.name.inlinehelp']} <ocp:message forId="name" /></span>
+                                </div>
+                            </h:panelGroup> 
+                            <h:panelGroup layout="block" class="control-group">
+                                <label for="code" class="control-label">#{messages['common.code']}*</label>
+                                <div class="controls">
+                                    <p:inputText  value="#{organizationHome.groupHome.bussinesEntity.code}" required="false" label="#{messages['common.name']}" 
+                                                  rendered="true">
+                                        <f:validator validatorId="safeTextUTF8Validator"/>                                        
+
+                                        <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                    </p:inputText>
+                                    <h:graphicImage value="#{resource['success.gif']}" rendered="#{organizationHome.groupHome.bussinesEntity.code != null}"
+                                                    styleClass="validation-status" />
+                                    <span class="help-block"><br/>#{messages['common.name.inlinehelp']} <ocp:message forId="code" /></span>
+                                </div>
+                            </h:panelGroup> 
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" class="control-group">
+                            <ui:repeat value="#{groupHome.bussinesEntity.findBussinesEntityAttribute(groupHome.instance.name)}" var="a" varStatus="status">
+                                <h:panelGroup layout="block" class="control-group">
+
+                                    <label class="#{(not empty a.property.required and a.property.required) ? 'control-label required' : 'control-label'}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
+                                    <div class="controls">
+                                        <p:inputText  value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}" 
+                                                      rendered="#{a.property.type eq 'java.lang.String'}">
+                                            <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
+                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                        </p:inputText>
+                                        <p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
+                                                    rendered="#{a.property.type eq 'java.util.Date'}">
+                                            <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
+                                        </p:calendar>  
+                                        <pe:inputNumber value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}"
+                                                        rendered="#{a.property.type eq 'java.lang.Long' or a.property.type eq 'java.lang.Double' or a.property.type eq 'java.lang.Float'}">  
+                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                        </pe:inputNumber>  
+                                        <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
+                                                         rendered="#{a.property.type eq 'java.lang.String[]'}">  
+                                            <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
+                                            <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                        </p:selectOneMenu> 
+                                        <p:inputTextarea value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}" style="width: 364px; height: 100px;" 
+                                                         rendered="#{a.property.type eq 'java.lang.MultiLineString'}">
+                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                        </p:inputTextarea>
+                                        <!-- TODO add support for boolean
+                                        <p:panel rendered="#{a.property.type eq 'java.lang.Boolean'}">
+                                            <p:selectBooleanCheckbox value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}"
+                                                                     rendered="#{a.property.type eq 'java.lang.Boolean'}">
+                                                <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                            </p:selectBooleanCheckbox>
+                                        </p:panel>
+                                        -->
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{a.value != null}"
+                                                        styleClass="validation-status" />
+                                        <span class="help-block"><br/>#{a.property.helpInline}</span>
+                                    </div>
+                                </h:panelGroup>  
+                            </ui:repeat>
+                        </h:panelGroup>
+
+                        <div class="controls">
+                            <p:commandButton value="#{messages['common.add']}" 
+                                             actionListener="#{groupHome.saveBussinesEntity('philosophicalGroupEditDlg')}" 
+                                             update=":organization-philosophical-form messages-dialog"
+                                             ajax="true" process="@this"
+                                             style="margin-top:10px;" icon="ui-icon-disk"
+                                             styleClass="btn btn-primary">  
+                            </p:commandButton>  
+
+                            <p:commandButton type="button" value="#{messages['common.delete']}" style="margin-top:10px;" rendered="#{groupHome.bussinesEntity.persistent}" onclick="philosophicalGroupEditDlg.show();"/>  
+                            <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" rendered="#{not groupHome.bussinesEntity.persistent}" onclick="philosophicalGroupEditDlg.hide();" actionListener="#{groupHome.deleteBussinessEntity()}"/>  
+                        </div>
+                    </h:form>
+                </p:scrollPanel>
             </p:dialog>
         </ui:define>
 
