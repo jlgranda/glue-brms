@@ -161,6 +161,5 @@ public class ResourceHome extends BussinesEntityHome<Resource> implements Serial
         setId(null);
         setInstance(null);
         load();
-        System.out.println("entraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 }

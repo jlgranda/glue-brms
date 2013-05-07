@@ -57,7 +57,7 @@ limitations under the License.
                 </div>
             </div>
         </ui:define>
-        <ui:define name="content" >
+        <ui:define name="content" id="define" >
             <h:form  id="form" acceptcharset="UTF-8" class="form-horizontal" >
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <h:panelGroup id="rvtm" layout="block" class="control-group">
@@ -80,19 +80,23 @@ limitations under the License.
                 <h:panelGroup id="qstn" layout="block" class="control-group">
                     <label for="question" class="control-label required">#{messages['module.question']}</label>
                     <div class="controls">
-                        <p:selectOneMenu id="question"  style="float: left"  value="#{revisionItemHome.instance.question}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="#{messages['required.question']}" rendered="true" label="#{messages['Question']}" filter="true" filterMatchMode="contains">
+                        <p:selectOneMenu id="question"  style="float: left"  value="#{revisionItemHome.instance.question}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true"  rendered="true" label="#{messages['Question']}" filter="false" filterMatchMode="contains">
 
                             <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
                             <f:selectItems value="#{questionListService.resultList}" var="_q" itemLabel="#{_q.name}" itemValue="#{_q}"/>                          
-                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                            <p:ajax event="change" update="@parent" partialSubmit="true"/>
 
                         </p:selectOneMenu>   
-                        <h:link styleClass="btn" outcome="/pages/management/question/question">
+                        <!--<h:link styleClass="btn" outcome="/pages/management/question/question">
                             <i class="icon-plus"></i>
                             <f:param name="outcome" value="/pages/management/revisionitem/revisionitem"/>
-                        </h:link>
-                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
-                                        styleClass="validation-status" />
+                        </h:link>-->
+
+                        <p:commandLink id="btn-add-question" oncomplete="questionEditDlg.show()"
+                                       styleClass="btn" update=":question-edit-dialog :form:question"
+                                       action="#{questionHome.createNewQuestion}">
+                            <i class="icon-plus"></i>
+                        </p:commandLink> 
                         <span class="help-block"><br/>#{messages['question.inlinehelp']} <ocp:message forId="question" /></span>
                     </div>
                 </h:panelGroup>
@@ -105,10 +109,15 @@ limitations under the License.
                             <p:ajax event="change" update="@parent " partialSubmit="true"/>
 
                         </p:selectOneMenu>                       
-                        <h:link styleClass="btn" outcome="/pages/management/scale/scale">
+                        <!--<h:link styleClass="btn" outcome="/pages/management/scale/scale">
                             <i class="icon-plus"></i>
                             <f:param name="outcome" value="/pages/management/revisionitem/revisionitem"/>
-                        </h:link>
+                        </h:link>-->
+                        <p:commandLink id="btn-add-scale" oncomplete="scaleEditDlg.show()"
+                                       styleClass="btn" update=":scale-edit-dialog :form:scale"
+                                       action="#{scaleHome.createNewScale}">
+                            <i class="icon-plus"></i>
+                        </p:commandLink> 
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
                                         styleClass="validation-status" />
                         <span class="help-block"><br/>#{messages['scale.inlinehelp']} <ocp:message forId="scale" /></span>
@@ -143,6 +152,47 @@ limitations under the License.
                                      style="margin-top:10px;"/>  
                 </h:form>
             </p:dialog> 
+
+            <p:dialog id="question-edit-dialog" header="#{messages['common.add']} #{messages['module.question']}" styleClass="atf-header" widgetVar="questionEditDlg" appendToBody="true" closeOnEscape="true">
+                <h:form  id="form-question" acceptcharset="UTF-8" class="form-horizontal" >
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{questionHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                    <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{questionHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+                    <div class="form-actions">
+                        <p:commandButton id="save" value="#{messages['common.done']}" 
+                                         action="#{questionHome.saveQuestion()}"
+                                         oncomplete="questionEditDlg.hide();" 
+                                         styleClass="btn btn-primary"
+                                         update=":form:question"
+                                         />
+                        <!-- &nbsp;-->
+                        #{'  '}
+                        <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                                         oncomplete="questionEditDlg.hide();"  
+                                         ajax="true" process="@this" styleClass="btn"/>
+                    </div>  
+                </h:form>
+            </p:dialog>
+            <p:dialog id="scale-edit-dialog" header="#{messages['common.add']} #{messages['module.scale']}" styleClass="atf-header" widgetVar="scaleEditDlg" appendToBody="true" closeOnEscape="true">
+                <h:form  id="scale-question" acceptcharset="UTF-8" class="form-horizontal" >
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{scaleHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                    <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{scaleHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+
+                    <div class="form-actions">
+                        <p:commandButton id="save" value="#{messages['common.done']}" 
+                                         action="#{scaleHome.saveScale()}"
+                                         oncomplete="scaleEditDlg.hide();" 
+                                         styleClass="btn btn-primary"
+                                         update="@parent"/>
+                        <!-- &nbsp;-->
+                        #{'  '}
+                        <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                                         oncomplete="scaleEditDlg.hide();"  
+                                         ajax="true" process="@this" styleClass="btn"/>
+                    </div>  
+                </h:form>
+            </p:dialog>
         </ui:define>
     </ui:composition>  
 </html>

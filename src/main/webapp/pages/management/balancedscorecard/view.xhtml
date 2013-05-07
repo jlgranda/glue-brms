@@ -40,13 +40,15 @@
                     </div>
                 </div></div>             
         </ui:define>
-        <div class="row-fluid">             
+        
             <ui:define name="sidebar">
                 <h:form id="view"> 
-                    <p:scrollPanel>
-                        <p:panel id="explorer-panel"  header="#{messages['common.explorer']}" toggleable="true" >
+
+                    <p:panel id="explorer-panel"  header="#{messages['common.explorer']}" toggleable="true" >
+                        <p:scrollPanel>
                             <p:tree id="bscTree"  value="#{balancedScorecardHome.rootNode}" var="node"
-                                    selectionMode="single" selection="#{balancedScorecardHome.selectedNode}">  
+                                    selectionMode="single" selection="#{balancedScorecardHome.selectedNode}"
+                                    dynamic="true" cache="true">  
 
                                 <p:ajax event="select" update=":viewtable:messages :viewtable:button-add :viewtable:button-edit :viewtable:detail-panel" listener="#{balancedScorecardHome.onNodeSelect}" /> 
                                 <p:treeNode expandedIcon="ui-icon-folder-open"  
@@ -71,59 +73,62 @@
                                     <h:outputText value="#{node.name}" />  
                                 </p:treeNode>
                             </p:tree>
-                        </p:panel> 
-                    </p:scrollPanel>
-                </h:form>
+                        </p:scrollPanel>
+                    </p:panel>
 
+                </h:form>
             </ui:define>
             <ui:define name="content">
-                <h:form id="viewtable" >
+                <h:form id="viewtable">
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"/>
                     <div class="form-actions" style="padding-left: 20px">                            
                         <p:commandLink id="button-add" value="#{messages['common.add']}" update=":viewtable:messages :perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" actionListener="#{balancedScorecardHome.redirecToAdd}" styleClass="btn btn-primary" disabled="#{empty balancedScorecardHome.selectedNode}"/>
                         #{'  '}
                         <p:commandLink id="button-edit" value="#{messages['common.edit']}" update=":viewtable:messages :perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" actionListener="#{balancedScorecardHome.redirecToEdit}" disabled="#{empty balancedScorecardHome.selectedNode}" styleClass="btn btn-secondary"/>
-                    </div>
-                    <p:panel id="detail-panel" header="#{balancedScorecardHome.selectedNode.data.name!=null? balancedScorecardHome.selectedNode.data.name: balancedScorecardHome.bscNode.data.name}" toggleable="true">
-                        <p:treeTable id="treetable" value="#{balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode}" var="node"  propagateSelectionUp="true">  
+                        <div></div>
+                        <br/>
+                        <p:panel id="detail-panel" header="#{balancedScorecardHome.selectedNode.data.name!=null? balancedScorecardHome.selectedNode.data.name: balancedScorecardHome.bscNode.data.name}" toggleable="true">
 
-                            <p:column headerText="#{messages['module.balancedscorecard.dimention']}">  
-                                <h:outputText value="#{balancedScorecardHome.getToHaveChildren(balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode) == true ? node: hola}"/>                        
-                            </p:column>  
-                            <p:column headerText="#{messages['common.period.from']}">  
-                                <h:outputText value="#{node.from}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
-                                    <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="#{messages['common.period.to']}">  
-                                <h:outputText value="#{node.to}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
-                                    <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
-                                </h:outputText>  
-                            </p:column>
-                            <p:column headerText="#{messages['common.type']}">  
-                                <h:outputText value="#{messages[node.targetType]}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
-                            </p:column>
-                            <p:column headerText="#{messages['common.expectedValue']}">  
-                                <h:outputText value="#{node.value}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
-                            </p:column>
-                            <p:column headerText="#{messages['common.currentValue']}">  
-                                <h:outputText value="#{node.currentValue}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
-                            </p:column>
-                            <p:column headerText="#{messages['common.variance']}">  
-                                <h:outputText value="#{node.currentValue - node.value}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
-                            </p:column>
-                            <p:column headerText="#{messages['common.unit']}">  
-                                <h:outputText value="#{node.measure.unit}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
-                            </p:column>
-                            <p:column headerText="#{messages['module.method']}">  
-                                <p:dataTable var="method" value="#{node.methods}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
-                                    <p:column>
-                                        <p:graphicImage value="/MethodPrinter?methodId=#{methodPrinter.printToDownload(balancedScorecardHome.runMethod(method)).id}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>
-                                    </p:column>
-                                </p:dataTable>                                
-                            </p:column>
-                        </p:treeTable>  
-                    </p:panel>    
+                            <p:treeTable id="treetable" value="#{balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode}" var="node"  propagateSelectionUp="true" >  
+
+                                <p:column headerText="#{messages['module.balancedscorecard.dimention']}">  
+                                    <h:outputText value="#{balancedScorecardHome.getToHaveChildren(balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode) == true ? node: hola}"/>                        
+                                </p:column>  
+                                <p:column headerText="#{messages['common.period.from']}">  
+                                    <h:outputText value="#{node.from}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
+                                        <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="#{messages['common.period.to']}">  
+                                    <h:outputText value="#{node.to}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
+                                        <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                                    </h:outputText>  
+                                </p:column>
+                                <p:column headerText="#{messages['common.type']}">  
+                                    <h:outputText value="#{messages[node.targetType]}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
+                                </p:column>
+                                <p:column headerText="#{messages['common.expectedValue']}">  
+                                    <h:outputText value="#{node.value}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
+                                </p:column>
+                                <p:column headerText="#{messages['common.currentValue']}">  
+                                    <h:outputText value="#{node.currentValue}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
+                                </p:column>
+                                <p:column headerText="#{messages['common.variance']}">  
+                                    <h:outputText value="#{node.currentValue - node.value}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
+                                </p:column>
+                                <p:column headerText="#{messages['common.unit']}">  
+                                    <h:outputText value="#{node.measure.unit}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
+                                </p:column>
+                                <p:column headerText="#{messages['module.method']}">  
+                                    <p:dataTable var="method" value="#{node.methods}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
+                                        <p:column>
+                                            <p:graphicImage value="/MethodPrinter?methodId=#{methodPrinter.printToDownload(balancedScorecardHome.runMethod(method)).id}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>
+                                        </p:column>
+                                    </p:dataTable>                                
+                                </p:column>
+                            </p:treeTable>  
+                        </p:panel>   
+                    </div>
                 </h:form>
 
                 <!--PERSPECTIVE DIALOG -->
@@ -137,9 +142,10 @@
                         <div class="form-actions">
                             <p:commandButton id="save" value="#{messages['common.done']}" 
                                              action="#{perspectiveHome.savePerspectiveDialog()}"
+                                             styleClass="btn btn-primary" 
                                              oncomplete="perspectiveEditDlg.hide();" 
-                                             styleClass="btn btn-primary"/>
-                            <!-- &nbsp;-->
+                                             update=":view:explorer-panel :viewtable:"/>
+
                             #{'  '}
                             <p:commandButton type="button" value="#{messages['common.delete']}" 
                                              styleClass="btn-danger"
@@ -339,6 +345,6 @@
                     </p:dialog> 
                 </p:dialog>
             </ui:define>
-        </div>
+    
     </ui:composition>
 </html>
