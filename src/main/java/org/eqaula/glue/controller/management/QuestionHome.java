@@ -117,6 +117,9 @@ public class QuestionHome extends BussinesEntityHome<Question> implements Serial
             getInstance().setAuthor(this.profile);
             create(getInstance());
         }
+        if(getOutcome()==null){
+            return null;
+        }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
@@ -167,5 +170,11 @@ public class QuestionHome extends BussinesEntityHome<Question> implements Serial
     public boolean hasValuesBussinesEntity() {
         boolean ban =  revisionItemService.findByQuestion(getInstance()).isEmpty();
         return ban;
+    }
+    
+    public void createNewQuestion(){
+        setId(null);
+        setInstance(null);
+        load();
     }
 }

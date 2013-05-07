@@ -42,13 +42,12 @@ import org.primefaces.context.RequestContext;
 /*
  * @author dianita
  */
-
 @Named
 @ViewScoped
-public class ScaleHome extends BussinesEntityHome<Scale> implements Serializable  {
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ScaleHome.class); 
+public class ScaleHome extends BussinesEntityHome<Scale> implements Serializable {
+
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ScaleHome.class);
     private static final long serialVersionUID = -2179287867008565066L;
-    
     @Inject
     @Web
     private EntityManager em;
@@ -57,7 +56,7 @@ public class ScaleHome extends BussinesEntityHome<Scale> implements Serializable
     private Profile profile;
     @Inject
     private RevisionItemService revisionItemService;
-            
+
     public ScaleHome() {
     }
 
@@ -118,6 +117,9 @@ public class ScaleHome extends BussinesEntityHome<Scale> implements Serializable
             getInstance().setAuthor(this.profile);
             create(getInstance());
         }
+        if (getOutcome() == null) {
+            return null;
+        }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
@@ -159,16 +161,20 @@ public class ScaleHome extends BussinesEntityHome<Scale> implements Serializable
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if(band){
+        if (band) {
             return null;
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-    
+
     public boolean hasValuesBussinesEntity() {
-        boolean ban =  revisionItemService.findByScale(getInstance()).isEmpty();
+        boolean ban = revisionItemService.findByScale(getInstance()).isEmpty();
         return ban;
     }
 
-    
+    public void createNewScale() {
+        setId(null);
+        setInstance(null);
+        load();
+    }
 }

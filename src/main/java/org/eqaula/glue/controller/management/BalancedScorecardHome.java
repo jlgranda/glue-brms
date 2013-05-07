@@ -124,6 +124,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     public TreeNode getRootNode() {
         if (rootNode == null) {
             buildTree();
+            System.out.println("arbol");
         }
         return rootNode;
     }
@@ -281,8 +282,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         TreeNode objetiveNode = null;
         TreeNode measureNode = null;
         TreeNode targetNode = null;
-
-
+        
         bscNode.setExpanded(true);
         for (Perspective perspective : getInstance().getPerspectives()) {
             perspectiveNode = new DefaultTreeNode("perspective", perspective, bscNode);
