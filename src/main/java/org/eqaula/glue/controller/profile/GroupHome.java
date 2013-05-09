@@ -219,6 +219,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
                 //}
                 if (validate) {
                     this.getInstance().add(getBussinesEntity());
+                    save(getInstance());
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se agregó con exito " + getInstance().getProperty().getLabel() + ": " + getBussinesEntity().getName(), ". No olvide guardar al final!"));
                     RequestContext.getCurrentInstance().execute(dialog + ".hide()"); //cerrar el popup si se grabo correctamente
                     setBussinesEntity(null); //liberar de memoria el objeto seleccionado
