@@ -123,8 +123,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
 
     public TreeNode getRootNode() {
         if (rootNode == null) {
-            buildTree();
-            System.out.println("arbol");
+            buildTree();        
         }
         return rootNode;
     }
