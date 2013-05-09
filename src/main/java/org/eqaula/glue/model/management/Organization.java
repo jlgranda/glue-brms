@@ -50,6 +50,14 @@ public class Organization extends BussinesEntity implements Serializable {
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     private List<Theme> themes = new ArrayList<Theme>();
     
+    //Philosophical definition
+    private List<Mission> missions = new org.apache.commons.collections.list.TreeList();
+    
+    private List<Vision> missions = new org.apache.commons.collections.list.TreeList();
+    
+    private List<Principle> principles = new org.apache.commons.collections.list.TreeList();
+    
+    
     public String getRuc() {
         return ruc;
     }
