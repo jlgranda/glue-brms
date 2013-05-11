@@ -39,10 +39,14 @@ import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.Property;
 import org.eqaula.glue.model.management.Macroprocess;
+import org.eqaula.glue.model.management.Method;
+import org.eqaula.glue.model.management.Mission;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.management.Perspective;
+import org.eqaula.glue.model.management.Principle;
 import org.eqaula.glue.model.management.Theme;
+import org.eqaula.glue.model.management.Vision;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
@@ -52,8 +56,7 @@ import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
-/**
- *
+/*
  * @author cesar
  */
 @Named
@@ -75,7 +78,9 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     @Inject
     private FacesContext context;
     private Group groupSelected;
-    
+    private Mission selectedMission;
+    private Vision selectedVision;
+    private Principle selectedPrinciple;
     @Inject
     private GroupHome groupHome;
 
@@ -128,6 +133,32 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public void setGroupHome(GroupHome groupHome) {
         this.groupHome = groupHome;
     }
+
+    public Mission getSelectedMission() {
+        return selectedMission;
+    }
+
+    public void setSelectedMission(Mission selectedMission) {
+        this.selectedMission = selectedMission;
+    }
+
+    public Vision getSelectedVision() {
+        return selectedVision;
+    }
+
+    public void setSelectedVision(Vision selectedVision) {
+        this.selectedVision = selectedVision;
+    }
+
+    public Principle getSelectedPrinciple() {
+        return selectedPrinciple;
+    }
+
+    public void setSelectedPrinciple(Principle selectedPrinciple) {
+        this.selectedPrinciple = selectedPrinciple;
+    }
+    
+    
 
     @TransactionAttribute
     public void load() {
@@ -189,9 +220,8 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             create(getInstance());
             createDefaultOwner(getInstance());
         }
-        if (getOutcome() == null) {
-            return null;
-        }
+        System.out.println(getInstance().getMissions().size() + " # de lista de misiones despues de guardar");
+
         return resolveOutcome();
     }
 
@@ -331,15 +361,18 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
 
     @Override
     public String resolveOutcome() {
-        String _outcome = "";
-        //TODO build a dynamic mechanism
-        if ("owners".equalsIgnoreCase(getOutcome())) {
-            _outcome = "/pages/management/owner/list.xhtml" + "?faces-redirect=true&organizationId=" + getOrganizationId();
-        } else {
-            _outcome = getOutcome() + "?faces-redirect=true&includeViewParams=true";
-        }
 
-        return _outcome;
+        String _outcome = "";
+        if (getOutcome() != null) {
+            //TODO build a dynamic mechanism
+            if ("owners".equalsIgnoreCase(getOutcome())) {
+                _outcome = "/pages/management/owner/list.xhtml" + "?faces-redirect=true&organizationId=" + getOrganizationId();
+            } else {
+                _outcome = getOutcome() + "?faces-redirect=true&includeViewParams=true";
+            }
+            return _outcome;
+        }
+        return null;
     }
 
     @TransactionAttribute
@@ -357,11 +390,109 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public List<Group> getGroups() {
         if (groups.isEmpty()) {
             for (Property p : ui.getProperties(getInstance())) {
-                if ("org.eqaula.glue.model.Group".equals(p.getType())){
+                if ("org.eqaula.glue.model.Group".equals(p.getType())) {
                     groups.add(ui.getGroup(getInstance(), p));
                 }
             }
         }
         return groups;
+    }
+    @Inject
+    private MissionHome missionHome;
+
+    public void wireMission(Mission mission) {
+        if (mission == null) {
+            setSelectedMission(missionHome.createInstance());
+        } else {
+            setSelectedMission(mission);
+        }
+    }
+
+    public void createMission() {
+        wireMission(null);
+    }
+
+    public void addMission() {
+        if (!getSelectedMission().isPersistent()) {
+            getInstance().addMission(getSelectedMission());
+        }
+    }
+
+    public void removeMission() {
+        System.out.println(getInstance().getMissions().size() + "inicial");
+        if (getInstance().getMissions().contains(getSelectedMission())) {
+            getInstance().removeMission(getSelectedMission());
+        }
+        System.out.println(getInstance().getMissions().size() + "final");
+    }
+
+    public void clearMission() {
+        setSelectedMission(null);
+    }
+    
+    @Inject
+    private VisionHome visionHome;
+
+    public void wireVision(Vision vision) {
+        if (vision == null) {
+            setSelectedVision(visionHome.createInstance());
+        } else {
+            setSelectedVision(vision);
+        }
+    }
+
+    public void createVision() {
+        wireVision(null);
+    }
+
+    public void addVision() {
+        if (!getSelectedVision().isPersistent()) {
+            getInstance().addVision(getSelectedVision());
+        }
+    }
+
+    public void removeVision() {
+        System.out.println(getInstance().getVissions().size() + "inicial");
+        if (getInstance().getVissions().contains(getSelectedVision())) {
+            getInstance().removeVision(getSelectedVision());
+        }
+        System.out.println(getInstance().getVissions().size() + "final");
+    }
+
+    public void clearVision() {
+        setSelectedVision(null);
+    }
+    
+    @Inject
+    private PrincipleHome principleHome;
+
+    public void wirePrinciple(Principle principle) {
+        if (principle == null) {
+            setSelectedPrinciple(principleHome.createInstance());
+        } else {
+            setSelectedPrinciple(principle);
+        }
+    }
+
+    public void createPrinciple() {
+        wirePrinciple(null);
+    }
+
+    public void addPrinciple() {
+        if (!getSelectedPrinciple().isPersistent()) {
+            getInstance().addPrinciple(getSelectedPrinciple());
+        }
+    }
+
+    public void removePrinciple() {
+        
+        if (getInstance().getPrinciples().contains(getSelectedPrinciple())) {
+            getInstance().removePrinciple(getSelectedPrinciple());
+        }
+        
+    }
+
+    public void clearPrinciple() {
+        setSelectedPrinciple(null);
     }
 }

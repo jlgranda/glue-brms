@@ -14,6 +14,9 @@
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
             <f:viewParam name="organizationId" value="#{organizationHome.organizationId}" />
+            <f:viewParam name="organizationId" value="#{missionHome.organizationId}" />
+            <f:viewParam name="organizationId" value="#{visionHome.organizationId}" />
+            <f:viewParam name="organizationId" value="#{principleHome.organizationId}" />
         </f:metadata>
         <ui:param name="title" value="#{organizationHome.instance.name}" />
         <ui:define name="subnav">
@@ -64,41 +67,118 @@
 
         <ui:define name="content">
 
-            <h:form id="organization-philosophical-form">
-                <ui:repeat var="g" value="#{organizationHome.groups}"> 
-                    <p:dataTable id="groups" var="m" value="#{g.findOtherMembers(organizationHome.instance)}" 
-                                 editable="false" 
-                                 emptyMessage="#{mesages['common.emptyList']}"
-                                 rendered="#{true}">  
+            <h:form id="mission-form">
+                
 
-                        <f:facet name="header"> 
-                            #{g.property.label}
-                            <p:commandLink value="#{messages['common.add']}"  oncomplete="philosophicalGroupEditDlg.show();" 
-                                           immediate="true"
-                                           styleClass="btn btn-mini btn-primary"
-                                           style="color:#fff; font-size: 0.75em;"
-                                           action="#{groupHome.plug(g)}"
-                                           update=":organization-philosophical-group-edit-dialog">
+                <p:panel id="mission-panel" toggleable="true" rendered="#{not empty organizationHome.instance.id}" >
+                    <f:facet name="header"> 
+                        <h:outputText value="#{messages['module.missions']}"/>
+                        #{' '}
+                        <p:commandLink id="mission-add-button" 
+                                       value="#{messages['common.add']} #{messages['module.mission']}"
+                                       action="#{organizationHome.createMission()}"
+                                       oncomplete="missionEditDlg.show();" immediate="true"
+                                       styleClass="btn btn-mini btn-primary"
+                                       style="color:#fff; font-size: 0.75em;"
+                                       update=":mission-edit-dialog">
+                        </p:commandLink>
+
+                    </f:facet>
+                    <p:dataTable var="_mission" value="#{organizationHome.instance.missions}">
+                        <p:column headerText="#{messages['common.name']}" style="width:150px">
+                            <h:outputText value="#{_mission.name}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['common.description']}" style="width:150px">
+                            <h:outputText value="#{_mission.description}"/>
+                        </p:column>                        
+                        <p:column headerText="#{messages['common.edit']}" style="width:4%">
+                            <p:commandLink id="mission-edit-button"
+                                           value="#{messages['common.edit']}" 
+                                           action="#{organizationHome.wireMission(_mission)}" 
+                                           oncomplete="missionEditDlg.show();" immediate="true"
+                                           styleClass="btn btn-mini" style="font-size: 0.75em;"
+                                           update=":mission-edit-dialog">
                             </p:commandLink>
-                        </f:facet>  
-                        <p:columns value="#{ui.findColumnsTemplate(g)}" var="column" columnIndexVar="colIndex">  
-                            <f:facet name="header">  
-                                #{column.header}  
-                            </f:facet>  
-                            #{m.findAttributeValue(column.property)}  
-                        </p:columns>
+                        </p:column>
                     </p:dataTable>
-                </ui:repeat>
-                <p:growl/>
-                <div class="form-actions">
-                    <p:commandButton id="save" value="#{messages['common.done']}" 
-                                     action="#{organizationHome.saveOrganization()}"                                         
-                                     ajax="true" process="@this" styleClass="btn btn-primary"/>
-                    <!-- &nbsp;-->
-                    <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
-                                     ajax="true" process="@this" styleClass="btn"/>
+                </p:panel>
+                <br/>
+                <p:panel id="vision-panel" toggleable="true" rendered="#{not empty organizationHome.instance.id}" >
+                    <f:facet name="header"> 
+                        <h:outputText value="#{messages['module.visions']}"/>
+                        #{' '}
+                        <p:commandLink id="vision-add-button" 
+                                       value="#{messages['common.add']} #{messages['module.vision']}"
+                                       action="#{organizationHome.createVision()}"
+                                       oncomplete="visionEditDlg.show();" immediate="true"
+                                       styleClass="btn btn-mini btn-primary"
+                                       style="color:#fff; font-size: 0.75em;"
+                                       update=":vision-edit-dialog">
+                        </p:commandLink>
 
-                </div>  
+                    </f:facet>
+                    <p:dataTable var="_vision" value="#{organizationHome.instance.vissions}">
+                        <p:column headerText="#{messages['common.name']}" style="width:150px">
+                            <h:outputText value="#{_vision.name}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['common.description']}" style="width:150px">
+                            <h:outputText value="#{_vision.description}"/>
+                        </p:column>                        
+                        <p:column headerText="#{messages['common.edit']}" style="width:4%">
+                            <p:commandLink id="vision-edit-button"
+                                           value="#{messages['common.edit']}" 
+                                           action="#{organizationHome.wireVision(_vision)}" 
+                                           oncomplete="visionEditDlg.show();" immediate="true"
+                                           styleClass="btn btn-mini" style="font-size: 0.75em;"
+                                           update=":vision-edit-dialog">
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                
+                <br/>
+                <p:panel id="principle-panel" toggleable="true" rendered="#{not empty organizationHome.instance.id}" >
+                    <f:facet name="header"> 
+                        <h:outputText value="#{messages['module.principle']}"/>
+                        #{' '}
+                        <p:commandLink id="principle-add-button" 
+                                       value="#{messages['common.add']} #{messages['module.principle']}"
+                                       action="#{organizationHome.createPrinciple()}"
+                                       oncomplete="principleEditDlg.show();" immediate="true"
+                                       styleClass="btn btn-mini btn-primary"
+                                       style="color:#fff; font-size: 0.75em;"
+                                       update=":principle-edit-dialog">
+                        </p:commandLink>
+
+                    </f:facet>
+                    <p:dataTable var="_principle" value="#{organizationHome.instance.principles}">
+                        <p:column headerText="#{messages['common.name']}" style="width:150px">
+                            <h:outputText value="#{_principle.name}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['common.description']}" style="width:150px">
+                            <h:outputText value="#{_principle.description}"/>
+                        </p:column>                        
+                        <p:column headerText="#{messages['common.edit']}" style="width:4%">
+                            <p:commandLink id="principle-edit-button"
+                                           value="#{messages['common.edit']}" 
+                                           action="#{organizationHome.wirePrinciple(_principle)}" 
+                                           oncomplete="principleEditDlg.show();" immediate="true"
+                                           styleClass="btn btn-mini" style="font-size: 0.75em;"
+                                           update=":principle-edit-dialog">
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                
+                <div class="form-actions">
+                    <p:commandButton id="save" action="#{organizationHome.saveOrganization()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
+                    <!-- &nbsp;-->
+                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
+                                     update=":cancel-dialog" rendered="#{organizationHome.instance.persistent}">                        
+                    </p:commandButton>
+                    <!-- &nbsp;-->       
+                </div> 
+
             </h:form>
             <p:dialog id="organization-edit-dialog" header="#{messages['common.add']} #{messages['module.organization']}" styleClass="atf-header" widgetVar="organizationEditDlg" appendToBody="true" closeOnEscape="true">
                 <h:form  id="form-organization" acceptcharset="UTF-8" class="form-horizontal" >
@@ -210,7 +290,7 @@
                         <div class="controls">
                             <p:commandButton value="#{messages['common.add']}" 
                                              actionListener="#{groupHome.saveBussinesEntity('philosophicalGroupEditDlg')}" 
-                                             update=":organization-philosophical-form messages-dialog"
+                                             update="messages-dialog"
                                              ajax="true" process="@this"
                                              style="margin-top:10px;" icon="ui-icon-disk"
                                              styleClass="btn btn-primary">  
@@ -222,6 +302,189 @@
                     </h:form>
                 </p:scrollPanel>
             </p:dialog>
+
+            <!--MISSION DIALOG-->
+            <p:dialog id="mission-edit-dialog" 
+                      header="#{organizationHome.selectedMission.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.mission']}" 
+                      styleClass="atf-header"
+                      widgetVar="missionEditDlg" 
+                      appendToBody="true" closeOnEscape="true">
+                <h:form  id="form-mission" acceptcharset="UTF-8" class="form-horizontal" >
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <glue:input id="name" name="name" type="text"
+                                label="#{messages['common.name']}"
+                                value="#{organizationHome.selectedMission.name}" 
+                                required="true" inlinehelp="#{messages['common.name.inlinehelp']}" 
+                                execute="@this save" render="name"/>
+                    <glue:input id="description" 
+                                name="description" type="textarea" 
+                                label="#{messages['common.description']}" 
+                                value="#{organizationHome.selectedMission.description}" 
+                                required="false" inlinehelp="#{messages['common.description.help']}" 
+                                render="description" execute="@this save" />                
+                    <div class="form-actions">
+                        <p:commandButton id="mission-save" value="#{messages['common.done']}"
+                                         type="submit"
+                                         update=":mission-form:mission-panel"
+                                         actionListener="#{organizationHome.addMission()}"
+                                         oncomplete="if (#{facesContext.maximumSeverity == null}) missionEditDlg.hide()"
+                                         ajax="true" process="@this" styleClass="btn btn-primary"
+                                         immediate="false"/>
+                        
+                        <!-- &nbsp;-->
+                        <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="missionDeletedDlg.show();" immediate="true"
+                                         update=":mission-cancel-delete-dialog" rendered="#{organizationHome.selectedMission.id != null}">                        
+                        </p:commandButton>
+                        <!-- &nbsp;-->
+                        <p:commandButton type="button" value="#{messages['common.cancel']}" styleClass="btn" onclick="missionEditDlg.hide();" immediate="true"
+                                         rendered="#{true}">                        
+                        </p:commandButton>
+                    </div>  
+                </h:form>
+            </p:dialog>
+            <p:dialog id="mission-cancel-delete-dialog" header="#{messages['common.delete.confirm']}" widgetVar="missionDeletedDlg" resizable="false" modal="true">   
+                <h:form id="mission-form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}"
+                                     oncomplete="missionDeletedDlg.hide(); missionEditDlg.hide();"  
+                                     action="#{organizationHome.removeMission()}"                                         
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;"
+                                     update=":mission-form:mission-panel">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" 
+                                     type="button" onclick="missionDeletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
+
+            
+            <!--VISION DIALOG-->
+            <p:dialog id="vision-edit-dialog" 
+                      header="#{organizationHome.selectedVision.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.vision']}" 
+                      styleClass="atf-header"
+                      widgetVar="visionEditDlg" 
+                      appendToBody="true" closeOnEscape="true">
+                <h:form  id="form-vision" acceptcharset="UTF-8" class="form-horizontal" >
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <glue:input id="name" name="name" type="text"
+                                label="#{messages['common.name']}"
+                                value="#{organizationHome.selectedVision.name}" 
+                                required="true" inlinehelp="#{messages['common.name.inlinehelp']}" 
+                                execute="@this save" render="name"/>
+                    <glue:input id="description" 
+                                name="description" type="textarea" 
+                                label="#{messages['common.description']}" 
+                                value="#{organizationHome.selectedVision.description}" 
+                                required="false" inlinehelp="#{messages['common.description.help']}" 
+                                render="description" execute="@this save" />                
+                    <div class="form-actions">
+                        <p:commandButton id="vision-save" value="#{messages['common.done']}"
+                                         type="submit"
+                                         update=":mission-form:vision-panel"
+                                         actionListener="#{organizationHome.addVision()}"
+                                         oncomplete="if (#{facesContext.maximumSeverity == null}) visionEditDlg.hide()"
+                                         ajax="true" process="@this" styleClass="btn btn-primary"
+                                         immediate="false"/>
+                        
+                        <!-- &nbsp;-->
+                        <p:commandButton type="button" value="#{messages['common.delete']}"
+                                         styleClass="btn" onclick="visionDeletedDlg.show();" 
+                                         immediate="true" update=":vision-cancel-delete-dialog" 
+                                         rendered="#{organizationHome.selectedVision.id != null}">                        
+                        </p:commandButton>
+                        <!-- &nbsp;-->
+                        <p:commandButton type="button" value="#{messages['common.cancel']}" 
+                                         styleClass="btn" onclick="visionEditDlg.hide();"
+                                         immediate="true" rendered="#{true}">                        
+                        </p:commandButton>
+                    </div>  
+                </h:form>
+            </p:dialog>
+            <p:dialog id="vision-cancel-delete-dialog"
+                      header="#{messages['common.delete.confirm']}" 
+                      widgetVar="visionDeletedDlg" resizable="false" modal="true">   
+                <h:form id="vision-form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}"
+                                     oncomplete="visionDeletedDlg.hide(); visionEditDlg.hide();"  
+                                     action="#{organizationHome.removeVision()}"                                         
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;"
+                                     update=":mission-form:vision-panel">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" 
+                                     type="button" onclick="visionDeletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
+            
+            <!--PRINCIPLE DIALOG-->
+            <p:dialog id="principle-edit-dialog" 
+                      header="#{organizationHome.selectedPrinciple.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.principle']}" 
+                      styleClass="atf-header"
+                      widgetVar="principleEditDlg" 
+                      appendToBody="true" closeOnEscape="true">
+                <h:form  id="form-principle" acceptcharset="UTF-8" class="form-horizontal" >
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <glue:input id="name" name="name" type="text"
+                                label="#{messages['common.name']}"
+                                value="#{organizationHome.selectedPrinciple.name}" 
+                                required="true" inlinehelp="#{messages['common.name.inlinehelp']}" 
+                                execute="@this save" render="name"/>
+                    <glue:input id="description" 
+                                name="description" type="textarea" 
+                                label="#{messages['common.description']}" 
+                                value="#{organizationHome.selectedPrinciple.description}" 
+                                required="false" inlinehelp="#{messages['common.description.help']}" 
+                                render="description" execute="@this save" />                
+                    <div class="form-actions">
+                        <p:commandButton id="principle-save" value="#{messages['common.done']}"
+                                         type="submit"
+                                         update=":mission-form:principle-panel"
+                                         actionListener="#{organizationHome.addPrinciple()}"
+                                         oncomplete="if (#{facesContext.maximumSeverity == null}) principleEditDlg.hide()"
+                                         ajax="true" process="@this" styleClass="btn btn-primary"
+                                         immediate="false"/>
+                        
+                        <!-- &nbsp;-->
+                        <p:commandButton type="button" value="#{messages['common.delete']}"
+                                         styleClass="btn" onclick="principleDeletedDlg.show();" 
+                                         immediate="true" update=":principle-cancel-delete-dialog" 
+                                         rendered="#{organizationHome.selectedPrinciple.id != null}">                        
+                        </p:commandButton>
+                        <!-- &nbsp;-->
+                        <p:commandButton type="button" value="#{messages['common.cancel']}" 
+                                         styleClass="btn" onclick="principleEditDlg.hide();"
+                                         immediate="true" rendered="#{true}">                        
+                        </p:commandButton>
+                    </div>  
+                </h:form>
+            </p:dialog>
+            <p:dialog id="principle-cancel-delete-dialog"
+                      header="#{messages['common.delete.confirm']}" 
+                      widgetVar="principleDeletedDlg" resizable="false" modal="true">   
+                <h:form id="principle-form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}"
+                                     oncomplete="principleDeletedDlg.hide(); principleEditDlg.hide();"  
+                                     action="#{organizationHome.removePrinciple()}"                                         
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;"
+                                     update=":mission-form:principle-panel">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" 
+                                     type="button" onclick="principleDeletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
+            
         </ui:define>
 
         <ui:define name="sidebar">

@@ -145,7 +145,10 @@ limitations under the License.
                             <h:outputText value="#{_initiative.resource.name}"/>
                         </p:column>
                         <p:column headerText="#{messages['common.edit']}" style="width:4%">
-                            <p:commandLink id="initiative-edit-button" value="#{messages['common.edit']}" action="#{targetHome.wireInitiative(_initiative)}" oncomplete="initiativeEditDlg.show();" immediate="true"
+                            <p:commandLink id="initiative-edit-button" 
+                                           value="#{messages['common.edit']}" 
+                                           action="#{targetHome.wireInitiative(_initiative)}" 
+                                           oncomplete="initiativeEditDlg.show();" immediate="true"
                                            styleClass="btn btn-mini" style="font-size: 0.75em;"
                                            update=":initiative-edit-dialog">
                             </p:commandLink>

@@ -311,9 +311,9 @@ public class InitializeDatabase {
         
         //Estructuras para organización
         validateStructureForOrganization();
-        validateStructureFor("Mission", "Misión");
-        validateStructureFor("Vision", "Visión");
-        validateStructureFor("Principle", "Valor institucional");
+        //validateStructureFor("Mission", "Misión");
+        //validateStructureFor("Vision", "Visión");
+        //validateStructureFor("Principle", "Valor institucional");
     }
 
     private void validateStructureForProfile() {
@@ -386,14 +386,14 @@ public class InitializeDatabase {
             structure.setLastUpdate(now);
 
             //Lista de atributos de Perfiles
-            List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildGroupTypeProperty("Mission", "Misión", false, null, 1L, 1L, "Misión de la organización", 1L));
-            attributes.add(buildGroupTypeProperty("Vision", "Visión", false, null, 1L, 1L, "Visión de la organización", 2L));
-            attributes.add(buildGroupTypeProperty("Principle", "Valores", false, null, 1L, 1L, "Valores de la organización", 3L));
+            //List<Property> attributes = new ArrayList<Property>();
+            //attributes.add(buildGroupTypeProperty("Mission", "Misión", false, null, 1L, 1L, "Misión de la organización", 1L));
+            //attributes.add(buildGroupTypeProperty("Vision", "Visión", false, null, 1L, 1L, "Visión de la organización", 2L));
+            //attributes.add(buildGroupTypeProperty("Principle", "Valores", false, null, 1L, 1L, "Valores de la organización", 3L));
             /*attributes.add(buildProperty("mision", "java.lang.MultiLineString", null, false, "Misión", "Ingrese la misión de la Organización", true, 0L));
             attributes.add(buildProperty("vision", "java.lang.MultiLineString", null, false, "Visión", "Ingrese la vision de la Organización", true, 1L));*/
 
-            structure.setProperties(attributes);
+            //structure.setProperties(attributes);
             bussinesEntityType.addStructure(structure);
 
             entityManager.persist(bussinesEntityType);

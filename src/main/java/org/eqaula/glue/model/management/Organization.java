@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
@@ -32,24 +31,27 @@ import org.eqaula.glue.model.BussinesEntity;
  *
  * @author jlgranda
  */
-
 @Entity
 @Table(name = "Organization")
 @DiscriminatorValue(value = "ORG")
 @PrimaryKeyJoinColumn(name = "id")
 public class Organization extends BussinesEntity implements Serializable {
+
     private static final long serialVersionUID = 3095488521256724258L;
-    
     private String ruc;
-    
     private String initials;
-    
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Owner> owners = new ArrayList<Owner>();
-
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     private List<Theme> themes = new ArrayList<Theme>();
-    
+    //Philosophical definition
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    private List<Mission> missions = new org.apache.commons.collections.list.TreeList();
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    private List<Vision> vissions = new org.apache.commons.collections.list.TreeList();
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    private List<Principle> principles = new org.apache.commons.collections.list.TreeList();
+
     public String getRuc() {
         return ruc;
     }
@@ -73,13 +75,13 @@ public class Organization extends BussinesEntity implements Serializable {
     public void setOwners(List<Owner> owners) {
         this.owners = owners;
     }
-    
-    public boolean addOwner(Owner owner){
+
+    public boolean addOwner(Owner owner) {
         owner.setOrganization(this);
         return getOwners().add(owner);
     }
-    
-    public boolean removeOwner(Owner owner){
+
+    public boolean removeOwner(Owner owner) {
         owner.setOrganization(null);
         return getOwners().remove(owner);
     }
@@ -91,14 +93,38 @@ public class Organization extends BussinesEntity implements Serializable {
     public void setThemes(List<Theme> themes) {
         this.themes = themes;
     }
+
+    public List<Mission> getMissions() {
+        return missions;
+    }
+
+    public void setMissions(List<Mission> missions) {
+        this.missions = missions;
+    }
+
+    public List<Vision> getVissions() {
+        return vissions;
+    }
+
+    public void setVissions(List<Vision> vissions) {
+        this.vissions = vissions;
+    }
+
+    public List<Principle> getPrinciples() {
+        return principles;
+    }
+
+    public void setPrinciples(List<Principle> principles) {
+        this.principles = principles;
+    }
     
     @Override
-    public String getCanonicalPath(){
+    public String getCanonicalPath() {
         StringBuilder path = new StringBuilder();
         path.append(getName());
         return path.toString();
     }
-    
+
     @Override
     public String toString() {
         return "org.eqaula.glue.model.management.Organization[ "
@@ -106,6 +132,41 @@ public class Organization extends BussinesEntity implements Serializable {
                 + "name=" + getName() + ","
                 + "type=" + getType() + ","
                 + " ]";
+    }
+    
+    public boolean addMission(Mission mission){
+        if(!this.getMissions().contains(mission)){
+            mission.setOrganization(this);
+            return this.getMissions().add(mission);
+        }
+        return false;
+    }
+    
+    public boolean addVision(Vision vision){
+        if(!this.getVissions().contains(vision)){
+            vision.setOrganization(this);
+            return this.getVissions().add(vision);
+        }
+        return false;
+    }
+    
+    public boolean addPrinciple(Principle principle){
+        if(!this.getPrinciples().contains(principle)){
+            principle.setOrganization(this);
+            return this.getPrinciples().add(principle);
+        }
+        return false;
+    }
+    
+    public boolean removeMission(Mission mission) {
+        return this.getMissions().remove(mission);
+    }
+    
+    public boolean removeVision(Vision vision) {
+        return this.getVissions().remove(vision);
+    }
+    public boolean removePrinciple(Principle principle) {
+        return this.getPrinciples().remove(principle);
     }
     
 }

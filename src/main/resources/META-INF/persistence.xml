@@ -10,6 +10,7 @@
     <class>org.eqaula.glue.service.StockService</class>
     <class>org.eqaula.glue.service.LedgerService</class>
     <class>org.eqaula.glue.model.config.Frequency</class>
+   
     <properties>
       <!-- Properties for Hibernate -->
       <property name="hibernate.hbm2ddl.auto" value="update"/>
