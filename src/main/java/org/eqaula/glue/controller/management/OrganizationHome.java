@@ -157,8 +157,6 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public void setSelectedPrinciple(Principle selectedPrinciple) {
         this.selectedPrinciple = selectedPrinciple;
     }
-    
-    
 
     @TransactionAttribute
     public void load() {
@@ -220,8 +218,6 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             create(getInstance());
             createDefaultOwner(getInstance());
         }
-        System.out.println(getInstance().getMissions().size() + " # de lista de misiones despues de guardar");
-
         return resolveOutcome();
     }
 
@@ -419,17 +415,18 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public void removeMission() {
-        System.out.println(getInstance().getMissions().size() + "inicial");
         if (getInstance().getMissions().contains(getSelectedMission())) {
             getInstance().removeMission(getSelectedMission());
         }
-        System.out.println(getInstance().getMissions().size() + "final");
+        if (getSelectedMission().isPersistent()) {
+            missionHome.editMission(getSelectedMission().getId());
+            missionHome.deleteMission();
+        }
     }
 
     public void clearMission() {
         setSelectedMission(null);
     }
-    
     @Inject
     private VisionHome visionHome;
 
@@ -452,17 +449,19 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public void removeVision() {
-        System.out.println(getInstance().getVissions().size() + "inicial");
+
         if (getInstance().getVissions().contains(getSelectedVision())) {
             getInstance().removeVision(getSelectedVision());
         }
-        System.out.println(getInstance().getVissions().size() + "final");
+        if (getSelectedVision().isPersistent()) {
+            visionHome.editVision(getSelectedVision().getId());
+            visionHome.deleteVision();
+        }
     }
 
     public void clearVision() {
         setSelectedVision(null);
     }
-    
     @Inject
     private PrincipleHome principleHome;
 
@@ -485,11 +484,14 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public void removePrinciple() {
-        
+
         if (getInstance().getPrinciples().contains(getSelectedPrinciple())) {
             getInstance().removePrinciple(getSelectedPrinciple());
         }
-        
+        if (getSelectedPrinciple().isPersistent()) {
+            principleHome.editPrinciple(getSelectedPrinciple().getId());
+            principleHome.deletePrinciple();
+        }
     }
 
     public void clearPrinciple() {

@@ -67,15 +67,13 @@
 
         <ui:define name="content">
 
-            <h:form id="mission-form">
-                
-
+            <h:form id="mission-form" styleClass="validation-status">
                 <p:panel id="mission-panel" toggleable="true" rendered="#{not empty organizationHome.instance.id}" >
                     <f:facet name="header"> 
-                        <h:outputText value="#{messages['module.missions']}"/>
+                        <h:outputText value="#{messages['module.mission']}"/>
                         #{' '}
                         <p:commandLink id="mission-add-button" 
-                                       value="#{messages['common.add']} #{messages['module.mission']}"
+                                       value="#{messages['common.add']}"
                                        action="#{organizationHome.createMission()}"
                                        oncomplete="missionEditDlg.show();" immediate="true"
                                        styleClass="btn btn-mini btn-primary"
@@ -84,20 +82,23 @@
                         </p:commandLink>
 
                     </f:facet>
-                    <p:dataTable var="_mission" value="#{organizationHome.instance.missions}">
+                    <p:dataTable id="mission-table"  var="_mission"
+                                 value="#{organizationHome.instance.missions}">
                         <p:column headerText="#{messages['common.name']}" style="width:150px">
                             <h:outputText value="#{_mission.name}"/>
                         </p:column>
                         <p:column headerText="#{messages['common.description']}" style="width:150px">
                             <h:outputText value="#{_mission.description}"/>
                         </p:column>                        
-                        <p:column headerText="#{messages['common.edit']}" style="width:4%">
+                        <p:column headerText="#{messages['common.actions']}" style="width:4%" 
+                                  id="mission-column">
                             <p:commandLink id="mission-edit-button"
                                            value="#{messages['common.edit']}" 
                                            action="#{organizationHome.wireMission(_mission)}" 
-                                           oncomplete="missionEditDlg.show();" immediate="true"
+                                           oncomplete="missionEditDlg.show();"
                                            styleClass="btn btn-mini" style="font-size: 0.75em;"
-                                           update=":mission-edit-dialog">
+                                           update=":mission-edit-dialog"
+                                            ajax="true">
                             </p:commandLink>
                         </p:column>
                     </p:dataTable>
@@ -105,10 +106,10 @@
                 <br/>
                 <p:panel id="vision-panel" toggleable="true" rendered="#{not empty organizationHome.instance.id}" >
                     <f:facet name="header"> 
-                        <h:outputText value="#{messages['module.visions']}"/>
+                        <h:outputText value="#{messages['module.vision']}"/>
                         #{' '}
                         <p:commandLink id="vision-add-button" 
-                                       value="#{messages['common.add']} #{messages['module.vision']}"
+                                       value="#{messages['common.add']}"
                                        action="#{organizationHome.createVision()}"
                                        oncomplete="visionEditDlg.show();" immediate="true"
                                        styleClass="btn btn-mini btn-primary"
@@ -124,7 +125,7 @@
                         <p:column headerText="#{messages['common.description']}" style="width:150px">
                             <h:outputText value="#{_vision.description}"/>
                         </p:column>                        
-                        <p:column headerText="#{messages['common.edit']}" style="width:4%">
+                        <p:column headerText="#{messages['common.actions']}" style="width:4%">
                             <p:commandLink id="vision-edit-button"
                                            value="#{messages['common.edit']}" 
                                            action="#{organizationHome.wireVision(_vision)}" 
@@ -142,7 +143,7 @@
                         <h:outputText value="#{messages['module.principle']}"/>
                         #{' '}
                         <p:commandLink id="principle-add-button" 
-                                       value="#{messages['common.add']} #{messages['module.principle']}"
+                                       value="#{messages['common.add']}"
                                        action="#{organizationHome.createPrinciple()}"
                                        oncomplete="principleEditDlg.show();" immediate="true"
                                        styleClass="btn btn-mini btn-primary"
@@ -158,7 +159,7 @@
                         <p:column headerText="#{messages['common.description']}" style="width:150px">
                             <h:outputText value="#{_principle.description}"/>
                         </p:column>                        
-                        <p:column headerText="#{messages['common.edit']}" style="width:4%">
+                        <p:column headerText="#{messages['common.actions']}" style="width:4%">
                             <p:commandLink id="principle-edit-button"
                                            value="#{messages['common.edit']}" 
                                            action="#{organizationHome.wirePrinciple(_principle)}" 
@@ -171,12 +172,13 @@
                 </p:panel>
                 
                 <div class="form-actions">
-                    <p:commandButton id="save" action="#{organizationHome.saveOrganization()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
+                    <p:commandButton
+                        id="save" action="#{organizationHome.saveOrganization()}"
+                        value="#{messages['common.save']}" styleClass="btn btn-primary"
+                        update=":mission-form :mission-form:mission-table:mission-column"
+                        immediate="true" process="@this"/>
                     <!-- &nbsp;-->
-                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
-                                     update=":cancel-dialog" rendered="#{organizationHome.instance.persistent}">                        
-                    </p:commandButton>
-                    <!-- &nbsp;-->       
+                    
                 </div> 
 
             </h:form>
@@ -308,7 +310,8 @@
                       header="#{organizationHome.selectedMission.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.mission']}" 
                       styleClass="atf-header"
                       widgetVar="missionEditDlg" 
-                      appendToBody="true" closeOnEscape="true">
+                      appendToBody="true" closeOnEscape="true"
+                      >
                 <h:form  id="form-mission" acceptcharset="UTF-8" class="form-horizontal" >
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                     <glue:input id="name" name="name" type="text"
@@ -332,27 +335,32 @@
                                          immediate="false"/>
                         
                         <!-- &nbsp;-->
-                        <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="missionDeletedDlg.show();" immediate="true"
-                                         update=":mission-cancel-delete-dialog" rendered="#{organizationHome.selectedMission.id != null}">                        
+                        <p:commandButton type="button" value="#{messages['common.delete']}"
+                                         styleClass="btn" onclick="missionDeletedDlg.show();"
+                                         immediate="true" update=":mission-cancel-delete-dialog" 
+                                         rendered="#{organizationHome.selectedMission.id != null}">                        
                         </p:commandButton>
                         <!-- &nbsp;-->
-                        <p:commandButton type="button" value="#{messages['common.cancel']}" styleClass="btn" onclick="missionEditDlg.hide();" immediate="true"
-                                         rendered="#{true}">                        
+                        <p:commandButton type="button" value="#{messages['common.cancel']}" 
+                                         styleClass="btn" onclick="missionEditDlg.hide();" 
+                                         immediate="true" rendered="#{true}">                        
                         </p:commandButton>
                     </div>  
                 </h:form>
             </p:dialog>
-            <p:dialog id="mission-cancel-delete-dialog" header="#{messages['common.delete.confirm']}" widgetVar="missionDeletedDlg" resizable="false" modal="true">   
+            <p:dialog id="mission-cancel-delete-dialog" header="#{messages['common.delete.confirm']}" 
+                      widgetVar="missionDeletedDlg" resizable="false" >   
                 <h:form id="mission-form-dialog-confirm-delete">
                     <h:panelGroup layout="block" style="padding:5px;">  
                         <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                     </h:panelGroup>  
                     <p:commandButton value="#{messages['common.yes']}"
                                      oncomplete="missionDeletedDlg.hide(); missionEditDlg.hide();"  
-                                     action="#{organizationHome.removeMission()}"                                         
-                                     ajax="true" process="@this"  
+                                     action="#{organizationHome.removeMission()}"  
+                                     ajax="true" process="@this" 
                                      style="margin-top:10px;"
-                                     update=":mission-form:mission-panel">  
+                                     update=":mission-form:mission-panel"
+                                     > 
                     </p:commandButton>  
                     <p:commandButton value="#{messages['common.no']}" 
                                      type="button" onclick="missionDeletedDlg.hide();"  
