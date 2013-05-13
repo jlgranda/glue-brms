@@ -6,7 +6,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/view/templates/glue.xhtml"
+                template="/WEB-INF/view/templates/glue-tree.xhtml"
                 xmlns:glue ="http://eqaula.org/jsf/facelets">
 
     <f:metadata>
@@ -34,29 +34,14 @@
 
                     </div>
                 </div> 
-
             </div>         
         </div>             
     </ui:define>
     <ui:define name="content">
 
-
-
         <h:form id="form">
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
             <div class="form-actions" style="padding-left: 20px">
-                <!--<h:link value="#{messages['common.add']}" rendered="#{true}" outcome="balancedscorecard" styleClass="btn btn-primary">
-                    <f:param name="organizationId" value="#{balancedScorecardListService.organizationId}" ></f:param>
-                    <f:param name="outcome" value="/pages/management/balancedscorecard/list"></f:param>
-                </h:link>                
-                #{' '}
-                <h:link id="button-edit" value="#{messages['common.edit']}" rendered="true" outcome="balancedscorecard" styleClass="btn" 
-                        disabled="#{empty balancedScorecardListService.selectedBalancedScorecard.id}">
-                    <f:param name= "balancedScorecardId" value="#{balancedScorecardListService.selectedBalancedScorecard.id}"></f:param>
-                    <f:param name="organizationId" value="#{balancedScorecardListService.selectedBalancedScorecard.organization.id}" ></f:param>
-                    <f:param name="outcome" value="/pages/management/balancedscorecard/list"></f:param>
-                </h:link> -->
-
 
                 <p:commandLink id="button-add" value="#{messages['common.add']}" action="#{balancedScorecardHome.createNewBalancedScoreCard()}" oncomplete="balancedScoreCardEditDlg.show();"
                                styleClass="btn btn-primary"
@@ -104,7 +89,7 @@
                     <h:outputText value="#{_balancedScorecard.createdOn}" />
                 </p:column>                
 
-                
+
                 <p:column headerText="#{messages['common.author']}" sortBy="#{_balancedScorecard.author}">
                     <h:outputText value="#{_balancedScorecard.author.name}" />
                 </p:column>   
@@ -156,5 +141,8 @@
             </p:dialog> 
         </p:dialog>
 
+    </ui:define>
+    <ui:define name="sidebar">
+        <ui:include src="/pages/management/navigator.xhtml" />
     </ui:define>
 </ui:composition>
