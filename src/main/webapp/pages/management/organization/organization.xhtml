@@ -135,7 +135,8 @@
                     </ui:repeat>                                   
                 </h:panelGroup>
                 <div class="form-actions">
-                    <p:commandButton id="save" action="#{organizationHome.saveOrganization()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
+                    <p:commandButton id="save" action="#{organizationHome.saveOrganization()}" 
+                                     value="#{messages['common.save']}" styleClass="btn btn-primary"/>
 
                     <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
                                      update=":cancel-dialog" rendered="#{organizationHome.managed}">                        

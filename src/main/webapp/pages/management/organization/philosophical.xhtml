@@ -11,7 +11,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:glue ="http://eqaula.org/jsf/facelets">
 
-    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+    <ui:composition template="/WEB-INF/view/templates/glue-tree.xhtml">
         <f:metadata>
             <f:viewParam name="organizationId" value="#{organizationHome.organizationId}" />
             <f:viewParam name="organizationId" value="#{missionHome.organizationId}" />
@@ -35,7 +35,7 @@
 
         <ui:define name="header-replace">
             <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="row-fluid" style="margin-top: 5px;">
                         <div class="span10">
                             <!--
@@ -68,14 +68,16 @@
         <ui:define name="content">
 
             <h:form id="mission-form" styleClass="validation-status">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <p:panel id="mission-panel" toggleable="true" rendered="#{not empty organizationHome.instance.id}" >
+
                     <f:facet name="header"> 
                         <h:outputText value="#{messages['module.mission']}"/>
                         #{' '}
                         <p:commandLink id="mission-add-button" 
                                        value="#{messages['common.add']}"
                                        action="#{organizationHome.createMission()}"
-                                       oncomplete="missionEditDlg.show();" immediate="true"
+                                       oncomplete="missionEditDlg.show();" 
                                        styleClass="btn btn-mini btn-primary"
                                        style="color:#fff; font-size: 0.75em;"
                                        update=":mission-edit-dialog">
@@ -97,8 +99,7 @@
                                            action="#{organizationHome.wireMission(_mission)}" 
                                            oncomplete="missionEditDlg.show();"
                                            styleClass="btn btn-mini" style="font-size: 0.75em;"
-                                           update=":mission-edit-dialog"
-                                            ajax="true">
+                                           update=":mission-edit-dialog">
                             </p:commandLink>
                         </p:column>
                     </p:dataTable>
@@ -136,7 +137,7 @@
                         </p:column>
                     </p:dataTable>
                 </p:panel>
-                
+
                 <br/>
                 <p:panel id="principle-panel" toggleable="true" rendered="#{not empty organizationHome.instance.id}" >
                     <f:facet name="header"> 
@@ -170,15 +171,14 @@
                         </p:column>
                     </p:dataTable>
                 </p:panel>
-                
+
                 <div class="form-actions">
                     <p:commandButton
-                        id="save" action="#{organizationHome.saveOrganization()}"
+                        id="save" action="#{organizationHome.saveOrganizationAndPhilosophicalDefinition()}"
                         value="#{messages['common.save']}" styleClass="btn btn-primary"
-                        update=":mission-form :mission-form:mission-table:mission-column"
-                        immediate="true" process="@this"/>
+                        update="@this"/>
                     <!-- &nbsp;-->
-                    
+
                 </div> 
 
             </h:form>
@@ -333,7 +333,7 @@
                                          oncomplete="if (#{facesContext.maximumSeverity == null}) missionEditDlg.hide()"
                                          ajax="true" process="@this" styleClass="btn btn-primary"
                                          immediate="false"/>
-                        
+
                         <!-- &nbsp;-->
                         <p:commandButton type="button" value="#{messages['common.delete']}"
                                          styleClass="btn" onclick="missionDeletedDlg.show();"
@@ -355,7 +355,7 @@
                         <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                     </h:panelGroup>  
                     <p:commandButton value="#{messages['common.yes']}"
-                                     oncomplete="missionDeletedDlg.hide(); missionEditDlg.hide();"  
+                                     oncomplete="missionDeletedDlg.hide(); :missionEditDlg.hide();"  
                                      action="#{organizationHome.removeMission()}"  
                                      ajax="true" process="@this" 
                                      style="margin-top:10px;"
@@ -368,7 +368,7 @@
                 </h:form>
             </p:dialog> 
 
-            
+
             <!--VISION DIALOG-->
             <p:dialog id="vision-edit-dialog" 
                       header="#{organizationHome.selectedVision.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.vision']}" 
@@ -396,7 +396,7 @@
                                          oncomplete="if (#{facesContext.maximumSeverity == null}) visionEditDlg.hide()"
                                          ajax="true" process="@this" styleClass="btn btn-primary"
                                          immediate="false"/>
-                        
+
                         <!-- &nbsp;-->
                         <p:commandButton type="button" value="#{messages['common.delete']}"
                                          styleClass="btn" onclick="visionDeletedDlg.show();" 
@@ -419,7 +419,7 @@
                         <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                     </h:panelGroup>  
                     <p:commandButton value="#{messages['common.yes']}"
-                                     oncomplete="visionDeletedDlg.hide(); visionEditDlg.hide();"  
+                                     oncomplete="visionDeletedDlg.hide(); :visionEditDlg.hide();"  
                                      action="#{organizationHome.removeVision()}"                                         
                                      ajax="true" process="@this"  
                                      style="margin-top:10px;"
@@ -430,7 +430,7 @@
                                      style="margin-top:10px;"/>  
                 </h:form>
             </p:dialog> 
-            
+
             <!--PRINCIPLE DIALOG-->
             <p:dialog id="principle-edit-dialog" 
                       header="#{organizationHome.selectedPrinciple.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.principle']}" 
@@ -458,7 +458,7 @@
                                          oncomplete="if (#{facesContext.maximumSeverity == null}) principleEditDlg.hide()"
                                          ajax="true" process="@this" styleClass="btn btn-primary"
                                          immediate="false"/>
-                        
+
                         <!-- &nbsp;-->
                         <p:commandButton type="button" value="#{messages['common.delete']}"
                                          styleClass="btn" onclick="principleDeletedDlg.show();" 
@@ -481,7 +481,7 @@
                         <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                     </h:panelGroup>  
                     <p:commandButton value="#{messages['common.yes']}"
-                                     oncomplete="principleDeletedDlg.hide(); principleEditDlg.hide();"  
+                                     oncomplete="principleDeletedDlg.hide(); :principleEditDlg.hide();"  
                                      action="#{organizationHome.removePrinciple()}"                                         
                                      ajax="true" process="@this"  
                                      style="margin-top:10px;"
@@ -492,7 +492,7 @@
                                      style="margin-top:10px;"/>  
                 </h:form>
             </p:dialog> 
-            
+
         </ui:define>
 
         <ui:define name="sidebar">

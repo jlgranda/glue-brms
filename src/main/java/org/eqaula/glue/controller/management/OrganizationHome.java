@@ -38,6 +38,7 @@ import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.Group;
 import org.eqaula.glue.model.Property;
+import org.eqaula.glue.model.management.BalancedScorecard;
 import org.eqaula.glue.model.management.Macroprocess;
 import org.eqaula.glue.model.management.Method;
 import org.eqaula.glue.model.management.Mission;
@@ -496,5 +497,17 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
 
     public void clearPrinciple() {
         setSelectedPrinciple(null);
+    }
+
+    @TransactionAttribute
+    public void saveOrganizationAndPhilosophicalDefinition() {
+        saveOrganization();
+        try {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Las propiedades agregadas se han guardado exitosamente.", ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
+        }
+
     }
 }
