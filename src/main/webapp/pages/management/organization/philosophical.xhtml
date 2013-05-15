@@ -224,20 +224,20 @@
                                        update=":philosophical-form"
                                        actionListener="#{organizationHome.addMission()}"
                                        oncomplete="if (#{facesContext.maximumSeverity == null}) missionEditDlg.hide()"
-                                       ajax="true" process="@this" styleClass="btn btn-primary"
-                                       immediate="false"
+                                       ajax="true" process="@this" immediate="false"
+                                       styleClass="btn btn-primary"
                                        style="color:#fff;"
                                        />
                         <!-- &nbsp;-->
                         <p:commandLink type="button" value="#{messages['common.delete']}"
-                                         styleClass="btn btn-danger" onclick="missionDeletedDlg.show();"
-                                         immediate="true" update=":mission-cancel-delete-dialog" 
-                                         rendered="#{organizationHome.containsMission()}"
-                                         style="color:#fff;"/>                                                
+                                       styleClass="btn btn-danger" onclick="missionDeletedDlg.show();"
+                                       immediate="true" update=":mission-cancel-delete-dialog" 
+                                       rendered="#{organizationHome.containsMission()}"
+                                       style="color:#fff;"/>                                                
                         <!-- &nbsp;-->
                         <p:commandLink type="button" value="#{messages['common.cancel']}" 
-                                         styleClass="btn" onclick="missionEditDlg.hide();" 
-                                         immediate="true" rendered="#{true}"/>                        
+                                       styleClass="btn" onclick="missionEditDlg.hide();" 
+                                       immediate="true" rendered="#{true}"/>                        
                     </div>  
                 </h:form>
             </p:dialog>
@@ -254,7 +254,7 @@
                                      style="margin-top:10px;"
                                      update=":philosophical-form"
                                      /> 
-                    
+
                     <p:commandButton value="#{messages['common.no']}" 
                                      type="button" onclick="missionDeletedDlg.hide();"  
                                      style="margin-top:10px;"/>  
@@ -282,25 +282,27 @@
                                 required="false" inlinehelp="#{messages['common.description.help']}" 
                                 render="description" execute="@this save" />                
                     <div class="form-actions">
-                        <p:commandButton id="vision-save" value="#{messages['common.done']}"
-                                         type="submit"
-                                         update=":philosophical-form"
-                                         actionListener="#{organizationHome.addVision()}"
-                                         oncomplete="if (#{facesContext.maximumSeverity == null}) visionEditDlg.hide()"
-                                         ajax="true" process="@this" styleClass="btn btn-primary"
-                                         immediate="false"/>
+                        <p:commandLink id="vision-save" value="#{messages['common.done']}"
+                                       type="submit"
+                                       update=":philosophical-form"
+                                       actionListener="#{organizationHome.addVision()}"
+                                       oncomplete="if (#{facesContext.maximumSeverity == null}) visionEditDlg.hide()"
+                                       ajax="true" process="@this" 
+                                       immediate="false"
+                                       styleClass="btn btn-primary"
+                                       style="color:#fff;"/>
 
                         <!-- &nbsp;-->
-                        <p:commandButton type="button" value="#{messages['common.delete']}"
-                                         styleClass="btn" onclick="visionDeletedDlg.show();" 
-                                         immediate="true" update=":vision-cancel-delete-dialog" 
-                                         rendered="#{organizationHome.containsVision()}">                        
-                        </p:commandButton>
+                        <p:commandLink type="button" value="#{messages['common.delete']}"
+                                       styleClass="btn btn-danger" onclick="visionDeletedDlg.show();" 
+                                       immediate="true" update=":vision-cancel-delete-dialog" 
+                                       rendered="#{organizationHome.containsVision()}"/>                        
+
                         <!-- &nbsp;-->
-                        <p:commandButton type="button" value="#{messages['common.cancel']}" 
-                                         styleClass="btn" onclick="visionEditDlg.hide();"
-                                         immediate="true" rendered="#{true}">                        
-                        </p:commandButton>
+                        <p:commandLink type="button" value="#{messages['common.cancel']}" 
+                                       styleClass="btn" onclick="visionEditDlg.hide();"
+                                       immediate="true" rendered="#{true}"/>  
+
                     </div>  
                 </h:form>
             </p:dialog>
@@ -344,25 +346,26 @@
                                 required="false" inlinehelp="#{messages['common.description.help']}" 
                                 render="description" execute="@this save" />                
                     <div class="form-actions">
-                        <p:commandButton id="principle-save" value="#{messages['common.done']}"
-                                         type="submit"
-                                         update=":philosophical-form"
-                                         actionListener="#{organizationHome.addPrinciple()}"
-                                         oncomplete="if (#{facesContext.maximumSeverity == null}) principleEditDlg.hide()"
-                                         ajax="true" process="@this" styleClass="btn btn-primary"
-                                         immediate="false"/>
+                        <p:commandLink id="principle-save" value="#{messages['common.done']}"
+                                       type="submit"
+                                       update=":philosophical-form"
+                                       actionListener="#{organizationHome.addPrinciple()}"
+                                       oncomplete="if (#{facesContext.maximumSeverity == null}) principleEditDlg.hide()"
+                                       ajax="true" process="@this"
+                                       immediate="false" styleClass="btn btn-primary"
+                                       style="color:#fff;" />
 
                         <!-- &nbsp;-->
-                        <p:commandButton type="button" value="#{messages['common.delete']}"
-                                         styleClass="btn" onclick="principleDeletedDlg.show();" 
-                                         immediate="true" update=":principle-cancel-delete-dialog" 
-                                         rendered="#{organizationHome.containsPrinciple()}">                        
-                        </p:commandButton>
+                        <p:commandLink type="button" value="#{messages['common.delete']}"
+                                       styleClass="btn btn-danger" onclick="principleDeletedDlg.show();" 
+                                       immediate="true" update=":principle-cancel-delete-dialog" 
+                                       rendered="#{organizationHome.containsPrinciple()}"/>                        
+
                         <!-- &nbsp;-->
-                        <p:commandButton type="button" value="#{messages['common.cancel']}" 
+                        <p:commandLink type="button" value="#{messages['common.cancel']}" 
                                          styleClass="btn" onclick="principleEditDlg.hide();"
-                                         immediate="true" rendered="#{true}">                        
-                        </p:commandButton>
+                                         immediate="true" rendered="#{true}"/>                        
+                        
                     </div>  
                 </h:form>
             </p:dialog>

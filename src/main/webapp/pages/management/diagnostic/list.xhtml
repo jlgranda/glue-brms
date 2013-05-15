@@ -140,22 +140,23 @@ limitations under the License.
                 <glue:input id="applicationDate" name="applicationDate" type="calendar" label="#{messages['common.applicationDate']}" value="#{diagnosticHome.instance.applicationDate}" required="true" inlinehelp="#{messages['common.applicationDate.inlinehelp']}" execute="@this save" render="applicationDate" />
 
                 <div class="form-actions">
-                    <p:commandButton id="save" value="#{messages['common.done']}" 
+                    <p:commandLink id="save" value="#{messages['common.done']}" 
                                      action="#{diagnosticHome.saveDiagnosticDialog()}"
                                      oncomplete="diagnosticEditDlg.hide();" 
                                      update=":form"
-                                     styleClass="btn btn-primary"/>
+                                     styleClass="btn btn-primary" style="color:#fff;" 
+                                     />
                     <!-- &nbsp;-->
                     #{'  '}
-                    <p:commandButton type="button" value="#{messages['common.delete']}" 
-                                     styleClass="btn-danger"
+                    <p:commandLink type="button" value="#{messages['common.delete']}" 
+                                     styleClass="btn btn-danger" style="color:#fff;" 
                                      onclick="deletedDlg.show()"
                                      immediate="true"
                                      update=":cancel-dialog"
                                      rendered="#{diagnosticHome.managed}"
                                      />
                     #{'  '}
-                    <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                    <p:commandLink id="cancel" value="#{messages['common.cancel']}" 
                                      oncomplete="diagnosticEditDlg.hide();"  
                                      ajax="true" process="@this" styleClass="btn"/>
 

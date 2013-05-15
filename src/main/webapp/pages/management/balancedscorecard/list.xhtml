@@ -105,14 +105,15 @@
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{balancedScorecardHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
 
                 <div class="form-actions">
-                    <p:commandButton id="save" value="#{messages['common.done']}" 
+                    <p:commandLink id="save" value="#{messages['common.done']}" 
                                      action="#{balancedScorecardHome.saveBalancedScoreCardDialog()}"
                                      oncomplete="balancedScoreCardEditDlg.hide();" 
                                      update=":form:balancedScorecardTable"
-                                     styleClass="btn-primary"/>
+                                     styleClass="btn btn-primary"
+                                     style="color:#fff;"/>
                     #{'  '}
-                    <p:commandButton type="button" value="#{messages['common.delete']}" 
-                                     styleClass="btn-danger"
+                    <p:commandLink type="button" value="#{messages['common.delete']}" 
+                                     styleClass="btn btn-danger" style="color:#fff;"
                                      onclick="deletedDlg.show()"
                                      immediate="true"
                                      update=":cancel-dialog"
@@ -120,7 +121,7 @@
                                      />
                     #{'  '}
                     <!--&nbsp;-->
-                    <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                    <p:commandLink id="cancel" value="#{messages['common.cancel']}" 
                                      oncomplete="balancedScoreCardEditDlg.hide();"  
                                      ajax="true" process="@this" styleClass="btn"/>
 

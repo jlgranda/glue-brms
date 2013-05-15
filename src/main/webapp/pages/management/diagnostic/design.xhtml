@@ -142,23 +142,24 @@ limitations under the License.
                     <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{sectionHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
 
                     <div class="form-actions">
-                        <p:commandButton id="save" value="#{messages['common.done']}" 
-                                         action="#{sectionHome.saveSectionDialog()}"
-                                         oncomplete="sectionEditDlg.hide();" 
-                                         styleClass="btn btn-primary"
-                                         />
+                        <p:commandLink id="save" value="#{messages['common.done']}" 
+                                       action="#{sectionHome.saveSectionDialog()}"
+                                       oncomplete="sectionEditDlg.hide();" 
+                                       styleClass="btn btn-primary"                                         
+                                       style="color:#fff;" 
+                                       />
                         #{'  '}
-                        <p:commandButton type="button" value="#{messages['common.delete']}" 
-                                         styleClass="btn-danger"
-                                         onclick="deletedDlg.show()"
-                                         immediate="true"
-                                         update=":cancel-dialog-section"
-                                         rendered="#{sectionHome.managed}"
-                                         />
+                        <p:commandLink type="button" value="#{messages['common.delete']}" 
+                                       styleClass="btn btn-danger" style="color:#fff;"
+                                       onclick="deletedDlg.show()"
+                                       immediate="true"
+                                       update=":cancel-dialog-section"
+                                       rendered="#{sectionHome.managed}"
+                                       />
                         #{'  '}
-                        <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
-                                         oncomplete="sectionEditDlg.hide();"  
-                                         ajax="true" process="@this" styleClass="btn"/>
+                        <p:commandLink id="cancel" value="#{messages['common.cancel']}" 
+                                       oncomplete="sectionEditDlg.hide();"  
+                                       ajax="true" process="@this" styleClass="btn"/>
 
                     </div>  
                 </h:form>
