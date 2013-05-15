@@ -393,8 +393,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public void removeMission() {
-        
-        if (getInstance().getMissions().contains(getSelectedMission())) {
+        if (containsMission()) {
             getInstance().removeMission(getSelectedMission());
             setModified(true);
         }
@@ -403,6 +402,14 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public void clearMission() {
         setSelectedMission(null);
     }
+    
+    public boolean containsMission(){
+        if(getInstance().getMissions().contains(getSelectedMission())){
+            return true;
+        }
+        return false;
+    }
+    
     @Inject
     private VisionHome visionHome;
 
@@ -426,7 +433,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public void removeVision() {
-        if (getInstance().getVissions().contains(getSelectedVision())) {
+        if (containsVision()) {
             getInstance().removeVision(getSelectedVision());
             setModified(true);
         }
@@ -436,6 +443,12 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         setSelectedVision(null);
     }
     
+    public boolean containsVision(){
+        if(getInstance().getVissions().contains(getSelectedVision())){
+            return true;
+        }
+        return false;
+    }
     @Inject
     private PrincipleHome principleHome;
 
@@ -459,7 +472,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public void removePrinciple() {
-        if (getInstance().getPrinciples().contains(getSelectedPrinciple())) {
+        if (containsPrinciple()) {
             getInstance().removePrinciple(getSelectedPrinciple());
             setModified(true);
         }
@@ -467,5 +480,12 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
 
     public void clearPrinciple() {
         setSelectedPrinciple(null);
+    }
+    
+    public boolean containsPrinciple(){
+        if(getInstance().getPrinciples().contains(getSelectedPrinciple())){
+            return true;
+        }
+        return false;
     }
 }

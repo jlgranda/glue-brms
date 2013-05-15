@@ -23,14 +23,27 @@ limitations under the License.
       xmlns:p="http://primefaces.org/ui"
       xmlns:glue ="http://eqaula.org/jsf/facelets">
 
-    <ui:composition template="/WEB-INF/view/templates/glue.xhtml" >
+    <ui:composition template="/WEB-INF/view/templates/glue-tree.xhtml" >
         <f:metadata>
             <f:viewParam name="diagnosticId" value="#{diagnosticHome.diagnosticId}"/> 
         </f:metadata>
         <ui:param name="title" value="#{diagnosticHome.instance.name}" />
+        <ui:define name="subnav">
+        </ui:define>
+
+        <ui:define name="topnav-post-template">
+            <li>
+                <h:link outcome="/pages/profile/profile"
+                        value="#{profile.username}"
+                        rendered="false">
+                    <f:param name="profileId" value="#{profile.id}" />
+                </h:link>
+            </li>
+            <ui:insert name="topnav-post-profile"/>
+        </ui:define>
         <ui:define name="header-replace">
             <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="row-fluid" style="margin-top: 5px;" >
                         <div class="span9 ">
                             <h2>#{diagnosticHome.managed ? diagnosticHome.instance.name : ""}</h2> 
@@ -167,6 +180,10 @@ limitations under the License.
                 </p:dialog> 
             </p:dialog>
         </ui:define>
+        <ui:define name="sidebar">
+            <ui:include src="/pages/management/navigator.xhtml"/>
+        </ui:define>
     </ui:composition>
+
 </html>
 
