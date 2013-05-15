@@ -54,22 +54,13 @@ limitations under the License.
                 <div class="container-fluid">
 
                     <div class="row-fluid" style="margin-top: 5px;">
-                        <div class="span9">
-                            <h2>#{ownerListService.organization.name} - #{messages['module.owners']}</h2>   
-                            <br/>
-                        </div>    
-
-                        <div class="span3">
-                            <h:link value="#{messages['common.edit']} " rendered="#{true}" 
-                                    outcome="/pages/management/organization/organization.xhtml" styleClass="btn btn-link">
-                                <f:param name="organizationId" value="#{ownerListService.organization.id}"/>
-                                <f:param name="outcome" value="owners"/>
-                            </h:link>
-                            #{' '}
-                            <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                    outcome="/pages/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
-                            </h:link> 
-                        </div>
+                        <div class="span10">
+                            <h2>#{organizationHome.instance.name} - #{messages['module.owners']}</h2>
+                            <p>
+                                #{organizationHome.instance.ruc}<br/>
+                                #{organizationHome.instance.description}
+                            </p>
+                        </div>                                   
                     </div> 
 
                 </div>         
