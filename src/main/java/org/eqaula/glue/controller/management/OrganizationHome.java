@@ -19,7 +19,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
@@ -36,11 +35,7 @@ import org.eqaula.glue.controller.BussinesEntityHome;
 import org.eqaula.glue.controller.profile.GroupHome;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
-import org.eqaula.glue.model.Group;
-import org.eqaula.glue.model.Property;
-import org.eqaula.glue.model.management.BalancedScorecard;
 import org.eqaula.glue.model.management.Macroprocess;
-import org.eqaula.glue.model.management.Method;
 import org.eqaula.glue.model.management.Mission;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
@@ -78,7 +73,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     private NavigationHandler navigation;
     @Inject
     private FacesContext context;
-    private Group groupSelected;
+    
     private Mission selectedMission;
     private Vision selectedVision;
     private Principle selectedPrinciple;
@@ -117,14 +112,6 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
 
     public void setSelectedNode(TreeNode selectedNode) {
         this.selectedNode = selectedNode;
-    }
-
-    public Group getGroupSelected() {
-        return groupSelected;
-    }
-
-    public void setGroupSelected(Group groupSelected) {
-        this.groupSelected = groupSelected;
     }
 
     public GroupHome getGroupHome() {
@@ -297,11 +284,13 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         return organizationNode;
     }
 
+    @Deprecated
     public void onNodeSelect(NodeSelectEvent event) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), ((BussinesEntity) event.getTreeNode().getData()).getName());
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    @Deprecated
     public void redirecToAdd() {
         StringBuilder outcomeBuilder = new StringBuilder();
         BussinesEntity bussinesEntity = null;
@@ -327,6 +316,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         }
     }
 
+    @Deprecated
     public void redirecToEdit() {
 
         StringBuilder outcomeBuilder = new StringBuilder();
@@ -368,6 +358,8 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                 _outcome = getOutcome() + "?faces-redirect=true&includeViewParams=true";
             }
             return _outcome;
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.action.sucessfully"), ""));
         }
         return null;
     }
@@ -377,23 +369,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         saveOrganization();
         setInstance(null);
     }
-    /**
-     * CRUD for groups
-     */
-    @Inject
-    private UI ui;
-    private List<Group> groups = new ArrayList<Group>();
-
-    public List<Group> getGroups() {
-        if (groups.isEmpty()) {
-            for (Property p : ui.getProperties(getInstance())) {
-                if ("org.eqaula.glue.model.Group".equals(p.getType())) {
-                    groups.add(ui.getGroup(getInstance(), p));
-                }
-            }
-        }
-        return groups;
-    }
+    
     @Inject
     private MissionHome missionHome;
 
@@ -410,18 +386,17 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public void addMission() {
+        setModified(true);
         if (!getSelectedMission().isPersistent()) {
             getInstance().addMission(getSelectedMission());
         }
     }
 
     public void removeMission() {
+        
         if (getInstance().getMissions().contains(getSelectedMission())) {
             getInstance().removeMission(getSelectedMission());
-        }
-        if (getSelectedMission().isPersistent()) {
-            missionHome.editMission(getSelectedMission().getId());
-            missionHome.deleteMission();
+            setModified(true);
         }
     }
 
@@ -444,25 +419,23 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public void addVision() {
+        setModified(true);
         if (!getSelectedVision().isPersistent()) {
             getInstance().addVision(getSelectedVision());
         }
     }
 
     public void removeVision() {
-
         if (getInstance().getVissions().contains(getSelectedVision())) {
             getInstance().removeVision(getSelectedVision());
-        }
-        if (getSelectedVision().isPersistent()) {
-            visionHome.editVision(getSelectedVision().getId());
-            visionHome.deleteVision();
+            setModified(true);
         }
     }
 
     public void clearVision() {
         setSelectedVision(null);
     }
+    
     @Inject
     private PrincipleHome principleHome;
 
@@ -479,35 +452,20 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public void addPrinciple() {
+        setModified(true);
         if (!getSelectedPrinciple().isPersistent()) {
             getInstance().addPrinciple(getSelectedPrinciple());
         }
     }
 
     public void removePrinciple() {
-
         if (getInstance().getPrinciples().contains(getSelectedPrinciple())) {
             getInstance().removePrinciple(getSelectedPrinciple());
-        }
-        if (getSelectedPrinciple().isPersistent()) {
-            principleHome.editPrinciple(getSelectedPrinciple().getId());
-            principleHome.deletePrinciple();
+            setModified(true);
         }
     }
 
     public void clearPrinciple() {
         setSelectedPrinciple(null);
-    }
-
-    @TransactionAttribute
-    public void saveOrganizationAndPhilosophicalDefinition() {
-        saveOrganization();
-        try {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Las propiedades agregadas se han guardado exitosamente.", ""));
-        } catch (Exception e) {
-            e.printStackTrace();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
-        }
-
     }
 }

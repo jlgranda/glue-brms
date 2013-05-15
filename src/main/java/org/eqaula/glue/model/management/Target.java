@@ -17,8 +17,6 @@ package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -72,12 +70,12 @@ public class Target extends BussinesEntity implements Serializable {
     private Long sequence;
     @ManyToOne
     private Measure measure;
-    @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
-    private List<Initiative> initiatives;
-    @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
-    private List<Method> methods = new ArrayList<Method>();
-    @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
-    private List<TargetValue> values = new ArrayList<TargetValue>();
+    @OneToMany(mappedBy = "target", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Initiative> initiatives = new org.apache.commons.collections.list.TreeList();
+    @OneToMany(mappedBy = "target", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Method> methods = new org.apache.commons.collections.list.TreeList();
+    @OneToMany(mappedBy = "target", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TargetValue> values = new org.apache.commons.collections.list.TreeList();
 
     public Type getTargetType() {
         return targetType;
@@ -136,6 +134,7 @@ public class Target extends BussinesEntity implements Serializable {
     }
 
     public boolean removeMethod(Method method) {
+        method.setOrganization(null);
         return this.getMethods().remove(method);
     }
 
@@ -148,6 +147,7 @@ public class Target extends BussinesEntity implements Serializable {
     }
 
     public boolean removeInitiative(Initiative initiative) {
+        initiative.setOrganization(null);
         return this.getInitiatives().remove(initiative);
     }
 

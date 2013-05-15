@@ -38,12 +38,6 @@
                 <div class="container-fluid">
                     <div class="row-fluid" style="margin-top: 5px;">
                         <div class="span10">
-                            <!--
-                            <h:link outcome="/pages/management/organization/organization" title="${organizationHome.instance.name}">
-                                <ocp:gravatar email="${organizationHome.instance.findAttributeValue('email')}" size="32" updatable="true" />
-                                <f:param name="organizationId" value="#{organizationHome.instance.id}"/>
-                            </h:link>
-                            -->
                             <h2>#{organizationHome.instance.name}</h2>
                             <p>
                                 #{organizationHome.instance.ruc}<br/>
@@ -67,7 +61,7 @@
 
         <ui:define name="content">
 
-            <h:form id="mission-form" styleClass="validation-status">
+            <h:form id="philosophical-form" styleClass="validation-status">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <p:panel id="mission-panel" toggleable="true" rendered="#{not empty organizationHome.instance.id}" >
 
@@ -174,7 +168,7 @@
 
                 <div class="form-actions">
                     <p:commandButton
-                        id="save" action="#{organizationHome.saveOrganizationAndPhilosophicalDefinition()}"
+                        id="save" action="#{organizationHome.saveOrganization()}"
                         value="#{messages['common.save']}" styleClass="btn btn-primary"
                         update="@this"/>
                     <!-- &nbsp;-->
@@ -203,107 +197,6 @@
                     </div>  
                 </h:form>
             </p:dialog>
-            <!--Edit group dialog -->
-            <p:dialog id="organization-philosophical-group-edit-dialog"
-                      header="#{messages['common.add']} #{groupHome.instance.name}" 
-                      styleClass="atf-header" 
-                      widgetVar="philosophicalGroupEditDlg" 
-                      appendToBody="true"
-                      closeOnEscape="true"
-                      dynamic="false">
-                <p:scrollPanel style="width:600px;height:300px">
-                    <h:form id="organization-philosophical-group-edit-form" class="form-horizontal">
-                        <p:messages id="messages-dialog" showDetail="true" autoUpdate="true" closable="true" />  
-                        <!-- Attributos de clase, siempre mostrar, almacena nombre y código único -->
-                        <h:panelGroup layout="block" class="control-group" rendered="#{organizationHome.groupHome.instance.property.showDefaultBussinesEntityProperties}">
-                            <h:panelGroup layout="block" class="control-group">
-                                <!-- class="required" -->
-                                <label for="name" class="control-label">#{messages['common.name']}*</label>
-                                <div class="controls">
-                                    <p:inputText value="#{organizationHome.groupHome.bussinesEntity.name}" styleClass="xLarge span4" required="true" label="#{messages['common.name']}" 
-                                                 rendered="true">
-                                        <f:validator validatorId="safeTextUTF8Validator"/>
-                                        <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                    </p:inputText>
-                                    <h:graphicImage value="#{resource['success.gif']}" rendered="#{groupHome.bussinesEntity.name != null}"
-                                                    styleClass="validation-status" />
-                                    <span class="help-block"><br/>#{messages['common.name.inlinehelp']} <ocp:message forId="name" /></span>
-                                </div>
-                            </h:panelGroup> 
-                            <h:panelGroup layout="block" class="control-group">
-                                <label for="code" class="control-label">#{messages['common.code']}*</label>
-                                <div class="controls">
-                                    <p:inputText  value="#{organizationHome.groupHome.bussinesEntity.code}" required="false" label="#{messages['common.name']}" 
-                                                  rendered="true">
-                                        <f:validator validatorId="safeTextUTF8Validator"/>                                        
-
-                                        <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                    </p:inputText>
-                                    <h:graphicImage value="#{resource['success.gif']}" rendered="#{organizationHome.groupHome.bussinesEntity.code != null}"
-                                                    styleClass="validation-status" />
-                                    <span class="help-block"><br/>#{messages['common.name.inlinehelp']} <ocp:message forId="code" /></span>
-                                </div>
-                            </h:panelGroup> 
-                        </h:panelGroup>
-                        <h:panelGroup layout="block" class="control-group">
-                            <ui:repeat value="#{groupHome.bussinesEntity.findBussinesEntityAttribute(groupHome.instance.name)}" var="a" varStatus="status">
-                                <h:panelGroup layout="block" class="control-group">
-
-                                    <label class="#{(not empty a.property.required and a.property.required) ? 'control-label required' : 'control-label'}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
-                                    <div class="controls">
-                                        <p:inputText  value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}" 
-                                                      rendered="#{a.property.type eq 'java.lang.String'}">
-                                            <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
-                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                        </p:inputText>
-                                        <p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
-                                                    rendered="#{a.property.type eq 'java.util.Date'}">
-                                            <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
-                                        </p:calendar>  
-                                        <pe:inputNumber value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}"
-                                                        rendered="#{a.property.type eq 'java.lang.Long' or a.property.type eq 'java.lang.Double' or a.property.type eq 'java.lang.Float'}">  
-                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                        </pe:inputNumber>  
-                                        <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
-                                                         rendered="#{a.property.type eq 'java.lang.String[]'}">  
-                                            <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
-                                            <p:ajax event="change" update="@parent" partialSubmit="true"/>
-                                        </p:selectOneMenu> 
-                                        <p:inputTextarea value="#{a.value}" required="#{a.property.required}" label="#{a.property.label}" style="width: 364px; height: 100px;" 
-                                                         rendered="#{a.property.type eq 'java.lang.MultiLineString'}">
-                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                        </p:inputTextarea>
-                                        <!-- TODO add support for boolean
-                                        <p:panel rendered="#{a.property.type eq 'java.lang.Boolean'}">
-                                            <p:selectBooleanCheckbox value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}"
-                                                                     rendered="#{a.property.type eq 'java.lang.Boolean'}">
-                                                <p:ajax event="change" update="@parent" partialSubmit="true"/>
-                                            </p:selectBooleanCheckbox>
-                                        </p:panel>
-                                        -->
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{a.value != null}"
-                                                        styleClass="validation-status" />
-                                        <span class="help-block"><br/>#{a.property.helpInline}</span>
-                                    </div>
-                                </h:panelGroup>  
-                            </ui:repeat>
-                        </h:panelGroup>
-
-                        <div class="controls">
-                            <p:commandButton value="#{messages['common.add']}" 
-                                             actionListener="#{groupHome.saveBussinesEntity('philosophicalGroupEditDlg')}" 
-                                             update="messages-dialog"
-                                             ajax="true" process="@this"
-                                             style="margin-top:10px;" icon="ui-icon-disk"
-                                             styleClass="btn btn-primary">  
-                            </p:commandButton>  
-
-                            <p:commandButton type="button" value="#{messages['common.delete']}" style="margin-top:10px;" rendered="#{groupHome.bussinesEntity.persistent}" onclick="philosophicalGroupEditDlg.show();"/>  
-                            <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" rendered="#{not groupHome.bussinesEntity.persistent}" onclick="philosophicalGroupEditDlg.hide();" actionListener="#{groupHome.deleteBussinessEntity()}"/>  
-                        </div>
-                    </h:form>
-                </p:scrollPanel>
-            </p:dialog>
 
             <!--MISSION DIALOG-->
             <p:dialog id="mission-edit-dialog" 
@@ -328,7 +221,7 @@
                     <div class="form-actions">
                         <p:commandButton id="mission-save" value="#{messages['common.done']}"
                                          type="submit"
-                                         update=":mission-form:mission-panel"
+                                         update=":philosophical-form"
                                          actionListener="#{organizationHome.addMission()}"
                                          oncomplete="if (#{facesContext.maximumSeverity == null}) missionEditDlg.hide()"
                                          ajax="true" process="@this" styleClass="btn btn-primary"
@@ -338,7 +231,7 @@
                         <p:commandButton type="button" value="#{messages['common.delete']}"
                                          styleClass="btn" onclick="missionDeletedDlg.show();"
                                          immediate="true" update=":mission-cancel-delete-dialog" 
-                                         rendered="#{organizationHome.selectedMission.id != null}">                        
+                                         rendered="#{not empty organizationHome.selectedMission}">                        
                         </p:commandButton>
                         <!-- &nbsp;-->
                         <p:commandButton type="button" value="#{messages['common.cancel']}" 
@@ -359,7 +252,7 @@
                                      action="#{organizationHome.removeMission()}"  
                                      ajax="true" process="@this" 
                                      style="margin-top:10px;"
-                                     update=":mission-form:mission-panel"
+                                     update=":philosophical-form"
                                      > 
                     </p:commandButton>  
                     <p:commandButton value="#{messages['common.no']}" 
@@ -391,7 +284,7 @@
                     <div class="form-actions">
                         <p:commandButton id="vision-save" value="#{messages['common.done']}"
                                          type="submit"
-                                         update=":mission-form:vision-panel"
+                                         update=":philosophical-form"
                                          actionListener="#{organizationHome.addVision()}"
                                          oncomplete="if (#{facesContext.maximumSeverity == null}) visionEditDlg.hide()"
                                          ajax="true" process="@this" styleClass="btn btn-primary"
@@ -423,7 +316,7 @@
                                      action="#{organizationHome.removeVision()}"                                         
                                      ajax="true" process="@this"  
                                      style="margin-top:10px;"
-                                     update=":mission-form:vision-panel">  
+                                     update=":philosophical-form">  
                     </p:commandButton>  
                     <p:commandButton value="#{messages['common.no']}" 
                                      type="button" onclick="visionDeletedDlg.hide();"  
@@ -453,7 +346,7 @@
                     <div class="form-actions">
                         <p:commandButton id="principle-save" value="#{messages['common.done']}"
                                          type="submit"
-                                         update=":mission-form:principle-panel"
+                                         update=":philosophical-form"
                                          actionListener="#{organizationHome.addPrinciple()}"
                                          oncomplete="if (#{facesContext.maximumSeverity == null}) principleEditDlg.hide()"
                                          ajax="true" process="@this" styleClass="btn btn-primary"
@@ -485,7 +378,7 @@
                                      action="#{organizationHome.removePrinciple()}"                                         
                                      ajax="true" process="@this"  
                                      style="margin-top:10px;"
-                                     update=":mission-form:principle-panel">  
+                                     update=":philosophical-form">  
                     </p:commandButton>  
                     <p:commandButton value="#{messages['common.no']}" 
                                      type="button" onclick="principleDeletedDlg.hide();"  

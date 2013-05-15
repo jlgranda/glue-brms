@@ -31,22 +31,28 @@
             </li>
         </ui:define>
         <ui:define name="header-replace">
-            <h:form id="action-form">
-                <div class="form-actions">                            
-                    <p:commandLink id="button-add" value="#{messages['common.add']}" update=":perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" actionListener="#{balancedScorecardHome.redirecToAdd}" styleClass="btn btn-primary" disabled="#{empty balancedScorecardHome.selectedNode}"/>
-                    #{' '}
-                    <p:commandLink id="button-edit" value="#{messages['common.edit']}" update=":perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" actionListener="#{balancedScorecardHome.redirecToEdit}" disabled="#{empty balancedScorecardHome.selectedNode}" styleClass="btn btn-secondary"/>
+            <p:panel id="action-panel" styleClass="container-fluid">
+                <div class="span2">
+                    <p:outputLabel>#{balancedScorecardHome.selectedNode}</p:outputLabel>
                 </div>
-            </h:form>
-        </ui:define>
-        <ui:define name="content-action">
-            <h:form id="action-form">
-                <div class="form-actions">                            
-                    <p:commandLink id="button-add" value="#{messages['common.add']}" update=":perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" actionListener="#{balancedScorecardHome.redirecToAdd}" styleClass="btn btn-primary" disabled="#{empty balancedScorecardHome.selectedNode}"/>
-                    #{' '}
-                    <p:commandLink id="button-edit" value="#{messages['common.edit']}" update=":perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" actionListener="#{balancedScorecardHome.redirecToEdit}" disabled="#{empty balancedScorecardHome.selectedNode}" styleClass="btn btn-secondary"/>
+                <div class="span10">
+                    <h:form id="action-form">
+                            <p:commandLink id="button-add" 
+                                           value="#{messages['common.add']}" 
+                                           update=":perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" 
+                                           actionListener="#{balancedScorecardHome.redirecToAdd}" 
+                                           styleClass="btn btn-primary" 
+                                           disabled="#{empty balancedScorecardHome.selectedNode}"/>
+                            #{' '}
+                            <p:commandLink id="button-edit" 
+                                           value="#{messages['common.edit']}" 
+                                           update=":perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" 
+                                           actionListener="#{balancedScorecardHome.redirecToEdit}" 
+                                           disabled="#{empty balancedScorecardHome.selectedNode}" 
+                                           styleClass="btn btn-secondary"/>
+                    </h:form>
                 </div>
-            </h:form>
+            </p:panel>
         </ui:define>
         <ui:define name="content">
             <p:layout id="bsc-layout" fullPage="false" transient="true"
@@ -65,7 +71,7 @@
                                 dynamic="true" cache="true">  
 
                             <p:ajax event="select" 
-                                    update=":action-form :bsc-table-form" 
+                                    update=":action-panel :bsc-table-form" 
                                     listener="#{balancedScorecardHome.onNodeSelect}" /> 
                             <p:treeNode expandedIcon="ui-icon-folder-open"  
                                         collapsedIcon="ui-icon-folder-collapsed">  
@@ -95,7 +101,9 @@
                 <p:layoutUnit id="center" position="center"
                               styleClass="span10">
                     <h:form id="bsc-table-form">
-                        <p:growl id="bsc-grow" showDetail="true" sticky="true"/>
+                        <p:growl id="bsc-grow" 
+                                 showDetail="true" 
+                                 sticky="false" />
                         <p:treeTable id="treetable" 
                                      value="#{balancedScorecardHome.selectedNode!=null ? balancedScorecardHome.selectedNode : balancedScorecardHome.bscNode}" 
                                      var="node"  propagateSelectionUp="true" >  

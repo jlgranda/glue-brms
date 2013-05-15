@@ -45,11 +45,11 @@ public class Organization extends BussinesEntity implements Serializable {
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     private List<Theme> themes = new ArrayList<Theme>();
     //Philosophical definition
-    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Mission> missions = new org.apache.commons.collections.list.TreeList();
-    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vision> vissions = new org.apache.commons.collections.list.TreeList();
-    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Principle> principles = new org.apache.commons.collections.list.TreeList();
 
     public String getRuc() {
@@ -159,13 +159,16 @@ public class Organization extends BussinesEntity implements Serializable {
     }
     
     public boolean removeMission(Mission mission) {
+        mission.setOrganization(null);
         return this.getMissions().remove(mission);
     }
     
     public boolean removeVision(Vision vision) {
+        vision.setOrganization(null);
         return this.getVissions().remove(vision);
     }
     public boolean removePrinciple(Principle principle) {
+        principle.setOrganization(null);
         return this.getPrinciples().remove(principle);
     }
     

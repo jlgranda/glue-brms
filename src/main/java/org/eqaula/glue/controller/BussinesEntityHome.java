@@ -52,6 +52,10 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
     private Long organizationId;
     private Organization organization;
     private boolean editionEnabled = true;
+    /**
+     * Bandera para detectar cambios
+     */
+    private boolean modified;
 
     public Property getProperty() {
         return property;
@@ -83,6 +87,14 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
 
     public void setEditionEnabled(boolean editionEnabled) {
         this.editionEnabled = editionEnabled;
+    }
+
+    public boolean isModified() {
+        return modified;
+    }
+
+    public void setModified(boolean modified) {
+        this.modified = modified;
     }
 
     public Long getOrganizationId() {
