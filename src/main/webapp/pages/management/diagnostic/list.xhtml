@@ -29,6 +29,7 @@ limitations under the License.
         <f:viewParam name="result" value="#{diagnosticListService.firstResult}" />
         <f:viewParam name="ownerId" value="#{diagnosticListService.ownerId}" />
         <f:viewParam name="ownerId" value="#{diagnosticHome.ownerId}" />
+        <f:viewParam name="organizationId" value="#{diagnosticListService.organizationId}" />
     </f:metadata>
 
     <ui:param name="title" value="#{diagnosticListService.owner.name} - #{messages['module.diagnostics']}"/>
