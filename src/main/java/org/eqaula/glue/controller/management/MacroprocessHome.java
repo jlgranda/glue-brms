@@ -143,6 +143,10 @@ public class MacroprocessHome extends BussinesEntityHome<Macroprocess> implement
             getInstance().setTheme(getTheme());
             create(getInstance());
         }
+        if(getOutcome()==null){
+            return null;
+        }
+            
         if (getThemeId() != null) {
             return getOutcome() + "?organizationId=" + getInstance().getTheme().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
@@ -198,11 +202,29 @@ public class MacroprocessHome extends BussinesEntityHome<Macroprocess> implement
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
+        if(getOutcome()==null){
+            return null;
+        }
         if (getThemeId() != null) {
             return getOutcome() + "?organizationId=" + getInstance().getTheme().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
+    public void createNewMacroprocess() {
+        setId(null);
+        setInstance(null);
+        wire();
+    }
+
+    public void editMacroprocess(Long id) {
+        setId(id);
+        load();
+    }
+    
+    @TransactionAttribute
+    private void saveMacroprocessDialog(){
+        saveMacroprocess();
+    }
    
 }

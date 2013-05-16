@@ -183,7 +183,16 @@
                     <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{organizationHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                     <glue:input id="ruc" name="ruc" type="text" label="#{messages['common.ruc']}" value="#{organizationHome.instance.ruc}" required="true" inlinehelp="#{messages['common.ruc.inlinehelp']}" execute="@this save"/> 
                     <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{organizationHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
-
+                    <h:panelGroup layout="block" class="control-group">
+                        <label for="organizationtype_" class="control-label">#{messages['Organization.type']}</label>
+                        <div class="controls">
+                            <p:selectOneMenu id="organizationtype_" value="#{organizationHome.instance.organizationType}" effect="fade"  converter="omnifaces.GenericEnumConverter" required="true" requiredMessage="#{messages['required.target']}" rendered="true" label="#{messages['module.organization']}" filter="true" filterMatchMode="contains">
+                                <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
+                                <f:selectItems value="#{organizationHome.instance.organizationTypes}" var="_o" itemLabel="#{messages[_o.name]}" itemValue="#{_o}"/>                          
+                                <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                            </p:selectOneMenu>              
+                        </div>
+                    </h:panelGroup>
                     <div class="form-actions">
                         <p:commandButton id="save" value="#{messages['common.done']}" 
                                          action="#{organizationHome.saveOrganization()}"                                         
@@ -365,9 +374,9 @@
 
                         <!-- &nbsp;-->
                         <p:commandLink type="button" value="#{messages['common.cancel']}" 
-                                         styleClass="btn" onclick="principleEditDlg.hide();"
-                                         immediate="true" rendered="#{true}"/>                        
-                        
+                                       styleClass="btn" onclick="principleEditDlg.hide();"
+                                       immediate="true" rendered="#{true}"/>                        
+
                     </div>  
                 </h:form>
             </p:dialog>
