@@ -17,10 +17,14 @@ package org.eqaula.glue.model.management;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -51,6 +55,30 @@ public class Organization extends BussinesEntity implements Serializable {
     private List<Vision> vissions = new org.apache.commons.collections.list.TreeList();
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Principle> principles = new org.apache.commons.collections.list.TreeList();
+
+    public enum Type {
+
+        GOVERMENT,
+        PUBLIC,
+        PRIVATE;
+
+        private Type() {
+        }
+    }
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Organization.Type organizationType;
+
+    public Type getOrganizationType() {
+        return organizationType;
+    }
+
+    public void setOrganizationType(Type organizationType) {
+        this.organizationType = organizationType;
+    }
+
+    
+    
 
     public String getRuc() {
         return ruc;
@@ -117,7 +145,7 @@ public class Organization extends BussinesEntity implements Serializable {
     public void setPrinciples(List<Principle> principles) {
         this.principles = principles;
     }
-    
+
     @Override
     public String getCanonicalPath() {
         StringBuilder path = new StringBuilder();
@@ -127,49 +155,49 @@ public class Organization extends BussinesEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.eqaula.glue.model.management.Organization[ "
-                + "id=" + getId() + ","
-                + "name=" + getName() + ","
-                + "type=" + getType() + ","
-                + " ]";
+        return getName();
     }
-    
-    public boolean addMission(Mission mission){
-        if(!this.getMissions().contains(mission)){
+
+    public boolean addMission(Mission mission) {
+        if (!this.getMissions().contains(mission)) {
             mission.setOrganization(this);
             return this.getMissions().add(mission);
         }
         return false;
     }
-    
-    public boolean addVision(Vision vision){
-        if(!this.getVissions().contains(vision)){
+
+    public boolean addVision(Vision vision) {
+        if (!this.getVissions().contains(vision)) {
             vision.setOrganization(this);
             return this.getVissions().add(vision);
         }
         return false;
     }
-    
-    public boolean addPrinciple(Principle principle){
-        if(!this.getPrinciples().contains(principle)){
+
+    public boolean addPrinciple(Principle principle) {
+        if (!this.getPrinciples().contains(principle)) {
             principle.setOrganization(this);
             return this.getPrinciples().add(principle);
         }
         return false;
     }
-    
+
     public boolean removeMission(Mission mission) {
         mission.setOrganization(null);
         return this.getMissions().remove(mission);
     }
-    
+
     public boolean removeVision(Vision vision) {
         vision.setOrganization(null);
         return this.getVissions().remove(vision);
     }
+
     public boolean removePrinciple(Principle principle) {
         principle.setOrganization(null);
         return this.getPrinciples().remove(principle);
     }
-    
+
+    public List<Organization.Type> getOrganizationTypes() {
+        return Arrays.asList(Organization.Type.values());
+    }
 }

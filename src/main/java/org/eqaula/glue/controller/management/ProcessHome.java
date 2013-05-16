@@ -144,6 +144,9 @@ public class ProcessHome extends BussinesEntityHome<Process> implements Serializ
             getInstance().setAuthor(this.profile);
             create(getInstance());
         }
+        if(getOutcome()==null){
+            return null;
+        }
         if (getMacroprocessId() != null) {
             return getOutcome() + "?organizationId=" + getMacroprocess().getTheme().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
@@ -194,11 +197,23 @@ public class ProcessHome extends BussinesEntityHome<Process> implements Serializ
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
+        if(getOutcome()==null){
+            return null;
+        }
         if (getMacroprocessId() != null) {
             return getOutcome() + "?organizationId=" + getMacroprocess().getTheme().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
 
-   
+   public void createNewProcess() {
+        setId(null);
+        setInstance(null);
+        wire();
+    }
+
+    public void editProcess(Long id) {
+        setId(id);
+        load();
+    }
 }

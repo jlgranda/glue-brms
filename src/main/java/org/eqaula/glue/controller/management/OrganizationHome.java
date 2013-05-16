@@ -69,16 +69,30 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     private Profile profile;
     private TreeNode organizationNode;
     private TreeNode selectedNode;
+    private TreeNode rootNode;
     @Inject
     private NavigationHandler navigation;
     @Inject
     private FacesContext context;
-    
     private Mission selectedMission;
     private Vision selectedVision;
     private Principle selectedPrinciple;
     @Inject
     private GroupHome groupHome;
+    private boolean toHaveChildren;
+
+    public boolean getToHaveChildren(TreeNode node) {
+        if (node.getChildren().isEmpty()) {
+            toHaveChildren = false;
+        } else {
+            toHaveChildren = true;
+        }
+        return toHaveChildren;
+    }
+
+    public void setToHaveChildren(boolean toHaveChildren) {
+        this.toHaveChildren = toHaveChildren;
+    }
 
     public OrganizationHome() {
     }
@@ -144,6 +158,17 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
 
     public void setSelectedPrinciple(Principle selectedPrinciple) {
         this.selectedPrinciple = selectedPrinciple;
+    }
+
+    public TreeNode getRootNode() {
+        if (rootNode == null) {
+            buildTree();
+        }
+        return rootNode;
+    }
+
+    public void setRootNode(TreeNode rootNode) {
+        this.rootNode = rootNode;
     }
 
     @TransactionAttribute
@@ -262,8 +287,10 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public TreeNode buildTree() {
-        organizationNode = new DefaultTreeNode("organization", getInstance(), null);
+        rootNode = new DefaultTreeNode("rootNode", "", null);
+        organizationNode = new DefaultTreeNode("organization", getInstance(), rootNode);
         organizationNode.setExpanded(true);
+        rootNode.setExpanded(true);
 
         TreeNode macroprocessNode = null;
         TreeNode processNode = null;
@@ -281,34 +308,47 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                 }
             }
         }
-        return organizationNode;
+        return rootNode;
     }
 
-    @Deprecated
     public void onNodeSelect(NodeSelectEvent event) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), ((BussinesEntity) event.getTreeNode().getData()).getName());
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+    @Inject
+    private MacroprocessHome macroprocessHome;
+    @Inject
+    private ProcessHome processHome;
 
-    @Deprecated
     public void redirecToAdd() {
         StringBuilder outcomeBuilder = new StringBuilder();
         BussinesEntity bussinesEntity = null;
         if (selectedNode != null) {
             bussinesEntity = (BussinesEntity) selectedNode.getData();
-            if ("organization".equals(selectedNode.getType())) {
+            if ("rootNode".equals(selectedNode.getType())) {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            } else if ("organization".equals(selectedNode.getType())) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, message);
             } else if ("theme".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/macroprocess/macroprocess.xhtml?");
-                outcomeBuilder.append("themeId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/viewTreeThemes");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                macroprocessHome.setThemeId(bussinesEntity.getId());
+                macroprocessHome.createNewMacroprocess();
+                RequestContext.getCurrentInstance().execute("macroprocessEditDlg.show()");
+
+                /*outcomeBuilder.append("/pages/management/macroprocess/macroprocess.xhtml?");
+                 outcomeBuilder.append("themeId=").append(bussinesEntity.getId());
+                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/viewTreeThemes");
+                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");*/
             } else if ("macroprocess".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/process/process.xhtml?");
-                outcomeBuilder.append("&macroprocessId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/viewTreeThemes");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                processHome.setMacroprocessId(bussinesEntity.getId());
+                processHome.createNewProcess();
+                RequestContext.getCurrentInstance().execute("processEditDlg.show()");
+
+                /*outcomeBuilder.append("/pages/management/process/process.xhtml?");
+                 outcomeBuilder.append("&macroprocessId=").append(bussinesEntity.getId());
+                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/viewTreeThemes");
+                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");*/
             } else if ("process".equals(selectedNode.getType())) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, message);
@@ -316,7 +356,6 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         }
     }
 
-    @Deprecated
     public void redirecToEdit() {
 
         StringBuilder outcomeBuilder = new StringBuilder();
@@ -324,24 +363,33 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
             FacesContext.getCurrentInstance().addMessage(null, message);
             BussinesEntity bussinesEntity = (BussinesEntity) selectedNode.getData();
-            if ("organization".equals(selectedNode.getType())) {
+            if ("rootNode".equals(selectedNode.getType())) {
+                FacesMessage messag = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
+                FacesContext.getCurrentInstance().addMessage(null, messag);
+            } else if ("organization".equals(selectedNode.getType())) {
                 FacesMessage messag = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, messag);
             } else if ("theme".equals(selectedNode.getType())) {
                 FacesMessage messag = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, messag);
             } else if ("macroprocess".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/macroprocess/macroprocess.xhtml?");
+                macroprocessHome.editMacroprocess(bussinesEntity.getId());
+                RequestContext.getCurrentInstance().execute("macroprocessEditDlg.show()");
+                
+                /*outcomeBuilder.append("/pages/management/macroprocess/macroprocess.xhtml?");
                 outcomeBuilder.append("&macroprocessId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&themeId=").append(((Macroprocess) bussinesEntity).getTheme().getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/viewTreeThemes");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");*/
             } else if ("process".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/process/process.xhtml?");
+                processHome.editProcess(bussinesEntity.getId());
+                RequestContext.getCurrentInstance().execute("processEditDlg.show()");
+                
+                /*outcomeBuilder.append("/pages/management/process/process.xhtml?");
                 outcomeBuilder.append("&processId=").append(bussinesEntity.getId());
                 outcomeBuilder.append("&macroprocessId=").append(((org.eqaula.glue.model.management.Process) bussinesEntity).getMacroprocess().getId());
                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/viewTreeThemes");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");*/
             }
         }
     }
@@ -369,7 +417,6 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         saveOrganization();
         setInstance(null);
     }
-    
     @Inject
     private MissionHome missionHome;
 
@@ -402,14 +449,13 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public void clearMission() {
         setSelectedMission(null);
     }
-    
-    public boolean containsMission(){
-        if(getInstance().getMissions().contains(getSelectedMission())){
+
+    public boolean containsMission() {
+        if (getInstance().getMissions().contains(getSelectedMission())) {
             return true;
         }
         return false;
     }
-    
     @Inject
     private VisionHome visionHome;
 
@@ -442,9 +488,9 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public void clearVision() {
         setSelectedVision(null);
     }
-    
-    public boolean containsVision(){
-        if(getInstance().getVissions().contains(getSelectedVision())){
+
+    public boolean containsVision() {
+        if (getInstance().getVissions().contains(getSelectedVision())) {
             return true;
         }
         return false;
@@ -481,9 +527,9 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public void clearPrinciple() {
         setSelectedPrinciple(null);
     }
-    
-    public boolean containsPrinciple(){
-        if(getInstance().getPrinciples().contains(getSelectedPrinciple())){
+
+    public boolean containsPrinciple() {
+        if (getInstance().getPrinciples().contains(getSelectedPrinciple())) {
             return true;
         }
         return false;
