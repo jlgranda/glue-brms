@@ -59,6 +59,10 @@
         <ui:define name="content">
             <h:form id="organization-home-form">
                 <p:growl/>
+                <div lass="info">
+                    <p:barChart value="#{statistics.buildCartesianChartModelByOrganization(organizationHome.instance)}" legendPosition="nw"  
+                                title="" minY="0" maxY="100" style="height:300px;margin-top:20px"/>  
+                </div>
             </h:form>
             <p:dialog id="organization-edit-dialog" header="#{messages['common.add']} #{messages['module.organization']}" styleClass="atf-header" widgetVar="organizationEditDlg" appendToBody="true" closeOnEscape="true">
                 <h:form  id="form-organization" acceptcharset="UTF-8" class="form-horizontal" >

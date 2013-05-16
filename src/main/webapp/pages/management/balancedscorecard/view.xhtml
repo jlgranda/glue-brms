@@ -110,6 +110,13 @@
                             <p:column headerText="#{messages['module.balancedscorecard.dimention']}">  
                                 <h:outputText value="#{balancedScorecardHome.getToHaveChildren(balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode) == true ? node: hola}"/>                        
                             </p:column>  
+                            <p:column headerText="#{messages['module.method']}">  
+                                <p:dataTable var="method" value="#{node.methods}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
+                                    <p:column>
+                                        <p:graphicImage value="/MethodPrinter?methodId=#{methodPrinter.printToDownload(balancedScorecardHome.runMethod(method)).id}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>
+                                    </p:column>
+                                </p:dataTable>                                
+                            </p:column>
                             <p:column headerText="#{messages['common.period.from']}">  
                                 <h:outputText value="#{node.from}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
                                     <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
@@ -134,13 +141,6 @@
                             </p:column>
                             <p:column headerText="#{messages['common.unit']}">  
                                 <h:outputText value="#{node.measure.unit}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
-                            </p:column>
-                            <p:column headerText="#{messages['module.method']}">  
-                                <p:dataTable var="method" value="#{node.methods}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
-                                    <p:column>
-                                        <p:graphicImage value="/MethodPrinter?methodId=#{methodPrinter.printToDownload(balancedScorecardHome.runMethod(method)).id}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>
-                                    </p:column>
-                                </p:dataTable>                                
                             </p:column>
                         </p:treeTable> 
                     </h:form>
