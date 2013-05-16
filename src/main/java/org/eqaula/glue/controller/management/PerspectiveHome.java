@@ -236,8 +236,8 @@ public class PerspectiveHome extends BussinesEntityHome<Perspective> implements 
     }
 
     @TransactionAttribute
-    public void savePerspectiveDialog() {
+    public String savePerspectiveDialog() {
         savePerspective();
-        //return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
     }
 }

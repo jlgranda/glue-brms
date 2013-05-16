@@ -14,6 +14,7 @@
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
             <f:viewParam name="balancedScorecardId" value="#{balancedScorecardHome.balancedScorecardId}" />
+            <s:viewAction action="#{balancedScorecardHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
         <ui:param name="title" value="#{balancedScorecardHome.instance.name}" />
 
@@ -27,29 +28,59 @@
             <li>
                 <h:link class="active" 
                         outcome="/pages/management/balancedscorecard/view" 
-                        value="#{balancedScorecardHome.managed ? balancedScorecardHome.instance.name : ''}"/>
+                        value="#{balancedScorecardHome.managed ? balancedScorecardHome.instance.name : ''}">
+                    <f:param name="balancedScorecardId" value="#{balancedScorecardHome.balancedScorecardId}"/>
+                </h:link>
             </li>
         </ui:define>
         <ui:define name="header-replace">
             <p:panel id="action-panel" styleClass="container-fluid">
-                <div class="span2">
-                    <p:outputLabel>#{balancedScorecardHome.selectedNode}</p:outputLabel>
+                <div class="span4">
+                    <div class="btn-group">
+                        <h:link title="${sitename}" styleClass="btn">
+                            ${sitename}
+                        </h:link>
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <!-- dropdown menu links -->
+                            <li>
+                                <h:link outcome="/pages/profile/profile" title="#{messages['common.viewprofile']}" value="#{messages['common.viewprofile']}">
+                                    <f:param name="profileId" value="#{userProfile.id}"/>
+                                </h:link>
+                            </li>
+                            <li>
+                                <h:link outcome="/pages/home" title="#{messages['module.management.organizations']}" value="${messages['module.management.organizations']}">
+                                </h:link>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="span10">
+                <div class="span8">
                     <h:form id="action-form">
-                            <p:commandLink id="button-add" 
-                                           value="#{messages['common.add']}" 
-                                           update=":perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" 
-                                           actionListener="#{balancedScorecardHome.redirecToAdd}" 
-                                           styleClass="btn btn-primary" 
-                                           disabled="#{empty balancedScorecardHome.selectedNode}"/>
-                            #{' '}
-                            <p:commandLink id="button-edit" 
-                                           value="#{messages['common.edit']}" 
-                                           update=":perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" 
-                                           actionListener="#{balancedScorecardHome.redirecToEdit}" 
-                                           disabled="#{empty balancedScorecardHome.selectedNode}" 
-                                           styleClass="btn btn-secondary"/>
+
+                        <p:commandLink id="button-add" 
+                                       value="#{messages['common.add']}" 
+                                       update=":perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" 
+                                       actionListener="#{balancedScorecardHome.redirecToAdd}" 
+                                       styleClass="btn btn-primary #{empty balancedScorecardHome.selectedNode ? 'disabled' : ''}"
+                                       style="color:#fff;" 
+                                       disabled="#{empty balancedScorecardHome.selectedNode}"/>
+                        #{' '}
+                        <p:commandLink id="button-edit" 
+                                       value="#{messages['common.edit']}" 
+                                       update=":perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" 
+                                       actionListener="#{balancedScorecardHome.redirecToEdit}" 
+                                       disabled="#{empty balancedScorecardHome.selectedNode}" 
+                                       styleClass="btn btn-secondary"/>
+                        #{' '}
+                        <h:link outcome="/pages/management/balancedscorecard/view" 
+                                styleClass="btn"
+                                value="#{messages['common.refresh']}">
+                            <f:param name="balancedScorecardId" value="#{balancedScorecardHome.balancedScorecardId}"/>
+                        </h:link>
+
                     </h:form>
                 </div>
             </p:panel>
@@ -57,11 +88,11 @@
         <ui:define name="content">
             <p:layout id="bsc-layout" fullPage="false" transient="true"
                       styleClass="row-fluid">
-                <p:layoutUnit id="left" header="#{messages['common.explorer']}" 
+                <p:layoutUnit id="left" header="#{balancedScorecardHome.instance.name}" 
                               position="west"
                               resizable="true" closable="false" 
                               collapsible="true"
-                              styleClass="span2">
+                              styleClass="span3">
                     <h:form id="tree-form">
                         <p:tree id="bscTree"
                                 value="#{balancedScorecardHome.rootNode}" 
@@ -98,19 +129,19 @@
                     </h:form>
                 </p:layoutUnit>
 
-                <p:layoutUnit id="center" position="center"
-                              styleClass="span10">
+                <p:layoutUnit id="center" position="center" 
+                              styleClass="span9">
                     <h:form id="bsc-table-form">
                         <p:growl id="bsc-grow" 
                                  showDetail="true" 
-                                 sticky="false" />
+                                 sticky="false"/>
                         <p:treeTable id="treetable" 
                                      value="#{balancedScorecardHome.selectedNode!=null ? balancedScorecardHome.selectedNode : balancedScorecardHome.bscNode}" 
                                      var="node"  propagateSelectionUp="true" >  
-                            <p:column headerText="#{messages['module.balancedscorecard.dimention']}">  
+                            <p:column headerText="#{balancedScorecardHome.selectedNode}">
                                 <h:outputText value="#{balancedScorecardHome.getToHaveChildren(balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode) == true ? node: hola}"/>                        
                             </p:column>  
-                            <p:column headerText="#{messages['module.method']}">  
+                            <p:column headerText="#{messages['common.status']}">  
                                 <p:dataTable var="method" value="#{node.methods}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
                                     <p:column>
                                         <p:graphicImage value="/MethodPrinter?methodId=#{methodPrinter.printToDownload(balancedScorecardHome.runMethod(method)).id}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>
@@ -158,8 +189,7 @@
                         <p:commandButton id="save" value="#{messages['common.done']}" 
                                          action="#{perspectiveHome.savePerspectiveDialog()}"
                                          styleClass="btn btn-primary" 
-                                         oncomplete="perspectiveEditDlg.hide();" 
-                                         update=":tree-form:bscTree :bsc-layout"/>
+                                         oncomplete="perspectiveEditDlg.hide();"/>
 
                         #{'  '}
                         <p:commandButton type="button" value="#{messages['common.delete']}" 

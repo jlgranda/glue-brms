@@ -73,7 +73,6 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     @Current
     @Inject
     private Profile profile;
-    private TreeNode bscNode;
     private TreeNode selectedNode;
     private TreeNode rootNode;
     @Inject
@@ -110,20 +109,9 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         return getInstance().getName();
     }
 
-    public TreeNode getBscNode() {
-        if (bscNode == null) {
-            buildTree();
-        }
-        return bscNode;
-    }
-
-    public void setBscNode(TreeNode bscNode) {
-        this.bscNode = bscNode;
-    }
-
     public TreeNode getRootNode() {
-        if (rootNode == null) {
-            buildTree();        
+        if (rootNode == null || rootNode.getChildCount() == 0) {
+            buildTree();
         }
         return rootNode;
     }
@@ -152,6 +140,8 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     public void load() {
         if (isIdDefined()) {
             wire();
+            rootNode = new DefaultTreeNode("bsc", getInstance(), null);
+            setSelectedNode(rootNode);
         }
     }
 
@@ -274,17 +264,18 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     }
 
     public TreeNode buildTree() {
-        rootNode = new DefaultTreeNode("rootNode", "", null);
-        bscNode = new DefaultTreeNode("bsc", getInstance(), rootNode);
+
+        //TreeNode bscNode = new DefaultTreeNode("bsc", getInstance(), rootNode);
+        
         TreeNode perspectiveNode = null;
         TreeNode themeNode = null;
         TreeNode objetiveNode = null;
         TreeNode measureNode = null;
         TreeNode targetNode = null;
-        
-        bscNode.setExpanded(true);
+
+        rootNode.setExpanded(true);
         for (Perspective perspective : getInstance().getPerspectives()) {
-            perspectiveNode = new DefaultTreeNode("perspective", perspective, bscNode);
+            perspectiveNode = new DefaultTreeNode("perspective", perspective, rootNode);
             perspectiveNode.setExpanded(true);
             for (Theme theme : perspective.getThemes()) {
                 themeNode = new DefaultTreeNode("theme", theme, perspectiveNode);
