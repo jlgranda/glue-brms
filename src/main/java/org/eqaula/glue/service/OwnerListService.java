@@ -139,7 +139,4 @@ public class OwnerListService extends ListService<Owner> {
     public Object getRowKey(Owner entity) {
         return entity.getName();
     }
-
-      
- 
 }

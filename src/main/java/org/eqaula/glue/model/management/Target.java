@@ -161,7 +161,7 @@ public class Target extends BussinesEntity implements Serializable {
 
     @Transient
     public BigDecimal getCurrentValue() {
-        BigDecimal _value = new BigDecimal(110);
+        BigDecimal _value = new BigDecimal(80);
         for (TargetValue tv : getValues()) {
             if (Boolean.TRUE.equals(tv.getCurrent())) {
                 _value = tv.getValue();

@@ -41,7 +41,10 @@ import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.Property;
 import org.eqaula.glue.model.Structure;
+import org.eqaula.glue.model.management.Macroprocess;
 import org.eqaula.glue.model.management.Organization;
+import org.eqaula.glue.model.management.Owner;
+import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.profile.ProfileService;
 import org.eqaula.glue.service.BussinesEntityService;
@@ -57,8 +60,7 @@ import org.primefaces.model.chart.MeterGaugeChartModel;
 @RequestScoped
 public class Statistics {
 
-   //private ProfileService ps;
-    
+    //private ProfileService ps;
     private BussinesEntityService bes;
 
     public Statistics() {
@@ -66,17 +68,17 @@ public class Statistics {
 
     @Inject
     public Statistics(EntityManager em, BussinesEntityService bes) {
-        
+
         this.bes = bes;
         //ps.setEntityManager(em);
         this.bes.setEntityManager(em);
-        
+
     }
 
     public long getUserCount() {
         return bes.countBussinesEntity(Profile.class);
     }
-    
+
     public float calculeAttributesCompletedPercent(Long bussinesEntityId, String bussinesEntityTypeName) {
         Long required = bes.getCountRequiredProperties(bussinesEntityId, bussinesEntityTypeName);
         Long completed = bes.getCountCompletedRequiredProperties(bussinesEntityId, bussinesEntityTypeName);
@@ -127,7 +129,7 @@ public class Statistics {
     /**
      * ********************************************************************
      * Bar and Line chart
-     *********************************************************************
+     * ********************************************************************
      */
     private CartesianChartModel categoryModel;
     private CartesianChartModel linearModel;
@@ -147,54 +149,102 @@ public class Statistics {
         entities.setLabel("Entidades");
         entities.set("Perfiles", bes.countBussinesEntity(Profile.class));
         entities.set("Organizaciones", bes.countBussinesEntity(Organization.class));
+        entities.set("Estrategías", bes.countBussinesEntity(Theme.class));
+        entities.set("Macro procesos", bes.countBussinesEntity(Macroprocess.class));
         //entities.set("Tipos de entidades de negocio", bes.countBussinesEntity(BussinesEntityType.class));
         //entities.set("Estructuras de datos", bes.countBussinesEntity(Structure.class));
         //entities.set("Propiedades", bes.countBussinesEntity(Property.class));
         /*entities.set("2006", 44);
-        entities.set("2007", 150);
-        entities.set("2008", 25);*/
+         entities.set("2007", 150);
+         entities.set("2008", 25);*/
 
         /*ChartSeries girls = new ChartSeries();
-        girls.setLabel("Girls");
+         girls.setLabel("Girls");
 
-        girls.set("2004", 52);
-        girls.set("2005", 60);
-        girls.set("2006", 110);
-        girls.set("2007", 135);
-        girls.set("2008", 120);*/
+         girls.set("2004", 52);
+         girls.set("2005", 60);
+         girls.set("2006", 110);
+         girls.set("2007", 135);
+         girls.set("2008", 120);*/
 
         categoryModel.addSeries(entities);
         //categoryModel.addSeries(girls);
     }
-    
-    public CartesianChartModel buildCartesianChartModel(){
+
+    private void createCategoryModelByOrganization(Organization organization) {
+        categoryModel = new CartesianChartModel();
+
+        ChartSeries entities = new ChartSeries();
+        entities.setLabel("Dimensiones");
+        entities.set("Gerencias", organization.getOwners().size());
+        entities.set("Estrategías", organization.getThemes().size());
+        int c1 = 0;
+        int c2 = 0;
+        for (Theme t : organization.getThemes()) {
+            for (Macroprocess m : t.getMacroprocess()) {
+                c1++;
+                for (org.eqaula.glue.model.management.Process p : m.getProcess()) {
+                    c2++;
+                }
+            }
+        }
+        entities.set("Macro procesos", c1);
+        entities.set("Procesos", c2);
+
+
+        //entities.set("Tipos de entidades de negocio", bes.countBussinesEntity(BussinesEntityType.class));
+        //entities.set("Estructuras de datos", bes.countBussinesEntity(Structure.class));
+        //entities.set("Propiedades", bes.countBussinesEntity(Property.class));
+        /*entities.set("2006", 44);
+         entities.set("2007", 150);
+         entities.set("2008", 25);*/
+
+        /*ChartSeries girls = new ChartSeries();
+         girls.setLabel("Girls");
+
+         girls.set("2004", 52);
+         girls.set("2005", 60);
+         girls.set("2006", 110);
+         girls.set("2007", 135);
+         girls.set("2008", 120);*/
+
+        categoryModel.addSeries(entities);
+        //categoryModel.addSeries(girls);
+    }
+
+    public CartesianChartModel buildCartesianChartModel() {
         createCategoryModel();
         return getCategoryModel();
     }
 
-   /* private void createLinearModel() {
-        linearModel = new CartesianChartModel();
+    public CartesianChartModel buildCartesianChartModelByOrganization(Organization organization) {
+        createCategoryModelByOrganization(organization);
+        return getCategoryModel();
+    }
 
-        LineChartSeries series1 = new LineChartSeries();
-        series1.setLabel("Series 1");
+    /* private void createLinearModel() {
+     linearModel = new CartesianChartModel();
 
-        series1.set(1, 2);
-        series1.set(2, 1);
-        series1.set(3, 3);
-        series1.set(4, 6);
-        series1.set(5, 8);
+     LineChartSeries series1 = new LineChartSeries();
+     series1.setLabel("Series 1");
 
-        LineChartSeries series2 = new LineChartSeries();
-        series2.setLabel("Series 2");
-        series2.setMarkerStyle("diamond");
+     series1.set(1, 2);
+     series1.set(2, 1);
+     series1.set(3, 3);
+     series1.set(4, 6);
+     series1.set(5, 8);
 
-        series2.set(1, 6);
-        series2.set(2, 3);
-        series2.set(3, 2);
-        series2.set(4, 7);
-        series2.set(5, 9);
+     LineChartSeries series2 = new LineChartSeries();
+     series2.setLabel("Series 2");
+     series2.setMarkerStyle("diamond");
 
-        linearModel.addSeries(series1);
-        linearModel.addSeries(series2);
-    }*/
+     series2.set(1, 6);
+     series2.set(2, 3);
+     series2.set(3, 2);
+     series2.set(4, 7);
+     series2.set(5, 9);
+
+     linearModel.addSeries(series1);
+     linearModel.addSeries(series2);
+     }*/
 }

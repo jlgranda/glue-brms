@@ -47,6 +47,7 @@ import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.eqaula.glue.model.BussinesEntity;
 
 @TransactionAttribute
 public abstract class PersistenceUtil<T> implements Serializable {

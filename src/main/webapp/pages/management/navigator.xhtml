@@ -23,8 +23,15 @@
             </li>
             <li>
                 <h:link outcome="/pages/management/owner/list.xhtml"
-                        title="#{messages['module.management.analytical']}"
-                        value="#{messages['module.management.analytical']}">
+                        title="#{messages['module.management.owners']}"
+                        value="#{messages['module.management.owners']}">
+                    <f:param name="organizationId" value="#{organizationHome.instance.id}" />
+                </h:link>
+            </li>
+            <li>
+                <h:link outcome="/pages/management/diagnostic/home.xhtml"
+                        title="#{messages['module.management.analytical.diagnostic']}"
+                        value="#{messages['module.management.analytical.diagnostic']}">
                     <f:param name="organizationId" value="#{organizationHome.instance.id}" />
                 </h:link>
             </li>

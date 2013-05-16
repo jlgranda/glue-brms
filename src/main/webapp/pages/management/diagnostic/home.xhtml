@@ -69,22 +69,27 @@ limitations under the License.
         <ui:define name="content">
             <h:form id="form">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-                <div class="form-actions" style="padding-left: 20px">
-
+                <div class="form-actions">
                     <p:commandLink id="owner-add-button" value="#{messages['common.add']}" action="#{ownerHome.createNewOwner()}" oncomplete="ownerEditDlg.show();"
                                    styleClass="btn btn-primary"
-                                   update=":owner-edit-dialog">
+                                   update=":owner-edit-dialog"
+                                   rendered="false">
                     </p:commandLink>
-
                     #{' '}
-
                     <p:commandLink id="owner-edit-button"  value="#{messages['common.edit']}" oncomplete="ownerEditDlg.show();"  action="#{ownerHome.editOwner(ownerListService.selectedOwner.id)}" 
                                    styleClass="btn btn-secondary"
                                    update=":owner-edit-dialog"
-                                   disabled="#{empty ownerListService.selectedOwner.id}" 
-                                   > 
+                                   disabled="#{empty ownerListService.selectedOwner.id}"
+                                   rendered="false"> 
                     </p:commandLink>
-
+                    #{' '}
+                    <h:link id="button-admin" value="#{messages['module.diagnose']}" 
+                            rendered="true" 
+                            outcome="/pages/management/diagnostic/list" 
+                            styleClass="btn btn-primary #{empty ownerListService.selectedOwner.id ? 'disabled' : ''}"
+                            disabled="#{empty ownerListService.selectedOwner.id}">
+                        <f:param name="ownerId" value="#{ownerListService.selectedOwner.id}"></f:param>
+                    </h:link> 
                 </div>
                 <p:dataTable var="_owner" value="#{ownerListService}"
                              paginator="true" rows="20"
@@ -100,9 +105,9 @@ limitations under the License.
                              >
 
                     <p:ajax event="rowSelect" listener="#{ownerListService.onRowSelect}"   
-                            update=":form:owner-edit-button :form:messages"/>                 
+                            update=":form:owner-edit-button :form:button-admin :form:messages"/>                 
                     <p:ajax event="rowUnselect" listener="#{ownerListService.onRowUnselect}"
-                            update=":form:owner-edit-button :form:messages"/>
+                            update=":form:owner-edit-button: :form:messages:"/>
 
                     <p:column headerText="#{messages['common.name']}" sortBy="#{_owner.name}">
                         <h:outputText value="#{_owner.name}" />
