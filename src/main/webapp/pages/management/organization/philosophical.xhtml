@@ -231,7 +231,7 @@
                         <!-- &nbsp;-->
                         <p:commandLink type="button" value="#{messages['common.delete']}"
                                        styleClass="btn btn-danger" onclick="missionDeletedDlg.show();"
-                                       immediate="true" update=":mission-cancel-delete-dialog" 
+                                       immediate="true" 
                                        rendered="#{organizationHome.containsMission()}"
                                        style="color:#fff;"/>                                                
                         <!-- &nbsp;-->
@@ -295,8 +295,9 @@
                         <!-- &nbsp;-->
                         <p:commandLink type="button" value="#{messages['common.delete']}"
                                        styleClass="btn btn-danger" onclick="visionDeletedDlg.show();" 
-                                       immediate="true" update=":vision-cancel-delete-dialog" 
-                                       rendered="#{organizationHome.containsVision()}"/>                        
+                                       immediate="true" 
+                                       rendered="#{organizationHome.containsVision()}"
+                                       style="color:#fff;"/>                        
 
                         <!-- &nbsp;-->
                         <p:commandLink type="button" value="#{messages['common.cancel']}" 
@@ -358,8 +359,9 @@
                         <!-- &nbsp;-->
                         <p:commandLink type="button" value="#{messages['common.delete']}"
                                        styleClass="btn btn-danger" onclick="principleDeletedDlg.show();" 
-                                       immediate="true" update=":principle-cancel-delete-dialog" 
-                                       rendered="#{organizationHome.containsPrinciple()}"/>                        
+                                       immediate="true" 
+                                       rendered="#{organizationHome.containsPrinciple()}"
+                                       style="color:#fff;"/>                        
 
                         <!-- &nbsp;-->
                         <p:commandLink type="button" value="#{messages['common.cancel']}" 

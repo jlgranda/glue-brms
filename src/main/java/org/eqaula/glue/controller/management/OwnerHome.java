@@ -34,6 +34,7 @@ import org.eqaula.glue.model.BussinesEntityType;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
 import org.eqaula.glue.model.profile.Profile;
+import org.eqaula.glue.service.DiagnosticService;
 import org.eqaula.glue.service.OwnerListService;
 import org.eqaula.glue.service.OwnerService;
 import org.eqaula.glue.service.ThemeService;
@@ -45,8 +46,6 @@ import org.primefaces.context.RequestContext;
 /*
  * @author dianita
  */
-
-
 @Named
 @ViewScoped
 public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable {
@@ -61,6 +60,8 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     private Profile profile;
     @Inject
     private ThemeService themeService;
+    @Inject
+    private DiagnosticService diagnosticService;
 
     public OwnerHome() {
     }
@@ -94,6 +95,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         setEntityManager(em);
         organizationService.setEntityManager(em);
         themeService.setEntityManager(em);
+        diagnosticService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
 
@@ -125,10 +127,10 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     public String saveOwner() {
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
-        if (getInstance().isPersistent()) {          
+        if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
-            getInstance().setAuthor(this.profile);  
+            getInstance().setAuthor(this.profile);
             create(getInstance());
         }
         //TODO idear una mejor forma de redireccionar
@@ -171,8 +173,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
                     //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.property.hasValues") + " " + getInstance().getName(), ""));
                     //RequestContext.getCurrentInstance().execute("editDlg.hide()");
                     band = true;
-                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, getInstance().getName() + " : " + UI.getMessages("module.stocklist.delete.confirm"), "");
-                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("module.stocklist.delete.confirm"), ""));
                 }
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un gerente para ser borrado!", ""));
@@ -181,11 +182,11 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        
-        if(getOutcome()==null){
+
+        if (getOutcome() == null) {
             return "/pages/management/owner/list.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
-        if (band) {            
+        if (band) {        
             return null;
         }
         if (getInstance().getOrganization() != null) {
@@ -195,10 +196,13 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     }
 
     public boolean hasValuesBussinesEntity() {
-        boolean ban = themeService.findByOwner(getInstance()).isEmpty();
+        boolean ban = false;
+        if (themeService.findByOwner(getInstance()).isEmpty() && diagnosticService.findByOwner(getInstance()).isEmpty()) {
+            ban = true;
+        }
         return ban;
     }
-    
+
     public void createNewOwner() {
         setId(null);
         setInstance(null);
@@ -206,15 +210,14 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     }
 
     public void editOwner(Long id) {
-        setId(id);        
-        load();        
+        setId(id);
+        load();
     }
-     
+
     @Transactional
     public String saveOwnerDialog() {
         saveOwner();
         //return "/pages/management/owner/list.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         return null;
     }
-    
 }

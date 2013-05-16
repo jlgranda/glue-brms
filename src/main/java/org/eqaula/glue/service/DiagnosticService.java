@@ -71,6 +71,14 @@ public class DiagnosticService extends PersistenceUtil<Diagnostic> implements Se
         return getSingleResult(query);
     }
     
+    public List<Diagnostic> findByOwner(Owner owner) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Diagnostic> query = builder.createQuery(Diagnostic.class);
+        Root<Diagnostic> bussinesEntityType = query.from(Diagnostic.class);
+        query.where(builder.equal(bussinesEntityType.get(Diagnostic_.owner), owner));
+        return getResultList(query);
+    }
+    
     public List<Diagnostic> findByProfile(Profile profile) {
         LOG.info("find Diagnostic with profile " + profile);
         if (profile == null) return new ArrayList<Diagnostic>(0);

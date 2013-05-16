@@ -68,21 +68,9 @@ limitations under the License.
         </ui:define>
         <ui:define name="content">
             <h:form id="form">
-                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <div class="form-actions" style="padding-left: 20px">
 
-<!--<h:link value="#{messages['common.add']}" rendered="#{true}" outcome="owner" styleClass="btn btn-primary">
-    <f:param name="ownerId"></f:param>
-    <f:param name="organizationId" value="#{ownerListService.organizationId}"></f:param>
-    <f:param name="outcome" value="list"></f:param>
-</h:link>                
-                    #{' '}
-                    <h:link id="button-edit" value="#{messages['common.edit']}" rendered="true" outcome="owner" styleClass="btn" 
-                            disabled="#{empty ownerListService.selectedOwner.id}">
-                        <f:param name="ownerId" value="#{ownerListService.selectedOwner.id}"></f:param>
-                        <f:param name="organizationId" value="#{ownerListService.organizationId}"></f:param>
-                        <f:param name="outcome" value="list"></f:param>
-                    </h:link> -->
 
                     <p:commandLink id="owner-add-button" value="#{messages['common.add']}" action="#{ownerHome.createNewOwner()}" oncomplete="ownerEditDlg.show();"
                                    styleClass="btn btn-primary"
@@ -152,8 +140,6 @@ limitations under the License.
                                        styleClass="btn btn-danger"
                                        style="color:#fff;"
                                        onclick="deletedDlg.show()"
-                                       immediate="true"
-                                       update=":cancel-dialog"
                                        rendered="#{ownerHome.managed}"
                                        />
                         #{'  '}
@@ -168,13 +154,15 @@ limitations under the License.
                         <h:panelGroup layout="block" style="padding:5px;">  
                             <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                         </h:panelGroup>  
-                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                        <p:commandButton value="#{messages['common.yes']}"
+                                         oncomplete="deletedDlg.hide(); :owner-edit-dialog.hide();"  
                                          action="#{ownerHome.deleteOwner()}"                                         
                                          ajax="true" process="@this"  
                                          style="margin-top:10px;"
-                                         update=":form">  
-                        </p:commandButton>  
-                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                         />  
+                       
+                        <p:commandButton value="#{messages['common.no']}"
+                                         type="button" onclick="deletedDlg.hide();"  
                                          style="margin-top:10px;"/>  
                     </h:form>
                 </p:dialog> 
