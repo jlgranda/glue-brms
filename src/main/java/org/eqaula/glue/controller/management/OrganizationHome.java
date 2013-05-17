@@ -77,6 +77,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     private Mission selectedMission;
     private Vision selectedVision;
     private Principle selectedPrinciple;
+    private Theme selectedTheme;
     @Inject
     private GroupHome groupHome;
     private boolean toHaveChildren;
@@ -158,6 +159,14 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
 
     public void setSelectedPrinciple(Principle selectedPrinciple) {
         this.selectedPrinciple = selectedPrinciple;
+    }
+
+    public Theme getSelectedTheme() {
+        return selectedTheme;
+    }
+
+    public void setSelectedTheme(Theme selectedTheme) {
+        this.selectedTheme = selectedTheme;
     }
 
     public TreeNode getRootNode() {
@@ -530,6 +539,46 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
 
     public boolean containsPrinciple() {
         if (getInstance().getPrinciples().contains(getSelectedPrinciple())) {
+            return true;
+        }
+        return false;
+    }
+    
+    @Inject
+    private ThemeHome themeHome;
+
+    public void wireTheme(Theme theme) {
+        if (theme == null) {
+            setSelectedTheme(themeHome.createInstance());
+        } else {
+            setSelectedTheme(theme);
+        }
+    }
+
+    public void createTheme() {
+        wireTheme(null);
+    }
+
+    public void addTheme() {
+        setModified(true);
+        if (!getSelectedTheme().isPersistent()) {
+            getInstance().addTheme(getSelectedTheme());
+        }
+    }
+
+    public void removeTheme() {
+        if (containsTheme()) {
+            getInstance().removeTheme(getSelectedTheme());
+            setModified(true);
+        }
+    }
+
+    public void clearTheme() {
+        setSelectedTheme(null);
+    }
+
+    public boolean containsTheme() {
+        if (getInstance().getThemes().contains(getSelectedTheme())) {
             return true;
         }
         return false;

@@ -46,7 +46,7 @@ public class Organization extends BussinesEntity implements Serializable {
     private String initials;
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Owner> owners = new ArrayList<Owner>();
-    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Theme> themes = new ArrayList<Theme>();
     //Philosophical definition
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -197,6 +197,19 @@ public class Organization extends BussinesEntity implements Serializable {
         return this.getPrinciples().remove(principle);
     }
 
+    public boolean addTheme(Theme theme) {
+        if (!this.getThemes().contains(theme)) {
+            theme.setOrganization(this);
+            return this.getThemes().add(theme);
+        }
+        return false;
+    }
+    
+    public boolean removeTheme(Theme theme) {
+        theme.setOrganization(null);
+        return this.getThemes().remove(theme);
+    }
+    
     public List<Organization.Type> getOrganizationTypes() {
         return Arrays.asList(Organization.Type.values());
     }
