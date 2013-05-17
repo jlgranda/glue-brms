@@ -67,53 +67,92 @@ limitations under the License.
             </div>             
         </ui:define>
         <ui:define name="content">
-            <h:form id="form">
-                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                <div class="form-actions" style="padding-left: 20px">
+            <div class="row" id="div-owner">
+                <div class="span12">
+                    <div class="well bs-docs-sidebar" style="padding-top: 7px; padding-bottom: 10px;">
+                        <br/>
+                        <h:form class="row-fluid">
+                            <h3>
+                                <p:commandLink id="owner-add-button" 
+                                               action="#{ownerHome.createNewOwner()}"
+                                               oncomplete="ownerEditDlg.show();"
+                                               styleClass="btn"
+                                               update=":owner-edit-dialog">
+                                    <i class="icon-plus"></i>
+                                </p:commandLink>
+                                <p:tooltip for="owner-add-button" value="#{messages['common.addNew']} #{messages['module.owner']}" showEffect="fade" hideEffect="fade" />  
+                                #{messages['module.owners']}
+                            </h3>
+                        </h:form>
+                        <ul class="nav nav-tabs nav-stacked">
+                            <ui:repeat var="_owner" value="#{organizationHome.instance.owners}" varStatus="i" id="id">
+                                <li>
+                                    <div class="box" style="margin-bottom: 8px;">
+                                        <div class="row">
+                                            <h:form id="owner-form">
+                                                <div class="span11 columns">
+                                                    <h5>
+                                                        <p:commandLink id="owner-edit-button" 
+                                                                       oncomplete="ownerEditDlg.show();"
+                                                                       action="#{ownerHome.editOwner(_owner.id)}" 
+                                                                       styleClass="link"
+                                                                       update=":owner-edit-dialog"
+                                                                       >
+                                                            <i class="icon-pencil"></i>
+                                                        </p:commandLink>
+                                                        <p:tooltip for="owner-edit-button" value="#{messages['common.edit']}: #{_owner.name}" showEffect="fade" hideEffect="fade" />  
+                                                        #{_owner.name}  
 
-                    <p:commandLink id="owner-add-button" value="#{messages['common.add']}" action="#{ownerHome.createNewOwner()}" oncomplete="ownerEditDlg.show();"
-                                   styleClass="btn btn-primary"
-                                   update=":owner-edit-dialog">
-                    </p:commandLink>
+                                                        <p:commandLink id="theme-add-button" 
+                                                                       value="#{messages['common.add']} #{messages['module.theme']}"
+                                                                       action="#{themeHome.createNewTheme(_owner.id)}"
+                                                                       oncomplete="themeEditDlg.show();"
+                                                                       styleClass="btn-mini btn-primary fr"
+                                                                       update=":theme-edit-dialog"/>
 
-                    #{' '}
+                                                        #{' '}
 
-                    <p:commandLink id="owner-edit-button"  value="#{messages['common.edit']}" oncomplete="ownerEditDlg.show();"  action="#{ownerHome.editOwner(ownerListService.selectedOwner.id)}" 
-                                   styleClass="btn btn-secondary"
-                                   update=":owner-edit-dialog"
-                                   disabled="#{empty ownerListService.selectedOwner.id}" 
-                                   > 
-                    </p:commandLink>
+                                              
 
-                </div>
-                <p:dataTable var="_owner" value="#{ownerListService}"
-                             paginator="true" rows="20"
-                             paginatorAlwaysVisible="false"
-                             paginatorPosition="top"
-                             paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
-                             rowsPerPageTemplate="5,10,15"
-                             id="ownerTable" lazy="true"
-                             selection="#{ownerListService.selectedOwner}"
-                             rendered="true"
-                             selectionMode="single"
-
-                             >
-
-                    <p:ajax event="rowSelect" listener="#{ownerListService.onRowSelect}"   
-                            update=":form:owner-edit-button :form:messages"/>                 
-                    <p:ajax event="rowUnselect" listener="#{ownerListService.onRowUnselect}"
-                            update=":form:owner-edit-button :form:messages"/>
-
-                    <p:column headerText="#{messages['common.name']}" sortBy="#{_owner.name}">
-                        <h:outputText value="#{_owner.name}" />
-                    </p:column>
-                    <p:column headerText="#{messages['common.description']}" sortBy="#{_owner.description}">
-                        <h:outputText value="#{_owner.description}" />
-                    </p:column>          
-
-                </p:dataTable>
-            </h:form>
-
+                                                    </h5>
+                                                    <div class="bs-docs-sidebar" style="padding-left: 20px">
+                                                        <p:dataTable var="_theme" value="#{_owner.themes}"
+                                                                     paginator="true" rows="20"
+                                                                     paginatorAlwaysVisible="false"
+                                                                     paginatorPosition="top"
+                                                                     paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                                                                     rowsPerPageTemplate="5,10,15"
+                                                                     id="themeTable" lazy="true"
+                                                                     rendered="true"
+                                                                     >
+                                                           <p:column headerText="#{messages['module.theme']}" sortBy="#{_theme.name}">
+                                                                <h:outputText value="#{_theme.name}" />
+                                                            </p:column>
+                                                            <p:column headerText="#{messages['common.description']}" sortBy="#{_theme.description}">
+                                                                <h:outputText value="#{_theme.description}" />
+                                                            </p:column>
+                                                       
+                                                            <p:column headerText="#{messages['common.actions']}" style="width:4%">
+                                                                <p:commandLink id="theme-edit-button" 
+                                                                               oncomplete="themeEditDlg.show();"
+                                                                               action="#{themeHome.editTheme(_theme.id)}" 
+                                                                               styleClass="btn btn-mini" style="font-size: 0.75em;"
+                                                                               value="#{messages['common.edit']}"
+                                                                               update=":theme-edit-dialog"
+                                                                               />
+                                                            </p:column>
+                                                        </p:dataTable>
+                                                    </div>
+                                                </div>
+                                            </h:form>
+                                        </div>       
+                                    </div> 
+                                </li>
+                            </ui:repeat> 
+                        </ul>
+                    </div>          
+                </div> 
+            </div>
 
             <p:dialog id="owner-edit-dialog" header="#{messages['common.add']} #{messages['module.owner']}" styleClass="atf-header" widgetVar="ownerEditDlg" appendToBody="true" closeOnEscape="true">
                 <h:form  id="form-owner" acceptcharset="UTF-8" class="form-horizontal" >
@@ -125,7 +164,7 @@ limitations under the License.
                         <p:commandLink id="save" value="#{messages['common.done']}" 
                                        action="#{ownerHome.saveOwnerDialog()}"
                                        oncomplete="ownerEditDlg.hide();" 
-                                       update=":form"
+                                       update="@form"
                                        styleClass="btn btn-primary"
                                        style="color:#fff;"/>
                         <!-- &nbsp;-->
@@ -154,13 +193,59 @@ limitations under the License.
                                          ajax="true" process="@this"  
                                          style="margin-top:10px;"
                                          />  
-                       
+
                         <p:commandButton value="#{messages['common.no']}"
                                          type="button" onclick="deletedDlg.hide();"  
                                          style="margin-top:10px;"/>  
                     </h:form>
                 </p:dialog> 
             </p:dialog>
+            <!-- DIALOG THEME  -->             
+            <p:dialog id="theme-edit-dialog" header="#{messages['common.add']} #{messages['module.theme']}" styleClass="atf-header" widgetVar="themeEditDlg" appendToBody="true" closeOnEscape="true">
+                <h:form  id="form-theme" acceptcharset="UTF-8" class="form-horizontal" >
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{themeHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                    <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{themeHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+
+                    <div class="form-actions">
+                        <p:commandLink id="save" value="#{messages['common.done']}" 
+                                       action="#{themeHome.saveThemeDialog()}"
+                                         oncomplete="themeEditDlg.hide();" 
+                                         update=":id"
+                                         styleClass="btn btn-primary"
+                                         style="color:#fff;"/>
+                        #{'  '}
+                        <p:commandLink type="button" value="#{messages['common.delete']}" 
+                                         styleClass="btn btn-danger"
+                                         onclick="deletedDlg.show()"
+                                         immediate="true"
+                                         update=":cancel-dialog-theme"
+                                         rendered="#{themeHome.managed}"
+                                          style="color:#fff;" />
+                        #{'  '}
+                        <p:commandLink id="cancel" value="#{messages['common.cancel']}" 
+                                         oncomplete="themeEditDlg.hide();"  
+                                         ajax="true" process="@this" styleClass="btn"/>
+
+                    </div>  
+                </h:form>
+                <p:dialog id="cancel-dialog-theme" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">   
+
+                    <h:form id="form-dialog-confirm-delete-theme">
+                        <h:panelGroup layout="block" style="padding:5px;">  
+                            <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                        </h:panelGroup>  
+                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                         action="#{themeHome.deleteTheme()}"                                         
+                                         ajax="true" process="@this"  
+                                         style="margin-top:10px;"
+                                         >  
+                        </p:commandButton>  
+                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                         style="margin-top:10px;"/>  
+                    </h:form>
+                </p:dialog> 
+            </p:dialog>          
         </ui:define>
         <ui:define name="sidebar">
             <ui:include src="/pages/management/navigator.xhtml" />

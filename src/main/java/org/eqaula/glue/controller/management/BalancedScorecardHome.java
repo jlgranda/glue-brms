@@ -351,7 +351,8 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("perspective".equals(selectedNode.getType())) {
                 themeHome.setPerspectiveId(bussinesEntity.getId());
-                themeHome.createNewTheme();
+                //modificación de gerente a null desde lista de gerencias 
+                themeHome.createNewTheme(null);
                 RequestContext.getCurrentInstance().execute("themeEditDlg.show()");
                 //outcomeBuilder.append("/pages/management/theme/theme.xhtml?");
                 //outcomeBuilder.append("&perspectiveId=").append(bussinesEntity.getId());
