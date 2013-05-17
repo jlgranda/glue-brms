@@ -123,7 +123,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
 
     public TreeNode getRootNode() {
         if (rootNode == null) {
-            buildTree();        
+            buildTree();
         }
         return rootNode;
     }
@@ -222,10 +222,28 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     public void createDefaultPerspectives(BalancedScorecard balancedScorecard) {
 
         ArrayList<String> messagesPerspectives = new ArrayList();
-        messagesPerspectives.add(UI.getMessages("common.perspective.Financial"));
-        messagesPerspectives.add(UI.getMessages("common.perspective.Customer"));
-        messagesPerspectives.add(UI.getMessages("common.perspective.Internal"));
-        messagesPerspectives.add(UI.getMessages("common.perspective.InnovationAndLearning"));
+
+
+        Organization.Type organizationType = getInstance().getOrganization().getOrganizationType();
+
+        switch (organizationType) {
+            case GOVERMENT:
+                messagesPerspectives.add(UI.getMessages("common.perspective.StrategicDirection"));
+                messagesPerspectives.add(UI.getMessages("common.perspective.GovernmentForResults"));
+                messagesPerspectives.add(UI.getMessages("common.perspective.Process"));
+                messagesPerspectives.add(UI.getMessages("common.perspective.HumanTalent"));
+            case PRIVATE:
+                messagesPerspectives.add(UI.getMessages("common.perspective.Financial"));
+                messagesPerspectives.add(UI.getMessages("common.perspective.Customer"));
+                messagesPerspectives.add(UI.getMessages("common.perspective.Internal"));
+                messagesPerspectives.add(UI.getMessages("common.perspective.InnovationAndLearning"));
+            case PUBLIC:
+                messagesPerspectives.add(UI.getMessages("common.perspective.StrategicDirection"));
+                messagesPerspectives.add(UI.getMessages("common.perspective.GovernmentForResults"));
+                messagesPerspectives.add(UI.getMessages("common.perspective.Process"));
+                messagesPerspectives.add(UI.getMessages("common.perspective.HumanTalent"));
+            default:;
+        }
 
         for (String createPerspectives : messagesPerspectives) {
             Date now = Calendar.getInstance().getTime();
@@ -281,7 +299,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         TreeNode objetiveNode = null;
         TreeNode measureNode = null;
         TreeNode targetNode = null;
-        
+
         bscNode.setExpanded(true);
         for (Perspective perspective : getInstance().getPerspectives()) {
             perspectiveNode = new DefaultTreeNode("perspective", perspective, bscNode);
