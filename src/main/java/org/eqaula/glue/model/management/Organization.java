@@ -57,11 +57,9 @@ public class Organization extends BussinesEntity implements Serializable {
     private List<Principle> principles = new org.apache.commons.collections.list.TreeList();
 
     public enum Type {
-
         GOVERMENT,
         PUBLIC,
         PRIVATE;
-
         private Type() {
         }
     }
