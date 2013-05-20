@@ -474,10 +474,10 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     /*
      * UI management
      */
-    private MenuModel model = null;
+    /*private MenuModel model = null;
     private String lastNodeType = "";
 
-    /* public MenuModel getMenuModel() {
+    public MenuModel getMenuModel() {
      model = new DefaultMenuModel();
 
      log.debug("node=<" + selectedNode + ">");

@@ -29,6 +29,7 @@ limitations under the License.
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
             <f:viewParam name="organizationId" value="#{organizationHome.organizationId}" />
+            <s:viewAction action="#{organizationHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
         <ui:param name="title" value="#{organizationHome.instance.name}" />
         <ui:define name="topnav-left">
@@ -42,19 +43,43 @@ limitations under the License.
 
         <ui:define name="header-replace">
             <p:panel id="action-panel" styleClass="container-fluid">
-                <div class="span2">
-                    <p:outputLabel>#{organizationHome.selectedNode}</p:outputLabel>
+                <div class="span4">
+                    <div class="btn-group">
+                        <h:link title="${organizationHome.instance.name}" styleClass="btn">
+                            ${organizationHome.instance.name}
+                        </h:link>
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <!-- dropdown menu links -->
+                            <li>
+                                <h:link outcome="/pages/management/organization/home"
+                                        title="#{messages['common.dashboard']}"
+                                        value="#{messages['common.dashboard']}">
+                                    <f:param name="organizationId" value="#{organizationHome.instance.id}" />
+                                </h:link>
+                            </li>
+                            <li>
+                                <h:link outcome="/pages/home" 
+                                        title="#{messages['module.management.organizations']}" 
+                                        value="${messages['module.management.organizations']}">
+                                </h:link>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="span10">
+                <div class="span8">
                     <h:form id="action-form">
                         <p:commandLink id="button-add" 
                                        value="#{messages['common.add']}"                                            
                                        actionListener="#{organizationHome.redirecToAdd}" 
                                        styleClass="btn btn-primary" 
+                                       style="color:#fff;" 
                                        disabled="#{empty organizationHome.selectedNode || organizationHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.Organization')}"
                                        update=":macroprocess-edit-dialog :process-edit-dialog"/>
                         #{' '}
-                       
+
                         <p:commandLink id="button-edit" 
                                        value="#{messages['common.edit']}" 
                                        actionListener="#{organizationHome.redirecToEdit}" 
@@ -107,11 +132,12 @@ limitations under the License.
                 </p:layoutUnit>
                 <p:layoutUnit id="center" position="center"
                               styleClass="span10">
+
                     <h:form id="macro-table-form">
                         <p:growl id="macro-grow" 
                                  showDetail="true" 
                                  sticky="false" />
-
+                        <h4>#{organizationHome.selectedNode}</h4>
                         <p:treeTable id="treetable" 
                                      value="#{organizationHome.selectedNode!=null ? (organizationHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.Process') ? organizationHome.selectedNode.parent : organizationHome.selectedNode)  : organizationHome.rootNode}" 
                                      var="node_"  propagateSelectionUp="true" >  
@@ -128,7 +154,7 @@ limitations under the License.
             </p:layout>
             <!-- MACROPROCESS DIALOG -->
             <p:dialog id="macroprocess-edit-dialog" 
-                      header="#{messages['common.add']} #{messages['module.macroprocess']}"
+                      header="#{macroprocessHome.managed ? messages['common.edit'] : messages['common.add']} #{messages['module.macroprocess']}"
                       styleClass="atf-header" widgetVar="macroprocessEditDlg" 
                       appendToBody="true" closeOnEscape="true">
                 <h:form  id="form-macroprocess" acceptcharset="UTF-8" class="form-horizontal" >
@@ -146,22 +172,22 @@ limitations under the License.
                                 render="name" execute="@this save" />
                     <div class="form-actions">
                         <p:commandButton id="save" value="#{messages['common.done']}" 
-                                       action="#{macroprocessHome.saveMacroprocessDialog()}"
-                                       styleClass="btn btn-primary" 
-                                       oncomplete="macroprocessEditDlg.hide();" 
-                                       update=":tree-form:themeTree :process-layout"/>
+                                         action="#{macroprocessHome.saveMacroprocessDialog()}"
+                                         styleClass="btn btn-primary" 
+                                         oncomplete="macroprocessEditDlg.hide();" 
+                                         update=":tree-form:themeTree :process-layout"/>
 
                         #{'  '}
                         <p:commandButton type="button" value="#{messages['common.delete']}" 
-                                       styleClass="btn btn-danger"
-                                       onclick="macroprocessdeletedDlg.show()"
-                                       immediate="true"
-                                       rendered="#{macroprocessHome.managed}"
-                                       />
+                                         styleClass="btn btn-danger"
+                                         onclick="macroprocessdeletedDlg.show()"
+                                         immediate="true"
+                                         rendered="#{macroprocessHome.managed}"
+                                         />
                         #{'  '}
                         <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
-                                       oncomplete="macroprocessEditDlg.hide();"  
-                                       ajax="true" process="@this" styleClass="btn"/>
+                                         oncomplete="macroprocessEditDlg.hide();"  
+                                         ajax="true" process="@this" styleClass="btn"/>
 
                     </div>  
                 </h:form>
@@ -208,22 +234,22 @@ limitations under the License.
 
                     <div class="form-actions">
                         <p:commandButton id="save" value="#{messages['common.done']}" 
-                                       action="#{processHome.saveProcess()}"
-                                       styleClass="btn btn-primary" 
-                                       oncomplete="processEditDlg.hide();" 
-                                       update=":tree-form:themeTree :process-layout"/>
+                                         action="#{processHome.saveProcess()}"
+                                         styleClass="btn btn-primary" 
+                                         oncomplete="processEditDlg.hide();" 
+                                         update=":tree-form:themeTree :process-layout"/>
 
                         #{'  '}
                         <p:commandButton type="button" value="#{messages['common.delete']}" 
-                                       styleClass="btn btn-danger"
-                                       onclick="deletedDlg.show()"
-                                       immediate="true"
-                                       rendered="#{processHome.managed}"
-                                       />
+                                         styleClass="btn btn-danger"
+                                         onclick="deletedDlg.show()"
+                                         immediate="true"
+                                         rendered="#{processHome.managed}"
+                                         />
                         #{'  '}
                         <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
-                                       oncomplete="processEditDlg.hide();"  
-                                       ajax="true" process="@this" styleClass="btn"/>
+                                         oncomplete="processEditDlg.hide();"  
+                                         ajax="true" process="@this" styleClass="btn"/>
 
                     </div>  
                 </h:form>

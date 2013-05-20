@@ -170,7 +170,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public TreeNode getRootNode() {
-        if (rootNode == null) {
+        if (rootNode == null || organizationNode.getChildCount() == 0) {
             buildTree();
         }
         return rootNode;
@@ -184,6 +184,10 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public void load() {
         if (isIdDefined()) {
             wire();
+            rootNode = new DefaultTreeNode("root", "Process map", null);
+            organizationNode = new DefaultTreeNode("organization", getInstance(), rootNode);
+            
+            setSelectedNode(organizationNode);
         }
     }
 
@@ -296,10 +300,11 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public TreeNode buildTree() {
-        rootNode = new DefaultTreeNode("rootNode", "", null);
-        organizationNode = new DefaultTreeNode("organization", getInstance(), rootNode);
-        organizationNode.setExpanded(true);
+        //rootNode = new DefaultTreeNode("rootNode", "", null);
+        //organizationNode = new DefaultTreeNode("organization", getInstance(), rootNode);
+        
         rootNode.setExpanded(true);
+        organizationNode.setExpanded(true);
 
         TreeNode macroprocessNode = null;
         TreeNode processNode = null;
