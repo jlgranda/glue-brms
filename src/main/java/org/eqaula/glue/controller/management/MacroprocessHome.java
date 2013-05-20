@@ -223,8 +223,10 @@ public class MacroprocessHome extends BussinesEntityHome<Macroprocess> implement
     }
     
     @TransactionAttribute
-    private void saveMacroprocessDialog(){
+    public String saveMacroprocessDialog(){
         saveMacroprocess();
+        return  "organizationId="+ getInstance().getTheme().getOrganization().getId() +"?faces-redirect=true&includeViewParams=true";
     }
+
    
 }

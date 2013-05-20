@@ -135,7 +135,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         }
         //TODO idear una mejor forma de redireccionar
         if (getOutcome() == null) {
-            return null;
+            return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         if (getInstance().getOrganization() != null) {
             return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true";
@@ -184,9 +184,9 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         }
 
         if (getOutcome() == null) {
-            return "/pages/management/owner/list.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+            return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
-        if (band) {        
+        if (band) {
             return null;
         }
         if (getInstance().getOrganization() != null) {
@@ -197,7 +197,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
 
     public boolean hasValuesBussinesEntity() {
         boolean ban = false;
-        if (themeService.findByOwner(getInstance()).isEmpty() && diagnosticService.findByOwner(getInstance()).isEmpty()) {
+        if (diagnosticService.findByOwner(getInstance()).isEmpty()) {
             ban = true;
         }
         return ban;
@@ -217,7 +217,6 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     @Transactional
     public String saveOwnerDialog() {
         saveOwner();
-        //return "/pages/management/owner/list.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
-        return null;
+        return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true"; 
     }
 }

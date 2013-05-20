@@ -168,42 +168,8 @@
                         </p:column>
                     </p:dataTable>
                 </p:panel>
-                
+
                 <br/>
-                <p:panel id="theme-panel" toggleable="true" rendered="#{not empty organizationHome.instance.id}" >
-                    <f:facet name="header"> 
-                        <h:outputText value="#{messages['module.theme']}"/>
-                        #{' '}
-                        <p:commandLink id="theme-add-button" 
-                                       value="#{messages['common.add']}"
-                                       action="#{organizationHome.createTheme()}"
-                                       oncomplete="themeEditDlg.show();" immediate="true"
-                                       styleClass="btn btn-mini btn-primary"
-                                       style="color:#fff; font-size: 0.75em;"
-                                       update=":principle-edit-dialog">
-                        </p:commandLink>
-
-                    </f:facet>
-                    <p:dataTable var="_theme" value="#{organizationHome.instance.themes}"
-                                 rendered="#{not empty organizationHome.instance.themes}">
-                        <p:column headerText="#{messages['common.name']}" style="width:150px">
-                            <h:outputText value="#{_theme.name}"/>
-                        </p:column>
-                        <p:column headerText="#{messages['common.description']}" style="width:150px">
-                            <h:outputText value="#{_theme.description}"/>
-                        </p:column>                        
-                        <p:column headerText="#{messages['common.actions']}" style="width:4%">
-                            <p:commandLink id="principle-edit-button"
-                                           value="#{messages['common.edit']}" 
-                                           action="#{organizationHome.wireTheme(_theme)}" 
-                                           oncomplete="themeEditDlg.show();" immediate="true"
-                                           styleClass="btn btn-mini" style="font-size: 0.75em;"
-                                           update=":theme-edit-dialog">
-                            </p:commandLink>
-                        </p:column>
-                    </p:dataTable>
-                </p:panel>
-
                 <div class="form-actions">
                     <p:commandButton
                         id="save" action="#{organizationHome.saveOrganization()}"
@@ -434,70 +400,6 @@
                     </p:commandButton>  
                     <p:commandButton value="#{messages['common.no']}" 
                                      type="button" onclick="principleDeletedDlg.hide();"  
-                                     style="margin-top:10px;"/>  
-                </h:form>
-            </p:dialog> 
-            
-            <!--THEME DIALOG-->
-            <p:dialog id="theme-edit-dialog" 
-                      header="#{organizationHome.selectedTheme.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.theme']}" 
-                      styleClass="atf-header"
-                      widgetVar="themeEditDlg" 
-                      appendToBody="true" closeOnEscape="true">
-                <h:form  id="form-theme" acceptcharset="UTF-8" class="form-horizontal" >
-                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                    <glue:input id="name" name="name" type="text"
-                                label="#{messages['common.name']}"
-                                value="#{organizationHome.selectedTheme.name}" 
-                                required="true" inlinehelp="#{messages['common.name.inlinehelp']}" 
-                                execute="@this save" render="name"/>
-                    <glue:input id="description" 
-                                name="description" type="textarea" 
-                                label="#{messages['common.description']}" 
-                                value="#{organizationHome.selectedTheme.description}" 
-                                required="false" inlinehelp="#{messages['common.description.help']}" 
-                                render="description" execute="@this save" />                
-                    <div class="form-actions">
-                        <p:commandLink id="principle-save" value="#{messages['common.done']}"
-                                       type="submit"
-                                       update=":philosophical-form"
-                                       actionListener="#{organizationHome.addTheme()}"
-                                       oncomplete="if (#{facesContext.maximumSeverity == null}) themeEditDlg.hide()"
-                                       ajax="true" process="@this"
-                                       immediate="false" styleClass="btn btn-primary"
-                                       style="color:#fff;" />
-
-                        <!-- &nbsp;-->
-                        <p:commandLink type="button" value="#{messages['common.delete']}"
-                                       styleClass="btn btn-danger" onclick="principleDeletedDlg.show();" 
-                                       immediate="true" 
-                                       rendered="#{organizationHome.containsTheme()}"
-                                       style="color:#fff;"/>                        
-
-                        <!-- &nbsp;-->
-                        <p:commandLink type="button" value="#{messages['common.cancel']}" 
-                                       styleClass="btn" onclick="themeEditDlg.hide();"
-                                       immediate="true" rendered="#{true}"/>                        
-
-                    </div>  
-                </h:form>
-            </p:dialog>
-            <p:dialog id="theme-cancel-delete-dialog"
-                      header="#{messages['common.delete.confirm']}" 
-                      widgetVar="themeDeletedDlg" resizable="false" modal="true">   
-                <h:form id="theme-form-dialog-confirm-delete">
-                    <h:panelGroup layout="block" style="padding:5px;">  
-                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
-                    </h:panelGroup>  
-                    <p:commandButton value="#{messages['common.yes']}"
-                                     oncomplete="themeDeletedDlg.hide(); themeEditDlg.hide();"  
-                                     action="#{organizationHome.removeTheme()}"                                         
-                                     ajax="true" process="@this"  
-                                     style="margin-top:10px;"
-                                     update=":philosophical-form">  
-                    </p:commandButton>  
-                    <p:commandButton value="#{messages['common.no']}" 
-                                     type="button" onclick="themeDeletedDlg.hide();"  
                                      style="margin-top:10px;"/>  
                 </h:form>
             </p:dialog> 

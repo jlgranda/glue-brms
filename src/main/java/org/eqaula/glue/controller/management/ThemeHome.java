@@ -134,7 +134,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     @Transactional
     public Owner getOwner() {
         if (owner == null) {
-            if (ownerId == null) {
+            if (getOwnerId() == null) {
                 owner = null;
             } else {
                 owner = ownerService.find(getOwnerId());
@@ -210,6 +210,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         theme.setActivationTime(now);
         theme.setExpirationTime(Dates.addDays(now, 364));
         theme.setType(_type);
+        theme.setOwner(getOwner());
         theme.setPerspective(getPerspective());
         theme.buildAttributes(bussinesEntityService);
         return theme;
@@ -217,14 +218,18 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
 
     @TransactionAttribute
     public String saveTheme() {
-        Date now = Calendar.getInstance().getTime();
+        Date now = Calendar.getInstance().getTime(); 
         getInstance().setLastUpdate(now);
         if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setOrganization(getPerspective().getBalancedScorecard().getOrganization());
+            getInstance().setOrganization(getOwner().getOrganization());
             create(getInstance());
+        }
+        if (getOutcome() == null) {
+            return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOwner().getId() + "&faces-redirect=true&includeViewParams=true";
+            
         }
         if (getInstance().getPerspective().getId() != null) {
             if (getOutcomeOther().isEmpty()) {
@@ -273,7 +278,8 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
         if (getOutcome() == null) {
-            return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+            return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+            //return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         if (getInstance().getPerspective().getId() != null) {
             return getOutcome() + "?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
@@ -352,22 +358,26 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             }
         }
-    }  
-    
-    public void createNewTheme() {
+    }
+
+    public void createNewTheme(Long ownerId) {
         setId(null);
         setInstance(null);
+        setOwnerId(ownerId);
         wire();
+
     }
 
     public void editTheme(Long id) {
         setId(id);
         load();
+        
     }
 
     @TransactionAttribute
     public String saveThemeDialog() {
         saveTheme();
-        return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+        //return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
     }
 }
