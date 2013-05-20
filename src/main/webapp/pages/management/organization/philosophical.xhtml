@@ -66,16 +66,16 @@
                 <p:panel id="mission-panel" toggleable="true" rendered="#{not empty organizationHome.instance.id}" >
 
                     <f:facet name="header"> 
-                        <h:outputText value="#{messages['module.mission']}"/>
-                        #{' '}
                         <p:commandLink id="mission-add-button" 
-                                       value="#{messages['common.add']}"
                                        action="#{organizationHome.createMission()}"
                                        oncomplete="missionEditDlg.show();" 
-                                       styleClass="btn btn-mini btn-primary"
-                                       style="color:#fff; font-size: 0.75em;"
+                                       styleClass="btn btn-mini"
                                        update=":mission-edit-dialog">
+                            <i class="icon-plus"></i>
                         </p:commandLink>
+                        <p:tooltip for="mission-add-button" value="#{messages['common.add']} #{messages['module.mission']}" showEffect="fade" hideEffect="fade" />  
+                        #{' '}
+                        <h:outputText value="#{messages['module.mission']}"/>
 
                     </f:facet>
                     <p:dataTable id="mission-table"  var="_mission"
@@ -102,17 +102,18 @@
                 <br/>
                 <p:panel id="vision-panel" toggleable="true" rendered="#{not empty organizationHome.instance.id}" >
                     <f:facet name="header"> 
-                        <h:outputText value="#{messages['module.vision']}"/>
-                        #{' '}
+                        
                         <p:commandLink id="vision-add-button" 
-                                       value="#{messages['common.add']}"
                                        action="#{organizationHome.createVision()}"
                                        oncomplete="visionEditDlg.show();" immediate="true"
-                                       styleClass="btn btn-mini btn-primary"
-                                       style="color:#fff; font-size: 0.75em;"
+                                       styleClass="btn btn-mini"
                                        update=":vision-edit-dialog">
+                            <i class="icon-plus"></i>
                         </p:commandLink>
-
+                        <p:tooltip for="vision-add-button" value="#{messages['common.add']} #{messages['module.vision']}" showEffect="fade" hideEffect="fade" />  
+                        #{' '}
+                        <h:outputText value="#{messages['module.vision']}"/>
+                        
                     </f:facet>
                     <p:dataTable var="_vision" value="#{organizationHome.instance.vissions}"
                                  rendered="#{not empty organizationHome.instance.vissions}">
@@ -137,17 +138,16 @@
                 <br/>
                 <p:panel id="principle-panel" toggleable="true" rendered="#{not empty organizationHome.instance.id}" >
                     <f:facet name="header"> 
-                        <h:outputText value="#{messages['module.principle']}"/>
-                        #{' '}
                         <p:commandLink id="principle-add-button" 
-                                       value="#{messages['common.add']}"
                                        action="#{organizationHome.createPrinciple()}"
                                        oncomplete="principleEditDlg.show();" immediate="true"
-                                       styleClass="btn btn-mini btn-primary"
-                                       style="color:#fff; font-size: 0.75em;"
+                                       styleClass="btn btn-mini"
                                        update=":principle-edit-dialog">
+                            <i class="icon-plus"></i>
                         </p:commandLink>
-
+                        <p:tooltip for="principle-add-button" value="#{messages['common.add']} #{messages['module.principle']}" showEffect="fade" hideEffect="fade" />  
+                        #{' '}
+                        <h:outputText value="#{messages['module.principle']}"/>
                     </f:facet>
                     <p:dataTable var="_principle" value="#{organizationHome.instance.principles}"
                                  rendered="#{not empty organizationHome.instance.principles}">

@@ -54,6 +54,7 @@ import org.eqaula.glue.model.accounting.Account;
 import org.eqaula.glue.model.accounting.Entry;
 import org.eqaula.glue.model.accounting.Ledger;
 import org.eqaula.glue.model.accounting.Posting;
+import org.eqaula.glue.model.config.Frequency;
 import org.eqaula.glue.model.config.Setting;
 import org.eqaula.glue.model.management.Organization;
 import org.eqaula.glue.model.management.Owner;
@@ -65,6 +66,7 @@ import org.eqaula.glue.model.stocklist.Stock;
 import org.eqaula.glue.model.stocklist.Warehouse;
 import org.eqaula.glue.service.BussinesEntityService;
 import org.eqaula.glue.util.Dates;
+import org.eqaula.glue.util.TimeUnit;
 import org.jboss.seam.security.management.picketlink.IdentitySessionProducer;
 import org.jboss.seam.transaction.TransactionPropagation;
 import org.jboss.seam.transaction.Transactional;
@@ -99,6 +101,7 @@ public class InitializeDatabase {
         validateStructure();
         validateIdentityObjectTypes();
         validateSecurity();
+        validateSetting();
 
     }
 
@@ -1239,4 +1242,49 @@ public class InitializeDatabase {
         {"6", "CUENTAS CONTINGENTES", "INCOME", "Agrupan las obligaciones eventuales"},
         {"7", "CUENTAS DE ORDEN", "EXPENSE", "Cuentas de orden y de control, indispensables para la buena administración"}
     };
+
+    private void validateSetting() {
+        validateFrequencies();
+        
+    }
+
+    private void validateFrequencies(){
+        validateFrequency("Quincenal", 15, TimeUnit.DAY);
+        validateFrequency("Mensual", 1, TimeUnit.MONTH);
+        validateFrequency("Trimestral", 3, TimeUnit.MONTH);
+        validateFrequency("Quimestral", 5, TimeUnit.MONTH);
+        validateFrequency("Semestral", 6, TimeUnit.MONTH);
+        validateFrequency("Anual", 1, TimeUnit.YEAR);
+        validateFrequency("Bianual", 2, TimeUnit.YEAR);
+        validateFrequency("Lustro", 5, TimeUnit.YEAR);
+        
+    }
+    
+    private void validateFrequency(String name, long value, TimeUnit timeUnit) {
+        Frequency frequency = null;
+
+        try {
+            TypedQuery<Frequency> query = entityManager.createQuery("from Frequency f where f.name=:name",
+                    Frequency.class);
+            query.setParameter("name", name);
+            frequency = query.getSingleResult();
+        } catch (NoResultException e) {
+            
+            //Agrupaciones de propiedades
+            Date now = Calendar.getInstance().getTime();
+            
+            frequency = new Frequency();
+            frequency.setName(name);
+            frequency.setValue(value);
+            frequency.setTimeUnit(timeUnit);
+            frequency.setCreatedOn(now);
+            frequency.setLastUpdate(now);
+            
+            entityManager.persist(frequency);
+            entityManager.flush();
+        }
+
+        System.out.println("Frequency [" + frequency + "]");
+    }
 }
+

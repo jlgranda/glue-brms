@@ -153,7 +153,6 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
         q.setParameter("bussinesEntityId", bussinesEntityId);
         q.setParameter("bussinesEntityTypeName", bussinesEntityTypeName);
         Long value = 0L;
-        System.out.println("BussinesEntityAttribute.countRequiredProperties [bussinesEntityId, bussinesEntityTypeName] ---> [" + bussinesEntityId + ", " + bussinesEntityTypeName + "] " + q.getResultList());
         List<Long> result = q.getResultList();
         for (Long r : result) {
             value = r;
