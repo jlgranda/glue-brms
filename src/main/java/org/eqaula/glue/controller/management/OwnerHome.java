@@ -135,7 +135,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         }
         //TODO idear una mejor forma de redireccionar
         if (getOutcome() == null) {
-            return "/pages/management/owner/list.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+            return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         if (getInstance().getOrganization() != null) {
             return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true";
@@ -184,7 +184,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
         }
 
         if (getOutcome() == null) {
-            return "/pages/management/owner/list.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+            return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         if (band) {
             return null;
@@ -217,6 +217,6 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
     @Transactional
     public String saveOwnerDialog() {
         saveOwner();
-        return "/pages/management/owner/list.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true"; 
+        return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true"; 
     }
 }

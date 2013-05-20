@@ -228,7 +228,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             create(getInstance());
         }
         if (getOutcome() == null) {
-            return "/pages/management/owner/list.xhtml?organizationId=" + getInstance().getOwner().getId() + "&faces-redirect=true&includeViewParams=true";
+            return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOwner().getId() + "&faces-redirect=true&includeViewParams=true";
             
         }
         if (getInstance().getPerspective().getId() != null) {
@@ -278,7 +278,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
         if (getOutcome() == null) {
-            return "/pages/management/owner/list.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+            return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
             //return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         if (getInstance().getPerspective().getId() != null) {
@@ -377,7 +377,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     @TransactionAttribute
     public String saveThemeDialog() {
         saveTheme();
-        return "/pages/management/owner/list.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+        return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         //return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
     }
 }
