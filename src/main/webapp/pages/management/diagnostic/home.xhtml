@@ -117,6 +117,23 @@ limitations under the License.
                     </p:column>          
 
                 </p:dataTable>
+                
+                <br/>
+                <p:dataTable var="_selectedTheme" value="#{themeListService}"
+                             paginator="true" rows="10"
+                             lazy="true" rendered="true"
+                             id="themeSelectedTable"       
+                             >    
+                    <p:column headerText="#{messages['module.theme']}" sortBy="#{_selectedTheme.name}">
+                        <h:outputText value="#{_selectedTheme.name}" />
+                    </p:column>
+                    <p:column headerText="#{messages['common.description']}" sortBy="#{_selectedTheme.description}">
+                        <h:outputText value="#{_selectedTheme.description}" />
+                    </p:column>
+                    <p:column headerText="#{messages['module.owner']}" sortBy="#{_selectedTheme.description}">
+                        <h:outputText value="#{_selectedTheme.owner.name}" />
+                    </p:column>
+                </p:dataTable>
             </h:form>
 
 
@@ -167,6 +184,7 @@ limitations under the License.
                 </p:dialog> 
             </p:dialog>
         </ui:define>
+
         <ui:define name="sidebar">
             <ui:include src="/pages/management/navigator.xhtml" />
         </ui:define>

@@ -64,7 +64,8 @@ public class ThemeListService extends ListService<Theme> {
     protected PerspectiveService perspectiveService;
     private Perspective perspective;
     private Long perspectiveId;
-
+    
+    
     public ThemeListService() {
         setPageSize(MAX_RESULTS);
         resultList = new ArrayList<Theme>();
@@ -106,6 +107,15 @@ public class ThemeListService extends ListService<Theme> {
         this.perspectiveId = perspectiveId;
     }
 
+    public Theme[] getSelectedThemes() {
+        return selectedThemes;
+    }
+
+    public void setSelectedThemes(Theme[] selectedThemes) {
+        this.selectedThemes = selectedThemes;
+    }
+
+   
     @Transactional
     public Perspective getPerspective() {
         if (perspective == null) {
@@ -172,4 +182,6 @@ public class ThemeListService extends ListService<Theme> {
     public Object getRowKey(Theme entity) {
         return entity.getName();
     }
+        
+   
 }

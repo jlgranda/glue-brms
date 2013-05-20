@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
@@ -31,6 +32,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.MethodExpressionActionListener;
+import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -49,12 +51,14 @@ import org.eqaula.glue.model.management.Perspective;
 import org.eqaula.glue.model.management.Target;
 import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
+import org.eqaula.glue.service.ThemeListService;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.SelectableDataModel;
 import org.primefaces.model.menu.MenuModel;
 import org.primefaces.model.TreeNode;
 
@@ -79,8 +83,10 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     private NavigationHandler navigation;
     @Inject
     private FacesContext context;
-    private boolean toHaveChildren;
-
+    private boolean toHaveChildren;    
+    private ThemeDataModel themeDataModel;
+    private Theme[] selectedThemes;
+    
     public boolean getToHaveChildren(TreeNode node) {
         if (node.getChildren().isEmpty()) {
             toHaveChildren = false;
@@ -128,6 +134,23 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         this.selectedNode = selectedNode;
     }
 
+    public Theme[] getSelectedThemes() {
+        return selectedThemes;
+    }
+
+    public void setSelectedThemes(Theme[] selectedThemes) {
+        this.selectedThemes = selectedThemes;
+    }
+
+    public ThemeDataModel getThemeDataModel() {
+        return themeDataModel;
+    }
+
+    public void setThemeDataModel(ThemeDataModel themeDataModel) {
+        this.themeDataModel = themeDataModel;
+    }
+      
+
     @Override
     public Organization getOrganization() {
         if (getOrganizationId() == null && isManaged()) {
@@ -155,6 +178,8 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
         organizationService.setEntityManager(em);
+        themeListService.setEntityManager(em);
+
     }
 
     @Override
@@ -216,21 +241,21 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
 
         switch (organizationType) {
             case GOVERMENT:
-                
+
                 messagesPerspectives.add(UI.getMessages("common.perspective.StrategicDirection"));
                 messagesPerspectives.add(UI.getMessages("common.perspective.GovernmentForResults"));
                 messagesPerspectives.add(UI.getMessages("common.perspective.Process"));
                 messagesPerspectives.add(UI.getMessages("common.perspective.HumanTalent"));
                 break;
             case PRIVATE:
-                
+
                 messagesPerspectives.add(UI.getMessages("common.perspective.Financial"));
                 messagesPerspectives.add(UI.getMessages("common.perspective.Customer"));
                 messagesPerspectives.add(UI.getMessages("common.perspective.Internal"));
                 messagesPerspectives.add(UI.getMessages("common.perspective.InnovationAndLearning"));
                 break;
             case PUBLIC:
-                
+
                 messagesPerspectives.add(UI.getMessages("common.perspective.StrategicDirection"));
                 messagesPerspectives.add(UI.getMessages("common.perspective.GovernmentForResults"));
                 messagesPerspectives.add(UI.getMessages("common.perspective.Process"));
@@ -290,7 +315,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     public TreeNode buildTree() {
 
         //TreeNode bscNode = new DefaultTreeNode("bsc", getInstance(), rootNode);
-        
+
         TreeNode perspectiveNode = null;
         TreeNode themeNode = null;
         TreeNode objetiveNode = null;
@@ -329,6 +354,8 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     @Inject
     private ThemeHome themeHome;
     @Inject
+    private ThemeListService themeListService;
+    @Inject
     private PerspectiveHome perspectiveHome;
     @Inject
     private ObjetiveHome objetiveHome;
@@ -353,7 +380,9 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 themeHome.setPerspectiveId(bussinesEntity.getId());
                 //modificación de gerente a null desde lista de gerencias 
                 themeHome.createNewTheme(null);
-                RequestContext.getCurrentInstance().execute("themeEditDlg.show()");
+                themeListService.setOrganizationId(getOrganizationId());
+                themeDataModel = new ThemeDataModel(themeListService.getResultList());
+                RequestContext.getCurrentInstance().execute("themeSelectedDlg.show()");
                 //outcomeBuilder.append("/pages/management/theme/theme.xhtml?");
                 //outcomeBuilder.append("&perspectiveId=").append(bussinesEntity.getId());
                 //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
@@ -492,5 +521,31 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     public String saveBalancedScoreCardDialog() {
         saveBalancedScorecard();
         return null;
+    }
+
+    public class ThemeDataModel extends ListDataModel<Theme> implements SelectableDataModel<Theme> {
+
+        public ThemeDataModel() {
+        }
+
+        public ThemeDataModel(List<Theme> themes) {
+            super(themes);
+        }
+
+        @Override
+        public Object getRowKey(Theme theme) {
+            return theme.getName();
+        }
+
+        @Override
+        public Theme getRowData(String rowKey) {
+            List<Theme> themes = (List<Theme>) getWrappedData();
+            for (Theme theme : themes) {
+                if (theme.getName().equals(rowKey)) {
+                    return theme;
+                }
+            }
+            return null;
+        }
     }
 }

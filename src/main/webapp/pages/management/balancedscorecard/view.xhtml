@@ -14,6 +14,8 @@
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
             <f:viewParam name="balancedScorecardId" value="#{balancedScorecardHome.balancedScorecardId}" />
+            <f:viewParam name="organizationId" value="#{balancedScorecardHome.organizationId}" />
+            
             <s:viewAction action="#{balancedScorecardHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
         <ui:param name="title" value="#{balancedScorecardHome.instance.name}" />
@@ -224,6 +226,43 @@
                     </h:form>
                 </p:dialog> 
             </p:dialog>
+
+            <!-- DIALOG SELECTED THEME  -->                         
+            <p:dialog id="theme-selected-dialog"
+                      header="#{messages['common.select']} #{messages['common.of']} #{messages['module.theme']}" 
+                      styleClass="atf-header" widgetVar="themeSelectedDlg" 
+                      appendToBody="true" closeOnEscape="true">
+                <h:form  id="form-selected-theme" acceptcharset="UTF-8" class="form-horizontal" >
+                   <p:dataTable var="_selectedTheme" value="#{balancedScorecardHome.themeDataModel}"
+                                 paginator="true" rows="10"
+                                 id="themeSelectedTable" 
+                                 selection="#{balancedScorecardHome.selectedThemes}"
+                                 >    
+                        <p:column selectionMode="multiple" style="width:2%" />  
+                        <p:column headerText="#{messages['module.theme']}" sortBy="#{_selectedTheme.name}">
+                            <h:outputText value="#{_selectedTheme.name}" />
+                        </p:column>
+                        <p:column headerText="#{messages['common.description']}" sortBy="#{_selectedTheme.description}">
+                            <h:outputText value="#{_selectedTheme.description}" />
+                        </p:column>
+                        <p:column headerText="#{messages['module.owner']}" sortBy="#{_selectedTheme.description}">
+                            <h:outputText value="#{_selectedTheme.owner.name}" />
+                        </p:column>
+                    </p:dataTable>
+                    <div class="form-actions">
+                        <p:commandButton id="save" value="#{messages['common.done']}" 
+                                         action="#{themeHome.saveThemeDialog()}"
+                                         oncomplete="themeSelectedDlg.hide();" 
+                                         styleClass="btn btn-primary"/>
+                        #{'  '}
+                        <p:commandButton type="button" value="#{messages['common.delete']}" 
+                                         styleClass="btn"
+                                         onclick="themeEditDlg.show()"
+                                         immediate="true"
+                                         />
+                    </div>  
+                </h:form>
+            </p:dialog>          
 
             <!-- DIALOG THEME  -->             
             <p:dialog id="theme-edit-dialog" header="#{messages['common.add']} #{messages['module.theme']}" styleClass="atf-header" widgetVar="themeEditDlg" appendToBody="true" closeOnEscape="true">
