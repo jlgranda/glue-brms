@@ -197,7 +197,7 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
 
     public boolean hasValuesBussinesEntity() {
         boolean ban = false;
-        if (themeService.findByOwner(getInstance()).isEmpty() && diagnosticService.findByOwner(getInstance()).isEmpty()) {
+        if (diagnosticService.findByOwner(getInstance()).isEmpty()) {
             ban = true;
         }
         return ban;

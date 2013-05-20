@@ -69,9 +69,12 @@ limitations under the License.
         <ui:define name="content">
             <div class="row" id="div-owner">
                 <div class="span12">
+
                     <div class="well bs-docs-sidebar" style="padding-top: 7px; padding-bottom: 10px;">
                         <br/>
+
                         <h:form class="row-fluid">
+
                             <h3>
                                 <p:commandLink id="owner-add-button" 
                                                action="#{ownerHome.createNewOwner()}"
@@ -112,7 +115,7 @@ limitations under the License.
 
                                                         #{' '}
 
-                                              
+
 
                                                     </h5>
                                                     <div class="bs-docs-sidebar" style="padding-left: 20px">
@@ -125,13 +128,13 @@ limitations under the License.
                                                                      id="themeTable" lazy="true"
                                                                      rendered="true"
                                                                      >
-                                                           <p:column headerText="#{messages['module.theme']}" sortBy="#{_theme.name}">
+                                                            <p:column headerText="#{messages['module.theme']}" sortBy="#{_theme.name}">
                                                                 <h:outputText value="#{_theme.name}" />
                                                             </p:column>
                                                             <p:column headerText="#{messages['common.description']}" sortBy="#{_theme.description}">
                                                                 <h:outputText value="#{_theme.description}" />
                                                             </p:column>
-                                                       
+
                                                             <p:column headerText="#{messages['common.actions']}" style="width:4%">
                                                                 <p:commandLink id="theme-edit-button" 
                                                                                oncomplete="themeEditDlg.show();"
@@ -210,22 +213,21 @@ limitations under the License.
                     <div class="form-actions">
                         <p:commandLink id="save" value="#{messages['common.done']}" 
                                        action="#{themeHome.saveThemeDialog()}"
-                                         oncomplete="themeEditDlg.hide();" 
-                                         update=":id"
-                                         styleClass="btn btn-primary"
-                                         style="color:#fff;"/>
+                                       oncomplete="themeEditDlg.hide();" 
+                                       update=":id"
+                                       styleClass="btn btn-primary"
+                                       style="color:#fff;"/>
                         #{'  '}
                         <p:commandLink type="button" value="#{messages['common.delete']}" 
-                                         styleClass="btn btn-danger"
-                                         onclick="deletedDlg.show()"
-                                         immediate="true"
-                                         update=":cancel-dialog-theme"
-                                         rendered="#{themeHome.managed}"
-                                          style="color:#fff;" />
+                                       styleClass="btn btn-danger"
+                                       onclick="deletedDlg.show()"
+                                       immediate="true"
+                                       rendered="#{themeHome.managed}"
+                                       style="color:#fff;" />
                         #{'  '}
                         <p:commandLink id="cancel" value="#{messages['common.cancel']}" 
-                                         oncomplete="themeEditDlg.hide();"  
-                                         ajax="true" process="@this" styleClass="btn"/>
+                                       oncomplete="themeEditDlg.hide();"  
+                                       ajax="true" process="@this" styleClass="btn"/>
 
                     </div>  
                 </h:form>
