@@ -86,6 +86,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     private boolean toHaveChildren;
     private ThemeDataModel themeDataModel;
     private Theme[] selectedThemes;
+    private  List<Theme> buffer = new ArrayList<Theme>();
 
     public BalancedScorecardHome() {
     }
@@ -542,6 +543,10 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     @Transactional
     public String assignThemes() {
         Perspective p = ((Perspective) getSelectedNode().getData());
+        for(Theme allTheme : buffer){
+            p.removeTheme(allTheme);
+            allTheme.setPerspective(null);
+        }
         for (Theme theme : selectedThemes) {
             p.addTheme(theme);
         }
@@ -552,7 +557,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
 
     private void buildDataModel(Perspective p) {
         themeListService.setOrganization(getOrganization());
-        List<Theme> buffer = themeListService.getResultListByPerspective(null);
+        buffer = themeListService.getResultListByPerspective(null);
         List<Theme> selected = themeListService.getResultListByPerspective(p);
         
         setSelectedThemes(selected.toArray(new Theme[0]));

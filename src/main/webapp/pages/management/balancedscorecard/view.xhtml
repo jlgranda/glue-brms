@@ -220,7 +220,8 @@
                                          style="margin-top:10px;"
                                          >  
                         </p:commandButton>  
-                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                        <p:commandButton value="#{messages['common.no']}" type="button"
+                                         onclick="deletedDlg.hide();"  
                                          style="margin-top:10px;"/>  
                     </h:form>
                 </p:dialog> 
@@ -234,10 +235,14 @@
                 <h:form  id="form-selected-theme" acceptcharset="UTF-8" class="form-horizontal" >
                     <p:dataTable var="_selectedTheme" value="#{balancedScorecardHome.themeDataModel}"
                                  paginator="true" rows="10"
+                                 paginatorAlwaysVisible="false"
+                                 paginatorPosition="top"
+                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                                 rowsPerPageTemplate="5,10,15"
                                  id="themeSelectedTable" 
                                  selection="#{balancedScorecardHome.selectedThemes}"
                                  >    
-                        <p:column selectionMode="multiple" style="width:2%" />  
+                        <p:column selectionMode="multiple" style="width:2%;"  />
                         <p:column headerText="#{messages['module.theme']}" sortBy="#{_selectedTheme.name}">
                             <h:outputText value="#{_selectedTheme.name}" />
                         </p:column>
@@ -257,11 +262,12 @@
                                        styleClass="btn btn-primary"
                                        style="color:#fff;"/>
                         #{'  '}
-                        <p:commandButton type="button" value="#{messages['common.delete']}" 
-                                         styleClass="btn"
-                                         onclick="themeEditDlg.show()"
-                                         immediate="true"
-                                         />
+                        <p:commandLink id="button" 
+                                       value="#{messages['common.addNew']} #{messages['module.theme']}" 
+                                       update=":theme-edit-dialog" 
+                                       actionListener="#{themeHome.createNewTheme()}"
+                                       oncomplete="themeEditDlg.show();"
+                                       styleClass="btn"/>                        
                     </div>  
                 </h:form>
             </p:dialog>          

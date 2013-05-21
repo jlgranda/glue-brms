@@ -218,7 +218,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
 
     @TransactionAttribute
     public void save() {
-        Date now = Calendar.getInstance().getTime(); 
+        Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         if (getInstance().isPersistent()) {
             save(getInstance());
@@ -228,13 +228,13 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             create(getInstance());
         }
     }
-    
+
     @TransactionAttribute
     public String saveTheme() {
         save();
         if (getOutcome() == null) {
             return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOwner().getId() + "&faces-redirect=true&includeViewParams=true";
-            
+
         }
         if (getInstance().getPerspective().getId() != null) {
             if (getOutcomeOther().isEmpty()) {
@@ -373,16 +373,21 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
 
     }
 
+    public void createNewTheme() {
+        setId(null);
+        setInstance(null);
+        wire();
+    }
+
     public void editTheme(Long id) {
         setId(id);
         load();
-        
+
     }
 
     @TransactionAttribute
     public String saveThemeDialog() {
         saveTheme();
         return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
-        //return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
     }
 }
