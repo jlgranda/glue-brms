@@ -24,6 +24,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.eqaula.glue.model.BussinesEntity;
 import org.eqaula.glue.model.management.Owner;
+import org.eqaula.glue.model.management.Perspective;
 import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.management.Theme_;
 import org.eqaula.glue.model.profile.Profile;
@@ -33,23 +34,24 @@ import org.eqaula.glue.util.PersistenceUtil;
  *
  * @author dianita
  */
-public class ThemeService extends PersistenceUtil<Theme> implements Serializable{
+public class ThemeService extends PersistenceUtil<Theme> implements Serializable {
+
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityService.class);
     private static final long serialVersionUID = -3246755068687015421L;
 
     public ThemeService() {
         super(Theme.class);
     }
-    
+
     @Override
-    public void setEntityManager(EntityManager em){
-        this.em=em;
+    public void setEntityManager(EntityManager em) {
+        this.em = em;
     }
-    
-    public Long count(){
+
+    public Long count() {
         return count(Theme.class);
     }
-    
+
     public List<Theme> getThemes() {
         return findAll(Theme.class);
     }
@@ -61,7 +63,7 @@ public class ThemeService extends PersistenceUtil<Theme> implements Serializable
     public Theme getThemeById(final Long id) {
         return (Theme) findById(Theme.class, id);
     }
-    
+
     public Theme findByName(final String name) {
         log.info("find Theme with name " + name);
         CriteriaBuilder builder = getCriteriaBuilder();
@@ -73,7 +75,9 @@ public class ThemeService extends PersistenceUtil<Theme> implements Serializable
 
     public List<Theme> findByProfile(Profile profile) {
         log.info("find Theme with profile " + profile);
-        if (profile == null) return new ArrayList<Theme>(0);
+        if (profile == null) {
+            return new ArrayList<Theme>(0);
+        }
 
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Theme> query = builder.createQuery(Theme.class);
@@ -90,12 +94,28 @@ public class ThemeService extends PersistenceUtil<Theme> implements Serializable
         query.where(builder.equal(bussinesEntityType.get(Theme_.author), profile));
         return getSingleResult(query);
     }
-    
-      public List<Theme> findByOwner(Owner owner) {
+
+    public List<Theme> findByOwner(Owner owner) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Theme> query = builder.createQuery(Theme.class);
         Root<Theme> bussinesEntityType = query.from(Theme.class);
         query.where(builder.equal(bussinesEntityType.get(Theme_.owner), owner));
+        return getResultList(query);
+    }
+
+    /**
+     * Doc: http://www.objectdb.com/java/jpa/query/jpql/comparison#IS_NOT_NULL_
+     * @param p
+     * @return 
+     */
+    public List<Theme> findByPerspective(Perspective p) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Theme> query = builder.createQuery(Theme.class);
+        Root<Theme> bussinesEntityType = query.from(Theme.class);
+        if (p == null)
+            query.where(builder.isNull(bussinesEntityType.get(Theme_.perspective)));
+        else 
+            query.where(builder.equal(bussinesEntityType.get(Theme_.perspective), p));
         return getResultList(query);
     }
 

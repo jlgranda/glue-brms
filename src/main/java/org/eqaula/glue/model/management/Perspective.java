@@ -72,7 +72,17 @@ public class Perspective extends BussinesEntity implements Serializable {
         this.balancedScorecard = balancedScorecard;
     }
 
+    public boolean addTheme(Theme theme){
+        theme.setPerspective(this);
+        return getThemes().add(theme);
+    }
     
+    public boolean removeTheme(Theme theme){
+        if (getThemes().contains(theme)){
+            return getThemes().remove(theme);
+        }
+        return false;
+    }    
       
     @Override
     public int hashCode() {

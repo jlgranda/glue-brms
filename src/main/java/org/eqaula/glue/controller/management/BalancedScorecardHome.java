@@ -59,7 +59,6 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.SelectableDataModel;
-import org.primefaces.model.menu.MenuModel;
 import org.primefaces.model.TreeNode;
 
 /*
@@ -79,14 +78,18 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     private Profile profile;
     private TreeNode selectedNode;
     private TreeNode rootNode;
+    private TreeNode balancedScoreCardNode;
     @Inject
     private NavigationHandler navigation;
     @Inject
     private FacesContext context;
-    private boolean toHaveChildren;    
+    private boolean toHaveChildren;
     private ThemeDataModel themeDataModel;
     private Theme[] selectedThemes;
-    
+
+    public BalancedScorecardHome() {
+    }
+
     public boolean getToHaveChildren(TreeNode node) {
         if (node.getChildren().isEmpty()) {
             toHaveChildren = false;
@@ -98,9 +101,6 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
 
     public void setToHaveChildren(boolean toHaveChildren) {
         this.toHaveChildren = toHaveChildren;
-    }
-
-    public BalancedScorecardHome() {
     }
 
     public Long getBalancedScorecardId() {
@@ -116,7 +116,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     }
 
     public TreeNode getRootNode() {
-        if (rootNode == null || rootNode.getChildCount() == 0) {
+        if (rootNode == null || balancedScoreCardNode.getChildCount() == 0) {
             buildTree();
         }
         return rootNode;
@@ -143,13 +143,15 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     }
 
     public ThemeDataModel getThemeDataModel() {
+        if (getSelectedNode().getData() instanceof Perspective) {
+            buildDataModel((Perspective) getSelectedNode().getData());
+        }
         return themeDataModel;
     }
 
     public void setThemeDataModel(ThemeDataModel themeDataModel) {
         this.themeDataModel = themeDataModel;
     }
-      
 
     @Override
     public Organization getOrganization() {
@@ -163,8 +165,8 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     public void load() {
         if (isIdDefined()) {
             wire();
-            rootNode = new DefaultTreeNode("bsc", getInstance(), null);
-            setSelectedNode(rootNode);
+            rebuildTree();
+            setSelectedNode(balancedScoreCardNode);
         }
     }
 
@@ -222,16 +224,27 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             getInstance().setAuthor(this.profile);
             create(getInstance());
             createDefaultPerspectives(getInstance());
-            return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
 
-        if (getOutcome() == null) {
-            return null;
+        return resolveOutcome();
+    }
+
+    @Override
+    public String resolveOutcome() {
+
+        String _outcome = "";
+        if (getOutcome() != null) {
+            //TODO build a dynamic mechanism
+            if ("view".equalsIgnoreCase(getOutcome())) {
+                _outcome = "/pages/management/balancedscorecard/view.xhtml" + "?faces-redirect=true&balancedScorecardId=" + getBalancedScorecardId();
+            } else {
+                _outcome = getOutcome() + "?faces-redirect=true&includeViewParams=true";
+            }
+            return _outcome;
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.action.sucessfully"), ""));
         }
-        if (getOrganizationId() != null) {
-            return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
-        }
-        return getOutcome() + "?faces-redirect=true&includeViewParams=true";
+        return null;
     }
 
     public void createDefaultPerspectives(BalancedScorecard balancedScorecard) {
@@ -313,9 +326,6 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     }
 
     public TreeNode buildTree() {
-
-        //TreeNode bscNode = new DefaultTreeNode("bsc", getInstance(), rootNode);
-
         TreeNode perspectiveNode = null;
         TreeNode themeNode = null;
         TreeNode objetiveNode = null;
@@ -323,8 +333,9 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         TreeNode targetNode = null;
 
         rootNode.setExpanded(true);
+        balancedScoreCardNode.setExpanded(true);
         for (Perspective perspective : getInstance().getPerspectives()) {
-            perspectiveNode = new DefaultTreeNode("perspective", perspective, rootNode);
+            perspectiveNode = new DefaultTreeNode("perspective", perspective, balancedScoreCardNode);
             perspectiveNode.setExpanded(true);
             for (Theme theme : perspective.getThemes()) {
                 themeNode = new DefaultTreeNode("theme", theme, perspectiveNode);
@@ -345,6 +356,12 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         }
 
         return rootNode;
+    }
+
+    private void rebuildTree() {
+        rootNode = new DefaultTreeNode("root", "Balanced Score Card", null);
+        balancedScoreCardNode = new DefaultTreeNode("bsc", getInstance(), rootNode);
+        buildTree();
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
@@ -378,11 +395,9 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("perspective".equals(selectedNode.getType())) {
                 themeHome.setPerspectiveId(bussinesEntity.getId());
-                //modificación de gerente a null desde lista de gerencias 
                 themeHome.createNewTheme(null);
-                themeListService.setOrganizationId(getOrganizationId());
-                themeDataModel = new ThemeDataModel(themeListService.getResultList());
                 RequestContext.getCurrentInstance().execute("themeSelectedDlg.show()");
+                //TODO remove commented lines
                 //outcomeBuilder.append("/pages/management/theme/theme.xhtml?");
                 //outcomeBuilder.append("&perspectiveId=").append(bussinesEntity.getId());
                 //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
@@ -475,9 +490,9 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
      * UI management
      */
     /*private MenuModel model = null;
-    private String lastNodeType = "";
+     private String lastNodeType = "";
 
-    public MenuModel getMenuModel() {
+     public MenuModel getMenuModel() {
      model = new DefaultMenuModel();
 
      log.debug("node=<" + selectedNode + ">");
@@ -493,6 +508,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
      }
      return model;
      }*/
+
     public ActionListener createMethodActionListener(String menuAction) {
         ExpressionFactory factory = FacesContext.getCurrentInstance().getApplication().getExpressionFactory();
         MethodExpression methodsexpression = factory.createMethodExpression(FacesContext.getCurrentInstance().getELContext(), menuAction, null, new Class[]{ActionEvent.class});
@@ -521,6 +537,28 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     public String saveBalancedScoreCardDialog() {
         saveBalancedScorecard();
         return null;
+    }
+
+    @Transactional
+    public String assignThemes() {
+        Perspective p = ((Perspective) getSelectedNode().getData());
+        for (Theme theme : selectedThemes) {
+            p.addTheme(theme);
+        }
+        setOutcome("view");
+        return saveBalancedScorecard();
+
+    }
+
+    private void buildDataModel(Perspective p) {
+        themeListService.setOrganization(getOrganization());
+        List<Theme> buffer = themeListService.getResultListByPerspective(null);
+        List<Theme> selected = themeListService.getResultListByPerspective(p);
+        
+        setSelectedThemes(selected.toArray(new Theme[0]));
+        buffer.addAll(selected);
+        //TODO sort list
+        setThemeDataModel(new ThemeDataModel(buffer));
     }
 
     public class ThemeDataModel extends ListDataModel<Theme> implements SelectableDataModel<Theme> {
