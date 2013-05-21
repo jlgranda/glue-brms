@@ -110,7 +110,7 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
         if (organization == null) {
             if (organizationId == null) {
                 organization = null;
-            } else {
+            } else {                
                 organization = organizationService.find(getOrganizationId());
             }
 

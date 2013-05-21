@@ -265,8 +265,8 @@
                         <p:commandLink id="button" 
                                        value="#{messages['common.addNew']} #{messages['module.theme']}" 
                                        update=":theme-edit-dialog" 
-                                       actionListener="#{themeHome.createNewTheme()}"
-                                       oncomplete="themeEditDlg.show();"
+                                       actionListener="#{balancedScorecardHome.themeParams()}" 
+                                       oncomplete="themeEditDlg.show()"
                                        styleClass="btn"/>                        
                     </div>  
                 </h:form>
@@ -279,7 +279,6 @@
                     <h:panelGroup id="onr" layout="block" class="control-group">
                         <label for="owner" class="control-label required">#{messages['module.owner']}</label>
                         <div class="controls">
-
                             <p:selectOneMenu id="owner" value="#{themeHome.instance.owner}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" 
                                              requiredMessage="#{messages['common.property.required.help']}" rendered="true" label="#{messages['module.owner']}" filter="true" filterMatchMode="contains">
                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
@@ -297,7 +296,7 @@
 
                     <div class="form-actions">
                         <p:commandButton id="save" value="#{messages['common.done']}" 
-                                         action="#{themeHome.saveThemeDialog()}"
+                                         action="#{themeHome.saveTheme()}"
                                          oncomplete="themeEditDlg.hide();" 
                                          styleClass="btn btn-primary"/>
                         #{'  '}

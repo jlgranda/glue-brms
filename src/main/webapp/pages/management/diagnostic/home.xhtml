@@ -125,6 +125,9 @@ limitations under the License.
                                                             <p:column headerText="#{messages['common.description']}" sortBy="#{_diagnostic.description}">
                                                                 <h:outputText value="#{_diagnostic.description}" />
                                                             </p:column>
+                                                            <p:column headerText="#{messages['common.applicationDate']}" sortBy="#{_diagnostic.applicationDate}">
+                                                                <h:outputText value="#{_diagnostic.applicationDate}" />
+                                                            </p:column>
 
                                                             <p:column headerText="#{messages['common.action']}" style="width:4%">
                                                                 <h:link id="button-design" value="#{messages['common.design']}" 
@@ -144,10 +147,11 @@ limitations under the License.
                         </ul>
                     </div>          
                 </div> 
-            </div> <p:dialog id="diagnostic-edit-dialog" 
-                             header="#{messages['common.add']} #{messages['module.diagnostic']}" 
-                             styleClass="atf-header" widgetVar="diagnosticEditDlg"
-                             appendToBody="true" closeOnEscape="true">
+            </div>
+            <p:dialog id="diagnostic-edit-dialog" 
+                      header="#{messages['common.add']} #{messages['module.diagnostic']}" 
+                      styleClass="atf-header" widgetVar="diagnosticEditDlg"
+                      appendToBody="true" closeOnEscape="true">
                 <h:form  id="form-diagnostic" acceptcharset="UTF-8" class="form-horizontal" >
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                     <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{diagnosticHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>

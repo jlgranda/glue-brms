@@ -86,7 +86,8 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     private boolean toHaveChildren;
     private ThemeDataModel themeDataModel;
     private Theme[] selectedThemes;
-    private  List<Theme> buffer = new ArrayList<Theme>();
+    private List<Theme> buffer = new ArrayList<Theme>();
+   //private Long perspective_Id;
 
     public BalancedScorecardHome() {
     }
@@ -154,6 +155,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         this.themeDataModel = themeDataModel;
     }
 
+    
     @Override
     public Organization getOrganization() {
         if (getOrganizationId() == null && isManaged()) {
@@ -396,7 +398,8 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("perspective".equals(selectedNode.getType())) {
                 themeHome.setPerspectiveId(bussinesEntity.getId());
-                themeHome.createNewTheme(null);
+                themeHome.createNewTheme();
+                //setPerspective_Id(bussinesEntity.getId());
                 RequestContext.getCurrentInstance().execute("themeSelectedDlg.show()");
                 //TODO remove commented lines
                 //outcomeBuilder.append("/pages/management/theme/theme.xhtml?");
@@ -543,7 +546,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     @Transactional
     public String assignThemes() {
         Perspective p = ((Perspective) getSelectedNode().getData());
-        for(Theme allTheme : buffer){
+        for (Theme allTheme : buffer) {
             p.removeTheme(allTheme);
             allTheme.setPerspective(null);
         }
@@ -559,7 +562,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         themeListService.setOrganization(getOrganization());
         buffer = themeListService.getResultListByPerspective(null);
         List<Theme> selected = themeListService.getResultListByPerspective(p);
-        
+
         setSelectedThemes(selected.toArray(new Theme[0]));
         buffer.addAll(selected);
         //TODO sort list
@@ -590,5 +593,11 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             }
             return null;
         }
+    }
+
+    public void themeParams() {
+        themeHome.createNewTheme();
+        themeHome.setOrganizationId(getInstance().getOrganization().getId());
+        themeHome.setPerspectiveId(null);
     }
 }

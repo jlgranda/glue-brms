@@ -174,7 +174,13 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     @Override
     public Organization getOrganization() {
         if (getOrganizationId() == null && isManaged()) {
-            super.setOrganization(getInstance().getPerspective().getOrganization());
+            if (getInstance().getPerspective() != null) {
+                super.setOrganization(getInstance().getPerspective().getOrganization());
+            } else {
+                super.setOrganization(getInstance().getOwner().getOrganization());
+            }
+        }else{
+            super.setOrganization(organizationService.find(getOrganizationId()));
         }
         return super.getOrganization();
     }
@@ -224,7 +230,8 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             save(getInstance());
         } else {
             getInstance().setAuthor(this.profile);
-            getInstance().setOrganization(getOwner().getOrganization());
+            // para owner esta linea getInstance().setOrganization(getOwner().getOrganization());
+            getInstance().setOrganization(getOrganization());
             create(getInstance());
         }
     }
@@ -233,8 +240,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     public String saveTheme() {
         save();
         if (getOutcome() == null) {
-            return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOwner().getId() + "&faces-redirect=true&includeViewParams=true";
-
+            return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         if (getInstance().getPerspective().getId() != null) {
             if (getOutcomeOther().isEmpty()) {

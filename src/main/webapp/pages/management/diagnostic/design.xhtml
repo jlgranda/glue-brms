@@ -111,6 +111,7 @@ limitations under the License.
                                                                 rendered="#{true}" outcome="/pages/management/revisionitem/revisionitem" 
                                                                 styleClass="btn btn-mini btn-primary fr">                                                        
                                                             <f:param name="sectionId" value="#{_section.id}"></f:param>
+                                                            <f:param name="organizationId" value="#{_section.diagnostic.owner.organization.id}"></f:param>
                                                             <f:param name="outcome" value="/pages/management/diagnostic/design"></f:param>
                                                         </h:link>    
                                                         #{' '}

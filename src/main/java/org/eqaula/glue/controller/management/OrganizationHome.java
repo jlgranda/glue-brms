@@ -186,7 +186,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             wire();
             rootNode = new DefaultTreeNode("root", "Process map", null);
             organizationNode = new DefaultTreeNode("organization", getInstance(), rootNode);
-            
+
             setSelectedNode(organizationNode);
         }
     }
@@ -302,23 +302,28 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     public TreeNode buildTree() {
         //rootNode = new DefaultTreeNode("rootNode", "", null);
         //organizationNode = new DefaultTreeNode("organization", getInstance(), rootNode);
-        
+
         rootNode.setExpanded(true);
         organizationNode.setExpanded(true);
 
         TreeNode macroprocessNode = null;
         TreeNode processNode = null;
         TreeNode themeNode = null;
+        TreeNode ownerNode = null;
 
-        for (Theme theme : getInstance().getThemes()) {
-            themeNode = new DefaultTreeNode("theme", theme, organizationNode);
-            themeNode.setExpanded(true);
-            for (Macroprocess macroprocess : theme.getMacroprocess()) {
-                macroprocessNode = new DefaultTreeNode("macroprocess", macroprocess, themeNode);
-                macroprocessNode.setExpanded(true);
-                for (org.eqaula.glue.model.management.Process process : macroprocess.getProcess()) {
-                    processNode = new DefaultTreeNode("process", process, macroprocessNode);
-                    processNode.setExpanded(true);
+        for (Owner owner : getInstance().getOwners()) {
+            ownerNode = new DefaultTreeNode("owner", owner, organizationNode);
+            ownerNode.setExpanded(true);
+            for (Theme theme : owner.getThemes()) {
+                themeNode = new DefaultTreeNode("theme", theme, ownerNode);
+                themeNode.setExpanded(true);
+                for (Macroprocess macroprocess : theme.getMacroprocess()) {
+                    macroprocessNode = new DefaultTreeNode("macroprocess", macroprocess, themeNode);
+                    macroprocessNode.setExpanded(true);
+                    for (org.eqaula.glue.model.management.Process process : macroprocess.getProcess()) {
+                        processNode = new DefaultTreeNode("process", process, macroprocessNode);
+                        processNode.setExpanded(true);
+                    }
                 }
             }
         }
@@ -343,6 +348,9 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, message);
             } else if ("organization".equals(selectedNode.getType())) {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            } else if ("owner".equals(selectedNode.getType())) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, message);
             } else if ("theme".equals(selectedNode.getType())) {
@@ -383,27 +391,30 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             } else if ("organization".equals(selectedNode.getType())) {
                 FacesMessage messag = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, messag);
+            } else if ("owner".equals(selectedNode.getType())) {
+                FacesMessage messag = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
+                FacesContext.getCurrentInstance().addMessage(null, messag);
             } else if ("theme".equals(selectedNode.getType())) {
                 FacesMessage messag = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, messag);
             } else if ("macroprocess".equals(selectedNode.getType())) {
                 macroprocessHome.editMacroprocess(bussinesEntity.getId());
                 RequestContext.getCurrentInstance().execute("macroprocessEditDlg.show()");
-                
+
                 /*outcomeBuilder.append("/pages/management/macroprocess/macroprocess.xhtml?");
-                outcomeBuilder.append("&macroprocessId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&themeId=").append(((Macroprocess) bussinesEntity).getTheme().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/viewTreeThemes");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");*/
+                 outcomeBuilder.append("&macroprocessId=").append(bussinesEntity.getId());
+                 outcomeBuilder.append("&themeId=").append(((Macroprocess) bussinesEntity).getTheme().getId());
+                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/viewTreeThemes");
+                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");*/
             } else if ("process".equals(selectedNode.getType())) {
                 processHome.editProcess(bussinesEntity.getId());
                 RequestContext.getCurrentInstance().execute("processEditDlg.show()");
-                
+
                 /*outcomeBuilder.append("/pages/management/process/process.xhtml?");
-                outcomeBuilder.append("&processId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&macroprocessId=").append(((org.eqaula.glue.model.management.Process) bussinesEntity).getMacroprocess().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/organization/viewTreeThemes");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");*/
+                 outcomeBuilder.append("&processId=").append(bussinesEntity.getId());
+                 outcomeBuilder.append("&macroprocessId=").append(((org.eqaula.glue.model.management.Process) bussinesEntity).getMacroprocess().getId());
+                 outcomeBuilder.append("&outcome=" + "/pages/management/organization/viewTreeThemes");
+                 navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");*/
             }
         }
     }
@@ -548,7 +559,6 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         }
         return false;
     }
-    
     @Inject
     private ThemeHome themeHome;
 
