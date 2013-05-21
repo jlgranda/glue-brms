@@ -217,7 +217,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     }
 
     @TransactionAttribute
-    public String saveTheme() {
+    public void save() {
         Date now = Calendar.getInstance().getTime(); 
         getInstance().setLastUpdate(now);
         if (getInstance().isPersistent()) {
@@ -227,6 +227,11 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             getInstance().setOrganization(getOwner().getOrganization());
             create(getInstance());
         }
+    }
+    
+    @TransactionAttribute
+    public String saveTheme() {
+        save();
         if (getOutcome() == null) {
             return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOwner().getId() + "&faces-redirect=true&includeViewParams=true";
             

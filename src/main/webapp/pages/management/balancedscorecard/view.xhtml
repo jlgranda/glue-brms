@@ -14,8 +14,6 @@
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
             <f:viewParam name="balancedScorecardId" value="#{balancedScorecardHome.balancedScorecardId}" />
-            <f:viewParam name="organizationId" value="#{balancedScorecardHome.organizationId}" />
-            
             <s:viewAction action="#{balancedScorecardHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
         <ui:param name="title" value="#{balancedScorecardHome.instance.name}" />
@@ -64,7 +62,7 @@
 
                         <p:commandLink id="button-add" 
                                        value="#{messages['common.add']}" 
-                                       update=":perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" 
+                                       update=":perspective-edit-dialog :theme-selected-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog" 
                                        actionListener="#{balancedScorecardHome.redirecToAdd}" 
                                        styleClass="btn btn-primary #{empty balancedScorecardHome.selectedNode ? 'disabled' : ''}"
                                        style="color:#fff;" 
@@ -137,10 +135,11 @@
                         <p:growl id="bsc-grow" 
                                  showDetail="true" 
                                  sticky="false"/>
+                        <h3>#{balancedScorecardHome.selectedNode}</h3>
                         <p:treeTable id="treetable" 
-                                     value="#{balancedScorecardHome.selectedNode!=null ? balancedScorecardHome.selectedNode : balancedScorecardHome.bscNode}" 
+                                     value="#{balancedScorecardHome.selectedNode}" 
                                      var="node"  propagateSelectionUp="true" >  
-                            <p:column headerText="#{balancedScorecardHome.selectedNode}">
+                            <p:column headerText="#{messages['module.balancedscorecard.dimention']}">
                                 <h:outputText value="#{balancedScorecardHome.getToHaveChildren(balancedScorecardHome.selectedNode!=null?balancedScorecardHome.selectedNode:balancedScorecardHome.bscNode) == true ? node: hola}"/>                        
                             </p:column>  
                             <p:column headerText="#{messages['common.status']}">  
@@ -229,11 +228,11 @@
 
             <!-- DIALOG SELECTED THEME  -->                         
             <p:dialog id="theme-selected-dialog"
-                      header="#{messages['common.select']} #{messages['common.of']} #{messages['module.theme']}" 
+                      header="#{balancedScorecardHome.selectedNode}: #{messages['common.select']} #{messages['common.of']} #{messages['module.themes']}" 
                       styleClass="atf-header" widgetVar="themeSelectedDlg" 
                       appendToBody="true" closeOnEscape="true">
                 <h:form  id="form-selected-theme" acceptcharset="UTF-8" class="form-horizontal" >
-                   <p:dataTable var="_selectedTheme" value="#{balancedScorecardHome.themeDataModel}"
+                    <p:dataTable var="_selectedTheme" value="#{balancedScorecardHome.themeDataModel}"
                                  paginator="true" rows="10"
                                  id="themeSelectedTable" 
                                  selection="#{balancedScorecardHome.selectedThemes}"
@@ -250,10 +249,13 @@
                         </p:column>
                     </p:dataTable>
                     <div class="form-actions">
-                        <p:commandButton id="save" value="#{messages['common.done']}" 
-                                         action="#{themeHome.saveThemeDialog()}"
-                                         oncomplete="themeSelectedDlg.hide();" 
-                                         styleClass="btn btn-primary"/>
+                        <p:commandLink id="save" 
+                                       type="submit"
+                                       value="#{messages['common.done']}" 
+                                       action="#{balancedScorecardHome.assignThemes()}"
+                                       oncomplete="themeSelectedDlg.hide();" 
+                                       styleClass="btn btn-primary"
+                                       style="color:#fff;"/>
                         #{'  '}
                         <p:commandButton type="button" value="#{messages['common.delete']}" 
                                          styleClass="btn"
