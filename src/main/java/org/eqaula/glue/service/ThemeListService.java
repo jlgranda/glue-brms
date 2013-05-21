@@ -38,7 +38,6 @@ import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
-import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 /*

@@ -26,6 +26,7 @@ limitations under the License.
     <ui:composition template="/WEB-INF/view/templates/glue-tree.xhtml" >
         <f:metadata>
             <f:viewParam name="diagnosticId" value="#{diagnosticHome.diagnosticId}"/> 
+            <f:viewParam name="organizationId" value="#{organizationHome.organizationId}"/>
         </f:metadata>
         <ui:param name="title" value="#{diagnosticHome.instance.name}" />
         <ui:define name="subnav">
@@ -72,17 +73,20 @@ limitations under the License.
                     <div class="well bs-docs-sidebar" style="padding-top: 7px; padding-bottom: 10px;">
                         <br/>
                         <h:form>
-                            <!--<h:link value="#{messages['module.management.section.add']}" outcome="/pages/management/section/section" class="btn btn-info fr" rendered="true">
-                                <f:param name="diagnosticId" value="#{diagnosticHome.diagnosticId}"></f:param>
-                                <f:param name="outcome" value="/pages/management/diagnostic/design"></f:param>
-                            </h:link>    -->
-                            <p:commandLink  id="button-add" value="#{messages['module.management.section.add']}" 
-                                            styleClass="btn btn-info fr" 
-                                            onclick="sectionEditDlg.show()"
-                                            actionListener="#{sectionHome.createNewSection(diagnosticHome.diagnosticId)}"
-                                            />
+                            <h3>
+                                <p:commandLink  id="button-add" 
+                                                styleClass="btn" 
+                                                onclick="sectionEditDlg.show()"
+                                                actionListener="#{sectionHome.createNewSection(diagnosticHome.diagnosticId)}"
+                                                >
+                                    <i class="icon-plus"></i>
+                                </p:commandLink>
+                                <p:tooltip for="button-add" value="#{messages['common.addNew']} #{messages['module.section']}"
+                                           showEffect="fade" hideEffect="fade" />  
+                                #{messages['module.sections']}
+                            </h3>
                         </h:form>
-                        <h3>#{messages['module.sections']}</h3>
+
                         <ul class="nav nav-tabs nav-stacked">
                             <ui:repeat var="_section" value="#{diagnosticHome.instance.sections}" varStatus="i">
                                 <li>
@@ -91,22 +95,26 @@ limitations under the License.
                                             <h:form>
                                                 <div class="span11 columns">
 
-                                                    <h5>#{_section.name}
-                                                        <!--<h:link value="#{messages['common.edit']}" outcome="/pages/management/section/section" class="btn btn-mini" rendered="true">
-                                                            <f:param name="sectionId" value="#{_section.id}"></f:param>
-                                                            <f:param name="outcome" value="/pages/management/diagnostic/design"></f:param>
-                                                        </h:link>  --> 
+                                                    <h5>
+                                                        <p:commandLink id="button-edit"  
+                                                                       actionListener="#{sectionHome.editSection(_section.id)}" 
+                                                                       oncomplete="sectionEditDlg.show()" update=":section-dialog" 
+                                                                       styleClass="link" >
+                                                            <i class="icon-pencil"></i>
+                                                        </p:commandLink>
+                                                        <p:tooltip for="button-edit" value="#{messages['common.edit']}: #{_section.name}" showEffect="fade" hideEffect="fade" />  
+                                                        #{_section.name}
 
-                                                        <p:commandLink id="button-edit"  value="#{messages['common.edit']}" actionListener="#{sectionHome.editSection(_section.id)}" oncomplete="sectionEditDlg.show()" update=":section-dialog" styleClass="btn btn-mini btn-secondary" />
 
-                                                        #{' '}
-                                                        <h:link value="#{messages['common.add']} #{messages['common.item']}" rendered="#{true}" outcome="/pages/management/revisionitem/revisionitem" styleClass="btn btn-mini btn-primary">                                                        
+
+                                                        <h:link value="#{messages['common.add']} #{messages['common.item']}" 
+                                                                rendered="#{true}" outcome="/pages/management/revisionitem/revisionitem" 
+                                                                styleClass="btn btn-mini btn-primary fr">                                                        
                                                             <f:param name="sectionId" value="#{_section.id}"></f:param>
                                                             <f:param name="outcome" value="/pages/management/diagnostic/design"></f:param>
                                                         </h:link>    
-
+                                                        #{' '}
                                                     </h5>
-
                                                     <div class="form-actions" style="padding-left: 20px">
                                                         <p:treeTable id="treetable" value="#{_section!=null?diagnosticHome.getNode(_section):null}" var="node"  propagateSelectionUp="true">  
                                                             <p:column headerText="#{messages['module.question']}" style="width:150px">  
@@ -153,7 +161,6 @@ limitations under the License.
                                        styleClass="btn btn-danger" style="color:#fff;"
                                        onclick="deletedDlg.show()"
                                        immediate="true"
-                                       update=":cancel-dialog-section"
                                        rendered="#{sectionHome.managed}"
                                        />
                         #{'  '}
@@ -169,7 +176,7 @@ limitations under the License.
                         <h:panelGroup layout="block" style="padding:5px;">  
                             <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                         </h:panelGroup>  
-                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                        <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide(); :sectionEditDlg.hide();"  
                                          action="#{sectionHome.deleteSection()}"                                         
                                          ajax="true" process="@this"  
                                          style="margin-top:10px;"

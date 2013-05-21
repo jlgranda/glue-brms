@@ -49,7 +49,6 @@ import org.primefaces.model.TreeNode;
 /*
  * @author dianita
  */
-
 @Named
 @ViewScoped
 public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Serializable {
@@ -58,7 +57,6 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
     @Inject
     @Web
     private EntityManager em;
-   
     @Current
     @Inject
     private Profile profile;
@@ -158,7 +156,7 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
         if (getInstance().isPersistent()) {
             save(getInstance());
         } else {
-            getInstance().setAuthor(this.profile); 
+            getInstance().setAuthor(this.profile);
             create(getInstance());
             createDefaultSections(getInstance());
         }
@@ -167,14 +165,14 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
-    
-     public void createDefaultSections(Diagnostic diagnostic) {
+
+    public void createDefaultSections(Diagnostic diagnostic) {
 
         ArrayList<String> messagesSections = new ArrayList();
         messagesSections.add(UI.getMessages("common.diagnostic.strategic"));
         messagesSections.add(UI.getMessages("common.diagnostic.administration"));
         messagesSections.add(UI.getMessages("common.diagnostic.management.control"));
-        
+
         for (String createSections : messagesSections) {
             Date now = Calendar.getInstance().getTime();
             Section section = createInstanceSection();
@@ -186,7 +184,7 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
         }
     }
 
-     protected Section createInstanceSection() {
+    protected Section createInstanceSection() {
         BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Section.class.getName());
         Date now = Calendar.getInstance().getTime();
         Section section = new Section();
@@ -199,7 +197,7 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
         section.buildAttributes(bussinesEntityService);
         return section;
     }
-     
+
     public boolean isWired() {
         return true;
     }
@@ -230,8 +228,8 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if(getOutcome()==null){
-            return null;
+        if (getOutcome() == null) {
+            return "/pages/management/diagnostic/home.xhtml?organizationId=" + getInstance().getOwner().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         if (getOwnerId() != null) {
             return getOutcome() + "?ownerId=" + getOwnerId() + "&faces-redirect=true&includeViewParams=true";
@@ -260,21 +258,25 @@ public class DiagnosticHome extends BussinesEntityHome<Diagnostic> implements Se
         }
         return node;
     }
-    
-    public void createNewDiagnostic() {
+
+    public void createNewDiagnostic(Long ownerId) {
         setId(null);
         setInstance(null);
-        load();        
+        setOwnerId(ownerId);
+        load();
     }
 
     public void editDiagnostic(Long id) {
-        setId(id);        
-        load();        
+        setId(id);
+        load();
     }
-     
+
     @Transactional
     public String saveDiagnosticDialog() {
         saveDiagnostic();
-        return null;
+         System.out.println("entra aqui" + getInstance().getOwner().getOrganization().getId());
+        return "/pages/management/diagnostic/home.xhtml?organizationId=" + getInstance().getOwner().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
     }
+
+   
 }
