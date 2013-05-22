@@ -214,6 +214,9 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
+        if(getOutcome()==null){
+            return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        }
         if (getMeasure() != null) {
             return getOutcome() + "?balancedScorecardId=" + getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
@@ -278,5 +281,22 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
     
     public void clearInitiative() {
         setSelectedInitiative(null);
+    }
+    
+    public void createNewTarget() {
+        setId(null);
+        setInstance(null);
+        wire();
+    }
+
+    public void editTarget(Long id) {
+        setId(id);
+        load();
+    }
+
+    @TransactionAttribute
+    public String saveTargetDialog() {
+        saveTarget();
+        return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
     }
 }

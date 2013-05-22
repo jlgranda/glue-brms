@@ -45,8 +45,9 @@ limitations under the License.
             <p:panel id="action-panel" styleClass="container-fluid">
                 <div class="span4">
                     <div class="btn-group">
-                        <h:link title="${organizationHome.instance.name}" styleClass="btn">
+                        <h:link title="${organizationHome.instance.name}" outcome="home" styleClass="btn">
                             ${organizationHome.instance.name}
+                            <f:param name="organizationId" value="#{organizationHome.organizationId}"/>
                         </h:link>
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
@@ -57,7 +58,7 @@ limitations under the License.
                                 <h:link outcome="/pages/management/organization/home"
                                         title="#{messages['common.dashboard']}"
                                         value="#{messages['common.dashboard']}">
-                                    <f:param name="organizationId" value="#{organizationHome.instance.id}" />
+                                    <f:param name="organizationId" value="#{organizationHome.organizationId}" />
                                 </h:link>
                             </li>
                             <li>
@@ -76,14 +77,14 @@ limitations under the License.
                                        actionListener="#{organizationHome.redirecToAdd}" 
                                        styleClass="btn btn-primary" 
                                        style="color:#fff;" 
-                                       disabled="#{empty organizationHome.selectedNode || organizationHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.Organization')}"
+                                       disabled="#{empty organizationHome.selectedNode || organizationHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.Organization') || organizationHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.Owner') || organizationHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.Process')}"
                                        update=":macroprocess-edit-dialog :process-edit-dialog"/>
                         #{' '}
 
                         <p:commandLink id="button-edit" 
                                        value="#{messages['common.edit']}" 
                                        actionListener="#{organizationHome.redirecToEdit}" 
-                                       disabled="#{empty organizationHome.selectedNode || organizationHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.Organization')}" 
+                                       disabled="#{empty organizationHome.selectedNode || organizationHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.Organization') || organizationHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.Owner')|| organizationHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.Theme')}" 
                                        styleClass="btn btn-secondary"
                                        update=":macroprocess-edit-dialog :process-edit-dialog"/>
                     </h:form>
@@ -141,8 +142,9 @@ limitations under the License.
                                  showDetail="true" 
                                  sticky="false" />
                         <h4>#{organizationHome.selectedNode}</h4>
+                        
                         <p:treeTable id="treetable" 
-                                     value="#{organizationHome.selectedNode!=null ? (organizationHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.Process') ? organizationHome.selectedNode.parent : organizationHome.selectedNode)  : organizationHome.rootNode}" 
+                                     value="#{organizationHome.selectedNode!=null ? (organizationHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.Process') ? organizationHome.selectedNode.parent : organizationHome.selectedNode)  : organizationHome.rootNode}"
                                      var="node_"  propagateSelectionUp="true" >  
                             <p:column headerText="#{messages['module.balancedscorecard.dimention']}">  
                                 <h:outputText value="#{node_.name}"/>                        
