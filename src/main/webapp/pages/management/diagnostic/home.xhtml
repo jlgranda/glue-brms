@@ -126,7 +126,9 @@ limitations under the License.
                                                                 <h:outputText value="#{_diagnostic.description}" />
                                                             </p:column>
                                                             <p:column headerText="#{messages['common.applicationDate']}" sortBy="#{_diagnostic.applicationDate}">
-                                                                <h:outputText value="#{_diagnostic.applicationDate}" />
+                                                                <h:outputText value="#{_diagnostic.applicationDate}" >
+                                                                    <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                                                                </h:outputText>
                                                             </p:column>
 
                                                             <p:column headerText="#{messages['common.action']}" style="width:4%">

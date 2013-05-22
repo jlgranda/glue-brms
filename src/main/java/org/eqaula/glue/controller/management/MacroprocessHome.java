@@ -203,7 +203,7 @@ public class MacroprocessHome extends BussinesEntityHome<Macroprocess> implement
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
         if(getOutcome()==null){
-            return null;
+            return  "/pages/management/organization/processmap.xhtml?organizationId="+ getInstance().getTheme().getOrganization().getId() +"&faces-redirect=true&includeViewParams=true";
         }
         if (getThemeId() != null) {
             return getOutcome() + "?organizationId=" + getInstance().getTheme().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
@@ -225,7 +225,7 @@ public class MacroprocessHome extends BussinesEntityHome<Macroprocess> implement
     @TransactionAttribute
     public String saveMacroprocessDialog(){
         saveMacroprocess();
-        return  "organizationId="+ getInstance().getTheme().getOrganization().getId() +"?faces-redirect=true&includeViewParams=true";
+        return  "/pages/management/organization/processmap.xhtml?organizationId="+ getInstance().getTheme().getOrganization().getId() +"&faces-redirect=true&includeViewParams=true";
     }
 
    

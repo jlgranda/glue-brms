@@ -91,8 +91,9 @@
                                             <h:outputText value="#{_balancedScorecard.description}" />
                                         </p:column>                
                                         <p:column headerText="#{messages['common.creationDate']}" sortBy="#{_balancedScorecard.createdOn}">
-                                            <h:outputText value="#{_balancedScorecard.createdOn}" />
-                                        </p:column>                
+                                            <h:outputText value="#{_balancedScorecard.createdOn}">
+                                                <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                                            </h:outputText>                                        </p:column>                
                                         <p:column headerText="#{messages['common.author']}" sortBy="#{_balancedScorecard.author}">
                                             <h:outputText value="#{_balancedScorecard.author.name}" />
                                         </p:column> 
