@@ -83,7 +83,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     private boolean toHaveChildren;
 
     public boolean getToHaveChildren(TreeNode node) {
-        if (node.getChildren().isEmpty()) {
+        if (node.getChildCount() == 0) {
             toHaveChildren = false;
         } else {
             toHaveChildren = true;
@@ -332,7 +332,17 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), ((BussinesEntity) event.getTreeNode().getData()).getName());
+        BussinesEntity entity = (BussinesEntity) event.getTreeNode().getData();
+        FacesMessage message;
+        System.out.println(entity.getClass().toString() + "nombre del entity");
+        if (entity.getClass().toString().equals("class org.eqaula.glue.model.management.Organization")
+                || entity.getClass().toString().equals("class org.eqaula.glue.model.management.Owner")) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), ("(Edición no permitida.) \n" + ((BussinesEntity) event.getTreeNode().getData()).getName()));
+            FacesMessage message2 = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), "(Edición no permitida.)");
+            FacesContext.getCurrentInstance().addMessage(null, message2);
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), ((BussinesEntity) event.getTreeNode().getData()).getName());
+        }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
     @Inject

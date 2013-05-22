@@ -87,7 +87,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     private ThemeDataModel themeDataModel;
     private Theme[] selectedThemes;
     private List<Theme> buffer = new ArrayList<Theme>();
-   //private Long perspective_Id;
+    //private Long perspective_Id;
 
     public BalancedScorecardHome() {
     }
@@ -155,7 +155,6 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         this.themeDataModel = themeDataModel;
     }
 
-    
     @Override
     public Organization getOrganization() {
         if (getOrganizationId() == null && isManaged()) {
@@ -381,6 +380,8 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
     private ObjetiveHome objetiveHome;
     @Inject
     private MeasureHome measureHome;
+    @Inject
+    private TargetHome targetHome;
 
     public void redirecToAdd() {
         StringBuilder outcomeBuilder = new StringBuilder();
@@ -423,10 +424,13 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("measure".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/targets/target.xhtml?");
-                outcomeBuilder.append("&measureId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                targetHome.setMeasureId(bussinesEntity.getId());
+                targetHome.createNewTarget();
+                RequestContext.getCurrentInstance().execute("targetEditDlg.show()");
+                //outcomeBuilder.append("/pages/management/targets/target.xhtml?");
+                //outcomeBuilder.append("&measureId=").append(bussinesEntity.getId());
+                //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
+                //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("target".equals(selectedNode.getType())) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.unimplemented"), ((BussinesEntity) selectedNode.getData()).getName());
                 FacesContext.getCurrentInstance().addMessage(null, message);
@@ -482,11 +486,13 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("target".equals(selectedNode.getType())) {
-                outcomeBuilder.append("/pages/management/targets/target.xhtml?");
-                outcomeBuilder.append("&targetId=").append(bussinesEntity.getId());
-                outcomeBuilder.append("&measureId=").append(((Target) bussinesEntity).getMeasure().getId());
-                outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
-                navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
+                targetHome.editTarget(bussinesEntity.getId());
+                RequestContext.getCurrentInstance().execute("targetEditDlg.show()");
+                //outcomeBuilder.append("/pages/management/targets/target.xhtml?");
+                //outcomeBuilder.append("&targetId=").append(bussinesEntity.getId());
+                //outcomeBuilder.append("&measureId=").append(((Target) bussinesEntity).getMeasure().getId());
+                //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
+                //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             }
         }
     }

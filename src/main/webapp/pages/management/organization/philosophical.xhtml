@@ -38,11 +38,24 @@
                 <div class="container-fluid">
                     <div class="row-fluid" style="margin-top: 5px;">
                         <div class="span10">
-                            <h2>#{organizationHome.instance.name}</h2>
-                            <p>
-                                #{organizationHome.instance.ruc}<br/>
-                                #{organizationHome.instance.description}
-                            </p>
+                            <h2>
+                                <h:form id="organization-header">
+                                    #{organizationHome.instance.name}
+
+                                    <p:commandLink id="organization-edit-button" 
+                                                   oncomplete="organizationEditDlg.show();" immediate="true"
+                                                   styleClass="btn "
+                                                   update=":organization-edit-dialog">
+                                        <i class="icon-pencil" ></i>
+                                    </p:commandLink>
+                                    <p:tooltip for="organization-edit-button" value="#{messages['common.edit']}: #{organizationHome.instance.name}" showEffect="fade" hideEffect="fade" />  
+                                    <p>
+                                        #{organizationHome.instance.ruc}<br/>
+                                        #{organizationHome.instance.description}
+                                    </p>
+                                    
+                                </h:form>
+                            </h2>
                         </div>
                         <div class="span2">
                             <h:form id="organization-header-actions">
