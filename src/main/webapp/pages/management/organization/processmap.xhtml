@@ -174,21 +174,23 @@ limitations under the License.
                                 inlinehelp="#{messages['common.name.inlinehelp']}" 
                                 render="name" execute="@this save" />
                     <div class="form-actions">
-                        <p:commandButton id="save" value="#{messages['common.done']}" 
+                        <p:commandLink id="save" value="#{messages['common.done']}" 
                                          action="#{macroprocessHome.saveMacroprocessDialog()}"
                                          styleClass="btn btn-primary" 
                                          oncomplete="macroprocessEditDlg.hide();" 
-                                         update=":tree-form:themeTree :process-layout"/>
+                                         style="color:#fff;"
+                                         />
 
                         #{'  '}
-                        <p:commandButton type="button" value="#{messages['common.delete']}" 
+                        <p:commandLink type="button" value="#{messages['common.delete']}" 
                                          styleClass="btn btn-danger"
                                          onclick="macroprocessdeletedDlg.show()"
                                          immediate="true"
                                          rendered="#{macroprocessHome.managed}"
+                                          style="color:#fff;"
                                          />
                         #{'  '}
-                        <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                        <p:commandLink id="cancel" value="#{messages['common.cancel']}" 
                                          oncomplete="macroprocessEditDlg.hide();"  
                                          ajax="true" process="@this" styleClass="btn"/>
 
@@ -236,21 +238,23 @@ limitations under the License.
                                 render="name" execute="@this save" />
 
                     <div class="form-actions">
-                        <p:commandButton id="save" value="#{messages['common.done']}" 
+                        <p:commandLink id="save" value="#{messages['common.done']}" 
                                          action="#{processHome.saveProcess()}"
                                          styleClass="btn btn-primary" 
                                          oncomplete="processEditDlg.hide();" 
-                                         update=":tree-form:themeTree :process-layout"/>
+                                         style="color:#fff;"
+                                         />
 
                         #{'  '}
-                        <p:commandButton type="button" value="#{messages['common.delete']}" 
+                        <p:commandLink type="button" value="#{messages['common.delete']}" 
                                          styleClass="btn btn-danger"
                                          onclick="deletedDlg.show()"
                                          immediate="true"
                                          rendered="#{processHome.managed}"
+                                          style="color:#fff;"
                                          />
                         #{'  '}
-                        <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                        <p:commandLink id="cancel" value="#{messages['common.cancel']}" 
                                          oncomplete="processEditDlg.hide();"  
                                          ajax="true" process="@this" styleClass="btn"/>
 

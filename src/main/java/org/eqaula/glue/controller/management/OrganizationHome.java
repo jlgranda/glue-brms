@@ -174,6 +174,7 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
             buildTree();
         }
         return rootNode;
+
     }
 
     public void setRootNode(TreeNode rootNode) {
