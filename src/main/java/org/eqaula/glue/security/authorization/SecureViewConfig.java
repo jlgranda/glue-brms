@@ -58,6 +58,9 @@ public interface SecureViewConfig {
         @ViewPattern("/pages/accounting/*")
         @Accountant
         ACCOUNTANT,
+        @ViewPattern("/pages/management/*")
+        @Manager
+        MANAGER,
         @FacesRedirect
         @ViewPattern("/*")
         @AccessDeniedView("/pages/denied.xhtml")

@@ -42,6 +42,7 @@ public class SecurityRules {
     private static Logger log = Logger.getLogger(SecurityRules.class);
     public static String ADMIN = "Admin";
     private static String ACCOUNTANT = "Accountant";
+    private static String MANAGER = "Manager";
 
     /*public @Secures
      @Admin
@@ -82,6 +83,19 @@ public class SecurityRules {
         } else {
             return identity.hasRole(ACCOUNTANT, "USERS", "GROUP")
                 || identity.inGroup(ACCOUNTANT, "GROUP")
+                || identity.inGroup(SecurityRules.ADMIN, "GROUP")
+                || "admin".contains(getUsername(identity));
+        }
+    }
+    
+    @Secures
+    @Manager
+    public boolean isManager(Identity identity) {
+        if (identity.getUser() == null) {
+            return false;
+        } else {
+            return identity.hasRole(MANAGER, "USERS", "GROUP")
+                || identity.inGroup(MANAGER, "GROUP")
                 || identity.inGroup(SecurityRules.ADMIN, "GROUP")
                 || "admin".contains(getUsername(identity));
         }
