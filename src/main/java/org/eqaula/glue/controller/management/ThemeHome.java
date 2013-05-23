@@ -42,6 +42,7 @@ import org.eqaula.glue.model.management.Theme;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.OwnerService;
 import org.eqaula.glue.service.PerspectiveService;
+import org.eqaula.glue.service.ThemeService;
 import org.eqaula.glue.util.Dates;
 import org.eqaula.glue.util.UI;
 import org.jboss.seam.transaction.Transactional;
@@ -80,7 +81,8 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     @Inject
     private FacesContext context;
     private String outcomeOther = "";
-
+    private Long balancedScorecardId;
+   
     public ThemeHome() {
     }
 
@@ -131,6 +133,14 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         this.outcomeOther = outcomeOther;
     }
 
+    public Long getBalancedScorecardId() {
+        return balancedScorecardId;
+    }
+
+    public void setBalancedScorecardId(Long balancedScorecardId) {
+        this.balancedScorecardId = balancedScorecardId;
+    }
+
     @Transactional
     public Owner getOwner() {
         if (owner == null) {
@@ -179,7 +189,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             } else {
                 super.setOrganization(getInstance().getOwner().getOrganization());
             }
-        }else{
+        } else {
             super.setOrganization(organizationService.find(getOrganizationId()));
         }
         return super.getOrganization();
@@ -203,6 +213,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         ownerService.setEntityManager(em);
         perspectiveService.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
+        organizationService.setEntityManager(em);
     }
 
     @Override
@@ -240,7 +251,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
     public String saveTheme() {
         save();
         if (getOutcome() == null) {
-            return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+            return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getBalancedScorecardId() + "&faces-redirect=true&includeViewParams=true";
         }
         if (getInstance().getPerspective().getId() != null) {
             if (getOutcomeOther().isEmpty()) {
@@ -277,10 +288,13 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             if (getInstance() == null) {
                 throw new NullPointerException("Theme is Null");
             }
+
             if (getInstance().isPersistent()) {
+
                 delete(getInstance());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
                 RequestContext.getCurrentInstance().execute("editDlg.hide()");
+
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un tema para ser borrado!", ""));
             }
@@ -288,8 +302,14 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
+       
         if (getOutcome() == null) {
-            return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+            if (getBalancedScorecardId() == null) {
+                return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+            } else {
+                return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getBalancedScorecardId() + "&faces-redirect=true&includeViewParams=true";
+            }
+
             //return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         if (getInstance().getPerspective().getId() != null) {
@@ -297,6 +317,8 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         }
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
+
+    
 
     public TreeNode buildTree() {
         themeNode = new DefaultTreeNode("theme", getInstance(), null);
@@ -375,6 +397,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
         setId(null);
         setInstance(null);
         setOwnerId(ownerId);
+        setOrganizationId(getOwner().getOrganization().getId());
         wire();
 
     }
@@ -393,7 +416,7 @@ public class ThemeHome extends BussinesEntityHome<Theme> implements Serializable
 
     @TransactionAttribute
     public String saveThemeDialog() {
-        saveTheme();
+        save();
         return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
     }
 }

@@ -158,23 +158,23 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
 
     @Transactional
     public String deleteOwner() {
-        boolean band;
-        band = false;
+        /**boolean band;
+        band = false;*/
         try {
             if (getInstance() == null) {
                 throw new NullPointerException("Owner is Null");
             }
             if (getInstance().isPersistent()) {
-                if (hasValuesBussinesEntity()) {
+               // if (hasValuesBussinesEntity()) {
                     delete(getInstance());
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
                     RequestContext.getCurrentInstance().execute("editDlg.hide()");
-                } else {
+               // } else {
                     //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.property.hasValues") + " " + getInstance().getName(), ""));
                     //RequestContext.getCurrentInstance().execute("editDlg.hide()");
-                    band = true;
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("module.stocklist.delete.confirm"), ""));
-                }
+               //     band = true;
+               //     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("module.stocklist.delete.confirm"), ""));
+               // }
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe un gerente para ser borrado!", ""));
             }
@@ -183,12 +183,14 @@ public class OwnerHome extends BussinesEntityHome<Owner> implements Serializable
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
 
+        /* if (band) {
+            return null;
+        }*/
+        
         if (getOutcome() == null) {
             return "/pages/management/owner/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
-        if (band) {
-            return null;
-        }
+        
         if (getInstance().getOrganization() != null) {
             return getOutcome() + "?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
         }
