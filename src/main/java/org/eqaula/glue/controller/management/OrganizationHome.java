@@ -338,8 +338,6 @@ public class OrganizationHome extends BussinesEntityHome<Organization> implement
         if (entity.getClass().toString().equals("class org.eqaula.glue.model.management.Organization")
                 || entity.getClass().toString().equals("class org.eqaula.glue.model.management.Owner")) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), ("(Edición no permitida.) \n" + ((BussinesEntity) event.getTreeNode().getData()).getName()));
-            FacesMessage message2 = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), "(Edición no permitida.)");
-            FacesContext.getCurrentInstance().addMessage(null, message2);
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.selectedBussinesEntity"), ((BussinesEntity) event.getTreeNode().getData()).getName());
         }

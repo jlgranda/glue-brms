@@ -490,6 +490,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("target".equals(selectedNode.getType())) {
+                targetHome.createNewTarget();
                 targetHome.editTarget(bussinesEntity.getId());
                 RequestContext.getCurrentInstance().execute("targetEditDlg.show()");
                 //outcomeBuilder.append("/pages/management/targets/target.xhtml?");
