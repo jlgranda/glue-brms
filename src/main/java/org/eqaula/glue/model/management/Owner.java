@@ -44,7 +44,7 @@ public class Owner extends BussinesEntity implements Serializable {
     private Organization organization;
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<Theme> themes ;
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private  List<Diagnostic> diagnostic;
     
     public Owner() {

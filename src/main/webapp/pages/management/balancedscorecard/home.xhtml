@@ -98,10 +98,12 @@
                                             <h:outputText value="#{_balancedScorecard.author.name}" />
                                         </p:column> 
                                         <p:column headerText="#{messages['common.actions']}" style="width:4%">
+                                            
                                             <h:link id="button-admin" 
                                                     value="#{messages['common.design']}" 
                                                     rendered="#{true}" outcome="view" styleClass="btn btn-mini">
                                                 <f:param name="balancedScorecardId" value="#{_balancedScorecard.id}"></f:param>
+                                                 <f:param name="organizationId" value="#{_balancedScorecard.organization.id}"></f:param>
                                             </h:link> 
                                         </p:column>
                                     </p:dataTable>
@@ -136,7 +138,6 @@
                                    styleClass="btn btn-danger" style="color:#fff;"
                                    onclick="deletedDlg.show()"
                                    immediate="true"
-                                   update=":cancel-dialog"
                                    rendered="#{balancedScorecardHome.managed}"
                                    />
                     #{'  '}

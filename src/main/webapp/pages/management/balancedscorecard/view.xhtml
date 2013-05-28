@@ -14,6 +14,7 @@
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
             <f:viewParam name="balancedScorecardId" value="#{balancedScorecardHome.balancedScorecardId}" />
+            <f:viewParam  name="organizationId" value="#{themeHome.organizationId}"/>
             <s:viewAction action="#{balancedScorecardHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
         <ui:param name="title" value="#{balancedScorecardHome.instance.name}" />
@@ -23,6 +24,7 @@
                 <h:link outcome="/pages/management/organization/home" 
                         value="#{balancedScorecardHome.organization.name}">
                     <f:param name="organizationId" value="#{balancedScorecardHome.organization.id}"/>
+
                 </h:link>
             </li>
             <li>
@@ -70,7 +72,7 @@
                         #{' '}
                         <p:commandLink id="button-edit" 
                                        value="#{messages['common.edit']}" 
-                                       update=":perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog :target-edit-dialog" 
+                                       update=":perspective-edit-dialog :theme-edit-dialog :objetive-edit-dialog :measure-edit-dialog :target-edit-dialog :tabView:form-methods" 
                                        actionListener="#{balancedScorecardHome.redirecToEdit}" 
                                        disabled="#{empty balancedScorecardHome.selectedNode || balancedScorecardHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.BalancedScorecard')}" 
                                        styleClass="btn btn-secondary"/>
@@ -284,7 +286,7 @@
                             <p:selectOneMenu id="owner" value="#{themeHome.instance.owner}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" 
                                              requiredMessage="#{messages['common.property.required.help']}" rendered="true" label="#{messages['module.owner']}" filter="true" filterMatchMode="contains">
                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
-                                <f:selectItems value="#{themeHome.instance.id==null ? themeHome.perspective.balancedScorecard.organization.owners : themeHome.instance.perspective.balancedScorecard.organization.owners}" var="_o" itemLabel="#{_o.name}" itemValue="#{_o}"/>                          
+                                <f:selectItems value="#{themeHome.instance.id==null ? themeHome.organization.owners : themeHome.instance.organization.owners}" var="_o" itemLabel="#{_o.name}" itemValue="#{_o}"/>                          
                                 <p:ajax event="change" update="@parent " partialSubmit="true"/>
                             </p:selectOneMenu> 
                             <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
@@ -298,8 +300,9 @@
 
                     <div class="form-actions">
                         <p:commandLink id="save" value="#{messages['common.done']}" 
-                                       action="#{themeHome.saveTheme()}"
-                                       oncomplete="themeEditDlg.hide();" 
+                                       action="#{themeHome.save()}"
+                                       oncomplete="themeEditDlg.hide();"
+                                       update=":form-selected-theme"
                                        styleClass="btn btn-primary"
                                        style="color:#fff;" />
                         #{'  '}
@@ -446,82 +449,204 @@
             <p:dialog id="target-edit-dialog" 
                       header="#{messages['module.target']}" 
                       styleClass="atf-header" widgetVar="targetEditDlg" appendToBody="true" 
-                      closeOnEscape="true" resizable="true">
+                      closable="false"
+                      height="350" width="600">
+                <h:form>
+
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                </h:form>
                 <p:tabView id="tabView">
-                    <p:tab id="tab-target" title="#{messages['module.target']}">
-                        <h:panelGrid>
-                            <h:form  id="form-targer" acceptcharset="UTF-8" class="form-horizontal">
-                                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                                <h:panelGroup layout="block" class="control-group">
-                                    <label for="targettype_" class="control-label">#{messages['Target.type']}</label>
-                                    <div class="controls">
-                                        <p:selectOneMenu id="targettype_" value="#{targetHome.instance.targetType}" effect="fade"  converter="omnifaces.GenericEnumConverter" required="true" requiredMessage="#{messages['required.target']}" rendered="true" label="#{messages['module.target']}" filter="true" filterMatchMode="contains">
-                                            <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
-                                            <f:selectItems value="#{targetHome.instance.targetTypes}" var="_t" itemLabel="#{messages[_t.name]}" itemValue="#{_t}"/>                          
-                                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
-                                        </p:selectOneMenu>              
-                                    </div>
-                                </h:panelGroup> 
-                                <glue:input id="name" name="name" type="text" 
-                                            label="#{messages['common.name']}" 
-                                            value="#{targetHome.instance.name}" required="true" 
-                                            inlinehelp="#{messages['common.name.inlinehelp']}"
-                                            execute="@this save" render="name"/>
-                                <glue:input id="description" name="description" type="textarea"
-                                            label="#{messages['common.description']}"
-                                            value="#{targetHome.instance.description}" required="false" 
-                                            inlinehelp="#{messages['common.description.help']}"
-                                            render="description" execute="@this save" />
-                                <glue:input id="periodFrom" name="periodFrom" type="calendar" 
-                                            label="#{messages['common.period.from']}" 
-                                            value="#{targetHome.instance.from}" required="true" 
-                                            inlinehelp="#{messages['common.period.from.inlinehelp']}" 
-                                            execute="@this save" render="periodFrom" />
-                                <glue:input id="periodTo" name="periodTo" type="calendar"
-                                            label="#{messages['common.period.to']}" value="#{targetHome.instance.to}"
-                                            required="true" inlinehelp="#{messages['common.period.to.inlinehelp']}" 
-                                            execute="@this save" render="periodTo" />
-                                <glue:input id="value" name="value" type="decimal" 
-                                            label="#{messages['common.expectedValue']}" 
-                                            value="#{targetHome.instance.value}" required="true" 
-                                            inlinehelp="#{messages['common.value.inlinehelp']}" 
-                                            execute="@this save" render="value"/>
-                                <glue:input id="sequence" name="sequence" type="decimal" 
-                                            label="#{messages['common.sequence']}"
-                                            value="#{targetHome.instance.sequence}" required="true" 
-                                            inlinehelp="#{messages['common.sequence.inlinehelp']}"
-                                            execute="@this save" render="sequence"/>
+                    <p:tab id="tab-target"  title="#{messages['module.target']}">
+                        <h:form  id="form-target" acceptcharset="UTF-8" class="form-horizontal" >
 
-                                <div class="form-actions">
-                                    <p:commandLink id="save" value="#{messages['common.done']}" 
-                                                   action="#{targetHome.saveTargetDialog()}"
-                                                   oncomplete="targetEditDlg.hide();" 
-                                                   styleClass="btn btn-primary"
-                                                   style="color:#fff;" />
-                                    #{'  '}
-                                    
-                                    <p:commandLink type="button" value="#{messages['common.delete']}" 
-                                                   styleClass="btn btn-danger" style="color:#fff;" 
-                                                   onclick="targetDeletedDlg.show()"
-                                                   immediate="true"
-                                                   rendered="#{targetHome.managed}"
-                                                   />
-                                    #{'  '}
-                                    <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
-                                                     oncomplete="targetEditDlg.hide();"  
-                                                     ajax="true" process="@this" styleClass="btn"/>
+                            <h:panelGroup layout="block" class="control-group">
+                                <label for="targettype_" class="control-label">#{messages['Target.type']}</label>
+                                <div class="controls">
+                                    <p:selectOneMenu id="targettype_" value="#{targetHome.instance.targetType}" effect="fade"  converter="omnifaces.GenericEnumConverter" required="true" requiredMessage="#{messages['required.target']}" rendered="true" label="#{messages['module.target']}" filter="true" filterMatchMode="contains">
+                                        <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
+                                        <f:selectItems value="#{targetHome.instance.targetTypes}" var="_t" itemLabel="#{messages[_t.name]}" itemValue="#{_t}"/>                          
+                                        <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                                    </p:selectOneMenu>              
+                                </div>
+                            </h:panelGroup> 
+                            <glue:input id="name" name="name" type="text" 
+                                        label="#{messages['common.name']}" 
+                                        value="#{targetHome.instance.name}" required="true" 
+                                        inlinehelp="#{messages['common.name.inlinehelp']}"
+                                        execute="@this save" render="name"/>
+                            <glue:input id="description" name="description" type="textarea"
+                                        label="#{messages['common.description']}"
+                                        value="#{targetHome.instance.description}" required="false" 
+                                        inlinehelp="#{messages['common.description.help']}"
+                                        render="description" execute="@this save" />
+                            <glue:input id="periodFrom" name="periodFrom" type="calendar" 
+                                        label="#{messages['common.period.from']}" 
+                                        value="#{targetHome.instance.from}" required="true" 
+                                        inlinehelp="#{messages['common.period.from.inlinehelp']}" 
+                                        execute="@this save" render="periodFrom" />
+                            <glue:input id="periodTo" name="periodTo" type="calendar"
+                                        label="#{messages['common.period.to']}" value="#{targetHome.instance.to}"
+                                        required="true" inlinehelp="#{messages['common.period.to.inlinehelp']}" 
+                                        execute="@this save" render="periodTo" />
+                            <glue:input id="value" name="value" type="decimal" 
+                                        label="#{messages['common.expectedValue']}" 
+                                        value="#{targetHome.instance.value}" required="true" 
+                                        inlinehelp="#{messages['common.value.inlinehelp']}" 
+                                        execute="@this save" render="value"/>
+                            <glue:input id="sequence" name="sequence" type="decimal" 
+                                        label="#{messages['common.sequence']}"
+                                        value="#{targetHome.instance.sequence}" required="true" 
+                                        inlinehelp="#{messages['common.sequence.inlinehelp']}"
+                                        execute="@this save" render="sequence"/>
 
-                                </div>  
-                            </h:form>
-                        </h:panelGrid>
+                            <div class="form-actions">
+                                <p:commandLink id="save" value="#{messages['common.done']}" 
+                                               action="#{targetHome.saveTargetDialog()}"
+                                               update=":target-edit-dialog"
+                                               styleClass="btn btn-primary"
+                                               style="color:#fff;" 
+                                               />
+                                #{'  '}
+                                
+
+                                <p:commandLink type="button" value="#{messages['common.delete']}" 
+                                               styleClass="btn btn-danger" style="color:#fff;" 
+                                               onclick="targetDeletedDlg.show()"
+                                               immediate="true"
+                                               rendered="#{targetHome.managed}"
+                                               />
+                                #{'  '}
+                                <h:link id="cancel" outcome="view" styleClass="btn" value="#{messages['common.cancel']}">
+                                    <f:param name="balancedScorecardId" value="#{balancedScorecardHome.balancedScorecardId}"/>
+                                    <f:param name="organizationId" value="#{themeHome.organizationId}"/> 
+                                </h:link>                                
+                            </div>  
+                        </h:form>
+
 
 
                     </p:tab>
+                    <p:tab id="tab-methods" title="#{messages['module.target.methods']}" disabled="#{empty targetHome.instance.id}">
 
-                    <p:tab id="tab-initiatives" title="#{messages['module.initiative']}" disabled="#{empty targetHome.instance.id}">
+                        <h:form id="form-methods" acceptcharset="UTF-8" class="form-horizontal">
+                            <div class="form-actions" style="padding-left: 20px">
+
+                                <p:commandLink id="method-add-button"
+                                               value="#{messages['common.add']} #{messages['module.target.method']}"
+                                               actionListener="#{targetHome.createMethod()}" 
+                                               oncomplete="methodEditDlg.show();"
+                                               styleClass="btn btn-info btn-mini fr" 
+                                               update=":method-edit-dialog" 
+                                               style="color: #fff; font-size: smaller;"
+                                               >
+                                    <i class="icon-plus" ></i>
+                                    <p:tooltip for="method-add-button" value="#{messages['common.add']} #{messages['module.method']}" showEffect="fade" hideEffect="fade" />  
+                                </p:commandLink>
+                            </div>
+
+                            <p:dataTable var="_method" value="#{targetHome.instance.methods}"
+                                         paginator="true" rows="5"
+                                         paginatorAlwaysVisible="false"
+                                         paginatorPosition="top"
+                                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                                         rowsPerPageTemplate="5,10,15"
+                                         id="methodTable">
+                                <p:column style="width:4%">
+                                    <p:commandLink id="method-edit-button" 
+                                                   action="#{targetHome.wireMethod(_method)}"
+                                                   oncomplete="methodEditDlg.show();" immediate="true"
+                                                   styleClass="link" style="font-size: 0.75em;"
+                                                   update=":method-edit-dialog">
+                                        <i class="icon-pencil"></i>
+                                    </p:commandLink>
+                                    <p:tooltip for="method-edit-button" value="#{messages['common.edit']}: #{_method.name}" showEffect="fade" hideEffect="fade" />  
+                                </p:column>
+                                <p:column headerText="#{messages['common.name']}" style="width:150px">
+                                    <h:outputText value="#{_method.name}"/>
+                                </p:column>
+                                <p:column headerText="#{messages['common.type']}" style="width:150px">
+                                    <h:outputText value="#{messages[_method.methodType]}"/>
+                                </p:column>
+                                <p:column headerText="#{messages['common.content.type']}" style="width:150px">
+                                    <h:outputText value="#{messages[_method.contentType]}"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <div class="form-actions">
+                                <p:commandLink id="save"
+                                               action="#{targetHome.saveTargetDialog()}"
+                                               value="#{messages['common.save']}" 
+                                               styleClass="btn btn-primary"
+                                               disabled="#{not targetHome.modifiedMethods}"
+                                               style="color: #fff"/>
+
+                                #{'  '}
+                                <h:link id="cancel" outcome="view" styleClass="btn" value="#{messages['common.cancel']}">
+                                    <f:param name="balancedScorecardId" value="#{balancedScorecardHome.balancedScorecardId}"/>
+                                    <f:param name="organizationId" value="#{themeHome.organizationId}"/>
+                                </h:link> 
+                            </div>
+                        </h:form>
                     </p:tab>
-                    <p:tab id="tab-methods" title="#{messages['module.method']}" disabled="#{empty targetHome.instance.id}">
+                    <p:tab id="tab-initiatives" title="#{messages['module.target.initiatives']}" disabled="#{empty targetHome.instance.id}">
+                        <h:form id="form-initiatives" acceptcharset="UTF-8" class="form-horizontal">
+                            <div class="form-actions" style="padding-left: 20px">
+                                <p:commandLink id="initiative-add-button"
+                                               value="#{messages['common.add']} #{messages['module.target.initiative']}"
+                                               actionListener="#{targetHome.createInitiative()}" 
+                                               oncomplete="initiativeEditDlg.show();"
+                                               styleClass="btn btn-info btn-mini fr" 
+                                               update=":initiative-edit-dialog" 
+                                               style="color: #fff; font-size: smaller;"
+                                               >
+                                    <i class="icon-plus" ></i>
+                                    <p:tooltip for="initiative-add-button" value="#{messages['common.add']} #{messages['module.initiative']}" showEffect="fade" hideEffect="fade" />  
+                                </p:commandLink>
+                            </div>
+                            <p:dataTable var="_initiative" value="#{targetHome.instance.initiatives}"
+                                         paginator="true" rows="5"
+                                         paginatorAlwaysVisible="false"
+                                         paginatorPosition="top"
+                                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                                         rowsPerPageTemplate="5,10,15"
+                                         id="initiativeTable">
+                                <p:column style="width:4%">
+                                    <p:commandLink id="initiative-edit-button" 
+                                                   action="#{targetHome.wireInitiative(_initiative)}"
+                                                   oncomplete="initiativeEditDlg.show();" immediate="true"
+                                                   styleClass="link" style="font-size: 0.75em;"
+                                                   update=":initiative-edit-dialog">
+                                        <i class="icon-pencil"></i>
+                                    </p:commandLink>
+                                    <p:tooltip for="initiative-edit-button" value="#{messages['common.edit']}: #{_method.name}" showEffect="fade" hideEffect="fade" />  
+                                </p:column>
+                                <p:column headerText="#{messages['common.name']}" style="width:150px">
+                                    <h:outputText value="#{_initiative.name}"/>
+                                </p:column>
+                                <p:column headerText="#{messages['module.resource']}" style="width:150px">
+                                    <h:outputText value="#{_initiative.resource.name}"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <div class="form-actions">
+                                <p:commandLink id="save"
+                                               action="#{targetHome.saveTargetDialog()}"
+                                               value="#{messages['common.save']}" 
+                                               styleClass="btn btn-primary"
+                                               disabled="#{not targetHome.modifiedInitiatives}"
+                                               style="color: #fff"/>
+
+                                #{'  '}
+                                <h:link id="cancel" outcome="view" styleClass="btn" value="#{messages['common.cancel']}">
+                                    <f:param name="balancedScorecardId" value="#{balancedScorecardHome.balancedScorecardId}"/>
+                                    <f:param name="organizationId" value="#{themeHome.organizationId}"/>
+                                </h:link> 
+                            </div>
+                        </h:form>
                     </p:tab>
+
                 </p:tabView>
 
             </p:dialog>  
@@ -543,8 +668,185 @@
                 </h:form>
             </p:dialog> 
 
+            <p:dialog id="method-edit-dialog" 
+                      header="#{targetHome.selectedMethod.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.method']}" 
+                      styleClass="atf-header" widgetVar="methodEditDlg" 
+                      appendToBody="true" closeOnEscape="true" resizable="true"
+                      height="300" width="550">
+                <h:form  id="form-method" acceptcharset="UTF-8" class="form-horizontal" >
+                    <glue:input id="name" name="name" type="text" 
+                                label="#{messages['common.name']}"
+                                value="#{targetHome.selectedMethod.name}" 
+                                required="true" inlinehelp="#{messages['common.name.inlinehelp']}" 
+                                execute="@this save" render="name"/>
+                    <glue:input id="description" name="description" type="textarea" 
+                                label="#{messages['common.description']}" 
+                                value="#{targetHome.selectedMethod.description}" 
+                                required="false" inlinehelp="#{messages['common.description.help']}"
+                                render="description" execute="@this save" />                
+                    <h:panelGroup layout="block" class="control-group">
+                        <label for="methodtype_" class="control-label">#{messages['common.type']}</label>
+                        <div class="controls">
+                            <p:selectOneMenu id="methodtype_" value="#{targetHome.selectedMethod.methodType}" effect="fade"  converter="omnifaces.GenericEnumConverter" required="true" requiredMessage="#{messages['required.method']}" rendered="true" label="#{messages['common.type']}" filter="true" filterMatchMode="contains">
+                                <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
+                                <f:selectItems value="#{targetHome.selectedMethod.methodTypes}"
+                                               var="_t" itemLabel="#{messages[_t.name]}" itemValue="#{_t}"/>                          
+                                <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                            </p:selectOneMenu>   
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{targetHome.selectedMethod.methodType != null}"
+                                            styleClass="validation-status" />
+                            <span class="help-block"><br/>#{messages['common.type.inlinehelp']} <ocp:message forId="methodtype_" /></span>
+                        </div>
 
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" class="control-group">
+                        <label for="contenttype_" class="control-label">#{messages['common.content.type']}</label>
+                        <div class="controls">
+                            <p:selectOneMenu id="contenttype_" value="#{targetHome.selectedMethod.contentType}" effect="fade"  converter="omnifaces.GenericEnumConverter" required="true" requiredMessage="#{messages['required.method']}" rendered="true" label="#{messages['module.method']}" filter="true" filterMatchMode="contains">
+                                <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
+                                <f:selectItems value="#{targetHome.selectedMethod.contentTypes}" var="_t" itemLabel="#{messages[_t.name]}" itemValue="#{_t}"/>                          
+                                <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                            </p:selectOneMenu>  
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{targetHome.selectedMethod.contentType != null}"
+                                            styleClass="validation-status" />
+                            <span class="help-block"><br/>#{messages['common.contentType.inlinehelp']} <ocp:message forId="contenttype_" /></span>
+                        </div>
+                    </h:panelGroup>
+                    <glue:input id="content" name="content" type="textarea" label="#{messages['common.content']}" value="#{targetHome.selectedMethod.content}" required="false" inlinehelp="#{messages['common.description.help']}" render="content" execute="@this save" />                
+                    <div class="form-actions">
+                        <p:commandLink id="method-save" value="#{messages['common.done']}"
+                                       actionListener="#{targetHome.addMethod()}"
+                                       oncomplete="methodEditDlg.hide();"
+                                       update=":tabView:form-methods"
+                                       styleClass="btn btn-primary"
+                                       style="color: #fff"
+                                       />
+                        <!-- &nbsp;-->
+                        <p:commandLink type="button" value="#{messages['common.delete']}" 
+                                       styleClass="btn btn-danger" onclick="methodDeletedDlg.show();"
+                                       immediate="true" rendered="#{targetHome.selectedMethod.target != null}"
+                                       style="color: #fff"/>                        
+                        <!-- &nbsp;-->
+                        <p:commandButton type="button" value="#{messages['common.cancel']}"
+                                         styleClass="btn" onclick="methodEditDlg.hide();" immediate="true"
+                                         update=":target-form:method-panel"  rendered="#{true}">                        
+                        </p:commandButton>
+                    </div>  
+                </h:form>
+            </p:dialog>
+            <p:dialog id="method-cancel-delete-dialog" 
+                      header="#{messages['common.delete.confirm']}"
+                      widgetVar="methodDeletedDlg" resizable="false" modal="true"
+                      >   
+                <h:form id="method-form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" 
+                                     oncomplete="methodDeletedDlg.hide(); methodEditDlg.hide();"  
+                                     action="#{targetHome.removeMethod()}"                                         
+                                     update=":tabView:form-methods"
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" 
+                                     type="button" onclick="methodDeletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog>
 
+            <p:dialog id="initiative-edit-dialog" 
+                      header="#{targetHome.selectedInitiative.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.initiative']}" 
+                      styleClass="atf-header" widgetVar="initiativeEditDlg"
+                      appendToBody="true" closeOnEscape="true"
+                      height="300" width="550">
+                <h:form  id="form-initiative" acceptcharset="UTF-8" class="form-horizontal" >
+                    <h:panelGroup id="combo" layout="block" class="control-group">
+                        <label for="resource" class="control-label">#{messages['module.resource']}</label>
+                        <div class="controls">
+                            <p:selectOneMenu id="resource" style="float: left" value="#{targetHome.selectedInitiative.resource}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="false" requiredMessage="#{messages['required.resource']}" rendered="true" label="#{messages['module.resource']}" filter="true" filterMatchMode="contains">
+                                <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
+                                <f:selectItems value="#{resourceListService.resultList}" var="_r" itemLabel="#{_r.name}" itemValue="#{_r}"/>                          
+                                <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                            </p:selectOneMenu>
+
+                            <p:commandLink id="button-add" update=":resource-edit-dialog" 
+                                           styleClass="btn" onclick="resourceEditDlg.show()"
+                                           actionListener="#{resourceHome.createNewResource}">
+                                <i class="icon-plus"></i>
+                            </p:commandLink> 
+                        </div>
+                    </h:panelGroup>
+                    <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{targetHome.selectedInitiative.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                    <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{targetHome.selectedInitiative.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+                    <glue:input id="startDate" name="startDate" type="calendar" label="#{messages['common.startDate']}" value="#{targetHome.selectedInitiative.startDate}" required="true" inlinehelp="#{messages['common.startDate.inlinehelp']}" execute="@this save" render="startDate" />
+                    <glue:input id="endDate" name="endDate" type="calendar" label="#{messages['common.endDate']}" value="#{targetHome.selectedInitiative.endDate}" required="true" inlinehelp="#{messages['common.endDate.inlinehelp']}" execute="@this save" render="endDate" />
+
+                    <div class="form-actions">
+                        <p:commandLink id="initiative-save" value="#{messages['common.done']}"
+                                       actionListener="#{targetHome.addInitiative()}"
+                                       oncomplete="initiativeEditDlg.hide();"
+                                       update=":tabView:form-initiatives" 
+                                       styleClass="btn btn-primary"
+                                       style="color: #fff"/>
+                        <!-- &nbsp;-->
+                        <p:commandLink type="button" value="#{messages['common.delete']}" 
+                                       styleClass="btn btn-danger" onclick="initiativeDeletedDlg.show();"
+                                       immediate="true"
+                                       rendered="#{targetHome.selectedInitiative.target != nul}"
+                                       style="color: #fff"/>                        
+
+                        <!-- &nbsp;-->
+                        <p:commandButton type="button" value="#{messages['common.cancel']}" 
+                                         styleClass="btn" onclick="initiativeEditDlg.hide();" immediate="true"
+                                         update=":target-form:initiative-panel"   rendered="#{true}">                        
+                        </p:commandButton>
+                    </div>  
+                </h:form>
+            </p:dialog>
+
+            <p:dialog id="initiative-cancel-delete-dialog"
+                      header="#{messages['common.delete.confirm']}" 
+                      widgetVar="initiativeDeletedDlg" resizable="false" modal="true">   
+                <h:form id="initiative-form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" 
+                                     oncomplete="initiativeDeletedDlg.hide(); initiativeEditDlg.hide();"   
+                                     action="#{targetHome.removeInitiative()}"                                         
+                                     update=":tabView:form-initiatives"
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" 
+                                     type="button" onclick="initiativeDeletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+
+                </h:form>
+            </p:dialog> 
+
+            <p:dialog id="resource-edit-dialog" header="#{messages['common.add']} #{messages['module.resource']}" styleClass="atf-header" widgetVar="resourceEditDlg" appendToBody="true" closeOnEscape="true"
+                      height="250" width="500">
+                <h:form  id="form-resource" acceptcharset="UTF-8" class="form-horizontal" >
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{resourceHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                    <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{resourceHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+                    <glue:input id="amount" name="amount" type="decimal" label="#{messages['common.amount']}" value="#{resourceHome.instance.amount}" required="false" inlinehelp="#{messages['common.amount.help']}" render="amount" execute="@this save" />
+                    <div class="form-actions">
+                        <p:commandLink id="save" value="#{messages['common.done']}" 
+                                         action="#{resourceHome.saveResource()}"
+                                         oncomplete="resourceEditDlg.hide();" 
+                                         styleClass="btn btn-primary"
+                                         style="color: #fff"
+                                         update=":form-initiative:combo :form-initiative:button-add"/>
+                        <!-- &nbsp;-->
+                        #{'  '}
+
+                        <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                                         oncomplete="resourceEditDlg.hide();"  
+                                         ajax="true" process="@this" styleClass="btn"/>
+                    </div>  
+                </h:form>
+            </p:dialog>
         </ui:define>
     </ui:composition>
 </html>

@@ -38,26 +38,27 @@
                 <div class="container-fluid">
                     <div class="row-fluid" style="margin-top: 5px;">
                         <div class="span10">
-                            <h2>
-                                <h:form id="organization-header">
-                                    #{organizationHome.instance.name}
-
-                                    <p:commandLink id="organization-edit-button" 
-                                                   oncomplete="organizationEditDlg.show();" immediate="true"
-                                                   styleClass="btn "
-                                                   update=":organization-edit-dialog">
-                                        <i class="icon-pencil" ></i>
-                                    </p:commandLink>
-                                    <p:tooltip for="organization-edit-button" value="#{messages['common.edit']}: #{organizationHome.instance.name}" showEffect="fade" hideEffect="fade" />  
-                                    <p>
-                                        #{organizationHome.instance.ruc}<br/>
-                                        #{organizationHome.instance.description}
-                                    </p>
-                                    
-                                </h:form>
-                            </h2>
+                            <h2>#{organizationHome.instance.name}</h2>
+                            <p>
+                                #{organizationHome.instance.ruc}<br/>
+                                #{organizationHome.instance.description}
+                            </p>
                         </div>
+                        <!--<div class="span2">
+                            <h:form id="organization-header">
+                                <p:commandLink id="organization-edit-button" 
+                                               oncomplete="organizationEditDlg.show();" immediate="true"
+                                               styleClass="btn "
+                                               update=":organization-edit-dialog">
+                                    <i class="icon-pencil" ></i>
+                                </p:commandLink>
+                                <p:tooltip for="organization-edit-button" value="#{messages['common.edit']}: #{organizationHome.instance.name}" showEffect="fade" hideEffect="fade" />  
+                            </h:form>
+                        </div>-->
+                        
                         <div class="span2">
+                            #{'  '}
+                            <br/>
                             <h:form id="organization-header-actions">
                                 <p:commandLink id="organization-edit-button" 
                                                value="#{messages['common.edit']}"  oncomplete="organizationEditDlg.show();" immediate="true"
@@ -73,8 +74,7 @@
         </ui:define>
 
         <ui:define name="content">
-
-            <h:form id="philosophical-form" styleClass="validation-status">
+            <h:form id="philosophical-form" styleClass="row-fluid">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <p:panel id="mission-panel" toggleable="true" rendered="#{not empty organizationHome.instance.id}" >
 
@@ -82,7 +82,7 @@
                         <p:commandLink id="mission-add-button" 
                                        action="#{organizationHome.createMission()}"
                                        oncomplete="missionEditDlg.show();" 
-                                       styleClass="btn btn-mini"
+                                       styleClass="btn"
                                        update=":mission-edit-dialog">
                             <i class="icon-plus"></i>
                         </p:commandLink>
@@ -93,7 +93,8 @@
                     </f:facet>
                     <p:dataTable id="mission-table"  var="_mission"
                                  value="#{organizationHome.instance.missions}"
-                                 rendered="#{not empty organizationHome.instance.missions}">
+                                 rendered="#{not empty organizationHome.instance.missions}"
+                                 >
                         <p:column headerText="#{messages['common.name']}" style="width:150px">
                             <h:outputText value="#{_mission.name}"/>
                         </p:column>
@@ -119,7 +120,7 @@
                         <p:commandLink id="vision-add-button" 
                                        action="#{organizationHome.createVision()}"
                                        oncomplete="visionEditDlg.show();" immediate="true"
-                                       styleClass="btn btn-mini"
+                                       styleClass="btn"
                                        update=":vision-edit-dialog">
                             <i class="icon-plus"></i>
                         </p:commandLink>
@@ -155,7 +156,7 @@
                         <p:commandLink id="principle-add-button" 
                                        action="#{organizationHome.createPrinciple()}"
                                        oncomplete="principleEditDlg.show();" immediate="true"
-                                       styleClass="btn btn-mini"
+                                       styleClass="btn"
                                        update=":principle-edit-dialog">
                             <i class="icon-plus"></i>
                         </p:commandLink>

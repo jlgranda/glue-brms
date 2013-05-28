@@ -134,7 +134,7 @@ public class Target extends BussinesEntity implements Serializable {
     }
 
     public boolean removeMethod(Method method) {
-        method.setOrganization(null);
+        method.setTarget(null);
         return this.getMethods().remove(method);
     }
 
@@ -147,7 +147,7 @@ public class Target extends BussinesEntity implements Serializable {
     }
 
     public boolean removeInitiative(Initiative initiative) {
-        initiative.setOrganization(null);
+        initiative.setTarget(null);
         return this.getInitiatives().remove(initiative);
     }
 

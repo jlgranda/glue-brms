@@ -238,7 +238,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         if (getOutcome() != null) {
             //TODO build a dynamic mechanism
             if ("view".equalsIgnoreCase(getOutcome())) {
-                _outcome = "/pages/management/balancedscorecard/view.xhtml" + "?faces-redirect=true&balancedScorecardId=" + getBalancedScorecardId();
+                _outcome = "/pages/management/balancedscorecard/view.xhtml" + "?faces-redirect=true&balancedScorecardId=" + getBalancedScorecardId()+ "&organizationId=" + getInstance().getOrganization().getId();
             } else {
                 _outcome = getOutcome() + "?faces-redirect=true&includeViewParams=true";
             }
@@ -323,7 +323,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
 
-        return "/pages/management/balancedscorecard/list.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
+        return "/pages/management/balancedscorecard/home.xhtml?organizationId=" + getInstance().getOrganization().getId() + "&faces-redirect=true&includeViewParams=true";
 
     }
 
@@ -333,7 +333,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
         TreeNode objetiveNode = null;
         TreeNode measureNode = null;
         TreeNode targetNode = null;
-
+        
         rootNode.setExpanded(true);
         balancedScoreCardNode.setExpanded(true);
         for (Perspective perspective : getInstance().getPerspectives()) {
@@ -398,8 +398,11 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("perspective".equals(selectedNode.getType())) {
-                themeHome.setPerspectiveId(bussinesEntity.getId());
+              //  themeHome.setPerspectiveId(bussinesEntity.getId());
                 themeHome.createNewTheme();
+                themeHome.setBalancedScorecardId(((Perspective)bussinesEntity).getBalancedScorecard().getId());
+              //  themeHome.setPerspective(null);
+              //  themeHome.setPerspectiveId(null);
                 //setPerspective_Id(bussinesEntity.getId());
                 RequestContext.getCurrentInstance().execute("themeSelectedDlg.show()");
                 //TODO remove commented lines
@@ -463,6 +466,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("theme".equals(selectedNode.getType())) {
                 themeHome.editTheme(bussinesEntity.getId());
+                themeHome.setBalancedScorecardId(((Theme)bussinesEntity).getPerspective().getBalancedScorecard().getId());
                 RequestContext.getCurrentInstance().execute("themeEditDlg.show()");
                 //outcomeBuilder.append("/pages/management/theme/theme.xhtml?");
                 //outcomeBuilder.append("&perspectiveId=").append(((Theme) bussinesEntity).getPerspective().getId());
@@ -486,6 +490,7 @@ public class BalancedScorecardHome extends BussinesEntityHome<BalancedScorecard>
                 //outcomeBuilder.append("&outcome=" + "/pages/management/balancedscorecard/view");
                 //navigation.handleNavigation(context, null, outcomeBuilder.toString() + "&faces-redirect=true");
             } else if ("target".equals(selectedNode.getType())) {
+                targetHome.createNewTarget();
                 targetHome.editTarget(bussinesEntity.getId());
                 RequestContext.getCurrentInstance().execute("targetEditDlg.show()");
                 //outcomeBuilder.append("/pages/management/targets/target.xhtml?");
