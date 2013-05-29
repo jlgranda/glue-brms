@@ -33,6 +33,7 @@ limitations under the License.
             <f:viewParam name="organizationId" value="#{ownerListService.organizationId}"/>
             <f:viewParam name="organizationId" value="#{ownerHome.organizationId}"/>
             <f:viewParam name="organizationId" value="#{organizationHome.organizationId}" />
+            <f:viewParam name="organizationId" value="#{themeHome.organizationId}"/>
         </f:metadata>
 
         <ui:param name="title" value="#{ownerListService.organization.name} - #{messages['module.owners']}" />
@@ -163,6 +164,7 @@ limitations under the License.
                     <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{ownerHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                     <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{ownerHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
 
+
                     <div class="form-actions">
                         <p:commandLink id="save" value="#{messages['common.done']}" 
                                        action="#{ownerHome.saveOwnerDialog()}"
@@ -209,7 +211,21 @@ limitations under the License.
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                     <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{themeHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
                     <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{themeHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
-
+                    
+                    <h:panelGroup id="onr" layout="block" class="control-group" rendered="#{not empty themeHome.instance.id}">
+                        <label for="owner" class="control-label required">#{messages['module.owner']}</label>
+                        <div class="controls">
+                            <p:selectOneMenu id="owner" value="#{themeHome.instance.owner}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" 
+                                             requiredMessage="#{messages['common.property.required.help']}" rendered="true" label="#{messages['module.owner']}" filter="true" filterMatchMode="contains">
+                                <f:selectItem  itemLabel = "#{messages['common.choice']}"/>  
+                                <f:selectItems value="#{themeHome.instance.id==null ? themeHome.organization.owners : themeHome.instance.organization.owners}" var="_o" itemLabel="#{_o.name}" itemValue="#{_o}"/>                          
+                                <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                            </p:selectOneMenu> 
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
+                                            styleClass="validation-status" />
+                            <span class="help-block"><br/>#{messages['owner.inlinehelp']} <ocp:message forId="owner"/></span>
+                        </div>
+                    </h:panelGroup>
                     <div class="form-actions">
                         <p:commandLink id="save" value="#{messages['common.done']}" 
                                        action="#{themeHome.saveThemeDialog()}"
