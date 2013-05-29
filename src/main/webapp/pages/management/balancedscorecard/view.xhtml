@@ -150,7 +150,7 @@
                                      value="#{balancedScorecardHome.selectedNode!=null ? (balancedScorecardHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.Target') ? balancedScorecardHome.selectedNode.parent : balancedScorecardHome.selectedNode)  : balancedScorecardHome.rootNode}"
                                      var="node"  propagateSelectionUp="true" >  
                             <p:column headerText="#{messages['module.balancedscorecard.dimention']}">
-                                <h:outputText value="#{node.name}"/>                        
+                                <h:outputText value="#{(node.class.name.equals('org.eqaula.glue.model.management.Theme') || node.class.name.equals('org.eqaula.glue.model.management.Objetive')) ? node.description : node.name}"/>                        
                             </p:column>  
                             <p:column headerText="#{messages['common.status']}">  
                                 <p:dataTable var="method" value="#{node.methods}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
