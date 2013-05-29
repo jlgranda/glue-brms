@@ -15,6 +15,7 @@
         <f:metadata>
             <f:viewParam name="balancedScorecardId" value="#{balancedScorecardHome.balancedScorecardId}" />
             <f:viewParam  name="organizationId" value="#{themeHome.organizationId}"/>
+            <f:viewParam  name="organizationId" value="#{organizationHome.organizationId}"/>
             <s:viewAction action="#{balancedScorecardHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
         <ui:param name="title" value="#{balancedScorecardHome.instance.name}" />
@@ -39,8 +40,9 @@
             <p:panel id="action-panel" styleClass="container-fluid">
                 <div class="span4">
                     <div class="btn-group">
-                        <h:link title="${sitename}" styleClass="btn">
-                            ${sitename}
+                        <h:link title="${organizationHome.instance.initials}" outcome="/pages/management/organization/home" styleClass="btn">
+                            ${organizationHome.instance.initials}
+                            <f:param name="organizationId" value="#{organizationHome.organizationId}"/>
                         </h:link>
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
@@ -48,17 +50,22 @@
                         <ul class="dropdown-menu">
                             <!-- dropdown menu links -->
                             <li>
-                                <h:link outcome="/pages/profile/profile" title="#{messages['common.viewprofile']}" value="#{messages['common.viewprofile']}">
-                                    <f:param name="profileId" value="#{userProfile.id}"/>
+                                <h:link outcome="/pages/management/organization/home"
+                                        title="#{messages['common.dashboard']}"
+                                        value="#{messages['common.dashboard']}">
+                                    <f:param name="organizationId" value="#{organizationHome.organizationId}" />
                                 </h:link>
                             </li>
                             <li>
-                                <h:link outcome="/pages/home" title="#{messages['module.management.organizations']}" value="${messages['module.management.organizations']}">
+                                <h:link outcome="/pages/home" 
+                                        title="#{messages['module.management.organizations']}" 
+                                        value="${messages['module.management.organizations']}">
                                 </h:link>
                             </li>
                         </ul>
                     </div>
                 </div>
+               
                 <div class="span8">
                     <h:form id="action-form">
 
