@@ -76,8 +76,7 @@ public class ThemeListService extends ListService<Theme> {
         return resultList;
     }
 
-    public List<Theme> getResultListByPerspective(Perspective p) {
-        themeService.setOrganzationId(getOrganization().getId());
+    public List<Theme> getResultListByPerspective(Perspective p) { 
         return themeService.findByPerspective(p);
     }
 

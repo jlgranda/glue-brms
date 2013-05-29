@@ -38,38 +38,10 @@ public class ThemeService extends PersistenceUtil<Theme> implements Serializable
 
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityService.class);
     private static final long serialVersionUID = -3246755068687015421L;
-    private Long organzationId;
-    private Organization organization;
-    private OrganizationService organizationService;
-
+   
     public ThemeService() {
         super(Theme.class);
     }
-
-    public Long getOrganzationId() {
-        return organzationId;
-    }
-
-    public void setOrganzationId(Long organzationId) {
-        this.organzationId = organzationId;
-    }
-
-    public Organization getOrganization() {
-        if(organization==null){
-            if(getOrganzationId()==null){
-                organization = null;
-            }else{
-                organization = organizationService.find(getOrganzationId());
-            }
-        }
-        return organization;
-    }
-
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
-    }
-    
-    
 
     @Override
     public void setEntityManager(EntityManager em) {
@@ -141,7 +113,6 @@ public class ThemeService extends PersistenceUtil<Theme> implements Serializable
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Theme> query = builder.createQuery(Theme.class);
         Root<Theme> bussinesEntityType = query.from(Theme.class);
-        query.where(builder.equal(bussinesEntityType.get(Theme_.organization),getOrganization()));
         if (p == null)
             query.where(builder.isNull(bussinesEntityType.get(Theme_.perspective)));
         else 
