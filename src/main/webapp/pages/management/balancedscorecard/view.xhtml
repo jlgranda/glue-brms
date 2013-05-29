@@ -117,10 +117,10 @@
                                 <h:outputText value="#{node.name}" />  
                             </p:treeNode>  
                             <p:treeNode  type="theme" icon="ui-icon-key">    
-                                <h:outputText value="#{node.name}" />  
+                                <h:outputText value="#{node.description}" />  
                             </p:treeNode>  
                             <p:treeNode type="objetive" icon="ui-icon-flag">  
-                                <h:outputText value="#{node.name}" />  
+                                <h:outputText value="#{node.description}" />  
                             </p:treeNode>
                             <p:treeNode type="measure" icon="ui-icon-battery-2">  
                                 <h:outputText value="#{node.name}" />  
@@ -152,6 +152,9 @@
                                     </p:column>
                                 </p:dataTable>                                
                             </p:column>
+                            <p:column headerText="#{messages['common.type']}">  
+                                <h:outputText value="#{messages[node.targetType]}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
+                            </p:column>
                             <p:column headerText="#{messages['common.period.from']}">  
                                 <h:outputText value="#{node.from}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
                                     <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
@@ -161,9 +164,6 @@
                                 <h:outputText value="#{node.to}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
                                     <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
                                 </h:outputText>  
-                            </p:column>
-                            <p:column headerText="#{messages['common.type']}">  
-                                <h:outputText value="#{messages[node.targetType]}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
                             </p:column>
                             <p:column headerText="#{messages['common.expectedValue']}">  
                                 <h:outputText value="#{node.value}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
