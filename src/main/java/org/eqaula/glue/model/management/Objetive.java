@@ -37,14 +37,13 @@ import org.eqaula.glue.model.BussinesEntity;
 @DiscriminatorValue(value = "OBJ")
 @PrimaryKeyJoinColumn(name = "id")
 public class Objetive extends BussinesEntity implements Serializable {
+
     private static final long serialVersionUID = 3521500957575111824L;
-      
     @OneToMany(mappedBy = "objetive", cascade = CascadeType.ALL)
     private List<Measure> measures;
-    
     @ManyToOne
     private Theme theme;
-    
+
     public List<Measure> getMeasures() {
         return measures;
     }
@@ -60,7 +59,7 @@ public class Objetive extends BussinesEntity implements Serializable {
     public void setTheme(Theme theme) {
         this.theme = theme;
     }
-  
+
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -88,23 +87,23 @@ public class Objetive extends BussinesEntity implements Serializable {
                 append(getType(), other.getType()).
                 isEquals();
     }
-    
+
     @Override
-    public String getCanonicalPath(){
+    public String getCanonicalPath() {
         StringBuilder path = new StringBuilder();
         path.append(getTheme().getCanonicalPath());
         path.append(BussinesEntity.SEPARATOR); //TODO hacer que sea personalizable
         path.append(getTheme().getName());
         return path.toString();
     }
-    
+
     @Override
     public String toString() {
         /*return "org.eqaula.glue.model.management.Objetive[ "
-                + "id=" + getId() + ","
-                + "name=" + getName() + ","
-                + "type=" + getType() + ","
-                + " ]";*/
-        return getName();
+         + "id=" + getId() + ","
+         + "name=" + getName() + ","
+         + "type=" + getType() + ","
+         + " ]";*/
+        return getName() + ":" + getDescription();
     }
 }

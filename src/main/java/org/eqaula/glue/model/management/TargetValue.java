@@ -33,7 +33,7 @@ import org.eqaula.glue.model.BussinesEntity;
 @Table(name = "TargetValue")
 @DiscriminatorValue(value = "TVL")
 @PrimaryKeyJoinColumn(name = "id")
-class TargetValue extends BussinesEntity implements Serializable{
+public class TargetValue extends BussinesEntity implements Serializable{
     private static final long serialVersionUID = 6219623698971724842L;
     
     BigDecimal value;

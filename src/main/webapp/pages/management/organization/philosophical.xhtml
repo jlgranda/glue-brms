@@ -55,7 +55,7 @@
                                 <p:tooltip for="organization-edit-button" value="#{messages['common.edit']}: #{organizationHome.instance.name}" showEffect="fade" hideEffect="fade" />  
                             </h:form>
                         </div>-->
-                        
+
                         <div class="span2">
                             #{'  '}
                             <br/>
@@ -76,9 +76,11 @@
         <ui:define name="content">
             <h:form id="philosophical-form" styleClass="row-fluid">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                <p:panel id="mission-panel" toggleable="true" rendered="#{not empty organizationHome.instance.id}" >
-
-                    <f:facet name="header"> 
+                <p:panel id="mission-panel" 
+                         toggleable="true"
+                         rendered="#{not empty organizationHome.instance.id}"
+                         >
+                     <f:facet name="header"> 
                         <p:commandLink id="mission-add-button" 
                                        action="#{organizationHome.createMission()}"
                                        oncomplete="missionEditDlg.show();" 
@@ -340,90 +342,90 @@
                       header="#{messages['common.delete.confirm']}" 
                       widgetVar="visionDeletedDlg" resizable="false" modal="true">   
                 <h:form id="vision-form-dialog-confirm-delete">
-                                    <h:panelGroup layout="block" style="padding:5px;">  
-                                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
-                                    </h:panelGroup>  
-                                    <p:commandButton value="#{messages['common.yes']}"
-                                                     oncomplete="visionDeletedDlg.hide(); :visionEditDlg.hide();"  
-                                                     action="#{organizationHome.removeVision()}"                                         
-                                                     ajax="true" process="@this"  
-                                                     style="margin-top:10px;"
-                                                     update=":philosophical-form">  
-                                    </p:commandButton>  
-                                    <p:commandButton value="#{messages['common.no']}" 
-                                                     type="button" onclick="visionDeletedDlg.hide();"  
-                                                     style="margin-top:10px;"/>  
-                                </h:form>
-                </p:dialog> 
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}"
+                                     oncomplete="visionDeletedDlg.hide(); :visionEditDlg.hide();"  
+                                     action="#{organizationHome.removeVision()}"                                         
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;"
+                                     update=":philosophical-form">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" 
+                                     type="button" onclick="visionDeletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
 
-                <!--PRINCIPLE DIALOG-->
-                <p:dialog id="principle-edit-dialog" 
-                          header="#{organizationHome.selectedPrinciple.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.principle']}" 
-                          styleClass="atf-header"
-                          widgetVar="principleEditDlg" 
-                          appendToBody="true" closeOnEscape="true">
-                    <h:form  id="form-principle" acceptcharset="UTF-8" class="form-horizontal" >
-                        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                        <glue:input id="name" name="name" type="text"
-                                    label="#{messages['common.name']}"
-                                    value="#{organizationHome.selectedPrinciple.name}" 
-                                    required="true" inlinehelp="#{messages['common.name.inlinehelp']}" 
-                                    execute="@this save" render="name"/>
-                        <glue:input id="description" 
-                                    name="description" type="textarea" 
-                                    label="#{messages['common.description']}" 
-                                    value="#{organizationHome.selectedPrinciple.description}" 
-                                    required="false" inlinehelp="#{messages['common.description.help']}" 
-                                    render="description" execute="@this save" />                
-                        <div class="form-actions">
-                            <p:commandLink id="principle-save" value="#{messages['common.done']}"
-                                           type="submit"
-                                           update=":philosophical-form"
-                                           actionListener="#{organizationHome.addPrinciple()}"
-                                           oncomplete="if (#{facesContext.maximumSeverity == null}) principleEditDlg.hide()"
-                                           ajax="true" process="@this"
-                                           immediate="false" styleClass="btn btn-primary"
-                                           style="color:#fff;" />
+            <!--PRINCIPLE DIALOG-->
+            <p:dialog id="principle-edit-dialog" 
+                      header="#{organizationHome.selectedPrinciple.persistent ? messages['common.edit'] : messages['common.add']} #{messages['module.principle']}" 
+                      styleClass="atf-header"
+                      widgetVar="principleEditDlg" 
+                      appendToBody="true" closeOnEscape="true">
+                <h:form  id="form-principle" acceptcharset="UTF-8" class="form-horizontal" >
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <glue:input id="name" name="name" type="text"
+                                label="#{messages['common.name']}"
+                                value="#{organizationHome.selectedPrinciple.name}" 
+                                required="true" inlinehelp="#{messages['common.name.inlinehelp']}" 
+                                execute="@this save" render="name"/>
+                    <glue:input id="description" 
+                                name="description" type="textarea" 
+                                label="#{messages['common.description']}" 
+                                value="#{organizationHome.selectedPrinciple.description}" 
+                                required="false" inlinehelp="#{messages['common.description.help']}" 
+                                render="description" execute="@this save" />                
+                    <div class="form-actions">
+                        <p:commandLink id="principle-save" value="#{messages['common.done']}"
+                                       type="submit"
+                                       update=":philosophical-form"
+                                       actionListener="#{organizationHome.addPrinciple()}"
+                                       oncomplete="if (#{facesContext.maximumSeverity == null}) principleEditDlg.hide()"
+                                       ajax="true" process="@this"
+                                       immediate="false" styleClass="btn btn-primary"
+                                       style="color:#fff;" />
 
-                            <!-- &nbsp;-->
-                            <p:commandLink type="button" value="#{messages['common.delete']}"
-                                           styleClass="btn btn-danger" onclick="principleDeletedDlg.show();" 
-                                           immediate="true" 
-                                           rendered="#{organizationHome.containsPrinciple()}"
-                                           style="color:#fff;"/>                        
+                        <!-- &nbsp;-->
+                        <p:commandLink type="button" value="#{messages['common.delete']}"
+                                       styleClass="btn btn-danger" onclick="principleDeletedDlg.show();" 
+                                       immediate="true" 
+                                       rendered="#{organizationHome.containsPrinciple()}"
+                                       style="color:#fff;"/>                        
 
-                            <!-- &nbsp;-->
-                            <p:commandLink type="button" value="#{messages['common.cancel']}" 
-                                           styleClass="btn" onclick="principleEditDlg.hide();"
-                                           immediate="true" rendered="#{true}"/>                        
+                        <!-- &nbsp;-->
+                        <p:commandLink type="button" value="#{messages['common.cancel']}" 
+                                       styleClass="btn" onclick="principleEditDlg.hide();"
+                                       immediate="true" rendered="#{true}"/>                        
 
-                        </div>  
-                    </h:form>
-                </p:dialog>
-                <p:dialog id="principle-cancel-delete-dialog"
-                          header="#{messages['common.delete.confirm']}" 
-                          widgetVar="principleDeletedDlg" resizable="false" modal="true">   
-                    <h:form id="principle-form-dialog-confirm-delete">
-                        <h:panelGroup layout="block" style="padding:5px;">  
-                            <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
-                        </h:panelGroup>  
-                        <p:commandButton value="#{messages['common.yes']}"
-                                         oncomplete="principleDeletedDlg.hide(); :principleEditDlg.hide();"  
-                                         action="#{organizationHome.removePrinciple()}"                                         
-                                         ajax="true" process="@this"  
-                                         style="margin-top:10px;"
-                                         update=":philosophical-form">  
-                        </p:commandButton>  
-                        <p:commandButton value="#{messages['common.no']}" 
-                                         type="button" onclick="principleDeletedDlg.hide();"  
-                                         style="margin-top:10px;"/>  
-                    </h:form>
-                </p:dialog> 
+                    </div>  
+                </h:form>
+            </p:dialog>
+            <p:dialog id="principle-cancel-delete-dialog"
+                      header="#{messages['common.delete.confirm']}" 
+                      widgetVar="principleDeletedDlg" resizable="false" modal="true">   
+                <h:form id="principle-form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}"
+                                     oncomplete="principleDeletedDlg.hide(); :principleEditDlg.hide();"  
+                                     action="#{organizationHome.removePrinciple()}"                                         
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;"
+                                     update=":philosophical-form">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" 
+                                     type="button" onclick="principleDeletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
 
-            </ui:define>
+        </ui:define>
 
-            <ui:define name="sidebar">
-                <ui:include src="/pages/management/navigator.xhtml"/>
-            </ui:define>
-        </ui:composition>
-    </html>
+        <ui:define name="sidebar">
+            <ui:include src="/pages/management/navigator.xhtml"/>
+        </ui:define>
+    </ui:composition>
+</html>

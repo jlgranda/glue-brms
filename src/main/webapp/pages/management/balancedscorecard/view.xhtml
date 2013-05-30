@@ -65,7 +65,7 @@
                         </ul>
                     </div>
                 </div>
-               
+
                 <div class="span8">
                     <h:form id="action-form">
 
@@ -150,11 +150,11 @@
                                      value="#{balancedScorecardHome.selectedNode!=null ? (balancedScorecardHome.selectedNode.data.class.name.equals('org.eqaula.glue.model.management.Target') ? balancedScorecardHome.selectedNode.parent : balancedScorecardHome.selectedNode)  : balancedScorecardHome.rootNode}"
                                      var="node"  propagateSelectionUp="true" >  
                             <p:column headerText="#{messages['module.balancedscorecard.dimention']}">
-                                <h:outputText value="#{(node.class.name.equals('org.eqaula.glue.model.management.Theme') || node.class.name.equals('org.eqaula.glue.model.management.Objetive')) ? node.description : node.name}"/>                        
+                                <h:outputText value="#{(node.class.name.equals('org.eqaula.glue.model.management.Theme') || node.class.name.equals('org.eqaula.glue.model.management.Objetive')) ? node: node.name}"/>                        
                             </p:column>  
                             <p:column headerText="#{messages['common.status']}">  
                                 <p:dataTable var="method" value="#{node.methods}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}">
-                                    <p:column>
+                                    <p:column> 
                                         <p:graphicImage value="/MethodPrinter?methodId=#{methodPrinter.printToDownload(balancedScorecardHome.runMethod(method)).id}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>
                                     </p:column>
                                 </p:dataTable>                                
@@ -176,7 +176,15 @@
                                 <h:outputText value="#{node.value}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
                             </p:column>
                             <p:column headerText="#{messages['common.currentValue']}">  
-                                <h:outputText value="#{node.currentValue}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
+                                <p:commandLink id="targetValue-btn" 
+                                               value="#{node.value}"
+                                               rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"
+                                               action="#{targetHome.editTarget(node.id)}"
+                                               onstart="#{targetValueHome.createNewTargetValue(node.id)}"
+                                               oncomplete="targetValuesEditDlg.show()"
+                                               update=":targetValues-edit-dialog"
+                                               styleClass="link">
+                                </p:commandLink>
                             </p:column>
                             <p:column headerText="#{messages['common.variance']}">  
                                 <h:outputText value="#{node.currentValue - node.value}" rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"/>  
@@ -448,7 +456,6 @@
                                      onclick="measureDeletedDlg.hide();"  
                                      style="margin-top:10px;"/>  
                 </h:form>
-
             </p:dialog>
 
 
@@ -514,7 +521,7 @@
                                                style="color:#fff;" 
                                                />
                                 #{'  '}
-                                
+
 
                                 <p:commandLink type="button" value="#{messages['common.delete']}" 
                                                styleClass="btn btn-danger" style="color:#fff;" 
@@ -831,6 +838,7 @@
                 </h:form>
             </p:dialog> 
 
+            <!-- RESOURCE DIALOG -->
             <p:dialog id="resource-edit-dialog" header="#{messages['common.add']} #{messages['module.resource']}" styleClass="atf-header" widgetVar="resourceEditDlg" appendToBody="true" closeOnEscape="true"
                       height="250" width="500">
                 <h:form  id="form-resource" acceptcharset="UTF-8" class="form-horizontal" >
@@ -840,11 +848,11 @@
                     <glue:input id="amount" name="amount" type="decimal" label="#{messages['common.amount']}" value="#{resourceHome.instance.amount}" required="false" inlinehelp="#{messages['common.amount.help']}" render="amount" execute="@this save" />
                     <div class="form-actions">
                         <p:commandLink id="save" value="#{messages['common.done']}" 
-                                         action="#{resourceHome.saveResource()}"
-                                         oncomplete="resourceEditDlg.hide();" 
-                                         styleClass="btn btn-primary"
-                                         style="color: #fff"
-                                         update=":form-initiative:combo :form-initiative:button-add"/>
+                                       action="#{resourceHome.saveResource()}"
+                                       oncomplete="resourceEditDlg.hide();" 
+                                       styleClass="btn btn-primary"
+                                       style="color: #fff"
+                                       update=":form-initiative:combo :form-initiative:button-add"/>
                         <!-- &nbsp;-->
                         #{'  '}
 
@@ -854,6 +862,88 @@
                     </div>  
                 </h:form>
             </p:dialog>
+
+
+            <!-- TARGET VALUES DIALOG -->
+            <p:dialog id="targetValues-edit-dialog" 
+                      header="#{messages['common.add']} #{messages['common.values']}" 
+                      styleClass="atf-header" widgetVar="targetValuesEditDlg" 
+                      appendToBody="true" closeOnEscape="true"
+                      height="400" width="500">
+                <h:form  id="form-targetValues" acceptcharset="UTF-8" class="form-inline">
+                    <div class="form-actions" style="padding-left: 20px">
+                        <glue:input id="value" name="value" type="decimal" 
+                                    label="#{messages['common.value']}"
+                                    value="#{targetValueHome.instance.value}" 
+                                    required="true" inlinehelp="#{messages['common.value.inlinehelp']}"
+                                    execute="@this save" render="value"/>
+
+                        <p:commandLink id="save" value="#{messages['common.done']}" 
+                                       action="#{targetValueHome.saveTargetValueDialog()}"
+                                       update=":form-targetValues"
+                                       styleClass="btn btn-primary"
+                                       style="color:#fff;" 
+                                       />
+                    </div>
+                    <p:dataTable var="_targetValue" value="#{targetHome.instance.values}"
+                                 paginator="true" rows="5"
+                                 paginatorAlwaysVisible="false"
+                                 paginatorPosition="top"
+                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                                 rowsPerPageTemplate="5,10,15"
+                                 id="targetValuesTable">
+
+
+                        <p:column headerText="#{messages['common.value']}" style="width:150px">
+                            <h:outputText value="#{_targetValue.value}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['common.createdOn']}" style="width:150px">
+                            <h:outputText value="#{_targetValue.createdOn}"/>
+                        </p:column>
+                        <p:column style="width:4%" headerText="#{messages['common.actions']}">
+                            &nbsp;
+                            &nbsp;
+                            <p:commandLink id="targetValue-edit-button" 
+                                           action="#{targetValueHome.editTargetValue(_targetValue.id)}"
+                                           immediate="true" styleClass="link" 
+                                           style="font-size: 0.75em;"
+                                           update=":form-targetValues @this @form">
+                                <i class="icon-pencil"></i>
+                            </p:commandLink>
+                            <p:tooltip for="targetValue-edit-button" value="#{messages['common.edit']}: #{_targetValue.value}" showEffect="fade" hideEffect="fade" />  
+
+                            <p:commandLink id="targetValue-remove-button" 
+                                           action="#{targetValueHome.editTargetValue(_targetValue.id)}"
+                                           oncomplete="targetValueDeletedDlg.show();"
+                                           immediate="true" styleClass="link" 
+                                           style="font-size: 0.75em;"
+                                           >
+                                <i class="icon-remove"></i>
+                            </p:commandLink>
+                            <p:tooltip for="targetValue-remove-button" value="#{messages['common.remove']}: #{_targetValue.value}" showEffect="fade" hideEffect="fade" />  
+                        </p:column>
+                    </p:dataTable>                      
+
+                </h:form>
+            </p:dialog>
+            <p:dialog id="targetValue-cancel-delete-dialog"
+                      header="#{messages['common.delete.confirm']}" 
+                      widgetVar="targetValueDeletedDlg" resizable="false" modal="true">   
+                <h:form id="targetValue-form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" 
+                                     actionListener="#{targetValueHome.deleteTargetValue()}"
+                                     oncomplete="targetValueDeletedDlg.hide();"
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" 
+                                     type="button" onclick="targetValueDeletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+
+                </h:form>
+            </p:dialog> 
         </ui:define>
     </ui:composition>
 </html>
