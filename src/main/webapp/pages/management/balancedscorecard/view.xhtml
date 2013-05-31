@@ -179,8 +179,7 @@
                                 <p:commandLink id="targetValue-btn" 
                                                value="#{node.value}"
                                                rendered="#{node.class.name.equals('org.eqaula.glue.model.management.Target')}"
-                                               action="#{targetHome.editTarget(node.id)}"
-                                               onstart="#{targetValueHome.createNewTargetValue(node.id)}"
+                                               action="#{targetHome.createTargetValue(node)}"
                                                oncomplete="targetValuesEditDlg.show()"
                                                update=":targetValues-edit-dialog"
                                                styleClass="link">
@@ -864,27 +863,28 @@
             </p:dialog>
 
 
+
             <!-- TARGET VALUES DIALOG -->
             <p:dialog id="targetValues-edit-dialog" 
                       header="#{messages['common.add']} #{messages['common.values']}" 
                       styleClass="atf-header" widgetVar="targetValuesEditDlg" 
                       appendToBody="true" closeOnEscape="true"
                       height="400" width="500">
-                <h:form  id="form-targetValues" acceptcharset="UTF-8" class="form-inline">
-                    <div class="form-actions" style="padding-left: 20px">
-                        <glue:input id="value" name="value" type="decimal" 
-                                    label="#{messages['common.value']}"
-                                    value="#{targetValueHome.instance.value}" 
-                                    required="true" inlinehelp="#{messages['common.value.inlinehelp']}"
-                                    execute="@this save" render="value"/>
+                <h:form  id="form-targetValues" acceptcharset="UTF-8" class="form-horizontal">
 
-                        <p:commandLink id="save" value="#{messages['common.done']}" 
-                                       action="#{targetValueHome.saveTargetValueDialog()}"
-                                       update=":form-targetValues"
-                                       styleClass="btn btn-primary"
-                                       style="color:#fff;" 
-                                       />
-                    </div>
+                    <glue:input id="value" name="value" type="decimal" 
+                                label="#{messages['common.value']}"
+                                value="#{targetHome.selectedTargetValue.value}" 
+                                required="true" inlinehelp="#{messages['common.value.inlinehelp']}"
+                                execute="@this save" render="value"/>
+                    
+                    <p:commandLink id="save" value="#{messages['common.done']}" 
+                                   action="#{targetHome.addTargetValue()}"
+                                   update=":form-targetValues"
+                                   styleClass="btn btn-primary"
+                                   style="color:#fff;" 
+                                   />
+
                     <p:dataTable var="_targetValue" value="#{targetHome.instance.values}"
                                  paginator="true" rows="5"
                                  paginatorAlwaysVisible="false"
@@ -892,28 +892,25 @@
                                  paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
                                  rowsPerPageTemplate="5,10,15"
                                  id="targetValuesTable">
-
-
-                        <p:column headerText="#{messages['common.value']}" style="width:150px">
-                            <h:outputText value="#{_targetValue.value}"/>
-                        </p:column>
                         <p:column headerText="#{messages['common.createdOn']}" style="width:150px">
                             <h:outputText value="#{_targetValue.createdOn}"/>
                         </p:column>
+                        <p:column headerText="#{messages['common.value']}" style="width:150px">
+                            <h:outputText value="#{_targetValue.value}"/>
+                        </p:column>
+
                         <p:column style="width:4%" headerText="#{messages['common.actions']}">
                             &nbsp;
                             &nbsp;
                             <p:commandLink id="targetValue-edit-button" 
-                                           action="#{targetValueHome.editTargetValue(_targetValue.id)}"
+                                           action="#{targetHome.wireTargetValue(_targetValue)}"
                                            immediate="true" styleClass="link" 
                                            style="font-size: 0.75em;"
-                                           update=":form-targetValues @this @form">
+                                           update=":form-targetValues">
                                 <i class="icon-pencil"></i>
                             </p:commandLink>
                             <p:tooltip for="targetValue-edit-button" value="#{messages['common.edit']}: #{_targetValue.value}" showEffect="fade" hideEffect="fade" />  
-
                             <p:commandLink id="targetValue-remove-button" 
-                                           action="#{targetValueHome.editTargetValue(_targetValue.id)}"
                                            oncomplete="targetValueDeletedDlg.show();"
                                            immediate="true" styleClass="link" 
                                            style="font-size: 0.75em;"
@@ -923,7 +920,6 @@
                             <p:tooltip for="targetValue-remove-button" value="#{messages['common.remove']}: #{_targetValue.value}" showEffect="fade" hideEffect="fade" />  
                         </p:column>
                     </p:dataTable>                      
-
                 </h:form>
             </p:dialog>
             <p:dialog id="targetValue-cancel-delete-dialog"
@@ -934,7 +930,7 @@
                         <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
                     </h:panelGroup>  
                     <p:commandButton value="#{messages['common.yes']}" 
-                                     actionListener="#{targetValueHome.deleteTargetValue()}"
+                                     actionListener="#{targetHome.removeTargetValue()}"
                                      oncomplete="targetValueDeletedDlg.hide();"
                                      style="margin-top:10px;">  
                     </p:commandButton>  

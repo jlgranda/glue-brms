@@ -138,6 +138,19 @@ public class Target extends BussinesEntity implements Serializable {
         return this.getMethods().remove(method);
     }
 
+    public boolean addTargetValue(TargetValue targetValue) {
+        if (!this.getValues().contains(targetValue)) {
+            targetValue.setTarget(this);
+            return this.getValues().add(targetValue);
+        }
+        return false;
+    }
+
+    public boolean removeTargetValue(TargetValue targetValue) {
+        targetValue.setTarget(null);
+        return this.getValues().remove(targetValue);
+    }
+    
     public boolean addInitiative(Initiative initiative) {
         if (!this.getInitiatives().contains(initiative)) {
             initiative.setTarget(this);

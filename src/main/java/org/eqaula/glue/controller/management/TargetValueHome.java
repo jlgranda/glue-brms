@@ -193,6 +193,7 @@ public class TargetValueHome extends BussinesEntityHome<TargetValue> implements 
         return getOutcome() + "?faces-redirect=true&includeViewParams=true";
     }
     
+    
      public void createNewTargetValue(Long targetId) {
         setId(null);
         setInstance(null);

@@ -38,6 +38,7 @@ import org.eqaula.glue.model.management.Initiative;
 import org.eqaula.glue.model.management.Measure;
 import org.eqaula.glue.model.management.Method;
 import org.eqaula.glue.model.management.Target;
+import org.eqaula.glue.model.management.TargetValue;
 import org.eqaula.glue.model.profile.Profile;
 import org.eqaula.glue.service.MeasureService;
 import org.eqaula.glue.util.Dates;
@@ -68,7 +69,7 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
     private Method selectedMethod;
     private List<Method> methods;
     private Initiative selectedInitiative;
-    
+    private TargetValue selectedTargetValue;
     private boolean modifiedMethods = false;
     private boolean modifiedInitiatives = false;
 
@@ -152,7 +153,14 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         this.modifiedInitiatives = modifiedInitiatives;
     }
 
-    
+    public TargetValue getSelectedTargetValue() {
+        return selectedTargetValue;
+    }
+
+    public void setSelectedTargetValue(TargetValue selectedTargetValue) {
+        this.selectedTargetValue = selectedTargetValue;
+    }
+
     @TransactionAttribute
     public void load() {
         if (isIdDefined()) {
@@ -199,6 +207,9 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
             getInstance().setAuthor(this.profile);
             create(getInstance());
         }
+        if (getOutcome() == null) {
+            return null;
+        }
         if (getMeasure() != null) {
             return getOutcome() + "?balancedScorecardId=" + getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
@@ -235,7 +246,7 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
-        if(getOutcome()==null){
+        if (getOutcome() == null) {
             return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
         }
         if (getMeasure() != null) {
@@ -247,11 +258,11 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
     private MethodHome methodHome;
 
     public void wireMethod(Method method) {
-               
+
         if (method == null) {
             setSelectedMethod(methodHome.createInstance());
         } else {
-            setModifiedMethods(true); 
+            setModifiedMethods(true);
             setSelectedMethod(method);
         }
     }
@@ -263,20 +274,21 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
     public void addMethod() {
         if (!getSelectedMethod().isPersistent()) {
             getInstance().addMethod(getSelectedMethod());
-            setModifiedMethods(true); 
+            setModifiedMethods(true);
         }
     }
-    
+
     public void removeMethod() {
-        if(containsMethod()){
+        if (containsMethod()) {
             getInstance().removeMethod(getSelectedMethod());
-            setModifiedMethods(true); 
+            setModifiedMethods(true);
         }
-        /**if (getInstance().getMethods().contains(getSelectedMethod())) {
-            getInstance().removeMethod(getSelectedMethod());
-        }**/
+        /**
+         * if (getInstance().getMethods().contains(getSelectedMethod())) {
+         * getInstance().removeMethod(getSelectedMethod()); }*
+         */
     }
-    
+
     public boolean containsMethod() {
         if (getInstance().getMethods().contains(getSelectedMethod())) {
             return true;
@@ -298,18 +310,17 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         if (initiative == null) {
             setSelectedInitiative(initiativeHome.createInstance());
         } else {
-             setModifiedInitiatives(true);
+            setModifiedInitiatives(true);
             setSelectedInitiative(initiative);
         }
     }
-    
+
     public boolean containsInitiative() {
         if (getInstance().getInitiatives().contains(getSelectedInitiative())) {
             return true;
         }
         return false;
     }
-
 
     public void addInitiative() {
         if (!getSelectedInitiative().isPersistent()) {
@@ -324,11 +335,11 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
             setModifiedInitiatives(true);
         }
     }
-    
+
     public void clearInitiative() {
         setSelectedInitiative(null);
     }
-    
+
     public void createNewTarget() {
         setId(null);
         setInstance(null);
@@ -348,6 +359,55 @@ public class TargetHome extends BussinesEntityHome<Target> implements Serializab
         setModifiedInitiatives(false);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.action.sucessfully"), ""));
         return null;
-       //return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+        //return "/pages/management/balancedscorecard/view.xhtml?balancedScorecardId=" + getInstance().getMeasure().getObjetive().getTheme().getPerspective().getBalancedScorecard().getId() + "&faces-redirect=true&includeViewParams=true";
+    }
+    @Inject
+    private TargetValueHome targetValueHome;
+
+    public void wireTargetValue(TargetValue targetValue) {
+
+        if (targetValue == null) {
+            setSelectedTargetValue(targetValueHome.createInstance());
+        } else {
+            setSelectedTargetValue(targetValue);
+        }
+    }
+
+    public void createTargetValue(Target target) {
+        setId(target.getId());
+        load();
+        wireTargetValue(null);
+    }
+
+    @TransactionAttribute
+    public void addTargetValue() {
+        if (!getSelectedTargetValue().isPersistent()) {
+            getInstance().addTargetValue(getSelectedTargetValue());
+            saveTarget();
+            wireTargetValue(null);
+        }
+    }
+
+    public void removeTargetValue() {
+        if (containsTargetValue()) {
+            getInstance().removeTargetValue(getSelectedTargetValue());
+            saveTarget();
+            createTargetValue(getInstance());
+        }
+        /**
+         * if (getInstance().getMethods().contains(getSelectedMethod())) {
+         * getInstance().removeMethod(getSelectedMethod()); }*
+         */
+    }
+
+    public boolean containsTargetValue() {
+        if (getInstance().getValues().contains(getSelectedTargetValue())) {
+            return true;
+        }
+        return false;
+    }
+
+    public void clearTargetValue() {
+        setSelectedTargetValue(null);
     }
 }
