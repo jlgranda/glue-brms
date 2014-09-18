@@ -105,7 +105,7 @@ public class SettingListService extends LazyDataModel<Setting> implements Serial
     }
 
      @Override
-    public List<Setting> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+    public List<Setting> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         int end = first + pageSize;
 
         QuerySortOrder order = QuerySortOrder.ASC;

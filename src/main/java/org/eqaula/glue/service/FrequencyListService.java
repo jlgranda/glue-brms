@@ -99,7 +99,7 @@ public class FrequencyListService extends LazyDataModel<Frequency> implements Se
     }
 
      @Override
-    public List<Frequency> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+    public List<Frequency> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         int end = first + pageSize;
 
         QuerySortOrder order = QuerySortOrder.ASC;

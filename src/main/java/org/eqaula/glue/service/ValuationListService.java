@@ -108,7 +108,7 @@ public class ValuationListService extends LazyDataModel<Valuation> {
     }
 
     @Override
-    public List<Valuation> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+    public List<Valuation> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         int end = first + pageSize;
         QuerySortOrder order = QuerySortOrder.ASC;
         if (sortOrder == SortOrder.DESCENDING) {

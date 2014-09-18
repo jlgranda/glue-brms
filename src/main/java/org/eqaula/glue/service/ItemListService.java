@@ -103,7 +103,7 @@ public class ItemListService extends LazyDataModel<Item>{
     }
 
     @Override
-    public List<Item> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+    public List<Item> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         int end = first + pageSize;
 
         QuerySortOrder order = QuerySortOrder.ASC;

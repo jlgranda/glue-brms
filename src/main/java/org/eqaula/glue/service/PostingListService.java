@@ -102,7 +102,7 @@ public class PostingListService extends ListService<Posting>{
     }
 
     @Override
-    public List<Posting> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+    public List<Posting> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         int end = first + pageSize;
 
         QuerySortOrder order = QuerySortOrder.ASC;

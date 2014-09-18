@@ -113,7 +113,7 @@ public class BalancedScorecardListService extends ListService<BalancedScorecard>
     }
 
     @Override
-    public List<BalancedScorecard> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+    public List<BalancedScorecard> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         int end = first + pageSize;
         QuerySortOrder order = QuerySortOrder.ASC;
         if (sortOrder == SortOrder.DESCENDING) {

@@ -149,7 +149,7 @@ public class BussinesEntityTypeListService extends LazyDataModel<BussinesEntityT
     }
 
     @Override
-    public List<BussinesEntityType> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+    public List<BussinesEntityType> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
 
         log.info("load results for ..." + first + ", " + pageSize);
         

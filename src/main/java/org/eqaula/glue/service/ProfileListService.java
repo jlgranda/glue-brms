@@ -71,7 +71,7 @@ public class ProfileListService extends LazyDataModel<Profile> {
     }
 
     @Override
-    public List<Profile> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+    public List<Profile> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
 
         int end = first + pageSize;
 

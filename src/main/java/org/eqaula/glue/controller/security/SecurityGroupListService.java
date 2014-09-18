@@ -186,7 +186,7 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
     }
 
     @Override
-    public List<Group> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+    public List<Group> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         List<Group> result = new ArrayList<Group>();
         try {
             int end = first + pageSize;

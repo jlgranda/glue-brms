@@ -102,7 +102,7 @@ public class OrganizationListService extends LazyDataModel<Organization> {
     }
 
     @Override
-    public List<Organization> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+    public List<Organization> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         int end = first + pageSize;
 
         QuerySortOrder order = QuerySortOrder.ASC;
